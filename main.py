@@ -7,8 +7,9 @@ from linebot.exceptions import (
     InvalidSignatureError
 )
 from linebot.models import (
-    MessageEvent, TextMessage, TextSendMessage,
+    MessageEvent, TextMessage, TextSendMessage
 )
+from janome.tokenizer import Tokenizer
 import os
 
 app = Flask(__name__)
