@@ -18,7 +18,7 @@ handler = WebhookHandler(YOUR_CHANNEL_SECRET)
 def hello_world():
     return "hello world!"
 
-@app.root("/callback", methods=['POST'])
+@app.route("/callback", methods=['POST'])
 def callback():
     signature = request.headers['X-Line-Signature']
     body = request.get_data(as_text=True)
