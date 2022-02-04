@@ -1,1 +1,1 @@
-web: python line-bot_main.py
+web: python main.py
