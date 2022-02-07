@@ -1,3 +1,4 @@
-flask==2.0.2
-janome==0.4.1
+Flask==2.0.2
+Werkzeug==2.0.2
+Janome==0.4.1
 line-bot-sdk==2.1.0
