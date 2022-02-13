@@ -21,8 +21,8 @@ handler = WebhookHandler(YOUR_CHANNEL_SECRET)
 
 #herokuへのデプロイが成功したかどうかを確認するためのコード
 @app.route("/")
-def hello_world():
-    return "hello world!"
+def now_online():
+    return "now online!"
 
 
 #LINE DevelopersのWebhookにURLを指定してWebhookからURLにイベントが送られるようにする
@@ -46,7 +46,14 @@ def callback():
 #以下でWebhookから送られてきたイベントをどのように処理するかを記述する
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    line_bot_api.reply_message(
+    if (event.message.text == "おは" or
+        event.message.text == "おはよう"):
+        line_bot_api.reply_message(
+        event.reply_token,
+        TextSendMessage(text="おはようございます"))
+            
+    else:
+        line_bot_api.reply_message(
         event.reply_token,
         TextSendMessage(text=event.message.text))
 
