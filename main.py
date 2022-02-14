@@ -57,10 +57,9 @@ def handle_message(event):
     for tkn in tkns:
         rslt.append(tkn.surface)
 
-
     line_bot_api.reply_message(
     event.reply_token,
-    TextSendMessage(text=rslt))
+    TextSendMessage(text="/".join(rslt)))
 
 # ポート番号の設定
 if __name__ == "__main__":
