@@ -1,3 +1,4 @@
+#各モジュールの読み込み
 from flask import Flask, request, abort
 from linebot import (
     LineBotApi, WebhookHandler
@@ -8,7 +9,11 @@ from linebot.exceptions import (
 from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage,
 )
+from janome.tokenizer import Tokenizer
 import os
+import re
+import random
+
 
 app = Flask(__name__)
 
@@ -46,16 +51,16 @@ def callback():
 #以下でWebhookから送られてきたイベントをどのように処理するかを記述する
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    if (event.message.text == "おは" or
-        event.message.text == "おはよう"):
-        line_bot_api.reply_message(
-        event.reply_token,
-        TextSendMessage(text="おはようございます"))
-            
-    else:
-        line_bot_api.reply_message(
-        event.reply_token,
-        TextSendMessage(text=event.message.text))
+    tknzr = Tokenizer()
+    tkns = tknzr.tokenize(event.message.text)
+    rslt = []
+    for tkn in tkns:
+        rslt.append(tkn.surface)
+
+
+    line_bot_api.reply_message(
+    event.reply_token,
+    TextSendMessage(text=rslt))
 
 # ポート番号の設定
 if __name__ == "__main__":
