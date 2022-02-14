@@ -58,7 +58,7 @@ def handle_message(event):
         rslt.append(tkn.surface)
 
     if rslt[0] == "わたし":
-    rslt[0] = "LINE-Client"
+       rslt[0] = "LINE-Client"
     line_bot_api.reply_message(
     event.reply_token,
     TextSendMessage(text="/".join(rslt)))
