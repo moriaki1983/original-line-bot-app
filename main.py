@@ -1,4 +1,3 @@
-
 #各モジュールの読み込み
 from flask import Flask, request, abort
 from linebot import (
@@ -11,9 +10,11 @@ from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage,
 )
 from janome.tokenizer import Tokenizer
+
 import os
 import re
 import random
+import sqlite3
 
 
 app = Flask(__name__)
@@ -60,16 +61,27 @@ def handle_message(event):
 
     if rslt[0] == "わたし":
        rslt[0] = "LINE-Client"
-    line_reply_message("/".join(rslt))
 
-
-#Lineメッセージを返信する
-def line_reply_message(line_text)
     line_bot_api.reply_message(
     event.reply_token,
-    TextSendMessage(text=line_text))
+    TextSendMessage(text="/".join(rslt))
 
 
 # ポート番号の設定
 if __name__ == "__main__":
+    #データベースへの接続を確立すると供にデータベースファイルを作成する
+    #db_nm = 'line_msg.db'
+    #conn = sqlite3.connect(db_nm)
+
+    # SQLiteを操作するためのカーソルを作成する
+    #cur = conn.cursor()
+
+    # テーブルの作成
+    #cur.execute('CREATE TABLE items(id INTEGER PRIMARY KEY AUTOINCREMENT, date STRING, speaker STRING, msg STRING)')
+
+    #
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
+    
+
+    #データベースへの接続を切断する
+    #conn.close()
