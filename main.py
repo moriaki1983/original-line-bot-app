@@ -45,7 +45,7 @@ def now_online():
     #cur.close()
     #conn.close()
     for row2 in row:
-        pass
+        print(row2[[0])
     #return row2[0]
     #return 'OK'
 
