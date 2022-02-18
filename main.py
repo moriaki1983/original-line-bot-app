@@ -39,12 +39,13 @@ def now_online():
     cur = conn.cursor()
     
     # データベースからLINEメッセージを取得する
-    cur.execute("SELECT * FROM items")
-    row = cur.fetchone()
-    row2 = row[0]
-    cur.close()
-    conn.close()
-    return row2
+    cur.execute("SELECT COUNT(1) FROM items")
+    #row = cur.fetchone()
+    #row2 = row[0]
+    #cur.close()
+    #conn.close()
+    #return row2
+    return 'OK'
 
 
 #LINE DevelopersのWebhookにURLを指定してWebhookからURLにイベントが送られるようにする
