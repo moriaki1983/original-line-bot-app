@@ -39,8 +39,8 @@ handler = WebhookHandler(YOUR_CHANNEL_SECRET)
 @app.route("/")
 def now_online():
     # データ検索
-    cur.execute('SELECT * FROM items')
-    for row in cur:
+    for row in cur.execute("SELECT * FROM items"):
+        print(row)
     return row
 
 
@@ -93,7 +93,7 @@ def handle_message(event):
 
     # 登録するデータ
     inserts = ["test", "test", "test"]
-    cur.execute('INSERT INTO items values(?,?,?)', inserts)
+    cur.execute("INSERT INTO items values(?, ?, ?)", inserts)
     conn.commit()
 
 
@@ -101,5 +101,6 @@ def handle_message(event):
 if __name__ == "__main__":
     #
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
+    cur.close()
     conn.close()
     #db_init_flg = False
