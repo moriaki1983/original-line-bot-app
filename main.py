@@ -42,7 +42,10 @@ handler = WebhookHandler(YOUR_CHANNEL_SECRET)
 def now_online():
     # データ検索
     if db_init_flg = True:
-       return cur.execute("SELECT * FROM items")
+       cur.execute("SELECT * FROM items")
+       #for row in cur
+       #row
+       return "success"
     else:
        return "now_online"
 
@@ -76,7 +79,7 @@ def handle_message(event):
     #
     #if db_init_flg == False
     #   # テーブルの作成
-    #   cur.execute('CREATE TABLE items(id INTEGER PRIMARY KEY AUTOINCREMENT, date STRING, speaker STRING, msg STRING)')
+    #   cur.execute('CREATE TABLE items(id int, date STRING, speaker STRING, msg STRING)')
     #   db_init_flg = True
 
     #
@@ -95,8 +98,8 @@ def handle_message(event):
     TextSendMessage(text="/".join(rslt)))
 
     # ユーザーからのLINEメッセージをデータベースに登録・格納する
-    inserts = ["test", "test", "test"]
-    cur.execute("INSERT INTO items VALUES(?, ?, ?)", inserts)
+    inserts = [0, "test", "test", "test"]
+    cur.execute("INSERT INTO items VALUES(?, ?, ?, ?)", inserts)
     conn.commit()
 
 
