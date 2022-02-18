@@ -18,7 +18,7 @@ import random
 
 #
 app = Flask(__name__)
-#db_init_flg = False
+db_init_flg = False
 
 #データベースへの接続を確立すると供にデータベースファイルを作成する
 db_nm = 'line_msg.db'
@@ -27,7 +27,8 @@ cur = conn.cursor()
 
 # テーブルの作成
 cur.execute("CREATE TABLE items(date, speaker, msg)")
- 
+db_init_flg = True
+
 #herokuの環境変数に設定された、LINE DevelopersのアクセストークンとChannelSecretを取得するコード
 YOUR_CHANNEL_ACCESS_TOKEN = os.environ["YOUR_CHANNEL_ACCESS_TOKEN"]
 YOUR_CHANNEL_SECRET = os.environ["YOUR_CHANNEL_SECRET"]
@@ -39,7 +40,10 @@ handler = WebhookHandler(YOUR_CHANNEL_SECRET)
 @app.route("/")
 def now_online():
     # データ検索
-    return cur.execute("SELECT * FROM items")
+    if db_init_flg = True
+       return cur.execute("SELECT * FROM items")
+    else
+       return "now_online"
 
 
 #LINE DevelopersのWebhookにURLを指定してWebhookからURLにイベントが送られるようにする
@@ -101,4 +105,3 @@ if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
     cur.close()
     conn.close()
-    #db_init_flg = False
