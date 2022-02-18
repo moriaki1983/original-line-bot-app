@@ -33,6 +33,8 @@ handler      = WebhookHandler(YOUR_CHANNEL_SECRET)
 #herokuの環境に設定されているPostgresの変数を取得する
 DATABASE_URL = os.environ["DATABASE_URL"]
 
+id = 0
+
 
 #herokuへのデプロイが成功したかどうかを確認する
 @app.route("/")
@@ -42,7 +44,8 @@ def now_online():
     cur  = conn.cursor()
 
     # データベースからLINEメッセージを取得する
-    cur.execute("SELECT * FROM items WHERE id ='1'")
+    #cur.execute("SELECT * FROM items WHERE id ='1'")
+    cur.execute("SELECT * FROM items WHERE id = %s", [id])
     row = cur.fetchone()
     cur.close()
     conn.close()
@@ -93,7 +96,7 @@ def handle_message(event):
        db_init_flg = True
 
     #ユーザーからのLINEメッセージをデータベースに登録・格納する
-    id      = 1
+    id      = id + 1
     date    = "test"
     speaker = "test"
     msg     = event.message.text
