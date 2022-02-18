@@ -40,12 +40,12 @@ def now_online():
     cur = conn.cursor()
     
     # データベースからLINEメッセージを取得する
-    cur.execute("SELECT COUNT(1) FROM items")
+    #cur.execute("SELECT COUNT(1) FROM items")
+    cur.execute("SELECT msg FROM items WHERE=")
     row = cur.fetchone()
     #cur.close()
     #conn.close()
-    return list(row)
-
+    return row[0].id
 
 #LINE DevelopersのWebhookにURLを指定してWebhookからURLにイベントが送られるようにする
 @app.route("/callback", methods=['POST'])
