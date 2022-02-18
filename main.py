@@ -43,8 +43,7 @@ handler = WebhookHandler(YOUR_CHANNEL_SECRET)
 def now_online():
     # データ検索
     if db_init_flg == True:
-       #cur.execute('SELECT * FROM items')
-       return 'success'
+       return cur.execute('SELECT * FROM items')
     else:
        return 'now_online'
 
