@@ -20,12 +20,12 @@ import random
 db_init_flg = False
 
 #データベースへの接続を確立するとともにデータベースファイルを作成する
-conn = sqlite3.connect('line_msg.db')
-cur = conn.cursor()
+#conn = sqlite3.connect('line_msg.db')
+#cur = conn.cursor()
 
 # テーブルを作成し、データーベースの初期化フラグを立てる
-cur.execute('CREATE TABLE items(id INTEGER, date STRING, speaker STRING, msg STRING)')
-db_init_flg = True
+#cur.execute('CREATE TABLE items(id INTEGER, date STRING, speaker STRING, msg STRING)')
+#db_init_flg = True
 
 #Flaskのアプリモジュールを作成する
 app = Flask(__name__)
@@ -47,6 +47,9 @@ def now_online():
     
     # データベースからLINEメッセージを取得する
     row = cur.execute('SELECT * FROM items')
+    cur.close()
+    conn.close()
+
     return row.fetchone()
 
 
@@ -71,6 +74,14 @@ def callback():
 #以下でWebhookから送られてきたイベントをどのように処理するかを記述する
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
+    #データベースへの接続を確立するとともにデータベースファイルを作成する
+    conn = sqlite3.connect('line_msg.db')
+    cur = conn.cursor()
+
+    # テーブルを作成し、データーベースの初期化フラグを立てる
+    cur.execute('CREATE TABLE items(id INTEGER, date STRING, speaker STRING, msg STRING)')
+    #db_init_flg = True
+
     #
     tknzr = Tokenizer()
     tkns = tknzr.tokenize(event.message.text)
@@ -90,11 +101,10 @@ def handle_message(event):
     inserts = [0, "test", "test", "test"]
     cur.execute('INSERT INTO items VALUES(?, ?, ?, ?)', inserts)
     conn.commit()
-
+    cur.close()
+    conn.close()
 
 # ポート番号の設定
 if __name__ == "__main__":
     #Flaskのアプリモジュールを実行する
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
-    cur.close()
-    conn.close()
