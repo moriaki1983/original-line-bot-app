@@ -46,7 +46,7 @@ def now_online():
     row = cur.fetchone()
     cur.close()
     conn.close()
-    return row
+    return row, 500
 
 #LINE DevelopersのWebhookにURLを指定してWebhookからURLにイベントが送られるようにする
 @app.route("/callback", methods=['POST'])
@@ -97,6 +97,7 @@ def handle_message(event):
     conn.commit()
     cur.close()
     conn.close()
+
 
 # ポート番号の設定
 if __name__ == "__main__":
