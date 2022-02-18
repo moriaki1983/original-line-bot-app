@@ -17,15 +17,7 @@ import random
 
 
 #データーベースの初期化フラグを宣言する
-db_init_flg = False
-
-#データベースへの接続を確立するとともにデータベースファイルを作成する
-#conn = sqlite3.connect('line_msg.db')
-#cur = conn.cursor()
-
-# テーブルを作成し、データーベースの初期化フラグを立てる
-#cur.execute('CREATE TABLE items(id INTEGER, date STRING, speaker STRING, msg STRING)')
-#db_init_flg = True
+#db_init_flg = False
 
 #Flaskのアプリモジュールを作成する
 app = Flask(__name__)
@@ -50,7 +42,7 @@ def now_online():
     cur.close()
     conn.close()
 
-    return row.fetchone()
+    return row[0]
 
 
 #LINE DevelopersのWebhookにURLを指定してWebhookからURLにイベントが送られるようにする
@@ -82,7 +74,7 @@ def handle_message(event):
     cur.execute('CREATE TABLE items(id INTEGER, date STRING, speaker STRING, msg STRING)')
     #db_init_flg = True
 
-    #
+    #JanomeでユーザーからのLINEメッセージを解析する
     tknzr = Tokenizer()
     tkns = tknzr.tokenize(event.message.text)
     rslt = []
