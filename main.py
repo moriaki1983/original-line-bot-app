@@ -16,9 +16,6 @@ import re
 import random
 
 
-#Flaskのアプリモジュールを作成する
-app = Flask(__name__)
-
 #データーベースの初期化フラグを宣言する
 db_init_flg = False
 
@@ -29,6 +26,10 @@ cur = conn.cursor()
 # テーブルを作成し、データーベースの初期化フラグを立てる
 cur.execute('CREATE TABLE items(id INTEGER, date STRING, speaker STRING, msg STRING)')
 db_init_flg = True
+
+#Flaskのアプリモジュールを作成する
+app = Flask(__name__)
+
 
 #herokuの環境変数に設定された、LINE DevelopersのアクセストークンとChannelSecretを取得するコード
 YOUR_CHANNEL_ACCESS_TOKEN = os.environ["YOUR_CHANNEL_ACCESS_TOKEN"]
@@ -43,8 +44,6 @@ def now_online():
     # データ検索
     if db_init_flg == True:
        #cur.execute('SELECT * FROM items')
-       #for row in cur
-       #row
        return 'success'
     else:
        return 'now_online'
@@ -71,17 +70,6 @@ def callback():
 #以下でWebhookから送られてきたイベントをどのように処理するかを記述する
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    #データベースへの接続を確立すると供にデータベースファイルを作成する
-    #db_nm = 'line_msg.db'
-    #conn = sqlite3.connect(db_nm)
-    #cur = conn.cursor()
-
-    #
-    #if db_init_flg == False
-    #   # テーブルの作成
-    #   cur.execute('CREATE TABLE items(id int, date STRING, speaker STRING, msg STRING)')
-    #   db_init_flg = True
-
     #
     tknzr = Tokenizer()
     tkns = tknzr.tokenize(event.message.text)
@@ -92,7 +80,7 @@ def handle_message(event):
     if rslt[0] == "わたし":
        rslt[0] = "LINE-Client"
 
-    #LINEメッセージを送信する
+    #ユーザーにLINEメッセージを送信する
     line_bot_api.reply_message(
     event.reply_token,
     TextSendMessage(text="/".join(rslt)))
@@ -105,7 +93,7 @@ def handle_message(event):
 
 # ポート番号の設定
 if __name__ == "__main__":
-    #
+    #Flaskのアプリモジュールを実行する
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
     cur.close()
     conn.close()
