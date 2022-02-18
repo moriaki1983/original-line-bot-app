@@ -39,9 +39,7 @@ handler = WebhookHandler(YOUR_CHANNEL_SECRET)
 @app.route("/")
 def now_online():
     # データ検索
-    for row in cur.execute("SELECT * FROM items"):
-        print(row)
-    return row
+    return cur.execute("SELECT * FROM items")
 
 
 #LINE DevelopersのWebhookにURLを指定してWebhookからURLにイベントが送られるようにする
