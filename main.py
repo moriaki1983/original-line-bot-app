@@ -17,15 +17,17 @@ import random
 
 
 #
-app = Flask(__name__)
 db_init_flg = False
 
-#データベースへの接続を確立すると供にデータベースファイルを作成する
+#Flaskのアプリモジュールを作成する
+app = Flask(__name__)
+
+#データベースへの接続を確立するとともにデータベースファイルを作成する
 db_nm = 'line_msg.db'
 conn = sqlite3.connect(db_nm)
 cur = conn.cursor()
 
-# テーブルの作成
+# テーブルを作成し、データーベースの初期化フラグを立てる
 cur.execute("CREATE TABLE items(date, speaker, msg)")
 db_init_flg = True
 
@@ -42,7 +44,7 @@ def now_online():
     # データ検索
     if db_init_flg = True:
        return cur.execute("SELECT * FROM items")
-    else
+    else:
        return "now_online"
 
 
