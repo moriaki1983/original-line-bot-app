@@ -44,7 +44,7 @@ def now_online():
     row = cur.fetchone()
     #cur.close()
     #conn.close()
-    return row.to_dict()
+    return list(row)
 
 
 #LINE DevelopersのWebhookにURLを指定してWebhookからURLにイベントが送られるようにする
