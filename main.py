@@ -39,7 +39,7 @@ def now_online():
     
     # データベースからLINEメッセージを取得する
     cur.execute('SELECT * FROM items')
-    row = cur.fethone()
+    row = cur.fetchone()
     cur.close()
     conn.close()
     return row
@@ -85,9 +85,7 @@ def handle_message(event):
        rslt[0] = "LINE-Client"
 
     #ユーザーにLINEメッセージを送信する
-    line_bot_api.reply_message(
-    event.reply_token,
-    TextSendMessage(text="/".join(rslt)))
+    line_bot_api.reply_message(event.reply_token, TextSendMessage(text="/".join(rslt)))
 
     # ユーザーからのLINEメッセージをデータベースに登録・格納する
     inserts = [0, "test", "test", "test"]
