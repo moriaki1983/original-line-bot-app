@@ -25,9 +25,9 @@ app = Flask(__name__)
 
 #herokuの環境変数に設定された、LINE DevelopersのアクセストークンとChannelSecretを取得するコード
 YOUR_CHANNEL_ACCESS_TOKEN = os.environ["YOUR_CHANNEL_ACCESS_TOKEN"]
-YOUR_CHANNEL_SECRET = os.environ["YOUR_CHANNEL_SECRET"]
+YOUR_CHANNEL_SECRET       = os.environ["YOUR_CHANNEL_SECRET"]
 line_bot_api = LineBotApi(YOUR_CHANNEL_ACCESS_TOKEN)
-handler = WebhookHandler(YOUR_CHANNEL_SECRET)
+handler      = WebhookHandler(YOUR_CHANNEL_SECRET)
 
 #herokuの環境に設定されているPostgresの変数を取得する
 DATABASE_URL = os.environ["DATABASE_URL"]
@@ -36,11 +36,11 @@ DATABASE_URL = os.environ["DATABASE_URL"]
 #herokuへのデプロイが成功したかどうかを確認する
 @app.route("/")
 def now_online():
-    #
+    #データベースへの接続を確立して、カーソルを用意する
     conn = psycopg2.connect(DATABASE_URL)
     cur  = conn.cursor()
+
     # データベースからLINEメッセージを取得する
-    #cur.execute("SELECT COUNT(1) FROM items")
     cur.execute("SELECT * FROM items WHERE id ='0'")
     row = cur.fetchone()
     cur.close()
@@ -68,14 +68,6 @@ def callback():
 #以下でWebhookから送られてきたイベントをどのように処理するかを記述する
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    #
-    conn = psycopg2.connect(DATABASE_URL)
-    cur  = conn.cursor()
-
-    #テーブルを作成し、データーベースの初期化フラグを立てる
-    cur.execute("CREATE TABLE items(id int, date text, speaker text, msg text)")
-    #db_init_flg = True
-
     #JanomeでユーザーからのLINEメッセージを解析する
     tknzr = Tokenizer()
     tkns = tknzr.tokenize(event.message.text)
@@ -83,11 +75,20 @@ def handle_message(event):
     for tkn in tkns:
         rslt.append(tkn.surface)
 
+    #
     if rslt[0] == "わたし":
        rslt[0] = "LINE-Client"
 
     #ユーザーにLINEメッセージを送信する
-    line_bot_api.reply_message(event.reply_token, TextSendMessage(text="/".join(rslt)))
+    line_bot_api.reply_message(event.reply_token,TextSendMessage(text="/".join(rslt)))
+
+    #データベースへの接続を確立して、カーソルを用意する
+    conn = psycopg2.connect(DATABASE_URL)
+    cur  = conn.cursor()
+
+    #テーブルを作成し、データーベースの初期化フラグを立てる
+    cur.execute("CREATE TABLE items(id int, date text, speaker text, msg text)")
+    #db_init_flg = True
 
     # ユーザーからのLINEメッセージをデータベースに登録・格納する
     id      = 0
