@@ -11,7 +11,7 @@ from linebot.models import (
 )
 from janome.tokenizer import Tokenizer
 import psycopg2
-import json
+#import jsonify
 import os
 import re
 import random
@@ -46,7 +46,7 @@ def now_online():
     row = cur.fetchone()
     cur.close()
     conn.close()
-    return row, 500
+    return jsonify(row), 500
 
 #LINE DevelopersのWebhookにURLを指定してWebhookからURLにイベントが送られるようにする
 @app.route("/callback", methods=['POST'])
@@ -69,9 +69,11 @@ def callback():
 #以下でWebhookから送られてきたイベントをどのように処理するかを記述する
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    # テーブルを作成し、データーベースの初期化フラグを立てる
+    #
     conn = psycopg2.connect(DATABASE_URL)
     cur  = conn.cursor()
+
+    #テーブルを作成し、データーベースの初期化フラグを立てる
     cur.execute("CREATE TABLE items(id int, date text, speaker text, msg text)")
     #db_init_flg = True
 
