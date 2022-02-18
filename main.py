@@ -41,9 +41,10 @@ def now_online():
     # データベースからLINEメッセージを取得する
     cur.execute("SELECT * FROM items")
     row = cur.fetchone()
+    row2 = row[0]
     cur.close()
     conn.close()
-    return row[0]
+    return row2
 
 
 #LINE DevelopersのWebhookにURLを指定してWebhookからURLにイベントが送られるようにする
