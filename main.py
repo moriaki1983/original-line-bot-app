@@ -93,7 +93,7 @@ def handle_message(event):
     id      = 0
     date    = "test"
     speaker = "test"
-    msg     = "test"
+    msg     = event.message.text
     cur.execute("INSERT INTO items VALUES(%s, %s, %s, %s)", [id, date, speaker, msg])
     conn.commit()
     cur.close()
