@@ -27,7 +27,7 @@ conn = sqlite3.connect('line_msg.db')
 cur = conn.cursor()
 
 # テーブルを作成し、データーベースの初期化フラグを立てる
-cur.execute("CREATE TABLE items(id INTEGER PRIMARY KEY AUTOINCREMENT, date STRING, speaker STRING, msg STRING)")
+cur.execute('CREATE TABLE items(id INTEGER PRIMARY KEY AUTOINCREMENT, date STRING, speaker STRING, msg STRING)')
 db_init_flg = True
 
 #herokuの環境変数に設定された、LINE DevelopersのアクセストークンとChannelSecretを取得するコード
@@ -42,7 +42,7 @@ handler = WebhookHandler(YOUR_CHANNEL_SECRET)
 def now_online():
     # データ検索
     if db_init_flg = True:
-       cur.execute("SELECT * FROM items")
+       cur.execute('SELECT * FROM items')
        #for row in cur
        #row
        return "success"
@@ -99,7 +99,7 @@ def handle_message(event):
 
     # ユーザーからのLINEメッセージをデータベースに登録・格納する
     inserts = [0, "test", "test", "test"]
-    cur.execute("INSERT INTO items VALUES(?, ?, ?, ?)", inserts)
+    cur.execute('INSERT INTO items VALUES(?, ?, ?, ?)', inserts)
     conn.commit()
 
 
