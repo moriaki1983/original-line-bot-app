@@ -42,13 +42,9 @@ def now_online():
     # データベースからLINEメッセージを取得する
     cur.execute("SELECT COUNT(1) FROM items")
     row = cur.fetchone()
-    #row2 = row[0]
     #cur.close()
     #conn.close()
-    for row2 in row:
-        print(row2[0])
-    #return row2[0]
-    #return 'OK'
+    return jsonify(row)
 
 
 #LINE DevelopersのWebhookにURLを指定してWebhookからURLにイベントが送られるようにする
