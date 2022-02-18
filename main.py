@@ -1,5 +1,5 @@
 #モジュールの読み込み
-from flask import Flask, request, abort
+from flask import Flask,jsonify,request,abort
 from linebot import (
     LineBotApi, WebhookHandler
 )
@@ -11,7 +11,6 @@ from linebot.models import (
 )
 from janome.tokenizer import Tokenizer
 import psycopg2
-import json
 import os
 import re
 import random
