@@ -30,21 +30,22 @@ YOUR_CHANNEL_SECRET = os.environ["YOUR_CHANNEL_SECRET"]
 line_bot_api = LineBotApi(YOUR_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(YOUR_CHANNEL_SECRET)
 
+#
+DATABASE_URL = os.environ["DATABASE_URL"]
+
 
 #herokuへのデプロイが成功したかどうかを確認する
 @app.route("/")
 def now_online():
-    #データベースへの接続を確立するとともにデータベースファイルを作成する
-    DATABASE_URL = os.environ["DATABASE_URL"]
+    #
     conn = psycopg2.connect(DATABASE_URL)
-    cur = conn.cursor()
-    
+    cur  = conn.cursor()
     # データベースからLINEメッセージを取得する
     #cur.execute("SELECT COUNT(1) FROM items")
-    cur.execute("SELECT * FROM items WHERE='0'")
+    cur.execute("SELECT * FROM items WHERE id ='0'")
     row = cur.fetchone()
-    #cur.close()
-    #conn.close()
+    cur.close()
+    conn.close()
     return row
 
 #LINE DevelopersのWebhookにURLを指定してWebhookからURLにイベントが送られるようにする
@@ -68,12 +69,9 @@ def callback():
 #以下でWebhookから送られてきたイベントをどのように処理するかを記述する
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    #データベースへの接続を確立するとともにデータベースファイルを作成する
-    DATABASE_URL = os.environ["DATABASE_URL"]
-    conn = psycopg2.connect(DATABASE_URL)
-    cur = conn.cursor()
-
     # テーブルを作成し、データーベースの初期化フラグを立てる
+    conn = psycopg2.connect(DATABASE_URL)
+    cur  = conn.cursor()
     cur.execute("CREATE TABLE items(id int, date text, speaker text, msg text)")
     #db_init_flg = True
 
