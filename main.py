@@ -16,19 +16,18 @@ import re
 import random
 
 
-#
-db_init_flg = False
-
 #Flaskのアプリモジュールを作成する
 app = Flask(__name__)
 
+#
+db_init_flg = False
+
 #データベースへの接続を確立するとともにデータベースファイルを作成する
-db_nm = 'line_msg.db'
-conn = sqlite3.connect(db_nm)
+conn = sqlite3.connect('line_msg.db')
 cur = conn.cursor()
 
 # テーブルを作成し、データーベースの初期化フラグを立てる
-cur.execute("CREATE TABLE items(date, speaker, msg)")
+cur.execute("CREATE TABLE items(id INTEGER PRIMARY KEY AUTOINCREMENT, date STRING, speaker STRING, msg STRING)")
 db_init_flg = True
 
 #herokuの環境変数に設定された、LINE DevelopersのアクセストークンとChannelSecretを取得するコード
@@ -90,12 +89,12 @@ def handle_message(event):
     if rslt[0] == "わたし":
        rslt[0] = "LINE-Client"
 
-    #
+    #LINEメッセージを送信する
     line_bot_api.reply_message(
     event.reply_token,
     TextSendMessage(text="/".join(rslt)))
 
-    # LINEメッセージを登録・格納する
+    # ユーザーからのLINEメッセージをデータベースに登録・格納する
     inserts = ["test", "test", "test"]
     cur.execute("INSERT INTO items VALUES(?, ?, ?)", inserts)
     conn.commit()
