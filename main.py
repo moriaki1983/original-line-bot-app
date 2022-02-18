@@ -42,7 +42,7 @@ def now_online():
     cur  = conn.cursor()
 
     # データベースからLINEメッセージを取得する
-    cur.execute("SELECT * FROM items WHERE id ='0'")
+    cur.execute("SELECT * FROM items WHERE id ='1'")
     row = cur.fetchone()
     cur.close()
     conn.close()
@@ -93,7 +93,7 @@ def handle_message(event):
        db_init_flg = True
 
     #ユーザーからのLINEメッセージをデータベースに登録・格納する
-    id      = 0
+    id      = 1
     date    = "test"
     speaker = "test"
     msg     = event.message.text
