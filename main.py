@@ -34,12 +34,12 @@ handler = WebhookHandler(YOUR_CHANNEL_SECRET)
 @app.route("/")
 def now_online():
     #データベースへの接続を確立するとともにデータベースファイルを作成する
-    db_url = os.environ.get('DATABASE_URL')
-    conn = psycopg2.connect(db_url)
+    DATABASE_URL = os.environ["DATABASE_URL"]
+    conn = psycopg2.connect(DATABASE_URL)
     cur = conn.cursor()
     
     # データベースからLINEメッセージを取得する
-    cur.execute('SELECT * FROM items')
+    cur.execute("SELECT * FROM items")
     row = cur.fetchone()
     cur.close()
     conn.close()
@@ -68,12 +68,12 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     #データベースへの接続を確立するとともにデータベースファイルを作成する
-    db_url = os.environ.get('DATABASE_URL')
-    conn = psycopg2.connect(db_url)
+    DATABASE_URL = os.environ["DATABASE_URL"]
+    conn = psycopg2.connect(DATABASE_URL)
     cur = conn.cursor()
 
     # テーブルを作成し、データーベースの初期化フラグを立てる
-    cur.execute('CREATE TABLE items(id int, date text, speaker text, msg text)')
+    cur.execute("CREATE TABLE items(id int, date text, speaker text, msg text)")
     #db_init_flg = True
 
     #JanomeでユーザーからのLINEメッセージを解析する
@@ -94,7 +94,7 @@ def handle_message(event):
     date    = "test"
     speaker = "test"
     msg     = "test"
-    cur.execute('INSERT INTO items VALUES(%s, %s, %s, %s)', (id, date, speaker, msg))
+    cur.execute("INSERT INTO items VALUES(%s, %s, %s, %s)", [id, date, speaker, msg])
     conn.commit()
     cur.close()
     conn.close()
