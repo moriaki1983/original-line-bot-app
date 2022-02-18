@@ -40,7 +40,7 @@ def now_online():
     
     # データベースからLINEメッセージを取得する
     cur.execute("SELECT COUNT(1) FROM items")
-    (row,) = cur.fetchone()
+    row = cur.fetchone()
     cur.close()
     conn.close()
     return row
