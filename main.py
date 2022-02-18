@@ -11,6 +11,7 @@ from linebot.models import (
 )
 from janome.tokenizer import Tokenizer
 import psycopg2
+import json
 import os
 import re
 import random
@@ -45,7 +46,7 @@ def now_online():
     #cur.close()
     #conn.close()
     for row2 in row:
-        print(row2[[0])
+        print(row2[0])
     #return row2[0]
     #return 'OK'
 
