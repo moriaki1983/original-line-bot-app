@@ -2,3 +2,4 @@ Flask==2.0.2
 line-bot-sdk==2.1.0
 Janome==0.4.1
 psycopg2==2.8.6
+json
