@@ -44,8 +44,8 @@ def now_online():
     #row2 = row[0]
     #cur.close()
     #conn.close()
-    #return row2
-    return 'OK'
+    return row
+    #return 'OK'
 
 
 #LINE DevelopersのWebhookにURLを指定してWebhookからURLにイベントが送られるようにする
