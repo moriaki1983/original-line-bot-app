@@ -19,7 +19,7 @@ import random
 #Flaskのアプリモジュールを作成する
 app = Flask(__name__)
 
-#
+#データーベースの初期化フラグを宣言する
 db_init_flg = False
 
 #データベースへの接続を確立するとともにデータベースファイルを作成する
@@ -27,7 +27,7 @@ conn = sqlite3.connect('line_msg.db')
 cur = conn.cursor()
 
 # テーブルを作成し、データーベースの初期化フラグを立てる
-cur.execute('CREATE TABLE items(id INTEGER PRIMARY KEY AUTOINCREMENT, date STRING, speaker STRING, msg STRING)')
+cur.execute('CREATE TABLE items(id INTEGER, date STRING, speaker STRING, msg STRING)')
 db_init_flg = True
 
 #herokuの環境変数に設定された、LINE DevelopersのアクセストークンとChannelSecretを取得するコード
@@ -45,9 +45,9 @@ def now_online():
        cur.execute('SELECT * FROM items')
        #for row in cur
        #row
-       return "success"
+       return 'success'
     else:
-       return "now_online"
+       return 'now_online'
 
 
 #LINE DevelopersのWebhookにURLを指定してWebhookからURLにイベントが送られるようにする
