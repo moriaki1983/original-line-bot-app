@@ -38,12 +38,13 @@ line_bot_api = LineBotApi(YOUR_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(YOUR_CHANNEL_SECRET)
 
 
-#herokuへのデプロイが成功したかどうかを確認するためのコード
+#herokuへのデプロイが成功したかどうかを確認する
 @app.route("/")
 def now_online():
-    # データ検索
+    # データベースからLINEメッセージを取得する
     if db_init_flg == True:
-       return cur.execute('SELECT * FROM items')
+       for row in cur.execute('SELECT * FROM items')
+       return row[0][0]
     else:
        return 'now_online'
 
