@@ -41,12 +41,13 @@ handler = WebhookHandler(YOUR_CHANNEL_SECRET)
 #herokuへのデプロイが成功したかどうかを確認する
 @app.route("/")
 def now_online():
+    #データベースへの接続を確立する
+    conn = sqlite3.connect('line_msg.db')
+    cur = conn.cursor()
+    
     # データベースからLINEメッセージを取得する
-    if db_init_flg == True:
-       for row in cur.execute('SELECT * FROM items')
-       return row[0][0]
-    else:
-       return 'now_online'
+    row = cur.execute('SELECT * FROM items')
+    return row.fetchone()
 
 
 #LINE DevelopersのWebhookにURLを指定してWebhookからURLにイベントが送られるようにする
