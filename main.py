@@ -40,7 +40,7 @@ handler = WebhookHandler(YOUR_CHANNEL_SECRET)
 @app.route("/")
 def now_online():
     # データ検索
-    if db_init_flg = True
+    if db_init_flg = True:
        return cur.execute("SELECT * FROM items")
     else
        return "now_online"
@@ -93,7 +93,7 @@ def handle_message(event):
     event.reply_token,
     TextSendMessage(text="/".join(rslt)))
 
-    # 登録するデータ
+    # LINEメッセージを登録・格納する
     inserts = ["test", "test", "test"]
     cur.execute("INSERT INTO items VALUES(?, ?, ?)", inserts)
     conn.commit()
