@@ -11,7 +11,7 @@ from linebot.models import (
 )
 from janome.tokenizer import Tokenizer
 import psycopg2
-#import jsonify
+import jsonify
 import os
 import re
 import random
@@ -30,7 +30,7 @@ YOUR_CHANNEL_SECRET = os.environ["YOUR_CHANNEL_SECRET"]
 line_bot_api = LineBotApi(YOUR_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(YOUR_CHANNEL_SECRET)
 
-#
+#herokuの環境に設定されているPostgresの変数を取得する
 DATABASE_URL = os.environ["DATABASE_URL"]
 
 
