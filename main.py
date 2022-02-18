@@ -16,12 +16,13 @@ import re
 import random
 
 
-#データーベースの初期化フラグを宣言する
-#db_init_flg = False
+
 
 #Flaskのアプリモジュールを作成する
 app = Flask(__name__)
 
+#データーベースの初期化フラグを宣言する
+db_init_flg = False
 
 #herokuの環境変数に設定された、LINE DevelopersのアクセストークンとChannelSecretを取得するコード
 YOUR_CHANNEL_ACCESS_TOKEN = os.environ["YOUR_CHANNEL_ACCESS_TOKEN"]
@@ -87,10 +88,11 @@ def handle_message(event):
     cur  = conn.cursor()
 
     #テーブルを作成し、データーベースの初期化フラグを立てる
-    cur.execute("CREATE TABLE items(id int, date text, speaker text, msg text)")
-    #db_init_flg = True
+    if db_init_flg == False:
+       cur.execute("CREATE TABLE items(id int, date text, speaker text, msg text)")
+       db_init_flg = True
 
-    # ユーザーからのLINEメッセージをデータベースに登録・格納する
+    #ユーザーからのLINEメッセージをデータベースに登録・格納する
     id      = 0
     date    = "test"
     speaker = "test"
