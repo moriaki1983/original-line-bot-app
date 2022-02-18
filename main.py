@@ -92,8 +92,8 @@ def handle_message(event):
     TextSendMessage(text="/".join(rslt)))
 
     # 登録するデータ
-    insert = [("test", "test", "test")]
-    cur.execute('INSERT INTO items values(?)', insert)
+    inserts = ["test", "test", "test"]
+    cur.execute('INSERT INTO items values(?,?,?)', inserts)
     conn.commit()
 
 
