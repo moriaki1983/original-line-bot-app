@@ -11,7 +11,7 @@ from linebot.models import (
 )
 from janome.tokenizer import Tokenizer
 import psycopg2
-import jsonify
+import json
 import os
 import re
 import random
