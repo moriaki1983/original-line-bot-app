@@ -10,26 +10,38 @@ from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage,
 )
 from janome.tokenizer import Tokenizer
-
+import sqlite3
 import os
 import re
 import random
-import sqlite3
 
 
+#
 app = Flask(__name__)
+#db_init_flg = False
 
-#herokuの環境変数に設定された、LINE DevelopersのアクセストークンとChannelSecretを
-#取得するコード
+#データベースへの接続を確立すると供にデータベースファイルを作成する
+db_nm = 'line_msg.db'
+conn = sqlite3.connect(db_nm)
+cur = conn.cursor()
+
+# テーブルの作成
+cur.execute('CREATE TABLE items(id INTEGER PRIMARY KEY AUTOINCREMENT, date STRING, speaker STRING, msg STRING)')
+       
+#herokuの環境変数に設定された、LINE DevelopersのアクセストークンとChannelSecretを取得するコード
 YOUR_CHANNEL_ACCESS_TOKEN = os.environ["YOUR_CHANNEL_ACCESS_TOKEN"]
 YOUR_CHANNEL_SECRET = os.environ["YOUR_CHANNEL_SECRET"]
 line_bot_api = LineBotApi(YOUR_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(YOUR_CHANNEL_SECRET)
 
+
 #herokuへのデプロイが成功したかどうかを確認するためのコード
 @app.route("/")
 def now_online():
-    return "now online!"
+    # データ検索
+    cur.execute('SELECT * FROM items')
+    for row in cur:
+    return row
 
 
 #LINE DevelopersのWebhookにURLを指定してWebhookからURLにイベントが送られるようにする
@@ -53,6 +65,18 @@ def callback():
 #以下でWebhookから送られてきたイベントをどのように処理するかを記述する
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
+    #データベースへの接続を確立すると供にデータベースファイルを作成する
+    #db_nm = 'line_msg.db'
+    #conn = sqlite3.connect(db_nm)
+    #cur = conn.cursor()
+
+    #
+    #if db_init_flg == False
+    #   # テーブルの作成
+    #   cur.execute('CREATE TABLE items(id INTEGER PRIMARY KEY AUTOINCREMENT, date STRING, speaker STRING, msg STRING)')
+    #   db_init_flg = True
+
+    #
     tknzr = Tokenizer()
     tkns = tknzr.tokenize(event.message.text)
     rslt = []
@@ -62,26 +86,20 @@ def handle_message(event):
     if rslt[0] == "わたし":
        rslt[0] = "LINE-Client"
 
+    #
     line_bot_api.reply_message(
     event.reply_token,
     TextSendMessage(text="/".join(rslt)))
 
+    # 登録するデータ
+    insert = [("test", "test", "test"]
+    cur.execute('INSERT INTO items values(?)', insert)
+    conn.commit()
+
 
 # ポート番号の設定
 if __name__ == "__main__":
-    #データベースへの接続を確立すると供にデータベースファイルを作成する
-    #db_nm = 'line_msg.db'
-    #conn = sqlite3.connect(db_nm)
-
-    # SQLiteを操作するためのカーソルを作成する
-    #cur = conn.cursor()
-
-    # テーブルの作成
-    #cur.execute('CREATE TABLE items(id INTEGER PRIMARY KEY AUTOINCREMENT, date STRING, speaker STRING, msg STRING)')
-
     #
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
-    
-
-    #データベースへの接続を切断する
-    #conn.close()
+    conn.close()
+    #db_init_flg = False
