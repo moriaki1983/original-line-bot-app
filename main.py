@@ -41,7 +41,7 @@ handler = WebhookHandler(YOUR_CHANNEL_SECRET)
 @app.route("/")
 def now_online():
     # データ検索
-    if db_init_flg = True:
+    if db_init_flg == True:
        cur.execute('SELECT * FROM items')
        #for row in cur
        #row
