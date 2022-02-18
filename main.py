@@ -1,4 +1,4 @@
-#各モジュールの読み込み
+#モジュールの読み込み
 from flask import Flask, request, abort
 from linebot import (
     LineBotApi, WebhookHandler
@@ -10,7 +10,7 @@ from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage,
 )
 from janome.tokenizer import Tokenizer
-import sqlite3
+import psycopg2
 import os
 import re
 import random
@@ -33,8 +33,9 @@ handler = WebhookHandler(YOUR_CHANNEL_SECRET)
 #herokuへのデプロイが成功したかどうかを確認する
 @app.route("/")
 def now_online():
-    #データベースへの接続を確立する
-    conn = sqlite3.connect('line_msg.db')
+    #データベースへの接続を確立するとともにデータベースファイルを作成する
+    db_url = os.environ.get('DATABASE_URL')
+    conn = psycopg2.connect(db_url)
     cur = conn.cursor()
     
     # データベースからLINEメッセージを取得する
@@ -67,11 +68,12 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     #データベースへの接続を確立するとともにデータベースファイルを作成する
-    conn = sqlite3.connect('line_msg.db')
+    db_url = os.environ.get('DATABASE_URL')
+    conn = psycopg2.connect(db_url)
     cur = conn.cursor()
 
     # テーブルを作成し、データーベースの初期化フラグを立てる
-    cur.execute('CREATE TABLE items(id INTEGER, date STRING, speaker STRING, msg STRING)')
+    cur.execute('CREATE TABLE items(id int, date text, speaker text, msg text)')
     #db_init_flg = True
 
     #JanomeでユーザーからのLINEメッセージを解析する
@@ -88,8 +90,11 @@ def handle_message(event):
     line_bot_api.reply_message(event.reply_token, TextSendMessage(text="/".join(rslt)))
 
     # ユーザーからのLINEメッセージをデータベースに登録・格納する
-    inserts = [0, "test", "test", "test"]
-    cur.execute('INSERT INTO items VALUES(?, ?, ?, ?)', inserts)
+    id      = 0
+    date    = "test"
+    speaker = "test"
+    msg     = "test"
+    cur.execute('INSERT INTO items VALUES(%s, %s, %s, %s)', (id, date, speaker, msg))
     conn.commit()
     cur.close()
     conn.close()
