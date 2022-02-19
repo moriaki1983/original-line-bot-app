@@ -1,13 +1,19 @@
 #モジュールの読み込み
 from flask import Flask,jsonify,request,abort
-from linebot import (LineBotApi, WebhookHandler)
-from linebot.exceptions import (InvalidSignatureError)
-from linebot.models import (MessageEvent, TextMessage, TextSendMessage)
+from linebot import (
+    LineBotApi, WebhookHandler
+)
+from linebot.exceptions import (
+    InvalidSignatureError
+)
+from linebot.models import (
+    MessageEvent, TextMessage, TextSendMessage,
+)
 from janome.tokenizer import Tokenizer
 import psycopg2
 import os
-#import re
-#import random
+import re
+import random
 
 
 
@@ -21,11 +27,11 @@ YOUR_CHANNEL_SECRET       = os.environ["YOUR_CHANNEL_SECRET"]
 line_bot_api = LineBotApi(YOUR_CHANNEL_ACCESS_TOKEN)
 handler      = WebhookHandler(YOUR_CHANNEL_SECRET)
 
-#herokuの環境に設定されているPostgresの変数と、テーブルの有無を示す変数を取得する
+#herokuの環境に設定されているPostgresの変数を取得する
 DATABASE_URL = os.environ["DATABASE_URL"]
-#HAS_DB_TABLE = os.environ["HAS_DB_TABLE"]
 
-#LINEメッセージをデータベースに登録・格納する際のIDを宣言する
+#データベースの初期化フラグと、LINEメッセージをデータベースに登録・格納する際のIDを宣言する
+#is_db_init = False
 id = 0
 
 
@@ -38,7 +44,7 @@ def now_online():
     conn = psycopg2.connect(DATABASE_URL)
     cur  = conn.cursor()
 
-    # データベースからLINEメッセージを取得する
+    # データベースからLINEメッセージを取得す
     cur.execute("SELECT * FROM items WHERE id=%s", [id])
     row = cur.fetchone()
     cur.close()
@@ -80,38 +86,12 @@ def handle_message(event):
     #ユーザーにLINEメッセージを送信する
     line_bot_api.reply_message(event.reply_token,TextSendMessage(text="/".join(rslt)))
 
-    #データベースに接続して、カーソルを用意する
+    #データベースへの接続を確立して、カーソルを用意する
     conn = psycopg2.connect(DATABASE_URL)
     cur  = conn.cursor()
 
-    #テーブルを作成する
-    #if HAS_DB_TABLE == True:
-    #   cur.execute("DROP TABLE items")
-    #   cur.execute("CREATE TABLE items(id int, speaker text, msg text)")
-    #else:
-    #   cur.execute("CREATE TABLE items(id int, speaker text, msg text)")
-    #   os.environ["HAS_DB_TABLE"] = True
- 
-    #ユーザーからのLINEメッセージをデータベースに登録・格納する
-    speaker = event.source.userId
-    msg     = event.message.text
-    #cur.execute("SELECT * FROM items WHERE id=%s", [id])
-    #row = cur.fetchone()
-    #cur.execute("SELECT * FROM items")
-    #row_num = len(cur.fetchall())
+    cur.execute("UPDATE items SET date='Test!', speaker='LINE-Client', msg='Hello！' WHERE id=0")
 
-    #if row == null:
-    #   cur.execute("INSERT INTO items VALUES(%s, %s, %s) WHERE id=%s", [id, speaker, msg, id])
-    #   id += 1
-    #elif row_num >= 100:
-    #   id = 0
-    #   cur.execute("UPDATE items SET speaker=%s, msg=%s, WHERE id=%s", [speaker, msg, id])
-    #   id += 1
-    #cur.execute("DROP TABLE items")
-    #cur.execute("CREATE TABLE items(id int, speaker text, msg text)")
-    cur.execute("UPDATE items SET id=0, date='test', speaker='LINE-Client', msg='こんにちは！' WHERE id=0")
-
-    #データベースへコミットし、カーソルを破棄して、接続を解除する。
     conn.commit()
     cur.close()
     conn.close()
