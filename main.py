@@ -24,7 +24,7 @@ DATABASE_URL = os.environ["DATABASE_URL"]
 HAS_DB_TABLE = os.environ["HAS_DB_TABLE"]
 
 #LINEメッセージをデータベースに登録・格納する際のIDを宣言する
-global row_id
+#global row_id
 row_id = 0
 
 
@@ -114,7 +114,7 @@ def handle_message(event):
     conn.commit()
     cur.close()
     conn.close()
-    row_id += 1
+    row_id = 1
 
 
 
