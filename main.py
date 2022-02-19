@@ -107,8 +107,8 @@ def handle_message(event):
     #   id = 0
     #   cur.execute("UPDATE items SET speaker=%s, msg=%s, WHERE id=%s", [speaker, msg, id])
     #   id += 1
-    cur.execute("DROP TABLE items")
-    cur.execute("CREATE TABLE items(id int, speaker text, msg text)")
+    #cur.execute("DROP TABLE items")
+    cur.execute("CREATE TABLE items2(id int, speaker text, msg text)")
     #cur.execute("UPDATE items SET speaker='LINE-Client', msg='Hello!' WHERE id=0")
 
     #データベースへコミットし、カーソルを破棄して、接続を解除する。
