@@ -27,11 +27,6 @@ HAS_DB_TABLE = os.environ["HAS_DB_TABLE"]
 global row_id
 row_id = 0
 
-# ポート番号の設定
-if __name__ == "__main__":
-    #Flaskのアプリモジュールを実行する
-    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
-
 
 
 
@@ -119,3 +114,11 @@ def handle_message(event):
     conn.commit()
     cur.close()
     conn.close()
+
+
+
+
+# ポート番号の設定
+if __name__ == "__main__":
+    #Flaskのアプリモジュールを実行する
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
