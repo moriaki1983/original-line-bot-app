@@ -24,8 +24,8 @@ DATABASE_URL = os.environ["DATABASE_URL"]
 HAS_DB_TABLE = os.environ["HAS_DB_TABLE"]
 
 #LINEメッセージをデータベースに登録・格納する際のIDを宣言する
-global row_id = 0
-
+global row_id
+row_id = 0
 
 
 
@@ -37,6 +37,7 @@ def now_online():
     cur  = conn.cursor()
 
     # データベースからLINEメッセージを取得する
+    global row_id
     cur.execute("SELECT * FROM items WHERE id=%s", [row_id])
     row = cur.fetchone()
     cur.close()
@@ -91,6 +92,7 @@ def handle_message(event):
        os.environ["HAS_DB_TABLE"] = True
  
     #ユーザーからのLINEメッセージをデータベースに登録・格納する
+    global row_id
     date    = "2022-02-22-22:22"
     speaker = event.source.userId
     msg     = event.message.text
