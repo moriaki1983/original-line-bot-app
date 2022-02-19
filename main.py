@@ -103,6 +103,7 @@ def handle_message(event):
     #row = cur.fetchone()
     #cur.execute("SELECT * FROM items")
     #row_num = len(cur.fetchall())
+    
     row_id += 1
     
     #if row is None:
