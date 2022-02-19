@@ -37,7 +37,7 @@ def now_online():
     cur  = conn.cursor()
 
     # データベースからLINEメッセージを取得する
-    cur.execute("SELECT * FROM items WHERE row_id=%s", [row_id])
+    cur.execute("SELECT * FROM items WHERE id=%s", [row_id])
     row = cur.fetchone()
     cur.close()
     conn.close()
@@ -85,25 +85,26 @@ def handle_message(event):
     #テーブルを作成する
     if HAS_DB_TABLE == True:
        cur.execute("DROP TABLE items")
-       cur.execute("CREATE TABLE items(row_id int, speaker text, msg text)")
+       cur.execute("CREATE TABLE items(id int, date, speaker text, msg text)")
     else:
-       cur.execute("CREATE TABLE items(row_id int, speaker text, msg text)")
+       cur.execute("CREATE TABLE items(id int, date, speaker text, msg text)")
        os.environ["HAS_DB_TABLE"] = True
  
     #ユーザーからのLINEメッセージをデータベースに登録・格納する
+    date    = "2022-02-22-22:22"
     speaker = event.source.userId
     msg     = event.message.text
-    cur.execute("SELECT * FROM items WHERE row_id=%s", [row_id])
+    cur.execute("SELECT * FROM items WHERE id=%s", [row_id])
     row = cur.fetchone()
     cur.execute("SELECT * FROM items")
     row_num = len(cur.fetchall())
 
     if row == null:
-       cur.execute("INSERT INTO items VALUES(%s, %s, %s) WHERE row_id=%s", [row_id, speaker, msg, row_id])
+       cur.execute("INSERT INTO items VALUES(%s, %s, %s, %s) WHERE id=%s", [row_id, date, speaker, msg, row_id])
        id += 1
     elif row_num >= 100:
        id = 0
-       cur.execute("UPDATE items SET speaker=%s, msg=%s, WHERE row_id=%s", [speaker, msg, row_id])
+       cur.execute("UPDATE items SET date=%s, speaker=%s, msg=%s, WHERE id=%s", [date, speaker, msg, row_id])
        id += 1
 
     #データベースへコミットし、カーソルを破棄して、接続を解除する。
