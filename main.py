@@ -21,9 +21,6 @@ import random
 #Flaskのアプリモジュールを作成する
 app = Flask(__name__)
 
-#データーベースの初期化フラグを宣言する
-db_init_flg = False
-
 #herokuの環境変数に設定された、LINE DevelopersのアクセストークンとChannelSecretを取得するコード
 YOUR_CHANNEL_ACCESS_TOKEN = os.environ["YOUR_CHANNEL_ACCESS_TOKEN"]
 YOUR_CHANNEL_SECRET       = os.environ["YOUR_CHANNEL_SECRET"]
@@ -33,7 +30,10 @@ handler      = WebhookHandler(YOUR_CHANNEL_SECRET)
 #herokuの環境に設定されているPostgresの変数を取得する
 DATABASE_URL = os.environ["DATABASE_URL"]
 
+#LINEメッセージをデータベースに登録・格納する際のIDを宣言する
 id = 0
+
+
 
 
 #herokuへのデプロイが成功したかどうかを確認する
@@ -44,8 +44,10 @@ def now_online():
     cur  = conn.cursor()
 
     # データベースからLINEメッセージを取得する
-    #cur.execute("SELECT * FROM items WHERE id ='1'")
-    cur.execute("SELECT * FROM items WHERE id = %s", [id])
+    if id == 0:
+      cur.execute("SELECT * FROM items WHERE id = '0'")
+    elif id > 0:
+         cur.execute("SELECT * FROM items WHERE id=%s", [id])
     row = cur.fetchone()
     cur.close()
     conn.close()
@@ -79,7 +81,7 @@ def handle_message(event):
     for tkn in tkns:
         rslt.append(tkn.surface)
 
-    #
+    #ユーザーへの返信メッセージを生成する
     if rslt[0] == "わたし":
        rslt[0] = "LINE-Client"
 
@@ -90,20 +92,30 @@ def handle_message(event):
     conn = psycopg2.connect(DATABASE_URL)
     cur  = conn.cursor()
 
-    #テーブルを作成し、データーベースの初期化フラグを立てる
-    if db_init_flg == False:
+    #テーブルを作成する
+    if is_db_init == False:
        cur.execute("CREATE TABLE items(id int, date text, speaker text, msg text)")
-       db_init_flg = True
-
+ 
     #ユーザーからのLINEメッセージをデータベースに登録・格納する
-    id      = id + 1
     date    = "test"
-    speaker = "test"
+    speaker = event.source.userId
     msg     = event.message.text
-    cur.execute("INSERT INTO items VALUES(%s, %s, %s, %s)", [id, date, speaker, msg])
+    cur.execute("SELECT * FROM items WHERE id=%s", [id])
+    row = cur.fetchone()
+    if row == null:
+       cur.execute("INSERT INTO items VALUES(%s, %s, %s, %s)", [id, date, speaker, msg])
+       id += 1
+    elif len(cur.fetchall()) >= 100:
+       id = 0
+       cur.execute("UPDATE items SET date=%s, speaker=%s, msg=%s, WHERE id=%s", [date, speaker, msg, id])
+       id += 1
+
+    #
     conn.commit()
     cur.close()
     conn.close()
+
+
 
 
 # ポート番号の設定
