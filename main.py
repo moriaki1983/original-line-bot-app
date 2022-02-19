@@ -24,7 +24,7 @@ DATABASE_URL = os.environ["DATABASE_URL"]
 HAS_DB_TABLE = os.environ["HAS_DB_TABLE"]
 
 #LINEメッセージをデータベースに登録・格納する際のIDを宣言する
-row_id = 0
+#row_id = 0
 
 
 
@@ -126,5 +126,8 @@ def handle_message(event):
 
 # ポート番号の設定
 if __name__ == "__main__":
+    #
+    row_id = 0
+    
     #Flaskのアプリモジュールを実行する
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
