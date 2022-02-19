@@ -35,17 +35,17 @@ is_db_init = False
 id = 0
 
 #データベースへの接続を確立して、カーソルを用意する
-conn = psycopg2.connect(DATABASE_URL)
-cur  = conn.cursor()
+#conn = psycopg2.connect(DATABASE_URL)
+#cur  = conn.cursor()
 
 #テーブルを作成する
-if is_db_init == False:
-   cur.execute("CREATE TABLE items(id int, date text, speaker text, msg text)")
-   is_db_init = True
+#if is_db_init == False:
+#   cur.execute("CREATE TABLE items(id int, date text, speaker text, msg text)")
+#   is_db_init = True
 
 #
-cur.close()
-conn.close()
+#cur.close()
+#conn.close()
 
 
 
