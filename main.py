@@ -109,7 +109,7 @@ def handle_message(event):
     #   id += 1
     #cur.execute("DROP TABLE items")
     #cur.execute("CREATE TABLE items(id int, speaker text, msg text)")
-    cur.execute("UPDATE items SET date='test', speaker='LINE-Client', msg='こんにちは！' WHERE id=0")
+    cur.execute("UPDATE items SET id=0, date='test', speaker='LINE-Client', msg='こんにちは！' WHERE id=0")
 
     #データベースへコミットし、カーソルを破棄して、接続を解除する。
     conn.commit()
