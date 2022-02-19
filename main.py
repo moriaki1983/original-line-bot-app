@@ -45,7 +45,7 @@ def now_online():
     cur  = conn.cursor()
 
     # データベースからLINEメッセージを取得する
-    cur.execute("SELECT * FROM items WHERE = %s", [id])
+    cur.execute("SELECT * FROM items WHERE id=%s", [id])
     row = cur.fetchone()
     cur.close()
     conn.close()
