@@ -10,9 +10,6 @@ import os
 
 
 
-#LINEメッセージをデータベースに登録・格納する際のIDを宣言する
-row_id = 0
-
 #Flaskのアプリモジュールを作成する
 app = Flask(__name__)
 
@@ -126,5 +123,9 @@ def handle_message(event):
 
 # ポート番号の設定
 if __name__ == "__main__":
+    #LINEメッセージをデータベースに登録・格納する際のIDを宣言する
+    global row_id
+    row_id = 0
+
     #Flaskのアプリモジュールを実行する
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
