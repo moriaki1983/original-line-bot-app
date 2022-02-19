@@ -39,12 +39,13 @@ def now_online():
     cur  = conn.cursor()
 
     # データベースからLINEメッセージを取得する
-    cur.execute("SELECT * FROM items WHERE id=%s", [DB_RCRD_NUM])
+    cur.execute("SELECT * FROM items WHERE id=%s", [int(os.environ["DB_RCRD_NUM"])])
     row = cur.fetchone()
     cur.close()
     conn.close()
     #return jsonify(row), 500
-    return str(DB_RCRD_NUM)
+    os.environ["DB_RCRD_NUM"] = str(int(os.environ["DB_RCRD_NUM"]) + 1)
+    return str(int(os.environ["DB_RCRD_NUM"]))
 
 
 #LINE DevelopersのWebhookにURLを指定してWebhookからURLにイベントが送られるようにする
@@ -110,7 +111,6 @@ def handle_message(event):
     #    row_id = 0
     #    cur.execute("UPDATE items SET date=%s, speaker=%s, msg=%s, WHERE id=%s", [date, speaker, msg, row_id])
     #    row_id += 1
-    os.environ["DB_RCRD_NUM"] = (os.environ["DB_RCRD_NUM"] + 1)
     
     #データベースへコミットし、カーソルを破棄して、接続を解除する。
     conn.commit()
