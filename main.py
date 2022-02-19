@@ -110,7 +110,7 @@ def handle_message(event):
     #    row_id = 0
     #    cur.execute("UPDATE items SET date=%s, speaker=%s, msg=%s, WHERE id=%s", [date, speaker, msg, row_id])
     #    row_id += 1
-    os.environ["DB_RCRD_NUM"] += 1
+    os.environ["DB_RCRD_NUM"] = (os.environ["DB_RCRD_NUM"] + 1)
     
     #データベースへコミットし、カーソルを破棄して、接続を解除する。
     conn.commit()
