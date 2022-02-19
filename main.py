@@ -34,19 +34,6 @@ DATABASE_URL = os.environ["DATABASE_URL"]
 #is_db_init = False
 id = 0
 
-#データベースへの接続を確立して、カーソルを用意する
-#conn = psycopg2.connect(DATABASE_URL)
-#cur  = conn.cursor()
-
-#テーブルを作成する
-#if is_db_init == False:
-#   cur.execute("CREATE TABLE items(id int, date text, speaker text, msg text)")
-#   is_db_init = True
-
-#
-#cur.close()
-#conn.close()
-
 
 
 
@@ -57,11 +44,8 @@ def now_online():
     conn = psycopg2.connect(DATABASE_URL)
     cur  = conn.cursor()
 
-    # データベースからLINEメッセージを取得する
-    if id == 0:
-      cur.execute("SELECT * FROM items WHERE id=0")
-    elif id > 0:
-      cur.execute("SELECT * FROM items WHERE id=%s", [id])
+    # データベースからLINEメッセージを取得す
+    cur.execute("SELECT * FROM items WHERE id=%s", [id])
     row = cur.fetchone()
     cur.close()
     conn.close()
@@ -112,9 +96,9 @@ def handle_message(event):
     #   is_db_init = True
  
     #ユーザーからのLINEメッセージをデータベースに登録・格納する
-    date    = "test"
-    speaker = event.source.userId
-    msg     = event.message.text
+    #date    = "test"
+    #speaker = event.source.userId
+    #msg     = event.message.text
     #cur.execute("SELECT * FROM items WHERE id=%s", [id])
     #row = cur.fetchone()
     #if row == null:
@@ -124,7 +108,7 @@ def handle_message(event):
     #   id = 0
     #   cur.execute("UPDATE items SET date=%s, speaker=%s, msg=%s, WHERE id=%s", [date, speaker, msg, id])
     #   id += 1
-    cur.execute("UPDATE items SET id=0, date='Test', speaker='LINE-Client', msg='こんにちは！' WHERE id=0")
+    cur.execute("UPDATE items SET date='Test', speaker='LINE-Client', msg='こんにちは！' WHERE id=0")
 
     #
     conn.commit()
