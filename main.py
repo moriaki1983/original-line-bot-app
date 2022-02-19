@@ -33,9 +33,6 @@ row_id = 0
 #herokuへのデプロイが成功したかどうかを確認する
 @app.route("/")
 def now_online():
-    #
-    global row_id
-    
     #データベースへの接続を確立して、カーソルを用意する
     conn = psycopg2.connect(DATABASE_URL)
     cur  = conn.cursor()
@@ -69,10 +66,7 @@ def callback():
 
 #以下でWebhookから送られてきたイベントをどのように処理するかを記述する
 @handler.add(MessageEvent, message=TextMessage)
-def handle_message(event):
-    #
-    global row_id
-    
+def handle_message(event):   
     #JanomeでユーザーからのLINEメッセージを解析する
     tknzr = Tokenizer()
     tkns = tknzr.tokenize(event.message.text)
