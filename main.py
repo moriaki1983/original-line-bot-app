@@ -30,7 +30,8 @@ handler      = WebhookHandler(YOUR_CHANNEL_SECRET)
 #herokuの環境に設定されているPostgresの変数を取得する
 DATABASE_URL = os.environ["DATABASE_URL"]
 
-#LINEメッセージをデータベースに登録・格納する際のIDを宣言する
+#データベースの初期化フラグと、LINEメッセージをデータベースに登録・格納する際のIDを宣言する
+is_db_init = False
 id = 0
 
 
@@ -95,20 +96,22 @@ def handle_message(event):
     #テーブルを作成する
     if is_db_init == False:
        cur.execute("CREATE TABLE items(id int, date text, speaker text, msg text)")
+       is_db_init = True
  
     #ユーザーからのLINEメッセージをデータベースに登録・格納する
     date    = "test"
     speaker = event.source.userId
     msg     = event.message.text
-    cur.execute("SELECT * FROM items WHERE id=%s", [id])
-    row = cur.fetchone()
-    if row == null:
-       cur.execute("INSERT INTO items VALUES(%s, %s, %s, %s)", [id, date, speaker, msg])
-       id += 1
-    elif len(cur.fetchall()) >= 100:
-       id = 0
-       cur.execute("UPDATE items SET date=%s, speaker=%s, msg=%s, WHERE id=%s", [date, speaker, msg, id])
-       id += 1
+    #cur.execute("SELECT * FROM items WHERE id=%s", [id])
+    #row = cur.fetchone()
+    #if row == null:
+    #   cur.execute("INSERT INTO items VALUES(%s, %s, %s, %s)", [id, date, speaker, msg])
+    #   id += 1
+    #elif len(cur.fetchall()) >= 100:
+    #   id = 0
+    #   cur.execute("UPDATE items SET date=%s, speaker=%s, msg=%s, WHERE id=%s", [date, speaker, msg, id])
+    #   id += 1
+    cur.execute("UPDATE items SET date='Test', speaker='LINE-Client', msg='こんにちは！', WHERE id='0'")
 
     #
     conn.commit()
