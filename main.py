@@ -103,11 +103,11 @@ def handle_message(event):
 
     if row == null:
        cur.execute("INSERT INTO items VALUES(%s, %s, %s, %s) WHERE id=%s", [row_id, date, speaker, msg, row_id])
-       id += 1
+       row_id += 1
     elif row_num >= 100:
-       id = 0
+       row_id = 0
        cur.execute("UPDATE items SET date=%s, speaker=%s, msg=%s, WHERE id=%s", [date, speaker, msg, row_id])
-       id += 1
+       row_id += 1
 
     #データベースへコミットし、カーソルを破棄して、接続を解除する。
     conn.commit()
