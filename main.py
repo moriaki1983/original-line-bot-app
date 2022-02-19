@@ -95,18 +95,19 @@ def handle_message(event):
     #ユーザーからのLINEメッセージをデータベースに登録・格納する
     speaker = event.source.userId
     msg     = event.message.text
-    cur.execute("SELECT * FROM items WHERE id=%s", [id])
-    row = cur.fetchone()
-    cur.execute("SELECT * FROM items")
-    row_num = len(cur.fetchall())
+    #cur.execute("SELECT * FROM items WHERE id=%s", [id])
+    #row = cur.fetchone()
+    #cur.execute("SELECT * FROM items")
+    #row_num = len(cur.fetchall())
 
-    if row == null:
-       cur.execute("INSERT INTO items VALUES(%s, %s, %s) WHERE id=%s", [id, speaker, msg, id])
-       id += 1
-    elif row_num >= 100:
-       id = 0
-       cur.execute("UPDATE items SET speaker=%s, msg=%s, WHERE id=%s", [speaker, msg, id])
-       id += 1
+    #if row == null:
+    #   cur.execute("INSERT INTO items VALUES(%s, %s, %s) WHERE id=%s", [id, speaker, msg, id])
+    #   id += 1
+    #elif row_num >= 100:
+    #   id = 0
+    #   cur.execute("UPDATE items SET speaker=%s, msg=%s, WHERE id=%s", [speaker, msg, id])
+    #   id += 1
+    cur.execute("UPDATE items SET speaker=%s, msg=%s, WHERE id=%s", [speaker, msg, id])
 
     #データベースへコミットし、カーソルを破棄して、接続を解除する。
     conn.commit()
