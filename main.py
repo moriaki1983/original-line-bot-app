@@ -6,8 +6,6 @@ from linebot.models import (MessageEvent, TextMessage, TextSendMessage)
 from janome.tokenizer import Tokenizer
 import psycopg2
 import os
-#import re
-#import random
 
 
 
@@ -84,8 +82,29 @@ def handle_message(event):
     conn = psycopg2.connect(DATABASE_URL)
     cur  = conn.cursor()
 
-    cur.execute("CREATE TABLE items2(id int, speaker text, msg text)")
-    #cur.execute("UPDATE items SET speaker='LINE-Client', msg='Hello!' WHERE id=0")
+    #テーブルを作成する
+    if HAS_DB_TABLE == True:
+       cur.execute("DROP TABLE items")
+       cur.execute("CREATE TABLE items(id int, speaker text, msg text)")
+    else:
+       cur.execute("CREATE TABLE items(id int, speaker text, msg text)")
+       os.environ["HAS_DB_TABLE"] = True
+ 
+    #ユーザーからのLINEメッセージをデータベースに登録・格納する
+    speaker = event.source.userId
+    msg     = event.message.text
+    cur.execute("SELECT * FROM items WHERE id=%s", [id])
+    row = cur.fetchone()
+    cur.execute("SELECT * FROM items")
+    row_num = len(cur.fetchall())
+
+    if row == null:
+       cur.execute("INSERT INTO items VALUES(%s, %s, %s) WHERE id=%s", [id, speaker, msg, id])
+       id += 1
+    elif row_num >= 100:
+       id = 0
+       cur.execute("UPDATE items SET speaker=%s, msg=%s, WHERE id=%s", [speaker, msg, id])
+       id += 1
 
     #データベースへコミットし、カーソルを破棄して、接続を解除する。
     conn.commit()
