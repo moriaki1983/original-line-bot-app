@@ -124,7 +124,7 @@ def handle_message(event):
     #   id = 0
     #   cur.execute("UPDATE items SET date=%s, speaker=%s, msg=%s, WHERE id=%s", [date, speaker, msg, id])
     #   id += 1
-    cur.execute("UPDATE items SET id=0, date='Test', speaker='LINE-Client', msg='こんにちは！', WHERE id=0")
+    cur.execute("UPDATE items SET id=0, date='Test', speaker='LINE-Client', msg='こんにちは！' WHERE id=0")
 
     #
     conn.commit()
