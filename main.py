@@ -24,7 +24,7 @@ DATABASE_URL = os.environ["DATABASE_URL"]
 HAS_DB_TABLE = os.environ["HAS_DB_TABLE"]
 
 #LINEメッセージをデータベースに登録・格納する際のIDを宣言する
-#row_id = 0
+row_id = 0
 
 
 
@@ -107,13 +107,13 @@ def handle_message(event):
     cur.execute("SELECT * FROM items")
     row_num = len(cur.fetchall())
 
-    if row == None:
-        cur.execute("INSERT INTO items VALUES(%s, %s, %s, %s) WHERE id=%s", [row_id, date, speaker, msg, row_id])
-        row_id += 1
-    elif row_num >= 100:
-        row_id = 0
-        cur.execute("UPDATE items SET date=%s, speaker=%s, msg=%s, WHERE id=%s", [date, speaker, msg, row_id])
-        row_id += 1
+    #if row == None:
+    #    cur.execute("INSERT INTO items VALUES(%s, %s, %s, %s) WHERE id=%s", [row_id, date, speaker, msg, row_id])
+    #    row_id += 1
+    #elif row_num >= 100:
+    #    row_id = 0
+    #    cur.execute("UPDATE items SET date=%s, speaker=%s, msg=%s, WHERE id=%s", [date, speaker, msg, row_id])
+    #    row_id += 1
 
     #データベースへコミットし、カーソルを破棄して、接続を解除する。
     conn.commit()
