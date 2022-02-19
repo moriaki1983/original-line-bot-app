@@ -1,14 +1,8 @@
 #モジュールの読み込み
 from flask import Flask,jsonify,request,abort
-from linebot import (
-    LineBotApi, WebhookHandler
-)
-from linebot.exceptions import (
-    InvalidSignatureError
-)
-from linebot.models import (
-    MessageEvent, TextMessage, TextSendMessage,
-)
+from linebot import (LineBotApi, WebhookHandler)
+from linebot.exceptions import (InvalidSignatureError)
+from linebot.models import (MessageEvent, TextMessage, TextSendMessage,)
 from janome.tokenizer import Tokenizer
 import psycopg2
 import os
@@ -101,10 +95,13 @@ def handle_message(event):
     msg     = event.message.text
     cur.execute("SELECT * FROM items WHERE id=%s", [id])
     row = cur.fetchone()
+    cur.execute("SELECT * FROM items")
+    row_num = len(cur.fetchall())
+
     if row == null:
-       cur.execute("INSERT INTO items VALUES(%s, %s, %s, %s)", [id, date, speaker, msg])
+       cur.execute("INSERT INTO items VALUES(%s, %s, %s, %s) WHERE id=%s", [id, date, speaker, msg, id])
        id += 1
-    elif len(cur.fetchall()) >= 100:
+    elif row_num >= 100:
        id = 0
        cur.execute("UPDATE items SET date=%s, speaker=%s, msg=%s, WHERE id=%s", [date, speaker, msg, id])
        id += 1
