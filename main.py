@@ -85,12 +85,14 @@ def handle_message(event):
     cur  = conn.cursor()
 
     #テーブルを作成する
-    if HAS_DB_TABLE == False:
-       cur.execute("CREATE TABLE items(id int, date text, speaker text, msg text)")
-       HAS_DB_TABLE = True
+    if HAS_DB_TABLE == True:
+       cur.execute("DROP TABLE items")
+       cur.execute("CREATE TABLE items(id int, speaker text, msg text)")
+    else:
+       cur.execute("CREATE TABLE items(id int, speaker text, msg text)")
+       os.environ["HAS_DB_TABLE"] = True
  
     #ユーザーからのLINEメッセージをデータベースに登録・格納する
-    date    = "test"
     speaker = event.source.userId
     msg     = event.message.text
     cur.execute("SELECT * FROM items WHERE id=%s", [id])
@@ -99,11 +101,11 @@ def handle_message(event):
     row_num = len(cur.fetchall())
 
     if row == null:
-       cur.execute("INSERT INTO items VALUES(%s, %s, %s, %s) WHERE id=%s", [id, date, speaker, msg, id])
+       cur.execute("INSERT INTO items VALUES(%s, %s, %s) WHERE id=%s", [id, speaker, msg, id])
        id += 1
     elif row_num >= 100:
        id = 0
-       cur.execute("UPDATE items SET date=%s, speaker=%s, msg=%s, WHERE id=%s", [date, speaker, msg, id])
+       cur.execute("UPDATE items SET speaker=%s, msg=%s, WHERE id=%s", [speaker, msg, id])
        id += 1
 
     #データベースへコミットし、カーソルを破棄して、接続を解除する。
