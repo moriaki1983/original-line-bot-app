@@ -31,7 +31,7 @@ handler      = WebhookHandler(YOUR_CHANNEL_SECRET)
 DATABASE_URL = os.environ["DATABASE_URL"]
 
 #データベースの初期化フラグと、LINEメッセージをデータベースに登録・格納する際のIDを宣言する
-is_db_init = False
+#is_db_init = False
 id = 0
 
 #データベースへの接続を確立して、カーソルを用意する
@@ -124,7 +124,7 @@ def handle_message(event):
     #   id = 0
     #   cur.execute("UPDATE items SET date=%s, speaker=%s, msg=%s, WHERE id=%s", [date, speaker, msg, id])
     #   id += 1
-    cur.execute("UPDATE items SET date='Test', speaker='LINE-Client', msg='こんにちは！', WHERE id=0")
+    cur.execute("UPDATE items SET id=0, date='Test', speaker='LINE-Client', msg='こんにちは！', WHERE id=0")
 
     #
     conn.commit()
