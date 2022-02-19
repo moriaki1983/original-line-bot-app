@@ -44,7 +44,7 @@ def now_online():
     cur.close()
     conn.close()
     #return jsonify(row), 500
-    return row_id
+    return f'(row_id)'
 
 
 #LINE DevelopersのWebhookにURLを指定してWebhookからURLにイベントが送られるようにする
@@ -104,7 +104,7 @@ def handle_message(event):
     cur.execute("SELECT * FROM items")
     row_num = len(cur.fetchall())
 
-    if row == none:
+    if row == None:
         cur.execute("INSERT INTO items VALUES(%s, %s, %s, %s) WHERE id=%s", [row_id, date, speaker, msg, row_id])
         row_id += 1
     elif row_num >= 100:
