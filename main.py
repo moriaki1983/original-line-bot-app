@@ -13,19 +13,20 @@ import os
 #Flaskのアプリモジュールを作成する
 app = Flask(__name__)
 
-#herokuの環境変数に設定された、LINE DevelopersのアクセストークンとChannelSecretを取得するコード
+#herokuの環境変数に設定された、LINE DevelopersのアクセストークンとChannelSecretを取得する
 YOUR_CHANNEL_ACCESS_TOKEN = os.environ["YOUR_CHANNEL_ACCESS_TOKEN"]
 YOUR_CHANNEL_SECRET       = os.environ["YOUR_CHANNEL_SECRET"]
 line_bot_api = LineBotApi(YOUR_CHANNEL_ACCESS_TOKEN)
 handler      = WebhookHandler(YOUR_CHANNEL_SECRET)
 
-#herokuの環境に設定されているPostgresの変数と、テーブルの有無を示す変数を取得する
+#herokuの環境に設定されているPostgresの変数を取得する
 DATABASE_URL = os.environ["DATABASE_URL"]
+
+#herokuの環境に設定されているテーブルの有無を示す変数を取得する
 HAS_DB_TABLE = os.environ["HAS_DB_TABLE"]
 
-#LINEメッセージをデータベースに登録・格納する際のIDを宣言する
-#global row_id
-row_id = 0
+#herokuの環境に設定されているLINEメッセージの登録・格納件数を示す変数を取得する
+DB_RCRD_NUM = os.environ["DB_RCRD_NUM"]
 
 
 
@@ -38,20 +39,17 @@ def now_online():
     cur  = conn.cursor()
 
     # データベースからLINEメッセージを取得する
-    cur.execute("SELECT * FROM items WHERE id=%s", [row_id])
+    cur.execute("SELECT * FROM items WHERE id=%s", [DB_RCRD_NUM])
     row = cur.fetchone()
     cur.close()
     conn.close()
     #return jsonify(row), 500
-    row_id += 1
-    return str(row_id)
+    return str(DB_RCRD_NUM)
 
 
 #LINE DevelopersのWebhookにURLを指定してWebhookからURLにイベントが送られるようにする
 @app.route("/callback", methods=['POST'])
 def callback():
-    global row_id
-    
     # リクエストヘッダーから署名検証のための値を取得
     signature = request.headers['X-Line-Signature']
 
@@ -105,8 +103,6 @@ def handle_message(event):
     #cur.execute("SELECT * FROM items")
     #row_num = len(cur.fetchall())
     
-    row_id += 1
-    
     #if row is None:
     #    cur.execute("INSERT INTO items VALUES(%s, %s, %s, %s) WHERE id=%s", [row_id, date, speaker, msg, row_id])
     #    row_id += 1
@@ -114,6 +110,7 @@ def handle_message(event):
     #    row_id = 0
     #    cur.execute("UPDATE items SET date=%s, speaker=%s, msg=%s, WHERE id=%s", [date, speaker, msg, row_id])
     #    row_id += 1
+    os.environ["DB_RCRD_NUM"] += 1
     
     #データベースへコミットし、カーソルを破棄して、接続を解除する。
     conn.commit()
