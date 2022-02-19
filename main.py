@@ -21,10 +21,10 @@ handler      = WebhookHandler(YOUR_CHANNEL_SECRET)
 
 #herokuの環境に設定されているPostgresの変数と、テーブルの有無を示す変数を取得する
 DATABASE_URL = os.environ["DATABASE_URL"]
-#HAS_DB_TABLE = os.environ["HAS_DB_TABLE"]
+HAS_DB_TABLE = os.environ["HAS_DB_TABLE"]
 
 #LINEメッセージをデータベースに登録・格納する際のIDを宣言する
-id = 0
+row_id = 0
 
 
 
@@ -37,7 +37,7 @@ def now_online():
     cur  = conn.cursor()
 
     # データベースからLINEメッセージを取得する
-    cur.execute("SELECT * FROM items WHERE id=%s", [id])
+    cur.execute("SELECT * FROM items WHERE row_id=%s", [row_id])
     row = cur.fetchone()
     cur.close()
     conn.close()
@@ -85,25 +85,25 @@ def handle_message(event):
     #テーブルを作成する
     if HAS_DB_TABLE == True:
        cur.execute("DROP TABLE items")
-       cur.execute("CREATE TABLE items(id int, speaker text, msg text)")
+       cur.execute("CREATE TABLE items(row_id int, speaker text, msg text)")
     else:
-       cur.execute("CREATE TABLE items(id int, speaker text, msg text)")
+       cur.execute("CREATE TABLE items(row_id int, speaker text, msg text)")
        os.environ["HAS_DB_TABLE"] = True
  
     #ユーザーからのLINEメッセージをデータベースに登録・格納する
     speaker = event.source.userId
     msg     = event.message.text
-    cur.execute("SELECT * FROM items WHERE id=%s", [id])
+    cur.execute("SELECT * FROM items WHERE row_id=%s", [row_id])
     row = cur.fetchone()
     cur.execute("SELECT * FROM items")
     row_num = len(cur.fetchall())
 
     if row == null:
-       cur.execute("INSERT INTO items VALUES(%s, %s, %s) WHERE id=%s", [id, speaker, msg, id])
+       cur.execute("INSERT INTO items VALUES(%s, %s, %s) WHERE row_id=%s", [row_id, speaker, msg, row_id])
        id += 1
     elif row_num >= 100:
        id = 0
-       cur.execute("UPDATE items SET speaker=%s, msg=%s, WHERE id=%s", [speaker, msg, id])
+       cur.execute("UPDATE items SET speaker=%s, msg=%s, WHERE row_id=%s", [speaker, msg, row_id])
        id += 1
 
     #データベースへコミットし、カーソルを破棄して、接続を解除する。
