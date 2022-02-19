@@ -43,6 +43,7 @@ def now_online():
     cur.close()
     conn.close()
     #return jsonify(row), 500
+    row_id += 1
     return str(row_id)
 
 
