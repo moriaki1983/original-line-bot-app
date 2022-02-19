@@ -34,6 +34,19 @@ DATABASE_URL = os.environ["DATABASE_URL"]
 is_db_init = False
 id = 0
 
+#データベースへの接続を確立して、カーソルを用意する
+conn = psycopg2.connect(DATABASE_URL)
+cur  = conn.cursor()
+
+#テーブルを作成する
+if is_db_init == False:
+   cur.execute("CREATE TABLE items(id int, date text, speaker text, msg text)")
+   is_db_init = True
+
+#
+cur.close()
+conn.close()
+
 
 
 
@@ -46,9 +59,9 @@ def now_online():
 
     # データベースからLINEメッセージを取得する
     if id == 0:
-      cur.execute("SELECT * FROM items WHERE id = '0'")
+      cur.execute("SELECT * FROM items WHERE id=0")
     elif id > 0:
-         cur.execute("SELECT * FROM items WHERE id=%s", [id])
+      cur.execute("SELECT * FROM items WHERE id=%s", [id])
     row = cur.fetchone()
     cur.close()
     conn.close()
@@ -94,9 +107,9 @@ def handle_message(event):
     cur  = conn.cursor()
 
     #テーブルを作成する
-    if is_db_init == False:
-       cur.execute("CREATE TABLE items(id int, date text, speaker text, msg text)")
-       is_db_init = True
+    #if is_db_init == False:
+    #   cur.execute("CREATE TABLE items(id int, date text, speaker text, msg text)")
+    #   is_db_init = True
  
     #ユーザーからのLINEメッセージをデータベースに登録・格納する
     date    = "test"
