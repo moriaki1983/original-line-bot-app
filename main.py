@@ -103,7 +103,7 @@ def handle_message(event):
     #row = cur.fetchone()
     #cur.execute("SELECT * FROM items")
     #row_num = len(cur.fetchall())
-    row_id = 1
+    row_id += 1
     
     #if row is None:
     #    cur.execute("INSERT INTO items VALUES(%s, %s, %s, %s) WHERE id=%s", [row_id, date, speaker, msg, row_id])
