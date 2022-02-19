@@ -24,7 +24,6 @@ DATABASE_URL = os.environ["DATABASE_URL"]
 HAS_DB_TABLE = os.environ["HAS_DB_TABLE"]
 
 #LINEメッセージをデータベースに登録・格納する際のIDを宣言する
-global row_id
 row_id = 0
 
 
@@ -33,12 +32,14 @@ row_id = 0
 #herokuへのデプロイが成功したかどうかを確認する
 @app.route("/")
 def now_online():
+    #
+    global row_id
+    
     #データベースへの接続を確立して、カーソルを用意する
     conn = psycopg2.connect(DATABASE_URL)
     cur  = conn.cursor()
 
     # データベースからLINEメッセージを取得する
-    global row_id
     cur.execute("SELECT * FROM items WHERE id=%s", [row_id])
     row = cur.fetchone()
     cur.close()
@@ -68,6 +69,9 @@ def callback():
 #以下でWebhookから送られてきたイベントをどのように処理するかを記述する
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
+    #
+    global row_id
+    
     #JanomeでユーザーからのLINEメッセージを解析する
     tknzr = Tokenizer()
     tkns = tknzr.tokenize(event.message.text)
@@ -95,7 +99,6 @@ def handle_message(event):
         os.environ["HAS_DB_TABLE"] = True
  
     #ユーザーからのLINEメッセージをデータベースに登録・格納する
-    global row_id
     date    = "2022-02-22-22:22"
     speaker = event.source.userId
     msg     = event.message.text
