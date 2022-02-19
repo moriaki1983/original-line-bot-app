@@ -67,7 +67,6 @@ def callback():
 
 
 #以下でWebhookから送られてきたイベントをどのように処理するかを記述する
-@app.route("/")
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):   
     #JanomeでユーザーからのLINEメッセージを解析する
@@ -97,14 +96,15 @@ def handle_message(event):
         os.environ["HAS_DB_TABLE"] = True
  
     #ユーザーからのLINEメッセージをデータベースに登録・格納する
-    date    = "2022-02-22-22:22"
-    speaker = event.source.userId
-    msg     = event.message.text
-    cur.execute("SELECT * FROM items WHERE id=%s", [row_id])
-    row = cur.fetchone()
-    cur.execute("SELECT * FROM items")
-    row_num = len(cur.fetchall())
-
+    #date    = "2022-02-22-22:22"
+    #speaker = event.source.userId
+    #msg     = event.message.text
+    #cur.execute("SELECT * FROM items WHERE id=%s", [row_id])
+    #row = cur.fetchone()
+    #cur.execute("SELECT * FROM items")
+    #row_num = len(cur.fetchall())
+    row_id = 1
+    
     #if row is None:
     #    cur.execute("INSERT INTO items VALUES(%s, %s, %s, %s) WHERE id=%s", [row_id, date, speaker, msg, row_id])
     #    row_id += 1
@@ -112,8 +112,6 @@ def handle_message(event):
     #    row_id = 0
     #    cur.execute("UPDATE items SET date=%s, speaker=%s, msg=%s, WHERE id=%s", [date, speaker, msg, row_id])
     #    row_id += 1
-    global row_id
-    row_id = 1
     
     #データベースへコミットし、カーソルを破棄して、接続を解除する。
     conn.commit()
