@@ -12,8 +12,8 @@ from linebot.models import (
 from janome.tokenizer import Tokenizer
 import psycopg2
 import os
-import re
-import random
+#import re
+#import random
 
 
 
@@ -27,11 +27,11 @@ YOUR_CHANNEL_SECRET       = os.environ["YOUR_CHANNEL_SECRET"]
 line_bot_api = LineBotApi(YOUR_CHANNEL_ACCESS_TOKEN)
 handler      = WebhookHandler(YOUR_CHANNEL_SECRET)
 
-#herokuの環境に設定されているPostgresの変数を取得する
+#herokuの環境に設定されているPostgresの変数と、テーブルの有無を示す変数を取得する
 DATABASE_URL = os.environ["DATABASE_URL"]
+HAS_DB_TABLE = os.environ["HAS_DB_TABLE"]
 
-#データベースの初期化フラグと、LINEメッセージをデータベースに登録・格納する際のIDを宣言する
-#is_db_init = False
+#LINEメッセージをデータベースに登録・格納する際のIDを宣言する
 id = 0
 
 
@@ -44,9 +44,9 @@ def now_online():
     conn = psycopg2.connect(DATABASE_URL)
     cur  = conn.cursor()
 
-    # データベースからLINEメッセージを取得す
-    cur.execute("SELECT * FROM items WHERE id=%s", [id])
-    row = cur.fetchone()
+    # データベースからLINEメッセージを取得する
+    cur.execute("SELECT * FROM items")
+    row = cur.fetchall()
     cur.close()
     conn.close()
     return jsonify(row), 500
@@ -86,31 +86,30 @@ def handle_message(event):
     #ユーザーにLINEメッセージを送信する
     line_bot_api.reply_message(event.reply_token,TextSendMessage(text="/".join(rslt)))
 
-    #データベースへの接続を確立して、カーソルを用意する
+    #データベースに接続して、カーソルを用意する
     conn = psycopg2.connect(DATABASE_URL)
     cur  = conn.cursor()
 
     #テーブルを作成する
-    #if is_db_init == False:
-    #   cur.execute("CREATE TABLE items(id int, date text, speaker text, msg text)")
-    #   is_db_init = True
+    if HAS_DB_TABLE == False:
+       cur.execute("CREATE TABLE items(id int, date text, speaker text, msg text)")
+       HAS_DB_TABLE = True
  
     #ユーザーからのLINEメッセージをデータベースに登録・格納する
-    #date    = "test"
-    #speaker = event.source.userId
-    #msg     = event.message.text
-    #cur.execute("SELECT * FROM items WHERE id=%s", [id])
-    #row = cur.fetchone()
-    #if row == null:
-    #   cur.execute("INSERT INTO items VALUES(%s, %s, %s, %s)", [id, date, speaker, msg])
-    #   id += 1
-    #elif len(cur.fetchall()) >= 100:
-    #   id = 0
-    #   cur.execute("UPDATE items SET date=%s, speaker=%s, msg=%s, WHERE id=%s", [date, speaker, msg, id])
-    #   id += 1
-    cur.execute("UPDATE items SET date='Test', speaker='LINE-Client', msg='こんにちは！' WHERE id=0")
+    date    = "test"
+    speaker = event.source.userId
+    msg     = event.message.text
+    cur.execute("SELECT * FROM items WHERE id=%s", [id])
+    row = cur.fetchone()
+    if row == null:
+       cur.execute("INSERT INTO items VALUES(%s, %s, %s, %s)", [id, date, speaker, msg])
+       id += 1
+    elif len(cur.fetchall()) >= 100:
+       id = 0
+       cur.execute("UPDATE items SET date=%s, speaker=%s, msg=%s, WHERE id=%s", [date, speaker, msg, id])
+       id += 1
 
-    #
+    #データベースへコミットし、カーソルを破棄して、接続を解除する。
     conn.commit()
     cur.close()
     conn.close()
