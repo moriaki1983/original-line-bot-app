@@ -85,11 +85,11 @@ def handle_message(event):
 
     #テーブルを作成する
     if HAS_DB_TABLE == True:
-       cur.execute("DROP TABLE items")
-       cur.execute("CREATE TABLE items(id int, date, speaker text, msg text)")
+        cur.execute("DROP TABLE items")
+        cur.execute("CREATE TABLE items(id int, date, speaker text, msg text)")
     else:
-       cur.execute("CREATE TABLE items(id int, date, speaker text, msg text)")
-       os.environ["HAS_DB_TABLE"] = True
+        cur.execute("CREATE TABLE items(id int, date, speaker text, msg text)")
+        os.environ["HAS_DB_TABLE"] = True
  
     #ユーザーからのLINEメッセージをデータベースに登録・格納する
     global row_id
@@ -102,12 +102,12 @@ def handle_message(event):
     row_num = len(cur.fetchall())
 
     if row == null:
-       cur.execute("INSERT INTO items VALUES(%s, %s, %s, %s) WHERE id=%s", [row_id, date, speaker, msg, row_id])
-       row_id += 1
+        cur.execute("INSERT INTO items VALUES(%s, %s, %s, %s) WHERE id=%s", [row_id, date, speaker, msg, row_id])
+        row_id += 1
     elif row_num >= 100:
-       row_id = 0
-       cur.execute("UPDATE items SET date=%s, speaker=%s, msg=%s, WHERE id=%s", [date, speaker, msg, row_id])
-       row_id += 1
+        row_id = 0
+        cur.execute("UPDATE items SET date=%s, speaker=%s, msg=%s, WHERE id=%s", [date, speaker, msg, row_id])
+        row_id += 1
 
     #データベースへコミットし、カーソルを破棄して、接続を解除する。
     conn.commit()
