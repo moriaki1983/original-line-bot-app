@@ -23,7 +23,7 @@ handler      = WebhookHandler(YOUR_CHANNEL_SECRET)
 
 #herokuの環境に設定されているPostgresの変数と、テーブルの有無を示す変数を取得する
 DATABASE_URL = os.environ["DATABASE_URL"]
-HAS_DB_TABLE = os.environ["HAS_DB_TABLE"]
+#HAS_DB_TABLE = os.environ["HAS_DB_TABLE"]
 
 #LINEメッセージをデータベースに登録・格納する際のIDを宣言する
 id = 0
@@ -107,9 +107,9 @@ def handle_message(event):
     #   id = 0
     #   cur.execute("UPDATE items SET speaker=%s, msg=%s, WHERE id=%s", [speaker, msg, id])
     #   id += 1
-    cur.execute("DROP TABLE items")
-    cur.execute("CREATE TABLE items(id int, speaker text, msg text)")
-    cur.execute("UPDATE items SET speaker='test', msg='test' WHERE id=0")
+    #cur.execute("DROP TABLE items")
+    #cur.execute("CREATE TABLE items(id int, speaker text, msg text)")
+    cur.execute("UPDATE items SET date='test', speaker='LINE-Client', msg='こんにちは！' WHERE id=0")
 
     #データベースへコミットし、カーソルを破棄して、接続を解除する。
     conn.commit()
