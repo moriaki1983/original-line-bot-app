@@ -45,8 +45,8 @@ def now_online():
     cur  = conn.cursor()
 
     # データベースからLINEメッセージを取得する
-    cur.execute("SELECT * FROM items")
-    row = cur.fetchall()
+    cur.execute("SELECT * FROM items WHERE =%s", [id])
+    row = cur.fetchone()
     cur.close()
     conn.close()
     return jsonify(row), 500
