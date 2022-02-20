@@ -112,11 +112,12 @@ def handle_message(event):
     cur.execute("SELECT * FROM items")
     row_num = len(cur.fetchall())
 
-    if row == null:
-        cur.execute("INSERT INTO items (id, date, speaker, msg) VALUES (%s, %s, %s, %s) WHERE id=%s", [rcd_id, date, speaker, msg, rcd_id])
-    elif row_num >= 100:
-        os.environ["DB_RCD_NUM"] = '-1'
-        cur.execute("UPDATE items SET id=%s, date=%s, speaker=%s, msg=%s, WHERE id=%s", [rcd_id, date, speaker, msg, rcd_id])
+    #if row == null:
+    #    cur.execute("INSERT INTO items (id, date, speaker, msg) VALUES (%s, %s, %s, %s) WHERE id=%s", [rcd_id, date, speaker, msg, rcd_id])
+    #elif row_num >= 100:
+    #    os.environ["DB_RCD_NUM"] = '-1'
+    #    cur.execute("UPDATE items SET id=%s, date=%s, speaker=%s, msg=%s, WHERE id=%s", [rcd_id, date, speaker, msg, rcd_id])
+    cur.execute("INSERT INTO items (id, date, speaker, msg) VALUES (%s, %s, %s, %s) WHERE id=%s", [rcd_id, date, speaker, msg, rcd_id])
     os.environ["DB_RCD_NUM"] = str(int(os.environ["DB_RCD_NUM"]) + 1)
     
     #データベースへコミットし、カーソルを破棄して、接続を解除する。
