@@ -76,21 +76,21 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):   
     #JanomeでユーザーからのLINEメッセージを解析する
-    tknzr = Tokenizer()
-    tkns = tknzr.tokenize(event.message.text)
-    rslt = []
-    for tkn in tkns:
-        rslt.append(tkn.surface)
+    #tknzr = Tokenizer()
+    #tkns = tknzr.tokenize(event.message.text)
+    #rslt = []
+    #for tkn in tkns:
+    #    rslt.append(tkn.surface)
 
     #ユーザーへの返信メッセージを生成する
-    if rslt[0] == "わたし":
-       rslt[0] = "LINE-Client"
+    #if rslt[0] == "わたし":
+    #   rslt[0] = "LINE-Client"
 
     #ユーザーにLINEメッセージを送信する
     line_bot_api.reply_message(event.reply_token,TextSendMessage(text="/".join(rslt)))
     
     #
-    #db_process()
+    db_process()
     
     #
     env_set()
@@ -127,8 +127,8 @@ def db_process():
     #    cur.execute("INSERT INTO items (id, date, speaker, msg) VALUES (%s, %s, %s, %s)", [rcd_id, date, speaker, msg])
     #elif rcd_id > 9:
     #    cur.execute("UPDATE items SET id=%s, date=%s, speaker=%s, msg=%s, WHERE id=%s", [rcd_id, date, speaker, msg, rcd_id])
-    
-    cur.execute("INSERT INTO items (id, date, speaker, msg) VALUES (%s, %s, %s, %s)", [rcd_id, date, speaker, msg])
+
+    cur.execute("INSERT INTO items VALUES (%s, %s, %s, %s)", [rcd_id, date, speaker, msg])
 
     #データベースへコミットし、カーソルを破棄して、接続を解除する。
     conn.commit()
