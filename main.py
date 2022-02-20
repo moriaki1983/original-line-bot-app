@@ -106,30 +106,29 @@ def db_process():
     cur  = conn.cursor()
 
     #テーブルを作成する
-    if cos.environ["HAS_DB_TABLE"] == 'True':
-         cur.execute("DROP TABLE items")
-         cur.execute("CREATE TABLE items(id int, date, speaker text, msg text)")
-    else:
-         cur.execute("CREATE TABLE items(id int, date, speaker text, msg text)")
-         cos.environ["HAS_DB_TABLE"] = 'True'
+    #if cos.environ["HAS_DB_TABLE"] == 'True':
+    #     cur.execute("DROP TABLE items")
+    #     cur.execute("CREATE TABLE items(id int, date, speaker text, msg text)")
+    #else:
+    #     cur.execute("CREATE TABLE items(id int, date, speaker text, msg text)")
+    #     cos.environ["HAS_DB_TABLE"] = 'True'
  
     #ユーザーからのLINEメッセージをデータベースに登録・格納する
     rcd_id  = int(os.environ["DB_RCD_NUM"])
     date    = "2022-02-22-22:22"
     speaker = event.source.userId
     msg     = event.message.text
-    cur.execute("SELECT * FROM items WHERE id=%s", [rcd_id])
-    row = cur.fetchone()
-    cur.execute("SELECT * FROM items")
-    row_num = len(cur.fetchall())
+    #cur.execute("SELECT * FROM items WHERE id=%s", [rcd_id])
+    #row = cur.fetchone()
+    #cur.execute("SELECT * FROM items")
+    #row_num = len(cur.fetchall())
 
     #if row == null:
     #    cur.execute("INSERT INTO items (id, date, speaker, msg) VALUES (%s, %s, %s, %s)", [rcd_id, date, speaker, msg])
-    #elif os.environ["DB_RCD_NUM"] >= 3:
-    #    env_set()
+    #elif rcd_id > 9:
     #    cur.execute("UPDATE items SET id=%s, date=%s, speaker=%s, msg=%s, WHERE id=%s", [rcd_id, date, speaker, msg, rcd_id])
     
-    #cur.execute("INSERT INTO items (id, date, speaker, msg) VALUES (%s, %s, %s, %s)", [rcd_id, date, speaker, msg])
+    cur.execute("INSERT INTO items (id, date, speaker, msg) VALUES (%s, %s, %s, %s)", [rcd_id, date, speaker, msg])
 
     #データベースへコミットし、カーソルを破棄して、接続を解除する。
     conn.commit()
@@ -137,12 +136,13 @@ def db_process():
     conn.close()
 
 
+#
 def env_set():
-    if int(os.environ["DB_RCD_NUM"]) >= 3:
+    if int(os.environ["DB_RCD_NUM"]) > 9:
           os.environ["DB_RCD_NUM"] = '-1'
 
 
- #
+#
 def env_count():
     os.environ["DB_RCD_NUM"] = str(int(os.environ["DB_RCD_NUM"]) + 1)
 
