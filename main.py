@@ -1,11 +1,12 @@
 #モジュールの読み込み
+import os
+import gunicorn
+import psycopg2
 from flask import Flask,jsonify,request,abort
 from linebot import (LineBotApi, WebhookHandler)
 from linebot.exceptions import (InvalidSignatureError)
 from linebot.models import (MessageEvent, TextMessage, TextSendMessage)
 from janome.tokenizer import Tokenizer
-import psycopg2
-import os
 
 
 
