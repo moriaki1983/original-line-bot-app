@@ -13,19 +13,19 @@ import os
 #Flaskのアプリモジュールを作成する
 app = Flask(__name__)
 
-#herokuの環境変数に設定された、LINE DevelopersのアクセストークンとChannelSecretを取得する
+#herokuの環境変数に設定されている、LINE-Developersのアクセストークンとチャンネルシークレットを取得する
 YOUR_CHANNEL_ACCESS_TOKEN = os.environ["YOUR_CHANNEL_ACCESS_TOKEN"]
 YOUR_CHANNEL_SECRET       = os.environ["YOUR_CHANNEL_SECRET"]
 line_bot_api = LineBotApi(YOUR_CHANNEL_ACCESS_TOKEN)
 handler      = WebhookHandler(YOUR_CHANNEL_SECRET)
 
-#herokuの環境に設定されているPostgresの変数を取得する
+#herokuの環境に設定されている、Postgresにアクセスするためのキーを取得する
 DATABASE_URL = os.environ["DATABASE_URL"]
 
-#herokuの環境に設定されているテーブルの有無を示す変数を取得する
+#herokuの環境に設定されている、Postgres上のテーブルの有無を示す変数を取得する
 HAS_DB_TABLE = os.environ["HAS_DB_TABLE"]
 
-#herokuの環境に設定されているLINEメッセージの登録・格納件数を示す変数を取得する
+#herokuの環境に設定されている、Postgres上のLINEメッセージの登録・格納件数を示す変数を取得する
 DB_RCRD_NUM = os.environ["DB_RCRD_NUM"]
 
 
@@ -38,31 +38,36 @@ def now_online():
     conn = psycopg2.connect(DATABASE_URL)
     cur  = conn.cursor()
 
-    # データベースからLINEメッセージを取得する
-    cur.execute("SELECT * FROM items WHERE id=%s", [int(os.environ["DB_RCRD_NUM"])])
+    # データベースからLINEメッセージを取得して、ブラウザーに引渡しする
+    id = int(os.environ["DB_RCRD_NUM"])
+    cur.execute("SELECT * FROM items WHERE id=%s", [id])
     row = cur.fetchone()
     cur.close()
     conn.close()
-    #return jsonify(row), 500
-    os.environ["DB_RCRD_NUM"] = str(int(os.environ["DB_RCRD_NUM"]) + 1)
-    return str(int(os.environ["DB_RCRD_NUM"]))
+    return jsonify(row), 500
 
 
 #LINE DevelopersのWebhookにURLを指定してWebhookからURLにイベントが送られるようにする
 @app.route("/callback", methods=['POST'])
 def callback():
-    # リクエストヘッダーから署名検証のための値を取得
+    # HTTPリクエストヘッダーから署名検証のためのシグネチャーを取得する
+    #signature = request.META['HTTP_X_LINE_SIGNATURE']
     signature = request.headers['X-Line-Signature']
 
-    # リクエストボディを取得
+    # HTTPリクエストボディを取得する
+    #body = request.body.decode('utf-8')
     body = request.get_data(as_text=True)
     app.logger.info("Request body: " + body)
 
-    # 署名を検証し、問題なければhandleに定義されている関数を呼ぶ
+    # 署名を検証して、問題がなければhandleに定義されている関数の呼出しをする
     try:
         handler.handle(body, signature)
     except InvalidSignatureError:
+        # 署名検証に失敗したら例外を送出する
+        #return HttpResponseForbidden()
         abort(400)
+    #呼出し元にステータスコードを送出する
+    #return HttpResponse('OK')
     return 'OK'
 
 
@@ -93,25 +98,28 @@ def handle_message(event):
         cur.execute("CREATE TABLE items(id int, date, speaker text, msg text)")
     else:
         cur.execute("CREATE TABLE items(id int, date, speaker text, msg text)")
-        os.environ["HAS_DB_TABLE"] = True
+        os.environ["HAS_DB_TABLE"] = 'True'
  
     #ユーザーからのLINEメッセージをデータベースに登録・格納する
-    #date    = "2022-02-22-22:22"
-    #speaker = event.source.userId
-    #msg     = event.message.text
-    #cur.execute("SELECT * FROM items WHERE id=%s", [row_id])
-    #row = cur.fetchone()
-    #cur.execute("SELECT * FROM items")
-    #row_num = len(cur.fetchall())
+    id = int(os.environ["DB_RCRD_NUM"])
+    date    = "2022-02-22-22:22"
+    speaker = event.source.userId
+    msg     = event.message.text
+    cur.execute("SELECT * FROM items WHERE id=%s", [id])
+    row = cur.fetchone()
+    cur.execute("SELECT * FROM items")
+    row_num = len(cur.fetchall())
+
+    if row is None:
+        cur.execute("INSERT INTO items VALUES(%s, %s, %s, %s) WHERE id=%s", [id, date, speaker, msg, id])
+        os.environ["DB_RCRD_NUM"] = str(int(os.environ["DB_RCRD_NUM"]) + 1)
+    elif row_num >= 100:
+        id = 0
+        os.environ["DB_RCRD_NUM"] = '0'
+        cur.execute("UPDATE items SET id=%s, date=%s, speaker=%s, msg=%s, WHERE id=%s", [id, date, speaker, msg, id])
+        os.environ["DB_RCRD_NUM"] = str(int(os.environ["DB_RCRD_NUM"]) + 1)
     
-    #if row is None:
-    #    cur.execute("INSERT INTO items VALUES(%s, %s, %s, %s) WHERE id=%s", [row_id, date, speaker, msg, row_id])
-    #    row_id += 1
-    #elif row_num >= 100:
-    #    row_id = 0
-    #    cur.execute("UPDATE items SET date=%s, speaker=%s, msg=%s, WHERE id=%s", [date, speaker, msg, row_id])
-    #    row_id += 1
-    
+    cur.execute("DROP TABLE items2")
     #データベースへコミットし、カーソルを破棄して、接続を解除する。
     conn.commit()
     cur.close()
