@@ -40,8 +40,7 @@ def now_online():
     cur  = conn.cursor()
 
     # データベースからLINEメッセージを取得して、ブラウザーに引渡しする
-    #rcd_id = int(os.environ["DB_RCD_NUM"])
-    rcd_id = 2
+    rcd_id = int(os.environ["DB_RCD_NUM"])
     cur.execute("SELECT * FROM items WHERE id=%s", [rcd_id])
     row = cur.fetchone()
     cur.close()
@@ -91,42 +90,36 @@ def handle_message(event):
     line_bot_api.reply_message(event.reply_token,TextSendMessage(text="/".join(rslt)))
 
     #データベースに接続して、カーソルを用意する
-    conn = psycopg2.connect(DATABASE_URL)
     #conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+    conn = psycopg2.connect(DATABASE_URL)
     cur  = conn.cursor()
 
     #テーブルを作成する
-    #if HAS_DB_TABLE == 'True':
-    #    cur.execute("DROP TABLE items")
-    #    cur.execute("CREATE TABLE items(id int, date, speaker text, msg text)")
-    #else:
-    #    cur.execute("CREATE TABLE items(id int, date, speaker text, msg text)")
-    #    os.environ["HAS_DB_TABLE"] = 'True'
+    if HAS_DB_TABLE == 'True':
+        cur.execute("DROP TABLE items")
+        cur.execute("CREATE TABLE items(id int, date, speaker text, msg text)")
+    else:
+        cur.execute("CREATE TABLE items(id int, date, speaker text, msg text)")
+        os.environ["HAS_DB_TABLE"] = 'True'
  
     #ユーザーからのLINEメッセージをデータベースに登録・格納する
-    #rcd_id = int(os.environ["DB_RCD_NUM"])
-    #rcd_id = 1
-    #date    = "2022-02-22-22:22"
-    #speaker = event.source.userId
-    #msg     = event.message.text
-    #cur.execute("SELECT * FROM items WHERE id=%s", [id])
-    #row = cur.fetchone()
-    #cur.execute("SELECT * FROM items")
-    #row_num = len(cur.fetchall())
+    rcd_id  = int(os.environ["DB_RCD_NUM"])
+    date    = "2022-02-22-22:22"
+    speaker = event.source.userId
+    msg     = event.message.text
+    cur.execute("SELECT * FROM items WHERE id=%s", [id])
+    row = cur.fetchone()
+    cur.execute("SELECT * FROM items")
+    row_num = len(cur.fetchall())
 
-    #if row is None:
-    #    cur.execute("INSERT INTO items (id, date, speaker, msg) VALUES (%s, %s, %s, %s) WHERE id=%s", [rcd_id, date, speaker, msg, rcd_id])
-    #    os.environ["DB_RCD_NUM"] = str(int(os.environ["DB_RCD_NUM"]) + 1)
-    #elif row_num >= 100:
-    #    rcd_id = 0
-    #    os.environ["DB_RCD_NUM"] = '0'
-    #    cur.execute("UPDATE items SET id=%s, date=%s, speaker=%s, msg=%s, WHERE id=%s", [rcd_id, date, speaker, msg, rcd_id])
-    #    os.environ["DB_RCD_NUM"] = str(int(os.environ["DB_RCD_NUM"]) + 1)
-    #cur.execute("UPDATE items SET id=%s, date=%s, speaker=%s, msg=%s, WHERE id=%s", [rcd_id, date, speaker, msg, rcd_id])
+    if row == null:
+        cur.execute("INSERT INTO items (id, date, speaker, msg) VALUES (%s, %s, %s, %s) WHERE id=%s", [rcd_id, date, speaker, msg, rcd_id])
+        os.environ["DB_RCD_NUM"] = str(int(os.environ["DB_RCD_NUM"]) + 1)
+    elif row_num >= 100:
+        os.environ["DB_RCD_NUM"] = '0'
+        cur.execute("UPDATE items SET id=%s, date=%s, speaker=%s, msg=%s, WHERE id=%s", [rcd_id, date, speaker, msg, rcd_id])
+        os.environ["DB_RCD_NUM"] = str(int(os.environ["DB_RCD_NUM"]) + 1)
     
-    cur.execute("INSERT INTO items VALUES (2, 'test', 'test', 'test')")
-    cur.execute("DROP TABLE items2")
-
     #データベースへコミットし、カーソルを破棄して、接続を解除する。
     conn.commit()
     cur.close()
@@ -138,6 +131,5 @@ def handle_message(event):
 # ポート番号の設定
 if __name__ == "__main__":
     #FlaskのアプリモジュールをWebアプリケーションサーバー上で実行する
-    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
     #app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
-    #app.run(host="0.0.0.0", port='5000')
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
