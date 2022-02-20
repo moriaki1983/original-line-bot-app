@@ -41,8 +41,9 @@ def now_online():
 
     # データベースからLINEメッセージを取得して、ブラウザーに引渡しする
     #rcd_id = int(os.environ["DB_RCD_NUM"])
-    rcd_id = 0
+    rcd_id = 1
     
+    cur.execute("INSERT INTO items VALUES (1, 'test', 'test', 'test')")
     cur.execute("SELECT * FROM items WHERE id=%s", [rcd_id])
     row = cur.fetchone()
     cur.close()
@@ -50,6 +51,7 @@ def now_online():
     return jsonify(row), 200
     #os.environ["DB_RCD_NUM"] = str(int(os.environ["DB_RCD_NUM"]) + 1)
     #return os.environ["DB_RCD_NUM"]
+
 
 #LINE DevelopersのWebhookにURLを指定してWebhookからURLにイベントが送られるようにする
 @app.route("/callback", methods=['POST'])
