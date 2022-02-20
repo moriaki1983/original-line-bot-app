@@ -44,7 +44,7 @@ def now_online():
     row = cur.fetchone()
     cur.close()
     conn.close()
-    return jsonify(row), 500
+    return jsonify(row), 200
 
 
 #LINE DevelopersのWebhookにURLを指定してWebhookからURLにイベントが送られるようにする
@@ -105,10 +105,10 @@ def handle_message(event):
     date    = "2022-02-22-22:22"
     speaker = event.source.userId
     msg     = event.message.text
-    cur.execute("SELECT * FROM items WHERE id=%s", [id])
-    row = cur.fetchone()
-    cur.execute("SELECT * FROM items")
-    row_num = len(cur.fetchall())
+    #cur.execute("SELECT * FROM items WHERE id=%s", [id])
+    #row = cur.fetchone()
+    #cur.execute("SELECT * FROM items")
+    #row_num = len(cur.fetchall())
 
     #if row is None:
     #    cur.execute("INSERT INTO items VALUES(%s, %s, %s, %s) WHERE id=%s", [id, date, speaker, msg, id])
@@ -118,7 +118,7 @@ def handle_message(event):
     #    os.environ["DB_RCRD_NUM"] = '0'
     #    cur.execute("UPDATE items SET id=%s, date=%s, speaker=%s, msg=%s, WHERE id=%s", [id, date, speaker, msg, id])
     #    os.environ["DB_RCRD_NUM"] = str(int(os.environ["DB_RCRD_NUM"]) + 1)
-    cur.execute("UPDATE items SET id=%s, date=%s, speaker=%s, msg=%s, WHERE id=%s", [id, date, speaker, msg, id])
+    #cur.execute("UPDATE items SET id=%s, date=%s, speaker=%s, msg=%s, WHERE id=%s", [id, date, speaker, msg, id])
     cur.execute("DROP TABLE items2")
 
     #データベースへコミットし、カーソルを破棄して、接続を解除する。
