@@ -112,7 +112,7 @@ def handle_message(event):
     #row_num = len(cur.fetchall())
 
     #if row is None:
-    #    cur.execute("INSERT INTO items VALUES(%s, %s, %s, %s) WHERE id=%s", [rcd_id, date, speaker, msg, rcd_id])
+    #    cur.execute("INSERT INTO items (id, date, speaker, msg) VALUES (%s, %s, %s, %s) WHERE id=%s", [rcd_id, date, speaker, msg, rcd_id])
     #    os.environ["DB_RCD_NUM"] = str(int(os.environ["DB_RCD_NUM"]) + 1)
     #elif row_num >= 100:
     #    rcd_id = 0
@@ -120,7 +120,8 @@ def handle_message(event):
     #    cur.execute("UPDATE items SET id=%s, date=%s, speaker=%s, msg=%s, WHERE id=%s", [rcd_id, date, speaker, msg, rcd_id])
     #    os.environ["DB_RCD_NUM"] = str(int(os.environ["DB_RCD_NUM"]) + 1)
     #cur.execute("UPDATE items SET id=%s, date=%s, speaker=%s, msg=%s, WHERE id=%s", [rcd_id, date, speaker, msg, rcd_id])
-    cur.execute("DROP TABLE items2")
+    cur.execute("INSERT INTO items (id, date, speaker, msg) VALUES (%s, %s, %s, %s) WHERE id=%s", [rcd_id, date, speaker, msg, rcd_id])
+    #cur.execute("DROP TABLE items2")
 
     #データベースへコミットし、カーソルを破棄して、接続を解除する。
     conn.commit()
