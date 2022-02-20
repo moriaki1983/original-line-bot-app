@@ -27,7 +27,7 @@ DATABASE_URL = os.environ["DATABASE_URL"]
 #HAS_DB_TABLE = os.environ["HAS_DB_TABLE"]
 
 #herokuの環境に設定されている、Postgres上のLINEメッセージの登録・格納件数を示す変数を取得する
-DB_RCD_NUM = os.environ["DB_RCD_NUM"]
+#DB_RCD_NUM = os.environ["DB_RCD_NUM"]
 
 
 
@@ -45,8 +45,8 @@ def now_online():
     row = cur.fetchone()
     cur.close()
     conn.close()
-    return jsonify(row), 200
-    #return os.environ['DB_RCD_NUM']
+    #return jsonify(row), 200
+    return os.environ['DB_RCD_NUM']
 
 #LINE DevelopersのWebhookにURLを指定してWebhookからURLにイベントが送られるようにする
 @app.route("/callback", methods=['POST'])
@@ -104,11 +104,11 @@ def db_process():
 
     #テーブルを作成する
     if cos.environ["HAS_DB_TABLE"] == 'True':
-        cur.execute("DROP TABLE items")
-        cur.execute("CREATE TABLE items(id int, date, speaker text, msg text)")
+         cur.execute("DROP TABLE items")
+         cur.execute("CREATE TABLE items(id int, date, speaker text, msg text)")
     else:
-        cur.execute("CREATE TABLE items(id int, date, speaker text, msg text)")
-        cos.environ["HAS_DB_TABLE"] = 'True'
+         cur.execute("CREATE TABLE items(id int, date, speaker text, msg text)")
+         cos.environ["HAS_DB_TABLE"] = 'True'
  
     #ユーザーからのLINEメッセージをデータベースに登録・格納する
     rcd_id  = int(os.environ["DB_RCD_NUM"])
@@ -120,11 +120,13 @@ def db_process():
     cur.execute("SELECT * FROM items")
     row_num = len(cur.fetchall())
 
-    if row == null:
-        cur.execute("INSERT INTO items (id, date, speaker, msg) VALUES (%s, %s, %s, %s)", [rcd_id, date, speaker, msg])
-    elif row_num >= 100:
-        os.environ["DB_RCD_NUM"] = '-1'
-        cur.execute("UPDATE items SET id=%s, date=%s, speaker=%s, msg=%s, WHERE id=%s", [rcd_id, date, speaker, msg, rcd_id])
+    #if row == null:
+    #    cur.execute("INSERT INTO items (id, date, speaker, msg) VALUES (%s, %s, %s, %s)", [rcd_id, date, speaker, msg])
+    #elif os.environ["DB_RCD_NUM"] >= 3:
+    #    env_set()
+    #    cur.execute("UPDATE items SET id=%s, date=%s, speaker=%s, msg=%s, WHERE id=%s", [rcd_id, date, speaker, msg, rcd_id])
+    
+    env_set()
     cur.execute("INSERT INTO items (id, date, speaker, msg) VALUES (%s, %s, %s, %s)", [rcd_id, date, speaker, msg])
 
     #データベースへコミットし、カーソルを破棄して、接続を解除する。
@@ -132,7 +134,12 @@ def db_process():
     cur.close()
     conn.close()
 
- 
+
+def env_set():
+    if int(os.environ["DB_RCD_NUM"]) => 3: 
+          os.environ["DB_RCD_NUM"] = '-1'
+
+
  #
 def env_count():
     os.environ["DB_RCD_NUM"] = str(int(os.environ["DB_RCD_NUM"]) + 1)
