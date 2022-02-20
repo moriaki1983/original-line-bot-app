@@ -40,13 +40,13 @@ def now_online():
     cur  = conn.cursor()
 
     # データベースからLINEメッセージを取得して、ブラウザーに引渡しする
-    rcd_id = int(os.environ["DB_RCD_NUM"])
+    rcd_id = int(os.environ['DB_RCD_NUM'])
     cur.execute("SELECT * FROM items WHERE id=%s", [rcd_id])
     row = cur.fetchone()
     cur.close()
     conn.close()
     #return jsonify(row), 200
-    return os.environ["DB_RCD_NUM"]
+    return os.environ['DB_RCD_NUM']
 
 #LINE DevelopersのWebhookにURLを指定してWebhookからURLにイベントが送られるようにする
 @app.route("/callback", methods=['POST'])
@@ -118,7 +118,7 @@ def handle_message(event):
     #    os.environ["DB_RCD_NUM"] = '-1'
     #    cur.execute("UPDATE items SET id=%s, date=%s, speaker=%s, msg=%s, WHERE id=%s", [rcd_id, date, speaker, msg, rcd_id])
     #cur.execute("INSERT INTO items (id, date, speaker, msg) VALUES (%s, %s, %s, %s)", [rcd_id, date, speaker, msg])
-    os.environ["DB_RCD_NUM"] = str(int(os.environ["DB_RCD_NUM"]) + 1)
+    os.environ['DB_RCD_NUM'] = str(int(os.environ['DB_RCD_NUM']) + 1)
     
     #データベースへコミットし、カーソルを破棄して、接続を解除する。
     conn.commit()
