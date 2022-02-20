@@ -44,8 +44,9 @@ def now_online():
     row = cur.fetchone()
     cur.close()
     conn.close()
-    return jsonify(row), 200
-
+    #return jsonify(row), 200
+    os.environ["DB_RCD_NUM"] = str(int(os.environ["DB_RCD_NUM"]) + 1)
+    return os.environ["DB_RCD_NUM"]
 
 #LINE DevelopersのWebhookにURLを指定してWebhookからURLにイベントが送られるようにする
 @app.route("/callback", methods=['POST'])
