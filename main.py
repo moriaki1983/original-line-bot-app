@@ -44,9 +44,9 @@ def now_online():
     row = cur.fetchone()
     cur.close()
     conn.close()
-    #return jsonify(row), 200
-    os.environ["DB_RCD_NUM"] = str(int(os.environ["DB_RCD_NUM"]) + 1)
-    return os.environ["DB_RCD_NUM"]
+    return jsonify(row), 200
+    #os.environ["DB_RCD_NUM"] = str(int(os.environ["DB_RCD_NUM"]) + 1)
+    #return os.environ["DB_RCD_NUM"]
 
 #LINE DevelopersのWebhookにURLを指定してWebhookからURLにイベントが送られるようにする
 @app.route("/callback", methods=['POST'])
@@ -102,7 +102,8 @@ def handle_message(event):
     #    os.environ["HAS_DB_TABLE"] = 'True'
  
     #ユーザーからのLINEメッセージをデータベースに登録・格納する
-    rcd_id = int(os.environ["DB_RCRD_NUM"])
+    #rcd_id = int(os.environ["DB_RCD_NUM"])
+    rcd_id = 1
     date    = "2022-02-22-22:22"
     speaker = event.source.userId
     msg     = event.message.text
@@ -120,6 +121,7 @@ def handle_message(event):
     #    cur.execute("UPDATE items SET id=%s, date=%s, speaker=%s, msg=%s, WHERE id=%s", [rcd_id, date, speaker, msg, rcd_id])
     #    os.environ["DB_RCD_NUM"] = str(int(os.environ["DB_RCD_NUM"]) + 1)
     #cur.execute("UPDATE items SET id=%s, date=%s, speaker=%s, msg=%s, WHERE id=%s", [rcd_id, date, speaker, msg, rcd_id])
+    
     cur.execute("INSERT INTO items (id, date, speaker, msg) VALUES (%s, %s, %s, %s) WHERE id=%s", [rcd_id, date, speaker, msg, rcd_id])
     #cur.execute("DROP TABLE items2")
 
