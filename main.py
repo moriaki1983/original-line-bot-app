@@ -76,15 +76,15 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):   
     #JanomeでユーザーからのLINEメッセージを解析する
-    #tknzr = Tokenizer()
-    #tkns = tknzr.tokenize(event.message.text)
-    #rslt = []
-    #for tkn in tkns:
-    #    rslt.append(tkn.surface)
+    tknzr = Tokenizer()
+    tkns = tknzr.tokenize(event.message.text)
+    rslt = []
+    for tkn in tkns:
+        rslt.append(tkn.surface)
 
     #ユーザーへの返信メッセージを生成する
-    #if rslt[0] == "わたし":
-    #   rslt[0] = "LINE-Client"
+    if rslt[0] == "わたし":
+       rslt[0] = "LINE-Client"
 
     #ユーザーにLINEメッセージを送信する
     line_bot_api.reply_message(event.reply_token,TextSendMessage(text="/".join(rslt)))
