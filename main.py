@@ -41,16 +41,12 @@ def now_online():
 
     # データベースからLINEメッセージを取得して、ブラウザーに引渡しする
     #rcd_id = int(os.environ["DB_RCD_NUM"])
-    rcd_id = 1
-    
-    cur.execute("INSERT INTO items VALUES (1, 'test', 'test', 'test')")
+    rcd_id = 2
     cur.execute("SELECT * FROM items WHERE id=%s", [rcd_id])
     row = cur.fetchone()
     cur.close()
     conn.close()
     return jsonify(row), 200
-    #os.environ["DB_RCD_NUM"] = str(int(os.environ["DB_RCD_NUM"]) + 1)
-    #return os.environ["DB_RCD_NUM"]
 
 
 #LINE DevelopersのWebhookにURLを指定してWebhookからURLにイベントが送られるようにする
@@ -128,10 +124,8 @@ def handle_message(event):
     #    os.environ["DB_RCD_NUM"] = str(int(os.environ["DB_RCD_NUM"]) + 1)
     #cur.execute("UPDATE items SET id=%s, date=%s, speaker=%s, msg=%s, WHERE id=%s", [rcd_id, date, speaker, msg, rcd_id])
     
-    cur.execute("INSERT INTO items VALUES (1, 'test', 'test', 'test')")
-    #cur.execute("INSERT INTO items (id, date, speaker, msg) VALUES (1, 'test', 'test', 'test')")
-    #cur.execute("INSERT INTO items (id, date, speaker, msg) VALUES (%s, %s, %s, %s) WHERE id=%s", [rcd_id, date, speaker, msg, rcd_id])
-    #cur.execute("DROP TABLE items2")
+    cur.execute("INSERT INTO items VALUES (2, 'test', 'test', 'test')")
+    cur.execute("DROP TABLE items2")
 
     #データベースへコミットし、カーソルを破棄して、接続を解除する。
     conn.commit()
