@@ -88,37 +88,39 @@ def handle_message(event):
 
     #ユーザーにLINEメッセージを送信する
     line_bot_api.reply_message(event.reply_token,TextSendMessage(text="/".join(rslt)))
-
+    
+    
     #データベースに接続して、カーソルを用意する
     #conn = psycopg2.connect(DATABASE_URL, sslmode='require')
     conn = psycopg2.connect(DATABASE_URL)
     cur  = conn.cursor()
 
     #テーブルを作成する
-    #if HAS_DB_TABLE == 'True':
-    #    cur.execute("DROP TABLE items")
-    #    cur.execute("CREATE TABLE items(id int, date, speaker text, msg text)")
-    #else:
-    #    cur.execute("CREATE TABLE items(id int, date, speaker text, msg text)")
-    #    os.environ["HAS_DB_TABLE"] = 'True'
+    if cos.environ["HAS_DB_TABLE"] == 'True':
+        cur.execute("DROP TABLE items")
+        cur.execute("CREATE TABLE items(id int, date, speaker text, msg text)")
+    else:
+        cur.execute("CREATE TABLE items(id int, date, speaker text, msg text)")
+        cos.environ["HAS_DB_TABLE"] = 'True'
  
     #ユーザーからのLINEメッセージをデータベースに登録・格納する
-    #rcd_id  = int(os.environ["DB_RCD_NUM"])
-    #date    = "2022-02-22-22:22"
-    #speaker = event.source.userId
-    #msg     = event.message.text
-    #cur.execute("SELECT * FROM items WHERE id=%s", [rcd_id])
-    #row = cur.fetchone()
-    #cur.execute("SELECT * FROM items")
-    #row_num = len(cur.fetchall())
+    rcd_id  = int(os.environ["DB_RCD_NUM"])
+    date    = "2022-02-22-22:22"
+    speaker = event.source.userId
+    msg     = event.message.text
+    cur.execute("SELECT * FROM items WHERE id=%s", [rcd_id])
+    row = cur.fetchone()
+    cur.execute("SELECT * FROM items")
+    row_num = len(cur.fetchall())
 
-    #if row == null:
-    #    cur.execute("INSERT INTO items (id, date, speaker, msg) VALUES (%s, %s, %s, %s)", [rcd_id, date, speaker, msg])
-    #elif row_num >= 100:
-    #    os.environ["DB_RCD_NUM"] = '-1'
-    #    cur.execute("UPDATE items SET id=%s, date=%s, speaker=%s, msg=%s, WHERE id=%s", [rcd_id, date, speaker, msg, rcd_id])
-    #cur.execute("INSERT INTO items (id, date, speaker, msg) VALUES (%s, %s, %s, %s)", [rcd_id, date, speaker, msg])
-    #os.environ['DB_RCD_NUM'] = str(int(os.environ['DB_RCD_NUM']) + 1)
+    if row == null:
+        cur.execute("INSERT INTO items (id, date, speaker, msg) VALUES (%s, %s, %s, %s)", [rcd_id, date, speaker, msg])
+    elif row_num >= 100:
+        os.environ["DB_RCD_NUM"] = '-1'
+        cur.execute("UPDATE items SET id=%s, date=%s, speaker=%s, msg=%s, WHERE id=%s", [rcd_id, date, speaker, msg, rcd_id])
+    cur.execute("INSERT INTO items (id, date, speaker, msg) VALUES (%s, %s, %s, %s)", [rcd_id, date, speaker, msg])
+    
+    #
     env_count()
     
     #データベースへコミットし、カーソルを破棄して、接続を解除する。
@@ -126,8 +128,9 @@ def handle_message(event):
     cur.close()
     conn.close()
 
+#
 def env_count():
-    os.environ['DB_RCD_NUM'] = str(int(os.environ['DB_RCD_NUM']) + 1)
+    os.environ["DB_RCD_NUM"] = str(int(os.environ["DB_RCD_NUM"]) + 1)
 
 
 # ポート番号の設定
