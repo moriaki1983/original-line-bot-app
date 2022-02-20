@@ -92,8 +92,8 @@ def handle_message(event):
     line_bot_api.reply_message(event.reply_token,TextSendMessage(text="/".join(rslt)))
 
     #データベースに接続して、カーソルを用意する
-    #conn = psycopg2.connect(DATABASE_URL)
-    conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+    conn = psycopg2.connect(DATABASE_URL)
+    #conn = psycopg2.connect(DATABASE_URL, sslmode='require')
     cur  = conn.cursor()
 
     #テーブルを作成する
@@ -140,6 +140,6 @@ def handle_message(event):
 # ポート番号の設定
 if __name__ == "__main__":
     #Flaskのアプリモジュールを実行する
-    #app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
-    app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
+    #app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
     #app.run(host="0.0.0.0", port='5000')
