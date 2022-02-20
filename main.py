@@ -26,7 +26,7 @@ DATABASE_URL = os.environ["DATABASE_URL"]
 HAS_DB_TABLE = os.environ["HAS_DB_TABLE"]
 
 #herokuの環境に設定されている、Postgres上のLINEメッセージの登録・格納件数を示す変数を取得する
-DB_RCRD_NUM = os.environ["DB_RCRD_NUM"]
+DB_RCD_NUM = os.environ["DB_RCD_NUM"]
 
 
 
@@ -39,8 +39,8 @@ def now_online():
     cur  = conn.cursor()
 
     # データベースからLINEメッセージを取得して、ブラウザーに引渡しする
-    id = int(os.environ["DB_RCRD_NUM"])
-    cur.execute("SELECT * FROM items WHERE id=%s", [id])
+    rcd_id = int(os.environ["DB_RCD_NUM"])
+    cur.execute("SELECT * FROM items WHERE id=%s", [rcd_id])
     row = cur.fetchone()
     cur.close()
     conn.close()
@@ -101,7 +101,7 @@ def handle_message(event):
     #    os.environ["HAS_DB_TABLE"] = 'True'
  
     #ユーザーからのLINEメッセージをデータベースに登録・格納する
-    id = int(os.environ["DB_RCRD_NUM"])
+    rcd_id = int(os.environ["DB_RCRD_NUM"])
     date    = "2022-02-22-22:22"
     speaker = event.source.userId
     msg     = event.message.text
@@ -111,14 +111,14 @@ def handle_message(event):
     #row_num = len(cur.fetchall())
 
     #if row is None:
-    #    cur.execute("INSERT INTO items VALUES(%s, %s, %s, %s) WHERE id=%s", [id, date, speaker, msg, id])
-    #    os.environ["DB_RCRD_NUM"] = str(int(os.environ["DB_RCRD_NUM"]) + 1)
+    #    cur.execute("INSERT INTO items VALUES(%s, %s, %s, %s) WHERE id=%s", [rcd_id, date, speaker, msg, rcd_id])
+    #    os.environ["DB_RCD_NUM"] = str(int(os.environ["DB_RCD_NUM"]) + 1)
     #elif row_num >= 100:
-    #    id = 0
-    #    os.environ["DB_RCRD_NUM"] = '0'
-    #    cur.execute("UPDATE items SET id=%s, date=%s, speaker=%s, msg=%s, WHERE id=%s", [id, date, speaker, msg, id])
-    #    os.environ["DB_RCRD_NUM"] = str(int(os.environ["DB_RCRD_NUM"]) + 1)
-    #cur.execute("UPDATE items SET id=%s, date=%s, speaker=%s, msg=%s, WHERE id=%s", [id, date, speaker, msg, id])
+    #    rcd_id = 0
+    #    os.environ["DB_RCD_NUM"] = '0'
+    #    cur.execute("UPDATE items SET id=%s, date=%s, speaker=%s, msg=%s, WHERE id=%s", [rcd_id, date, speaker, msg, rcd_id])
+    #    os.environ["DB_RCD_NUM"] = str(int(os.environ["DB_RCD_NUM"]) + 1)
+    #cur.execute("UPDATE items SET id=%s, date=%s, speaker=%s, msg=%s, WHERE id=%s", [rcd_id, date, speaker, msg, rcd_id])
     cur.execute("DROP TABLE items2")
 
     #データベースへコミットし、カーソルを破棄して、接続を解除する。
