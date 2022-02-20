@@ -122,7 +122,7 @@ def handle_message(event):
     #    os.environ["DB_RCD_NUM"] = str(int(os.environ["DB_RCD_NUM"]) + 1)
     #cur.execute("UPDATE items SET id=%s, date=%s, speaker=%s, msg=%s, WHERE id=%s", [rcd_id, date, speaker, msg, rcd_id])
     
-    cur.execute("INSERT INTO items (id, date, speaker, msg) VALUES (1, 'test', 'test', 'test') WHERE id=1")
+    cur.execute("INSERT INTO items (id, date, speaker, msg) VALUES (1, 'test', 'test', 'test')")
     #cur.execute("INSERT INTO items (id, date, speaker, msg) VALUES (%s, %s, %s, %s) WHERE id=%s", [rcd_id, date, speaker, msg, rcd_id])
     #cur.execute("DROP TABLE items2")
 
