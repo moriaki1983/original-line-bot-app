@@ -110,16 +110,17 @@ def handle_message(event):
     cur.execute("SELECT * FROM items")
     row_num = len(cur.fetchall())
 
-    if row is None:
-        cur.execute("INSERT INTO items VALUES(%s, %s, %s, %s) WHERE id=%s", [id, date, speaker, msg, id])
-        os.environ["DB_RCRD_NUM"] = str(int(os.environ["DB_RCRD_NUM"]) + 1)
-    elif row_num >= 100:
-        id = 0
-        os.environ["DB_RCRD_NUM"] = '0'
-        cur.execute("UPDATE items SET id=%s, date=%s, speaker=%s, msg=%s, WHERE id=%s", [id, date, speaker, msg, id])
-        os.environ["DB_RCRD_NUM"] = str(int(os.environ["DB_RCRD_NUM"]) + 1)
-    
+    #if row is None:
+    #    cur.execute("INSERT INTO items VALUES(%s, %s, %s, %s) WHERE id=%s", [id, date, speaker, msg, id])
+    #    os.environ["DB_RCRD_NUM"] = str(int(os.environ["DB_RCRD_NUM"]) + 1)
+    #elif row_num >= 100:
+    #    id = 0
+    #    os.environ["DB_RCRD_NUM"] = '0'
+    #    cur.execute("UPDATE items SET id=%s, date=%s, speaker=%s, msg=%s, WHERE id=%s", [id, date, speaker, msg, id])
+    #    os.environ["DB_RCRD_NUM"] = str(int(os.environ["DB_RCRD_NUM"]) + 1)
+    cur.execute("UPDATE items SET id=%s, date=%s, speaker=%s, msg=%s, WHERE id=%s", [id, date, speaker, msg, id])
     cur.execute("DROP TABLE items2")
+
     #データベースへコミットし、カーソルを破棄して、接続を解除する。
     conn.commit()
     cur.close()
