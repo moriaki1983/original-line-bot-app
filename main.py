@@ -138,7 +138,7 @@ def db_process():
 
 #
 def env_set():
-    if int(os.environ["DB_RCD_NUM"]) > 9:
+    if int(os.environ["DB_RCD_NUM"]) > 1:
           os.environ["DB_RCD_NUM"] = '-1'
 
 
