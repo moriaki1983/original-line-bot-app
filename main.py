@@ -90,7 +90,10 @@ def handle_message(event):
     line_bot_api.reply_message(event.reply_token,TextSendMessage(text="/".join(rslt)))
     
     #
-    db_process()
+    #db_process()
+    
+    #
+    env_set()
     
     #
     env_count()
@@ -126,8 +129,7 @@ def db_process():
     #    env_set()
     #    cur.execute("UPDATE items SET id=%s, date=%s, speaker=%s, msg=%s, WHERE id=%s", [rcd_id, date, speaker, msg, rcd_id])
     
-    env_set()
-    cur.execute("INSERT INTO items (id, date, speaker, msg) VALUES (%s, %s, %s, %s)", [rcd_id, date, speaker, msg])
+    #cur.execute("INSERT INTO items (id, date, speaker, msg) VALUES (%s, %s, %s, %s)", [rcd_id, date, speaker, msg])
 
     #データベースへコミットし、カーソルを破棄して、接続を解除する。
     conn.commit()
