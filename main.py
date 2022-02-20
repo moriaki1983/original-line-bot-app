@@ -24,7 +24,7 @@ handler      = WebhookHandler(YOUR_CHANNEL_SECRET)
 DATABASE_URL = os.environ["DATABASE_URL"]
 
 #herokuの環境に設定されている、Postgres上のテーブルの有無を示す変数を取得する
-HAS_DB_TABLE = os.environ["HAS_DB_TABLE"]
+#HAS_DB_TABLE = os.environ["HAS_DB_TABLE"]
 
 #herokuの環境に設定されている、Postgres上のLINEメッセージの登録・格納件数を示す変数を取得する
 DB_RCD_NUM = os.environ["DB_RCD_NUM"]
@@ -45,8 +45,8 @@ def now_online():
     row = cur.fetchone()
     cur.close()
     conn.close()
-    #return jsonify(row), 200
-    return os.environ['DB_RCD_NUM']
+    return jsonify(row), 200
+    #return os.environ['DB_RCD_NUM']
 
 #LINE DevelopersのWebhookにURLを指定してWebhookからURLにイベントが送られるようにする
 @app.route("/callback", methods=['POST'])
