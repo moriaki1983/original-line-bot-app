@@ -93,12 +93,12 @@ def handle_message(event):
     cur  = conn.cursor()
 
     #テーブルを作成する
-    if HAS_DB_TABLE == True:
-        cur.execute("DROP TABLE items")
-        cur.execute("CREATE TABLE items(id int, date, speaker text, msg text)")
-    else:
-        cur.execute("CREATE TABLE items(id int, date, speaker text, msg text)")
-        os.environ["HAS_DB_TABLE"] = 'True'
+    #if HAS_DB_TABLE == 'True':
+    #    cur.execute("DROP TABLE items")
+    #    cur.execute("CREATE TABLE items(id int, date, speaker text, msg text)")
+    #else:
+    #    cur.execute("CREATE TABLE items(id int, date, speaker text, msg text)")
+    #    os.environ["HAS_DB_TABLE"] = 'True'
  
     #ユーザーからのLINEメッセージをデータベースに登録・格納する
     id = int(os.environ["DB_RCRD_NUM"])
