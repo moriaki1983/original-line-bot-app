@@ -116,8 +116,10 @@ def db_process():
     #ユーザーからのLINEメッセージをデータベースに登録・格納する
     rcd_id  = int(os.environ["DB_RCD_NUM"])
     date    = "2022-02-22-22:22"
-    speaker = event.source.userId
-    msg     = event.message.text
+    #speaker = event.source.userId
+    #msg     = event.message.text
+    speaker = "アッキー"
+    msg     = "Hello!"
     #cur.execute("SELECT * FROM items WHERE id=%s", [rcd_id])
     #row = cur.fetchone()
     #cur.execute("SELECT * FROM items")
