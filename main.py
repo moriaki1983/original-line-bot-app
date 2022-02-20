@@ -89,7 +89,14 @@ def handle_message(event):
     #ユーザーにLINEメッセージを送信する
     line_bot_api.reply_message(event.reply_token,TextSendMessage(text="/".join(rslt)))
     
+    #
+    db_process()
     
+    #
+    env_count()
+
+
+def db_process():
     #データベースに接続して、カーソルを用意する
     #conn = psycopg2.connect(DATABASE_URL, sslmode='require')
     conn = psycopg2.connect(DATABASE_URL)
@@ -119,16 +126,14 @@ def handle_message(event):
         os.environ["DB_RCD_NUM"] = '-1'
         cur.execute("UPDATE items SET id=%s, date=%s, speaker=%s, msg=%s, WHERE id=%s", [rcd_id, date, speaker, msg, rcd_id])
     cur.execute("INSERT INTO items (id, date, speaker, msg) VALUES (%s, %s, %s, %s)", [rcd_id, date, speaker, msg])
-    
-    #
-    env_count()
-    
+
     #データベースへコミットし、カーソルを破棄して、接続を解除する。
     conn.commit()
     cur.close()
     conn.close()
 
-#
+ 
+ #
 def env_count():
     os.environ["DB_RCD_NUM"] = str(int(os.environ["DB_RCD_NUM"]) + 1)
 
