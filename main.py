@@ -92,7 +92,10 @@ def handle_message(event):
     db_process(event)
     
     #
-    env_set(rcd_id)
+    set_env(rcd_id)
+
+    #
+    count_env(rcd_id)
 
 
 def db_process(event):
@@ -139,17 +142,14 @@ def db_process(event):
 
 
 #
-def env_set(rcd_id):
+def set_env(rcd_id):
     if rcd_id > 99:
-       os.environ["DB_RCD_NUM"] = str(0)
-    else:
-       os.environ["DB_RCD_NUM"] = str(int(rcd_id) + 1)
+       os.environ["DB_RCD_NUM"] = str(-1)
 
 
 #
-#def env_count(rcd_id):
-#    if rcd_id > 99:
-#       os.environ["DB_RCD_NUM"] = str(0)
+def count_env(rcd_id):
+    os.environ["DB_RCD_NUM"] = str(int(rcd_id) + 1)
 
 
 
