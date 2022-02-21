@@ -38,7 +38,8 @@ def now_online():
     cur  = conn.cursor()
 
     # データベースからLINEメッセージを取得して、ブラウザーに引渡しする
-    rcd_id = os.environ["DB_RCD_NUM"]
+    #rcd_id = os.environ["DB_RCD_NUM"]
+    global rcd_id
     cur.execute("""SELECT * FROM items WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id})
     row = cur.fetchone()
     cur.close()
