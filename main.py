@@ -1,6 +1,5 @@
 #モジュールの読み込み
 import os
-#import gunicorn
 import psycopg2
 from flask import Flask, jsonify, request, abort
 from linebot import (LineBotApi, WebhookHandler)
@@ -107,12 +106,12 @@ def db_process(event):
     cur  = conn.cursor()
 
     #テーブルを作成する
-    if cos.environ["HAS_DB_TABLE"] == 'True':
+    if os.environ["HAS_DB_TABLE"] == 'True':
        cur.execute("DROP TABLE items")
        cur.execute("CREATE TABLE items(rcd_id text, date, speaker text, msg text)")
     else:
        cur.execute("CREATE TABLE items(rcd_id text, date, speaker text, msg text)")
-       cos.environ["HAS_DB_TABLE"] = 'True'
+       os.environ["HAS_DB_TABLE"] = 'True'
     
     #ユーザーからのLINEメッセージをデータベースに登録・格納する
     rcd_id  = os.environ["DB_RCD_NUM"]
@@ -130,10 +129,10 @@ def db_process(event):
 
     #
     if row == null:
-      cur.execute("""INSERT INTO items (rcd_id, date, speaker, msg) VALUES (%(rcd_id)s, %(date)s, %(speaker)s, %(msg)s);""", {'rcd_id': rcd_id, 'date' : date, 'speaker': speaker, 'msg': msg})
+       cur.execute("""INSERT INTO items (rcd_id, date, speaker, msg) VALUES (%(rcd_id)s, %(date)s, %(speaker)s, %(msg)s);""", {'rcd_id': rcd_id, 'date' : date, 'speaker': speaker, 'msg': msg})
     elif rcd_id > 99:
-      cur.execute("UPDATE items SET (rcd_id, date, speaker, msg) VALUES (%(rcd_id)s, %(date)s, %(speaker)s, %(msg)s) WHERE=%(rcd_id)s;""", {'rcd_id': rcd_id, 'date' : date, 'speaker': speaker, 'msg': msg, 'rcd_id': rcd_id})
-    cur.execute("""INSERT INTO items (rcd_id, date, speaker, msg) VALUES (%(rcd_id)s, %(date)s, %(speaker)s, %(msg)s);""", {'rcd_id': rcd_id, 'date' : date, 'speaker': speaker, 'msg': msg})
+       cur.execute("UPDATE items SET (rcd_id, date, speaker, msg) VALUES (%(rcd_id)s, %(date)s, %(speaker)s, %(msg)s) WHERE=%(rcd_id)s;""", {'rcd_id': rcd_id, 'date' : date, 'speaker': speaker, 'msg': msg, 'rcd_id': rcd_id})
+       cur.execute("""INSERT INTO items (rcd_id, date, speaker, msg) VALUES (%(rcd_id)s, %(date)s, %(speaker)s, %(msg)s);""", {'rcd_id': rcd_id, 'date' : date, 'speaker': speaker, 'msg': msg})
     
     #データベースへコミットし、カーソルを破棄して、接続を解除する。
     conn.commit()
@@ -155,5 +154,5 @@ def env_count():
 # ポート番号の設定
 if __name__ == "__main__":
     #FlaskのアプリモジュールをWebアプリケーションサーバー上で実行する
-    #app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
-    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
+    app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
+    #app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
