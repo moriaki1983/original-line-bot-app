@@ -40,10 +40,10 @@ def now_online():
 
     # データベースからLINEメッセージを取得して、ブラウザーに引渡しする
     global rcd_id
-    if rcd_id == 0:
+    if rcd_id == "0":
         cur.execute("""SELECT * FROM items WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id})
     else:
-        cur.execute("""SELECT * FROM items WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': (rcd_id - 1)})
+        cur.execute("""SELECT * FROM items WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': str(int(rcd_id) - 1)})
     row = cur.fetchone()
     cur.close()
     conn.close()
