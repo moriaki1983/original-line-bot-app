@@ -41,7 +41,8 @@ def now_online():
 
     # データベースからLINEメッセージを取得して、ブラウザーに引渡しする
     rcd_id = int(os.environ['DB_RCD_NUM'])
-    cur.execute("SELECT * FROM items WHERE id=%s", [rcd_id])
+    #cur.execute("SELECT * FROM items WHERE id=%s", [rcd_id])
+    cur.execute("SELECT * FROM items WHERE id=9")
     row = cur.fetchone()
     cur.close()
     conn.close()
@@ -130,7 +131,8 @@ def db_process():
     #elif rcd_id > 9:
     #    cur.execute("UPDATE items SET id=%s, date=%s, speaker=%s, msg=%s, WHERE id=%s", [rcd_id, date, speaker, msg, rcd_id])
 
-    cur.execute("INSERT INTO items (id, date, speaker, msg) VALUES (%s, %s, %s, %s)", [rcd_id, date, speaker, msg])
+    #cur.execute("INSERT INTO items (id, date, speaker, msg) VALUES (%s, %s, %s, %s)", [rcd_id, date, speaker, msg])
+    cur.execute("INSERT INTO items (id, date, speaker, msg) VALUES (9, 'test', 'test', 'test')")
 
     #データベースへコミットし、カーソルを破棄して、接続を解除する。
     conn.commit()
