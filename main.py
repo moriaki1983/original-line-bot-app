@@ -135,9 +135,10 @@ def db_process():
     #elif rcd_id > 9:
     #    cur.execute("UPDATE items SET id=%s, date=%s, speaker=%s, msg=%s, WHERE id=%s", [rcd_id, date, speaker, msg, rcd_id])
 
-    cur.execute("INSERT INTO items (rcd_id, date, speaker, msg) VALUES (%s, %s, %s, %s)", ("rcd_id", "date", "speaker", "msg",))
+    #cur.execute("INSERT INTO items (rcd_id, date, speaker, msg) VALUES (%s, %s, %s, %s)", ("rcd_id", "date", "speaker", "msg",))
     #cur.execute("INSERT INTO items (id, date, speaker, msg) VALUES (9, 'test', 'test', 'test')")
-
+    cur.execute("""INSERT INTO some_table (rcd_id, date, speaker, msg) VALUES (%(rcd_id)s, %(date)s, %(speaker)s, %(msg)s);""", {'rcd_id': rcd_id, 'date' : date, 'speaker': speaker, 'msg': msg})
+    
     #データベースへコミットし、カーソルを破棄して、接続を解除する。
     conn.commit()
     cur.close()
