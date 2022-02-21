@@ -25,6 +25,7 @@ DATABASE_URL = os.environ["DATABASE_URL"]
 #herokuの環境に設定されている、Postgres上のテーブルの有無を示す変数を取得する
 HAS_DB_TABLE = os.environ["HAS_DB_TABLE"]
 
+#
 rcd_id = "0"
 
 
@@ -92,16 +93,10 @@ def handle_message(event):
     line_bot_api.reply_message(event.reply_token,TextSendMessage(text="/".join(rslt)))
     
     #
-    #db_process(event)
+    db_process(event)
 
     global rcd_id
     rcd_id = str(int(rcd_id) + 1)
-    
-    #
-    #main.env_set()
-
-    #
-    #main.env_count()
 
 
 def db_process(event):
@@ -136,26 +131,16 @@ def db_process(event):
     #
     if row is None:
        cur.execute("""INSERT INTO items (rcd_id, date, speaker, msg) VALUES (%(rcd_id)s, %(date)s, %(speaker)s, %(msg)s);""", {'rcd_id': rcd_id, 'date' : date, 'speaker': speaker, 'msg': msg})
-    elif int(os.environ["DB_RCD_NUM"]) < 99:
+    elif int(rcd_id) < 99:
        cur.execute("""UPDATE items SET (rcd_id, date, speaker, msg) VALUES (%(rcd_id)s, %(date)s, %(speaker)s, %(msg)s) WHERE = %(rcd_id)s;""", {'rcd_id': rcd_id, 'date' : date, 'speaker': speaker, 'msg': msg, 'rcd_id': rcd_id})
-    elif int(os.environ["DB_RCD_NUM"]) == 99:
+    elif int(rcd_id) == 99:
        cur.execute("""UPDATE items SET (rcd_id, date, speaker, msg) VALUES (%(rcd_id)s, %(date)s, %(speaker)s, %(msg)s) WHERE = '0';""", {'rcd_id': "0", 'date' : date, 'speaker': speaker, 'msg': msg})
+       rcd_id = str(-1)
 
     #データベースへコミットし、カーソルを破棄して、接続を解除する。
     conn.commit()
     cur.close()
     conn.close()
-
-
-#
-def env_set():
-    if int(os.environ["DB_RCD_NUM"]) > 99:
-       os.environ["DB_RCD_NUM"] = "-1"
-
-
-#
-def env_count():
-    os.environ["DB_RCD_NUM"] = str(int(os.environ["DB_RCD_NUM"]) + 1)
 
 
 
