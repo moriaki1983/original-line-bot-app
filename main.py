@@ -37,6 +37,10 @@ def now_online():
 
     # データベースからLINEメッセージを取得して、ブラウザーに引渡しする
     rcd_id = os.environ["DB_RCD_NUM"]
+    if rcd_id == -1:
+       rcd_id = 0
+    else:
+       rcd_id == 
     #cur.execute("SELECT * FROM items WHERE rcd_id = %s", [rcd_id])
     cur.execute("""SELECT * FROM items WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id})
     row = cur.fetchone()
@@ -128,11 +132,13 @@ def db_process(event):
     row_num = len(cur.fetchall())
 
     #
-    if row == null:
+    if row is None:
        cur.execute("""INSERT INTO items (rcd_id, date, speaker, msg) VALUES (%(rcd_id)s, %(date)s, %(speaker)s, %(msg)s);""", {'rcd_id': rcd_id, 'date' : date, 'speaker': speaker, 'msg': msg})
-    elif rcd_id > 99:
-       cur.execute("UPDATE items SET (rcd_id, date, speaker, msg) VALUES (%(rcd_id)s, %(date)s, %(speaker)s, %(msg)s) WHERE=%(rcd_id)s;""", {'rcd_id': rcd_id, 'date' : date, 'speaker': speaker, 'msg': msg, 'rcd_id': rcd_id})
-       cur.execute("""INSERT INTO items (rcd_id, date, speaker, msg) VALUES (%(rcd_id)s, %(date)s, %(speaker)s, %(msg)s);""", {'rcd_id': rcd_id, 'date' : date, 'speaker': speaker, 'msg': msg})
+       rcd_id = str(int(rcd_id + 1))
+    elif rcd_id < 100:
+       rcd_id = 0
+       cur.execute("""UPDATE items SET (rcd_id, date, speaker, msg) VALUES (%(rcd_id)s, %(date)s, %(speaker)s, %(msg)s) WHERE=%(rcd_id)s;""", {'rcd_id': rcd_id, 'date' : date, 'speaker': speaker, 'msg': msg, 'rcd_id': rcd_id})
+       rcd_id = str(int(rcd_id + 1))
     
     #データベースへコミットし、カーソルを破棄して、接続を解除する。
     conn.commit()
@@ -141,9 +147,8 @@ def db_process(event):
 
 
 #
-def env_set():
-    if int(os.environ["DB_RCD_NUM"]) > 9:
-          os.environ["DB_RCD_NUM"] = '-1'
+def env_set(rcd_id):
+    os.environ["DB_RCD_NUM"] = rcd_id
 
 
 #
