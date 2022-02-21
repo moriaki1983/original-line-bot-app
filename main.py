@@ -47,8 +47,8 @@ def now_online():
     conn.close()
     
     #
-    #return jsonify(row), 200
-    return rcd_id
+    return jsonify(row), 200
+    #return rcd_id
 
 
 #LINE DevelopersのWebhookにURLを指定してWebhookからURLにイベントが送られるようにする
