@@ -42,7 +42,7 @@ def now_online():
     # データベースからLINEメッセージを取得して、ブラウザーに引渡しする
     rcd_id = int(os.environ['DB_RCD_NUM'])
     #cur.execute("SELECT * FROM items WHERE id=%s", [rcd_id])
-    cur.execute("SELECT * FROM items WHERE id=10")
+    cur.execute("SELECT * FROM items WHERE row_id='20'")
     row = cur.fetchone()
     cur.close()
     conn.close()
@@ -118,7 +118,7 @@ def db_process():
     
     #ユーザーからのLINEメッセージをデータベースに登録・格納する
     #rcd_id  = int(os.environ["DB_RCD_NUM"])
-    rcd_id  = "10"
+    rcd_id  = "20"
     date    = "2022-02-22-22:22"
     #speaker = event.source.userId
     #msg     = event.message.text
