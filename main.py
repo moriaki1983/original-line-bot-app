@@ -113,7 +113,9 @@ def db_process():
     #else:
     #     cur.execute("CREATE TABLE items(id int, date, speaker text, msg text)")
     #     cos.environ["HAS_DB_TABLE"] = 'True'
- 
+    cur.execute("DROP TABLE items")
+    cur.execute("CREATE TABLE items(rcd_id text, date text, speaker text, msg text)")
+    
     #ユーザーからのLINEメッセージをデータベースに登録・格納する
     #rcd_id  = int(os.environ["DB_RCD_NUM"])
     rcd_id  = "10"
@@ -132,7 +134,7 @@ def db_process():
     #elif rcd_id > 9:
     #    cur.execute("UPDATE items SET id=%s, date=%s, speaker=%s, msg=%s, WHERE id=%s", [rcd_id, date, speaker, msg, rcd_id])
 
-    cur.execute("INSERT INTO items (id, date, speaker, msg) VALUES (%s, %s, %s, %s);", ("rcd_id", "date", "speaker", "msg"))
+    cur.execute("INSERT INTO items (rcd_id, date, speaker, msg) VALUES (%s, %s, %s, %s);", ("rcd_id", "date", "speaker", "msg"))
     #cur.execute("INSERT INTO items (id, date, speaker, msg) VALUES (9, 'test', 'test', 'test')")
 
     #データベースへコミットし、カーソルを破棄して、接続を解除する。
