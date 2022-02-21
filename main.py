@@ -94,7 +94,7 @@ def handle_message(event):
     main.db_process(event)
 
     global rcd_id
-    rcd_id = str(int(rcd_id) + 1))
+    rcd_id = str(int(rcd_id) + 1)
     
     #
     #main.env_set()
