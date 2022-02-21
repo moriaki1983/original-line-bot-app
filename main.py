@@ -95,9 +95,6 @@ def handle_message(event):
     #
     db_process(event)
 
-    global rcd_id
-    rcd_id = str(int(rcd_id) + 1)
-
 
 def db_process(event):
     #データベースに接続して、カーソルを用意する
@@ -131,11 +128,13 @@ def db_process(event):
     #
     if row is None:
        cur.execute("""INSERT INTO items (rcd_id, date, speaker, msg) VALUES (%(rcd_id)s, %(date)s, %(speaker)s, %(msg)s);""", {'rcd_id': rcd_id, 'date' : date, 'speaker': speaker, 'msg': msg})
-    elif int(rcd_id) < 99:
+       rcd_id = str(int(rcd_id) + 1)
+    elif row_num < 99:
        cur.execute("""UPDATE items SET (rcd_id, date, speaker, msg) VALUES (%(rcd_id)s, %(date)s, %(speaker)s, %(msg)s) WHERE = %(rcd_id)s;""", {'rcd_id': rcd_id, 'date' : date, 'speaker': speaker, 'msg': msg, 'rcd_id': rcd_id})
-    elif int(rcd_id) == 99:
+       rcd_id = str(int(rcd_id) + 1)
+    elif row_num == 99:
        cur.execute("""UPDATE items SET (rcd_id, date, speaker, msg) VALUES (%(rcd_id)s, %(date)s, %(speaker)s, %(msg)s) WHERE = '0';""", {'rcd_id': "0", 'date' : date, 'speaker': speaker, 'msg': msg})
-       rcd_id = str(-1)
+       rcd_id = str(0)
 
     #データベースへコミットし、カーソルを破棄して、接続を解除する。
     conn.commit()
