@@ -75,7 +75,7 @@ def callback():
 
 #以下でWebhookから送られてきたイベントをどのように処理するかを記述する
 @handler.add(MessageEvent, message=TextMessage)
-def handle_message(event):   
+def handle_message(event):
     #JanomeでユーザーからのLINEメッセージを解析する
     tknzr = Tokenizer()
     tkns = tknzr.tokenize(event.message.text)
@@ -121,7 +121,8 @@ def db_process(event):
     #rcd_id  = int(os.environ["DB_RCD_NUM"])
     rcd_id  = "40"
     date    = "2022-02-22-22:22"
-    speaker = event.source.userId
+    #speaker = event.source.userId
+    speaker = "LINE-Client"
     msg     = event.message.text
     #cur.execute("SELECT * FROM items WHERE id=%s", [rcd_id])
     #row = cur.fetchone()
