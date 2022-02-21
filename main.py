@@ -37,11 +37,6 @@ def now_online():
 
     # データベースからLINEメッセージを取得して、ブラウザーに引渡しする
     rcd_id = os.environ["DB_RCD_NUM"]
-    if rcd_id == -1:
-       rcd_id = 0
-    else:
-       rcd_id == 
-    #cur.execute("SELECT * FROM items WHERE rcd_id = %s", [rcd_id])
     cur.execute("""SELECT * FROM items WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id})
     row = cur.fetchone()
     cur.close()
@@ -96,10 +91,10 @@ def handle_message(event):
     db_process(event)
     
     #
-    env_set()
+    env_set(rcd_id)
     
     #
-    env_count()
+    env_count(rcd_id)
 
 
 def db_process(event):
@@ -148,12 +143,16 @@ def db_process(event):
 
 #
 def env_set(rcd_id):
-    os.environ["DB_RCD_NUM"] = rcd_id
+    if rcd_id > 99:
+       os.environ["DB_RCD_NUM"] = str(0)
+    else:
+       os.environ["DB_RCD_NUM"] = str(int(rcd_id) + 1)
 
 
 #
-def env_count():
-    os.environ["DB_RCD_NUM"] = str(int(os.environ["DB_RCD_NUM"]) + 1)
+#def env_count(rcd_id):
+#    if rcd_id > 99:
+#       os.environ["DB_RCD_NUM"] = str(0)
 
 
 
