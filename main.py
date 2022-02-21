@@ -108,9 +108,9 @@ def db_process(event):
     #テーブルを作成する
     if os.environ["HAS_DB_TABLE"] == 'True':
        cur.execute("DROP TABLE items")
-       cur.execute("CREATE TABLE items(rcd_id text, date, speaker text, msg text)")
+       cur.execute("CREATE TABLE items(rcd_id text, date text, speaker text, msg text)")
     else:
-       cur.execute("CREATE TABLE items(rcd_id text, date, speaker text, msg text)")
+       cur.execute("CREATE TABLE items(rcd_id text, date text, speaker text, msg text)")
        os.environ["HAS_DB_TABLE"] = 'True'
     
     #ユーザーからのLINEメッセージをデータベースに登録・格納する
