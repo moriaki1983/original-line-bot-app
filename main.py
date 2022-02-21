@@ -16,8 +16,8 @@ app = Flask(__name__)
 #herokuの環境変数に設定されている、LINE-Developersのアクセストークンとチャンネルシークレットを取得する
 YOUR_CHANNEL_ACCESS_TOKEN = os.environ["YOUR_CHANNEL_ACCESS_TOKEN"]
 YOUR_CHANNEL_SECRET       = os.environ["YOUR_CHANNEL_SECRET"]
-#line_bot_api = LineBotApi(YOUR_CHANNEL_ACCESS_TOKEN)
-#handler      = WebhookHandler(YOUR_CHANNEL_SECRET)
+line_bot_api = LineBotApi(YOUR_CHANNEL_ACCESS_TOKEN)
+handler      = WebhookHandler(YOUR_CHANNEL_SECRET)
 
 #herokuの環境に設定されている、Postgresにアクセスするためのキーを取得する
 DATABASE_URL = os.environ["DATABASE_URL"]
