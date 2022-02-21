@@ -92,9 +92,6 @@ def handle_message(event):
     
     #
     env_set(rcd_id)
-    
-    #
-    env_count(rcd_id)
 
 
 def db_process(event):
@@ -129,12 +126,11 @@ def db_process(event):
     #
     if row is None:
        cur.execute("""INSERT INTO items (rcd_id, date, speaker, msg) VALUES (%(rcd_id)s, %(date)s, %(speaker)s, %(msg)s);""", {'rcd_id': rcd_id, 'date' : date, 'speaker': speaker, 'msg': msg})
-       rcd_id = str(int(rcd_id + 1))
     elif rcd_id < 100:
        rcd_id = 0
        cur.execute("""UPDATE items SET (rcd_id, date, speaker, msg) VALUES (%(rcd_id)s, %(date)s, %(speaker)s, %(msg)s) WHERE=%(rcd_id)s;""", {'rcd_id': rcd_id, 'date' : date, 'speaker': speaker, 'msg': msg, 'rcd_id': rcd_id})
-       rcd_id = str(int(rcd_id + 1))
-    
+    rcd_id = str(int(rcd_id) + 1)
+
     #データベースへコミットし、カーソルを破棄して、接続を解除する。
     conn.commit()
     cur.close()
