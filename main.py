@@ -16,14 +16,16 @@ app = Flask(__name__)
 #herokuの環境変数に設定されている、LINE-Developersのアクセストークンとチャンネルシークレットを取得する
 YOUR_CHANNEL_ACCESS_TOKEN = os.environ["YOUR_CHANNEL_ACCESS_TOKEN"]
 YOUR_CHANNEL_SECRET       = os.environ["YOUR_CHANNEL_SECRET"]
-line_bot_api = LineBotApi(YOUR_CHANNEL_ACCESS_TOKEN)
-handler      = WebhookHandler(YOUR_CHANNEL_SECRET)
+#line_bot_api = LineBotApi(YOUR_CHANNEL_ACCESS_TOKEN)
+#handler      = WebhookHandler(YOUR_CHANNEL_SECRET)
 
 #herokuの環境に設定されている、Postgresにアクセスするためのキーを取得する
 DATABASE_URL = os.environ["DATABASE_URL"]
 
 #herokuの環境に設定されている、Postgres上のテーブルの有無を示す変数を取得する
 HAS_DB_TABLE = os.environ["HAS_DB_TABLE"]
+
+rcd_id = "0"
 
 
 
@@ -44,7 +46,7 @@ def now_online():
     
     #
     #return jsonify(row), 200
-    return os.environ["DB_RCD_NUM"]
+    return rcd_id
 
 
 #LINE DevelopersのWebhookにURLを指定してWebhookからURLにイベントが送られるようにする
@@ -90,12 +92,15 @@ def handle_message(event):
     
     #
     main.db_process(event)
+
+    global rcd_id
+    rcd_id = str(int(rcd_id) + 1))
     
     #
-    main.env_set()
+    #main.env_set()
 
     #
-    main.env_count()
+    #main.env_count()
 
 
 def db_process(event):
@@ -114,14 +119,14 @@ def db_process(event):
        os.environ["HAS_DB_TABLE"] = 'True'
     
     #ユーザーからのLINEメッセージをデータベースに登録・格納する
-    rcd_id  = os.environ["DB_RCD_NUM"]
+    global rcd_id    
+    #rcd_id  = os.environ["DB_RCD_NUM"]
     date    = "2022-02-22-22:22"
     #speaker = event.source.userId
     speaker = "LINE-Client"
     msg     = event.message.text
 
     #
-    #cur.execute("SELECT * FROM items WHERE rcd_id = %s", [rcd_id])
     cur.execute("""SELECT * FROM items WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id})
     row = cur.fetchone()
     cur.execute("SELECT * FROM items")
@@ -143,13 +148,14 @@ def db_process(event):
 
 #
 def env_set():
-    if int(os.environ["DB_RCD_NUM"]) > 9:
-          os.environ["DB_RCD_NUM"] = '-1'
+    if int(os.environ["DB_RCD_NUM"]) > 99:
+       os.environ["DB_RCD_NUM"] = "-1"
 
 
 #
 def env_count():
     os.environ["DB_RCD_NUM"] = str(int(os.environ["DB_RCD_NUM"]) + 1)
+
 
 
 
