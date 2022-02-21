@@ -24,10 +24,7 @@ handler      = WebhookHandler(YOUR_CHANNEL_SECRET)
 DATABASE_URL = os.environ["DATABASE_URL"]
 
 #herokuの環境に設定されている、Postgres上のテーブルの有無を示す変数を取得する
-#HAS_DB_TABLE = os.environ["HAS_DB_TABLE"]
-
-#herokuの環境に設定されている、Postgres上のLINEメッセージの登録・格納件数を示す変数を取得する
-#DB_RCD_NUM = os.environ["DB_RCD_NUM"]
+HAS_DB_TABLE = os.environ["HAS_DB_TABLE"]
 
 
 
@@ -40,14 +37,13 @@ def now_online():
     cur  = conn.cursor()
 
     # データベースからLINEメッセージを取得して、ブラウザーに引渡しする
-    rcd_id = int(os.environ['DB_RCD_NUM'])
-    #cur.execute("SELECT * FROM items WHERE id=%s", [rcd_id])
-    cur.execute("SELECT * FROM items WHERE rcd_id='50'")
+    rcd_id = int(os.environ["DB_RCD_NUM"])
+    cur.execute("SELECT * FROM items WHERE=%(rcd_id)s", {'rcd_id': rcd_id})
     row = cur.fetchone()
     cur.close()
     conn.close()
     return jsonify(row), 200
-    #return os.environ['DB_RCD_NUM']
+
 
 #LINE DevelopersのWebhookにURLを指定してWebhookからURLにイベントが送られるようにする
 @app.route("/callback", methods=['POST'])
@@ -108,32 +104,31 @@ def db_process(event):
     cur  = conn.cursor()
 
     #テーブルを作成する
-    #if cos.environ["HAS_DB_TABLE"] == 'True':
-    #     cur.execute("DROP TABLE items")
-    #     cur.execute("CREATE TABLE items(id int, date, speaker text, msg text)")
-    #else:
-    #     cur.execute("CREATE TABLE items(id int, date, speaker text, msg text)")
-    #     cos.environ["HAS_DB_TABLE"] = 'True'
-    #cur.execute("DROP TABLE items")
-    #cur.execute("CREATE TABLE items(rcd_id text, date text, speaker text, msg text)")
+    if cos.environ["HAS_DB_TABLE"] == 'True':
+       cur.execute("DROP TABLE items")
+       cur.execute("CREATE TABLE items(rcd_id text, date, speaker text, msg text)")
+    else:
+       cur.execute("CREATE TABLE items(rcd_id text, date, speaker text, msg text)")
+       cos.environ["HAS_DB_TABLE"] = 'True'
     
     #ユーザーからのLINEメッセージをデータベースに登録・格納する
-    #rcd_id  = int(os.environ["DB_RCD_NUM"])
-    rcd_id  = "50"
+    rcd_id  = int(os.environ["DB_RCD_NUM"])
     date    = "2022-02-22-22:22"
     #speaker = event.source.userId
     speaker = "LINE-Client"
     msg     = event.message.text
 
-    #cur.execute("SELECT * FROM items WHERE id=%s", [rcd_id])
-    #row = cur.fetchone()
-    #cur.execute("SELECT * FROM items")
-    #row_num = len(cur.fetchall())
+    #
+    cur.execute("SELECT * FROM items WHERE=%(rcd_id)s", {'rcd_id': rcd_id})
+    row = cur.fetchone()
+    cur.execute("SELECT * FROM items")
+    row_num = len(cur.fetchall())
 
-    #if row == null:
-    #    cur.execute("INSERT INTO items (id, date, speaker, msg) VALUES (%s, %s, %s, %s)", [rcd_id, date, speaker, msg])
-    #elif rcd_id > 9:
-    #    cur.execute("UPDATE items SET id=%s, date=%s, speaker=%s, msg=%s, WHERE id=%s", [rcd_id, date, speaker, msg, rcd_id])
+    #
+    if row == null:
+      cur.execute("""INSERT INTO items (rcd_id, date, speaker, msg) VALUES (%(rcd_id)s, %(date)s, %(speaker)s, %(msg)s);""", {'rcd_id': rcd_id, 'date' : date, 'speaker': speaker, 'msg': msg})
+    elif rcd_id > 99:
+      cur.execute("UPDATE items SET (rcd_id, date, speaker, msg) VALUES (%(rcd_id)s, %(date)s, %(speaker)s, %(msg)s) WHERE=%(rcd_id)s;""", {'rcd_id': rcd_id, 'date' : date, 'speaker': speaker, 'msg': msg, 'rcd_id': rcd_id})
     cur.execute("""INSERT INTO items (rcd_id, date, speaker, msg) VALUES (%(rcd_id)s, %(date)s, %(speaker)s, %(msg)s);""", {'rcd_id': rcd_id, 'date' : date, 'speaker': speaker, 'msg': msg})
     
     #データベースへコミットし、カーソルを破棄して、接続を解除する。
