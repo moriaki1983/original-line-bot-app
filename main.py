@@ -89,13 +89,13 @@ def handle_message(event):
     line_bot_api.reply_message(event.reply_token,TextSendMessage(text="/".join(rslt)))
     
     #
-    db_process(event)
+    main.db_process(event)
     
     #
-    set_env(rcd_id)
+    main.set_env(rcd_id)
 
     #
-    count_env(rcd_id)
+    main.count_env(rcd_id)
 
 
 def db_process(event):
@@ -133,7 +133,6 @@ def db_process(event):
     elif rcd_id < 100:
        rcd_id = 0
        cur.execute("""UPDATE items SET (rcd_id, date, speaker, msg) VALUES (%(rcd_id)s, %(date)s, %(speaker)s, %(msg)s) WHERE=%(rcd_id)s;""", {'rcd_id': rcd_id, 'date' : date, 'speaker': speaker, 'msg': msg, 'rcd_id': rcd_id})
-    rcd_id = str(int(rcd_id) + 1)
 
     #データベースへコミットし、カーソルを破棄して、接続を解除する。
     conn.commit()
