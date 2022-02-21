@@ -104,6 +104,7 @@ def db_process():
     #データベースに接続して、カーソルを用意する
     #conn = psycopg2.connect(DATABASE_URL, sslmode='require')
     conn = psycopg2.connect(DATABASE_URL)
+    conn.set_client_encoding('utf-8') 
     cur  = conn.cursor()
 
     #テーブルを作成する
