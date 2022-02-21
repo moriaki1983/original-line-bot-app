@@ -38,7 +38,8 @@ def now_online():
 
     # データベースからLINEメッセージを取得して、ブラウザーに引渡しする
     rcd_id = os.environ["DB_RCD_NUM"]
-    cur.execute("SELECT * FROM items WHERE rcd_id = %s", [rcd_id])
+    #cur.execute("SELECT * FROM items WHERE rcd_id = %s", [rcd_id])
+    cur.execute("""SELECT * FROM items WHERE rcd_id = (%(rcd_id)s;""", {'rcd_id': rcd_id})
     row = cur.fetchone()
     cur.close()
     conn.close()
@@ -121,7 +122,8 @@ def db_process(event):
     msg     = event.message.text
 
     #
-    cur.execute("SELECT * FROM items WHERE rcd_id = %s", [rcd_id])
+    #cur.execute("SELECT * FROM items WHERE rcd_id = %s", [rcd_id])
+    cur.execute("""SELECT * FROM items WHERE rcd_id = (%(rcd_id)s;""", {'rcd_id': rcd_id})
     row = cur.fetchone()
     cur.execute("SELECT * FROM items")
     row_num = len(cur.fetchall())
