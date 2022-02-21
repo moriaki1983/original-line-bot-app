@@ -91,7 +91,7 @@ def handle_message(event):
     line_bot_api.reply_message(event.reply_token,TextSendMessage(text="/".join(rslt)))
     
     #
-    db_process(event)
+    #db_process(event)
 
     global rcd_id
     rcd_id = str(int(rcd_id) + 1)
