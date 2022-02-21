@@ -37,11 +37,13 @@ def now_online():
     cur  = conn.cursor()
 
     # データベースからLINEメッセージを取得して、ブラウザーに引渡しする
-    rcd_id = int(os.environ["DB_RCD_NUM"])
+    rcd_id = os.environ["DB_RCD_NUM"]
     cur.execute("SELECT * FROM items WHERE rcd_id = %s", [rcd_id])
     row = cur.fetchone()
     cur.close()
     conn.close()
+    
+    #
     return jsonify(row), 200
 
 
@@ -112,7 +114,7 @@ def db_process(event):
        cos.environ["HAS_DB_TABLE"] = 'True'
     
     #ユーザーからのLINEメッセージをデータベースに登録・格納する
-    rcd_id  = int(os.environ["DB_RCD_NUM"])
+    rcd_id  = os.environ["DB_RCD_NUM"]
     date    = "2022-02-22-22:22"
     #speaker = event.source.userId
     speaker = "LINE-Client"
