@@ -122,7 +122,7 @@ def db_process(event):
 
     #
     #cur.execute("SELECT * FROM items WHERE rcd_id = %s", [rcd_id])
-    cur.execute("""SELECT * FROM items WHERE rcd_id =(%(rcd_id)s;""", {'rcd_id': rcd_id})
+    cur.execute("""SELECT * FROM items WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id})
     row = cur.fetchone()
     cur.execute("SELECT * FROM items")
     row_num = len(cur.fetchall())
@@ -151,8 +151,10 @@ def env_count():
     os.environ["DB_RCD_NUM"] = str(int(os.environ["DB_RCD_NUM"]) + 1)
 
 
+
+
 # ポート番号の設定
 if __name__ == "__main__":
     #FlaskのアプリモジュールをWebアプリケーションサーバー上で実行する
-    app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
     #app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
+    app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
