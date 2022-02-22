@@ -1,4 +1,4 @@
-#モジュールの読み込み
+#各モジュールの読み込み
 import os
 import psycopg2
 from flask import Flask, jsonify, request, abort
@@ -38,7 +38,7 @@ def now_online():
     conn = psycopg2.connect(DATABASE_URL)
     cur  = conn.cursor()
 
-    # データベースからLINEメッセージを取得し、jsonifyで整形してブラウザーに引渡しする
+    # データベースからLINEメッセージを取得し、jsonifyで整形してブラウザーに引渡しをする
     global rcd_id
     if rcd_id == "0":
         cur.execute("""SELECT * FROM items WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id})
@@ -79,26 +79,51 @@ def callback():
 #LINE-DevelopersのWebhookを介して送られてくるイベントを処理する
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    #JanomeでユーザーからのLINEメッセージを解析する
-    tknzr = Tokenizer()
-    tkns = tknzr.tokenize(event.message.text)
-    rslt = []
-    for tkn in tkns:
-        rslt.append(tkn.surface)
+    #LINEメッセージをJanomeで形態素解析し、「/」で文節に分けて結合する
+    tknz_rslt = tokenize(event.message.text)
 
-    #ユーザーへの返信メッセージを生成する
-    if rslt[0] == "わたし":
-       rslt[0] = "LINE-Client"
-
-    #ユーザーにLINEメッセージを送信する
-    line_bot_api.reply_message(event.reply_token,TextSendMessage(text="/".join(rslt)))
+    #janomeで解析されたユーザーのメッセージから返信メッセージを生成する
+    msg_gnrt_rslt = generate(tknz_rslt)
     
-    #ユーザーからのLINEメッセージをデータベースに登録・格納する
-    db_process(event)
+    #LINEBotAPIを使って、ユーザーにLINEボットからのLINEメッセージを送信する
+    send(event, msg_gnrt_rslt)
+
+    #ユーザーから送られるLINEメッセージをpostgresのデータベースに登録・格納する
+    db_insert_and_update(event.message.text)
 
 
-#ユーザーから送られてくるLINEメッセージをデータベースに登録・格納する
-def db_process(event):
+#LINEメッセージをJanomeで形態素解析し、「/」で文節に分けて結合する
+def tokenize(line_msg_text)
+    #ユーザーから送られるLINEメッセージをJanomeで形態素解析する
+    tknzr = Tokenizer()
+    tkns = tknzr.tokenize(line_msg_text)
+    
+    #解析後のLINEメッセージを文節に分けて、呼出し元に引渡しをする
+    tknz_rslt = []
+    for tkn in tkns:
+        tknz_rslt.append(tkn.surface)
+    tknz_rslt
+    return tknz_rslt
+
+
+#janomeで解析されたユーザーのメッセージから返信メッセージを生成する
+def generate(tknz_rslt)
+    #解析後のLINEメッセージの主語を置き換え、「/」で文節に分けて、呼出し元に引渡しをする
+     msg_gnrt_rslt = []
+    if tknz_rslt[0] == "わたし" OR tknz_rslt[0] == "あたし":
+       tknz_rslt[0] = "LINE-Client"
+    msg_gnrt_rslt = "/".join(tknz_rslt)
+    return msg_gnrt_rslt
+
+
+#LINEBotAPIを使って、ユーザーにLINEボットからのLINEメッセージを送信する
+def send(event, msg_gnrt_rslt)
+    #LINEの返信用トークンと前段で生成されたメッセージをセットにしてLINEBotAPIの呼出しをする
+    line_bot_api.reply_message(event.reply_token, TextSendMessage(text=msg_gnrt_rslt))
+
+
+#ユーザーから送られるLINEメッセージをpostgresのデータベースに登録・格納する
+def db_insert_and_update(line_msg_text):
     #データベースに接続して、カーソルを用意する
     #conn = psycopg2.connect(DATABASE_URL, sslmode='require')
     conn = psycopg2.connect(DATABASE_URL)
@@ -120,7 +145,7 @@ def db_process(event):
     #speaker = event["source"]["userId"]
     speaker  = "LINE-Client"
     #msg     = event["message"]["text"]
-    msg      = event.message.text
+    msg      = line_msg_text
 
     #該当IDのLINEメッセージ(＝レコード)がないか調べる、また、データベースに登録・格納されているメッセージの数も調べる
     cur.execute("""SELECT * FROM items WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id})
@@ -147,8 +172,7 @@ def db_process(event):
 
 
 
-# デバッグモードをオンにし、ポート番号の設定をしてアプリを実行する
+#FlaskのアプリケーションモジュールをWebアプリケーションサーバー上で実行する
 if __name__ == "__main__":
-    #FlaskのアプリケーションモジュールをWebアプリケーションサーバー上で実行する
-    #app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
+    # デバッグモードをオンにし、ポート番号の設定をしてアプリケーションモジュールを実行する
     app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
