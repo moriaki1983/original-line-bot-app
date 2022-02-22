@@ -1,6 +1,7 @@
 #各モジュールの読み込み
 import os
 import psycopg2
+#import gunicorn
 from flask import Flask, jsonify, request, abort
 from linebot import (LineBotApi, WebhookHandler)
 from linebot.exceptions import (InvalidSignatureError)
@@ -71,7 +72,7 @@ def callback():
         # 署名検証に失敗したら例外を送出する
         #return HttpResponseForbidden()
         abort(400)
-    #呼出し元にステータスコードを送出する
+    #呼出し元にステータスコードの引渡しをする
     #return HttpResponse('OK')
     return 'OK'
 
