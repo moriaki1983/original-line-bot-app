@@ -93,7 +93,7 @@ def handle_message(event):
 
 
 #LINEメッセージをJanomeで形態素解析し、「/」で文節に分けて結合する
-def tokenize(line_msg_text)
+def tokenize(line_msg_text):
     #ユーザーから送られるLINEメッセージをJanomeで形態素解析する
     tknzr = Tokenizer()
     tkns = tknzr.tokenize(line_msg_text)
@@ -107,7 +107,7 @@ def tokenize(line_msg_text)
 
 
 #janomeで解析されたユーザーのメッセージから返信メッセージを生成する
-def generate(tknz_rslt)
+def generate(tknz_rslt):
     #解析後のLINEメッセージの主語を置き換え、「/」で文節に分けて、呼出し元に引渡しをする
      msg_gnrt_rslt = []
     if tknz_rslt[0] == "わたし" OR tknz_rslt[0] == "あたし":
@@ -117,7 +117,7 @@ def generate(tknz_rslt)
 
 
 #LINEBotAPIを使って、ユーザーにLINEボットからのLINEメッセージを送信する
-def send(event, msg_gnrt_rslt)
+def send(event, msg_gnrt_rslt):
     #LINEの返信用トークンと前段で生成されたメッセージをセットにしてLINEBotAPIの呼出しをする
     line_bot_api.reply_message(event.reply_token, TextSendMessage(text=msg_gnrt_rslt))
 
