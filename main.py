@@ -115,10 +115,12 @@ def db_process(event):
     
     #データベースに登録・格納するLINEメッセージ(＝レコード)を構成する情報をまとめて用意する
     global rcd_id
-    date    = "2022-02-22-22:22"
-    #speaker = event.source.userId
-    speaker = "LINE-Client"
-    msg     = event.message.text
+    #date    = datetime.datetime.now(tz_jst).strftime("%Y/%m/%d %H:%M:%S")
+    date     = "2022-02-22" 
+    #speaker = event["source"]["userId"]
+    speaker  = "LINE-Client"
+    #msg     = event["message"]["text"]
+    msg      = event.message.text
 
     #該当IDのLINEメッセージ(＝レコード)がないか調べる、また、データベースに登録・格納されているメッセージの数も調べる
     cur.execute("""SELECT * FROM items WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id})
