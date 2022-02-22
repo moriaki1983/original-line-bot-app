@@ -110,8 +110,9 @@ def tokenize(line_msg_text):
 def generate(tknz_rslt):
     #解析後のLINEメッセージの主語を置き換え、「/」で文節に分けて、呼出し元に引渡しをする
      msg_gnrt_rslt = []
-    if (tknz_rslt[0] == "わたし" or tknz_rslt[0] == "あたし"):
-         tknz_rslt[0] = "LINE-Client"
+    if (tknz_rslt[0] == "わたし" or
+        tknz_rslt[0] == "あたし"):
+          tknz_rslt[0] = "LINE-Client"
     msg_gnrt_rslt = "/".join(tknz_rslt)
     return msg_gnrt_rslt
 
