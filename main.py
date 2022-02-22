@@ -96,7 +96,7 @@ def handle_message(event):
 def tokenize(line_msg_text):
     #ユーザーから送られるLINEメッセージをJanomeで形態素解析する
     tknzr = Tokenizer()
-    tkns = tknzr.tokenize(line_msg_text)
+    tkns  = tknzr.tokenize(line_msg_text)
     
     #解析後のLINEメッセージを文節に分けて、呼出し元に引渡しをする
     tknz_rslt = []
@@ -109,7 +109,7 @@ def tokenize(line_msg_text):
 #janomeで解析されたユーザーのメッセージから返信メッセージを生成する
 def generate(tknz_rslt):
     #解析後のLINEメッセージの主語を置き換え、「/」で文節に分けて、呼出し元に引渡しをする
-     msg_gnrt_rslt = []
+    msg_gnrt_rslt = []
     if tknz_rslt[0] == "わたし":
           tknz_rslt[0] = "LINE-Client"
     msg_gnrt_rslt = "/".join(tknz_rslt)
