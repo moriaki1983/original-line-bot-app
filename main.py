@@ -1,5 +1,6 @@
 #各モジュールの読み込み
 import os
+import datetime
 import psycopg2
 #import gunicorn
 from flask import Flask, jsonify, request, abort
