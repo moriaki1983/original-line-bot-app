@@ -8,7 +8,7 @@ from linebot import (LineBotApi, WebhookHandler)
 from linebot.exceptions import (InvalidSignatureError)
 from linebot.models import (MessageEvent, FollowEvent, TextMessage, TextSendMessage)
 from janome.tokenizer import Tokenizer
-#from datetime import datetime, timedelta, timezone
+
 
 
 
@@ -23,9 +23,6 @@ handler      = WebhookHandler(YOUR_CHANNEL_SECRET)
 
 #herokuの環境に設定されている、Postgresにアクセスするためのキーを取得する
 DATABASE_URL = os.environ["DATABASE_URL"]
-
-#herokuの環境に設定されている、Postgres上のテーブルの有無を示す変数を取得する
-HAS_DB_TABLE = os.environ["HAS_DB_TABLE"]
 
 #データベースに登録・格納するLINEメッセージ(＝レコード)のIDを示す変数を宣言する
 rcd_id = "0"
@@ -71,10 +68,8 @@ def callback():
         handler.handle(body, signature)
     except InvalidSignatureError:
         # 署名検証に失敗したら例外を送出する
-        #return HttpResponseForbidden()
         abort(400)
     #呼出し元にステータスコードの引渡しをする
-    #return HttpResponse('OK')
     return 'OK'
 
 
@@ -133,7 +128,6 @@ def send(event, msg_gnrt_rslt):
 #ユーザーから送られるLINEメッセージをpostgresのデータベースに登録・格納する
 def db_insert_and_update(event):
     #データベースに接続して、カーソルを用意する
-    #conn = psycopg2.connect(DATABASE_URL, sslmode='require')
     conn = psycopg2.connect(DATABASE_URL)
     conn.set_client_encoding('utf-8') 
     cur  = conn.cursor()
@@ -152,7 +146,6 @@ def db_insert_and_update(event):
     dt_tm   = datetime.datetime.now(jst)
     date    = dt_tm.strftime("%Y/%m/%d %H:%M:%S")
     profile = line_bot_api.get_profile(event.source.user_id)
-    #speaker = event.source.user_id
     speaker = profile.display_name
     msg     = event.message.text
 
