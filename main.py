@@ -1,6 +1,5 @@
 #各モジュールの読み込み
 import os
-import datetime
 import psycopg2
 #import gunicorn
 from flask import Flask, jsonify, request, abort
@@ -8,7 +7,7 @@ from linebot import (LineBotApi, WebhookHandler)
 from linebot.exceptions import (InvalidSignatureError)
 from linebot.models import (MessageEvent, FollowEvent, TextMessage, TextSendMessage)
 from janome.tokenizer import Tokenizer
-
+from datetime import datetime, timedelta, timezone
 
 
 
@@ -148,7 +147,8 @@ def db_insert_and_update(event):
     
     #データベースに登録・格納するLINEメッセージ(＝レコード)を構成する情報をまとめて用意する
     global rcd_id
-    dt_tm   = datetime.datetime.now()
+    jst = timezone(timedelta(hours=+9), "JST")
+    dt_tm   = datetime.datetime.now(jst)
     date    = dt_tm.strftime("%Y/%m/%d %H:%M:%S")
     profile = line_bot_api.get_profile(event.source.user_id)
     #speaker = event.source.user_id
