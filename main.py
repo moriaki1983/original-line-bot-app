@@ -148,7 +148,8 @@ def db_insert_and_update(event):
     
     #データベースに登録・格納するLINEメッセージ(＝レコード)を構成する情報をまとめて用意する
     global rcd_id
-    date    = datetime.datetime.now(tz_jst).strftime("%Y/%m/%d %H:%M:%S")
+    dt_tm   = datetime.datetime.now()
+    date    = dt_tm.strftime("%Y/%m/%d %H:%M:%S")
     speaker = event["source"]["userId"]
     msg     = event["message"]["text"]
 
