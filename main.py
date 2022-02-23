@@ -90,7 +90,7 @@ def handle_message(event):
     send(event, msg_gnrt_rslt)
 
     #ユーザーから送られるLINEメッセージをpostgresのデータベースに登録・格納する
-    db_insert_and_update(event.message.text)
+    db_insert_and_update(event)
 
 
 #LINE-DevelopersのWebhookを介して送られてくるイベントを処理する(＝フォローイベントを処理する)
@@ -130,7 +130,7 @@ def send(event, msg_gnrt_rslt):
 
 
 #ユーザーから送られるLINEメッセージをpostgresのデータベースに登録・格納する
-def db_insert_and_update(line_msg_text):
+def db_insert_and_update(event):
     #データベースに接続して、カーソルを用意する
     #conn = psycopg2.connect(DATABASE_URL, sslmode='require')
     conn = psycopg2.connect(DATABASE_URL)
@@ -147,12 +147,9 @@ def db_insert_and_update(line_msg_text):
     
     #データベースに登録・格納するLINEメッセージ(＝レコード)を構成する情報をまとめて用意する
     global rcd_id
-    #date    = datetime.datetime.now(tz_jst).strftime("%Y/%m/%d %H:%M:%S")
-    date     = "2022-02-22" 
-    #speaker = event["source"]["userId"]
-    speaker  = "LINE-Client"
-    #msg     = event["message"]["text"]
-    msg      = line_msg_text
+    date    = datetime.datetime.now(tz_jst).strftime("%Y/%m/%d %H:%M:%S")
+    speaker = event["source"]["userId"]
+    msg     = event["message"]["text"]
 
     #該当IDのLINEメッセージ(＝レコード)がないか調べる、また、データベースに登録・格納されているメッセージの数も調べる
     cur.execute("""SELECT * FROM items WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id})
