@@ -150,8 +150,10 @@ def db_insert_and_update(event):
     global rcd_id
     dt_tm   = datetime.datetime.now()
     date    = dt_tm.strftime("%Y/%m/%d %H:%M:%S")
-    speaker = event["source"]["userId"]
-    msg     = event["message"]["text"]
+    profile = line_bot_api.get_profile(event.source.user_id)
+    #speaker = event.source.user_id
+    speaker = profile.display_name
+    msg     = event.message.text
 
     #該当IDのLINEメッセージ(＝レコード)がないか調べる、また、データベースに登録・格納されているメッセージの数も調べる
     cur.execute("""SELECT * FROM items WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id})
