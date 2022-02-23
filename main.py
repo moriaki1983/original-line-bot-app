@@ -5,7 +5,7 @@ import psycopg2
 from flask import Flask, jsonify, request, abort
 from linebot import (LineBotApi, WebhookHandler)
 from linebot.exceptions import (InvalidSignatureError)
-from linebot.models import (MessageEvent, TextMessage, TextSendMessage)
+from linebot.models import (MessageEvent, FollowEvent, TextMessage, TextSendMessage)
 from janome.tokenizer import Tokenizer
 
 
@@ -77,7 +77,7 @@ def callback():
     return 'OK'
 
 
-#LINE-DevelopersのWebhookを介して送られてくるイベントを処理する
+#LINE-DevelopersのWebhookを介して送られてくるイベントを処理する(＝メッセージイベントを処理する)
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     #LINEメッセージをJanomeで形態素解析し、「/」で文節に分けて結合する
@@ -91,6 +91,12 @@ def handle_message(event):
 
     #ユーザーから送られるLINEメッセージをpostgresのデータベースに登録・格納する
     db_insert_and_update(event.message.text)
+
+
+#LINE-DevelopersのWebhookを介して送られてくるイベントを処理する(＝フォローイベントを処理する)
+@handler.add(FollowEvent)
+def handle_follow(event):
+    line_bot_api.reply_message(event.reply_token, TextSendMessage(text="友達追加 ありがとう！"))
 
 
 #LINEメッセージをJanomeで形態素解析し、「/」で文節に分けて結合する
