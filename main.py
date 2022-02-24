@@ -40,16 +40,21 @@ def show_db_record():
     conn.set_client_encoding("utf-8") 
     cur  = conn.cursor()
 
-    # データベースからLINEメッセージを取得し、jsonifyで整形して呼出し元に引き渡しをする
+    # データベースから該当IDのLINEメッセージ(＝レコード)を取得し、jsonifyで整形して呼出し元に引き渡しをする
     global rcd_id
-    if rcd_id == "0":
-        cur.execute("""SELECT * FROM line_entries WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id})
-    else:
-        cur.execute("""SELECT * FROM line_entries WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': str(int(rcd_id) - 1)})
-    rcd = cur.fetchone()
-    cur.close()
-    conn.close()
-    return jsonify(rcd), 200
+    if has_db_table == True:
+       if rcd_id == "0":
+         cur.execute("""SELECT * FROM line_entries WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id})
+       elif rcd_id > 0:
+         cur.execute("""SELECT * FROM line_entries WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': str(int(rcd_id) - 1)})
+       rcd = cur.fetchone()
+       cur.close()
+       conn.close()
+       return jsonify(rcd), 200
+    elif:
+       cur.close()
+       conn.close()
+       return "db-table not exist..."
 
 
 #postgresデータベース上のテーブルを破棄する
