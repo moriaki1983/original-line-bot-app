@@ -87,16 +87,14 @@ def db_table_drop():
 #LINE-DevelopersのWebhookからURLにイベントが送出されるようにする(内部でイベントハンドラーを呼び出す)
 @app.route("/callback", methods=["POST"])
 def callback():
-    # HTTPリクエストヘッダーから署名検証のためのシグネチャーを取得する
-    #signature = request.META['HTTP_X_LINE_SIGNATURE']
+    #HTTPリクエストヘッダーから署名検証のためのシグネチャーを取得する
     signature = request.headers["X-Line-Signature"]
 
-    # HTTPリクエストボディを取得する
-    body = request.body.decode('utf-8')
-    #body = request.get_data(as_text=True)
+    #HTTPリクエストボディを取得して、ログに記録する
+    body = request.get_data(as_text=True)
     app.logger.info("Request body: " + body)
 
-    # 署名を検証して、問題がなければhandleに定義されている関数の呼出しをする
+    #署名を検証して問題がなければ、「handle_message(＝イベントハンドラー)」の呼出しをする
     try:
         handler.handle(body, signature)
     except InvalidSignatureError:
