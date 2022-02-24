@@ -123,7 +123,8 @@ def handle_message(event):
 #LINE-DevelopersのWebhookを介して送られてくるイベントを処理する(＝フォローイベントを処理する)
 @handler.add(FollowEvent)
 def handle_follow(event):
-    line_bot_api.reply_message(event.reply_token, TextSendMessage(text="友達追加 ありがとう！"))
+    follow_msg = "友達追加 ありがとう！"
+    line_bot_api.reply_message(event.reply_token, TextSendMessage(text=follow_msg))
 
 
 #ユーザーから送られるLINEメッセージをJanomeで形態素解析する
