@@ -41,8 +41,9 @@ def show_db_record():
     cur  = conn.cursor()
 
     # データベースから該当IDのLINEメッセージ(＝レコード)を取得し、jsonifyで整形して呼出し元に引き渡しをする
-    global has_db_table
+    #global has_db_table
     global rcd_id
+    has_db_table = cur.execute(SELECT * FROM information_schema.tables WHERE table_name = 'line_entries';)
     if has_db_table == True:
        if rcd_id == "0":
          cur.execute("""SELECT * FROM line_entries WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id})
@@ -65,21 +66,25 @@ def db_table_drop():
     conn = psycopg2.connect(DATABASE_URL)
     conn.set_client_encoding("utf-8") 
     cur  = conn.cursor()
-    tbl_oprtn_rslt = ""
 
     #既にテーブルが作成・用意されていれば、それを破棄する
-    cur.execute("DROP TABLE line_entries")
-    global has_db_table
-    has_db_table = False
-
-    #データベースに登録・格納するLINEメッセージ(＝レコード)のID(＝レコードカウンタ)を示す変数を初期化する
-    global rcd_id
-    rcd_id = "0"
+    tbl_oprtn_rslt = ""
+    has_db_table = cur.execute(SELECT * FROM information_schema.tables WHERE table_name = 'line_entries';)
+    if has_db_table == True:
+       cur.execute("DROP TABLE line_entries")
+       tbl_oprtn_rslt = "table droped!"
+    #global has_db_table
+    #has_db_table = False
+       #データベースに登録・格納するLINEメッセージ(＝レコード)のID(＝レコードカウンタ)を示す変数を初期化する
+       global rcd_id
+       rcd_id = "0"
+    else:
+       tbl_oprtn_rslt = "can't droped..."
 
     #データベースへコミットし、テーブル操作のためのカーソルを破棄して、データベースとの接続を解除する
     cur.close()
     conn.close()
-    return "table droped!"
+    return tbl_oprtn_rslt
 
 
 #LINE-DevelopersのWebhookからURLにイベントが送出されるようにする(内部でイベントハンドラーを呼び出す)
@@ -161,11 +166,12 @@ def db_insert_and_update(event):
     cur  = conn.cursor()
 
     #既にテーブルが作成・用意されていれば、それを破棄して新たにテーブルを作成・用意する
-    global has_db_table
+    #global has_db_table
+    has_db_table = cur.execute(SELECT * FROM information_schema.tables WHERE table_name = 'line_entries';)
     if has_db_table == False:
-       cur.execute("DROP TABLE line_entries")
+       #cur.execute("DROP TABLE line_entries")
        cur.execute("CREATE TABLE line_entries(rcd_id text, date text, speaker text, msg text)")
-       has_db_table = True
+       #has_db_table = True
 
     #データベースに登録・格納するLINEメッセージ(＝レコード)を構成する情報をまとめて用意する
     global rcd_id
