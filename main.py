@@ -20,10 +20,10 @@ YOUR_CHANNEL_SECRET       = os.environ["YOUR_CHANNEL_SECRET"]
 line_bot_api = LineBotApi(YOUR_CHANNEL_ACCESS_TOKEN)
 handler      = WebhookHandler(YOUR_CHANNEL_SECRET)
 
-#herokuの環境に設定されている、Postgresにアクセスするためのキーを取得する
+#herokuの環境に設定されている、postgresにアクセスするためのキーを取得する
 DATABASE_URL = os.environ["DATABASE_URL"]
 
-#postgresデータベース上のテーブル「items」の有無を示す変数を宣言する
+#postgresデータベース上のテーブル「line_entries」の有無を示す変数を宣言する
 has_db_table = False
 
 #postgresデータベースに登録・格納するLINEメッセージ(＝レコード)のID(＝レコードカウンタ)を示す変数を宣言する
@@ -32,24 +32,24 @@ rcd_id = "0"
 
 
 
-#postgresデータベース上のテーブル内のレコードを取得して、呼出し元に引き渡しをする
+#postgresデータベース上のテーブル内のレコードを取得して、ブラウザーに引渡しをする
 @app.route("/")
-def now_online():
+def show_db_record():
     #postgresデータベースに接続して、テーブル操作のためのカーソルを用意する
     conn = psycopg2.connect(DATABASE_URL)
     conn.set_client_encoding("utf-8") 
     cur  = conn.cursor()
 
-    # データベースからLINEメッセージを取得し、jsonifyで整形してブラウザーに引渡しをする
+    # データベースからLINEメッセージを取得し、jsonifyで整形して呼出し元に引き渡しをする
     global rcd_id
     if rcd_id == "0":
-        cur.execute("""SELECT * FROM items WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id})
+        cur.execute("""SELECT * FROM line_entries WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id})
     else:
-        cur.execute("""SELECT * FROM items WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': str(int(rcd_id) - 1)})
-    row = cur.fetchone()
+        cur.execute("""SELECT * FROM line_entries WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': str(int(rcd_id) - 1)})
+    rcd = cur.fetchone()
     cur.close()
     conn.close()
-    return jsonify(row), 200
+    return jsonify(rcd), 200
 
 
 #postgresデータベース上のテーブルを破棄する
@@ -63,7 +63,7 @@ def db_table_drop():
 
     #既にテーブルが作成・用意されていれば、それを破棄する
     if has_db_table == True:
-       cur.execute("DROP TABLE items")
+       cur.execute("DROP TABLE line_entries")
        has_db_table = False
        tbl_oprtn_rslt = "db-table droped!"
     else:
@@ -87,8 +87,8 @@ def callback():
     signature = request.headers["X-Line-Signature"]
 
     # HTTPリクエストボディを取得する
-    #body = request.body.decode('utf-8')
-    body = request.get_data(as_text=True)
+    body = request.body.decode('utf-8')
+    #body = request.get_data(as_text=True)
     app.logger.info("Request body: " + body)
 
     # 署名を検証して、問題がなければhandleに定義されている関数の呼出しをする
@@ -102,13 +102,13 @@ def callback():
 #LINE-DevelopersのWebhookを介して送られてくるイベントを処理する(＝メッセージイベントを処理する)
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    #LINEメッセージをJanomeで形態素解析し、「/」で文節に分けて結合する
+    #ユーザーから送られるLINEメッセージをJanomeで形態素解析する
     tknz_rslt = tokenize(event.message.text)
 
-    #janomeで解析されたユーザーのメッセージから返信メッセージを生成する
+    #janomeで解析されたユーザーのメッセージを基に返信メッセージを生成する
     msg_gnrt_rslt = generate(tknz_rslt)
     
-    #LINEBotAPIを使って、ユーザーにLINEボットからのLINEメッセージを送信する
+    #LINEBotAPIを使って、ユーザーに生成されたLINEメッセージを送信する
     send(event, msg_gnrt_rslt)
 
     #ユーザーから送られるLINEメッセージをpostgresのデータベースに登録・格納する
@@ -121,13 +121,13 @@ def handle_follow(event):
     line_bot_api.reply_message(event.reply_token, TextSendMessage(text="友達追加 ありがとう！"))
 
 
-#LINEメッセージをJanomeで形態素解析し、「/」で文節に分けて結合する
+#ユーザーから送られるLINEメッセージをJanomeで形態素解析する
 def tokenize(line_msg_text):
-    #ユーザーから送られるLINEメッセージをJanomeで形態素解析する
+    #LINEメッセージの内容を品詞や単語を単位として分解する(＝文節に分ける)
     tknzr = Tokenizer()
     tkns  = tknzr.tokenize(line_msg_text)
     
-    #解析後のLINEメッセージを文節に分けて、呼出し元に引渡しをする
+    #分解後のLINEメッセージをリストに格納して呼出し元に引渡しをする
     tknz_rslt = []
     for tkn in tkns:
         tknz_rslt.append(tkn.surface)
@@ -135,7 +135,7 @@ def tokenize(line_msg_text):
     return tknz_rslt
 
 
-#janomeで解析されたユーザーのメッセージから返信メッセージを生成する
+#janomeで解析されたユーザーのメッセージを基に返信メッセージを生成する
 def generate(tknz_rslt):
     #解析後のLINEメッセージの主語を置き換え、「/」で文節に分けて、呼出し元に引渡しをする
     msg_gnrt_rslt = []
@@ -145,9 +145,9 @@ def generate(tknz_rslt):
     return msg_gnrt_rslt
 
 
-#LINEBotAPIを使って、ユーザーにLINEボットからのLINEメッセージを送信する
+#LINEBotAPIを使って、ユーザーに生成されたLINEメッセージを送信する
 def send(event, msg_gnrt_rslt):
-    #LINEの返信用トークンと前段で生成されたメッセージをセットにしてLINEBotAPIの呼出しをする
+    #LINEの返信用トークンと生成されたメッセージをセットにしてLINEBotAPIの呼出しをする
     line_bot_api.reply_message(event.reply_token, TextSendMessage(text=msg_gnrt_rslt))
 
 
@@ -162,7 +162,7 @@ def db_insert_and_update(event):
     global has_db_table
     if has_db_table == False:
        #cur.execute("DROP TABLE items")
-       cur.execute("CREATE TABLE items(rcd_id text, date text, speaker text, msg text)")
+       cur.execute("CREATE TABLE line_entries(rcd_id text, date text, speaker text, msg text)")
        has_db_table = True
 
     #データベースに登録・格納するLINEメッセージ(＝レコード)を構成する情報をまとめて用意する
@@ -175,20 +175,20 @@ def db_insert_and_update(event):
     msg     = event.message.text
 
     #該当IDのLINEメッセージ(＝レコード)がないか調べる、また、データベースに登録・格納されているメッセージの数も調べる
-    cur.execute("""SELECT * FROM items WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id})
-    row = cur.fetchone()
-    cur.execute("SELECT * FROM items")
-    row_num = len(cur.fetchall())
+    cur.execute("""SELECT * FROM line_entries WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id})
+    rcd = cur.fetchone()
+    cur.execute("SELECT * FROM line_entries")
+    rcd_num = len(cur.fetchall())
 
-    #該当IDのLINEメッセージ(＝レコード)がなかったら、データベースにインサート(＝挿入)(＝新規に登録・格納)し、既にメッセージがあったらアップデート(＝上書き)をする
-    if row is None:
-       cur.execute("""INSERT INTO items (rcd_id, date, speaker, msg) VALUES (%(rcd_id)s, %(date)s, %(speaker)s, %(msg)s);""", {'rcd_id': rcd_id, 'date' : date, 'speaker': speaker, 'msg': msg})
+    #該当IDのLINEメッセージ(＝レコード)がなかったら、データベースにインサート(＝挿入)(＝新規に登録・格納)し、既にメッセージがあったらアップデート(＝上書き)する
+    if rcd is None:
+       cur.execute("""INSERT INTO line_entries (rcd_id, date, speaker, msg) VALUES (%(rcd_id)s, %(date)s, %(speaker)s, %(msg)s);""", {'rcd_id': rcd_id, 'date' : date, 'speaker': speaker, 'msg': msg})
        rcd_id = str(int(rcd_id) + 1)
-    elif row_num < 99:
-       cur.execute("""UPDATE items SET (rcd_id, date, speaker, msg) VALUES (%(rcd_id)s, %(date)s, %(speaker)s, %(msg)s) WHERE = %(rcd_id)s;""", {'rcd_id': rcd_id, 'date' : date, 'speaker': speaker, 'msg': msg, 'rcd_id': rcd_id})
+    elif rcd_num < 99:
+       cur.execute("""UPDATE line_entries SET (rcd_id, date, speaker, msg) VALUES (%(rcd_id)s, %(date)s, %(speaker)s, %(msg)s) WHERE = %(rcd_id)s;""", {'rcd_id': rcd_id, 'date' : date, 'speaker': speaker, 'msg': msg, 'rcd_id': rcd_id})
        rcd_id = str(int(rcd_id) + 1)
-    elif row_num == 99:
-       cur.execute("""UPDATE items SET (rcd_id, date, speaker, msg) VALUES (%(rcd_id)s, %(date)s, %(speaker)s, %(msg)s) WHERE = '0';""", {'rcd_id': "0", 'date' : date, 'speaker': speaker, 'msg': msg})
+    elif rcd_num == 99:
+       cur.execute("""UPDATE line_entries SET (rcd_id, date, speaker, msg) VALUES (%(rcd_id)s, %(date)s, %(speaker)s, %(msg)s) WHERE = '0';""", {'rcd_id': "0", 'date' : date, 'speaker': speaker, 'msg': msg})
        rcd_id = str(0)
 
     #データベースへコミットし、テーブル操作のためのカーソルを破棄して、データベースとの接続を解除する
