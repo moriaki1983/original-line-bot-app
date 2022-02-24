@@ -41,14 +41,13 @@ def show_db_record():
     cur  = conn.cursor()
 
     # データベースから該当IDのLINEメッセージ(＝レコード)を取得し、jsonifyで整形して呼出し元に引き渡しをする
-    #global has_db_table
+    global has_db_table
     global rcd_id
-    has_db_table = cur.execute("SELECT CASE WHEN relname = 'line_entries' THEN TRUE ELSE FALSE END AS exist_table FROM pg_class WHERE relkind = 'r';")
     if has_db_table == True:
        if rcd_id == "0":
-         cur.execute("SELECT * FROM line_entries WHERE rcd_id = %(rcd_id)s;", {'rcd_id': rcd_id})
+         cur.execute("""SELECT * FROM line_entries WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id})
        elif int(rcd_id) > int("0"):
-         cur.execute("SELECT * FROM line_entries WHERE rcd_id = %(rcd_id)s;", {'rcd_id': str(int(rcd_id) - 1)})
+         cur.execute("""SELECT * FROM line_entries WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': str(int(rcd_id) - 1)})
        rcd = cur.fetchone()
        cur.close()
        conn.close()
@@ -66,25 +65,21 @@ def db_table_drop():
     conn = psycopg2.connect(DATABASE_URL)
     conn.set_client_encoding("utf-8") 
     cur  = conn.cursor()
+    tbl_oprtn_rslt = ""
 
     #既にテーブルが作成・用意されていれば、それを破棄する
-    tbl_oprtn_rslt = ""
-    has_db_table = cur.execute("SELECT CASE WHEN relname = 'line_entries' THEN TRUE ELSE FALSE END AS exist_table FROM pg_class WHERE relkind = 'r';")
-    if has_db_table == True:
-       cur.execute("DROP TABLE line_entries")
-       tbl_oprtn_rslt = "table droped!"
-    #global has_db_table
-    #has_db_table = False
-       #データベースに登録・格納するLINEメッセージ(＝レコード)のID(＝レコードカウンタ)を示す変数を初期化する
-       global rcd_id
-       rcd_id = "0"
-    else:
-       tbl_oprtn_rslt = "can't droped..."
+    cur.execute("DROP TABLE line_entries")
+    global has_db_table
+    has_db_table = False
+
+    #データベースに登録・格納するLINEメッセージ(＝レコード)のID(＝レコードカウンタ)を示す変数を初期化する
+    global rcd_id
+    rcd_id = "0"
 
     #データベースへコミットし、テーブル操作のためのカーソルを破棄して、データベースとの接続を解除する
     cur.close()
     conn.close()
-    return tbl_oprtn_rslt
+    return "table droped!"
 
 
 #LINE-DevelopersのWebhookからURLにイベントが送出されるようにする(内部でイベントハンドラーを呼び出す)
@@ -166,12 +161,11 @@ def db_insert_and_update(event):
     cur  = conn.cursor()
 
     #既にテーブルが作成・用意されていれば、それを破棄して新たにテーブルを作成・用意する
-    #global has_db_table
-    has_db_table = cur.execute("SELECT CASE WHEN relname = 'line_entries' THEN TRUE ELSE FALSE END AS exist_table FROM pg_class WHERE relkind = 'r';")
+    global has_db_table
     if has_db_table == False:
-       #cur.execute("DROP TABLE line_entries")
+       cur.execute("DROP TABLE line_entries")
        cur.execute("CREATE TABLE line_entries(rcd_id text, date text, speaker text, msg text)")
-       #has_db_table = True
+       has_db_table = True
 
     #データベースに登録・格納するLINEメッセージ(＝レコード)を構成する情報をまとめて用意する
     global rcd_id
@@ -182,21 +176,17 @@ def db_insert_and_update(event):
     speaker = profile.display_name
     msg     = event.message.text
 
-    #該当IDのLINEメッセージ(＝レコード)がないか調べる、また、データベースに登録・格納されているメッセージの数も調べる
-    cur.execute("SELECT * FROM line_entries WHERE rcd_id = %(rcd_id)s;", {'rcd_id': rcd_id})
-    rcd = cur.fetchone()
-    #cur.execute("SELECT * FROM line_entries")
-    #rcd_num = len(cur.fetchall())
-
     #該当IDのLINEメッセージ(＝レコード)がなかったら、データベースにインサート(＝挿入)(＝新規に登録・格納)し、既にメッセージがあったらアップデート(＝上書き)する
+    cur.execute("""SELECT * FROM line_entries WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id})
+    rcd = cur.fetchone()
     if rcd is None:
-       cur.execute("INSERT INTO line_entries (rcd_id, date, speaker, msg) VALUES (%(rcd_id)s, %(date)s, %(speaker)s, %(msg)s);", {'rcd_id': rcd_id, 'date' : date, 'speaker': speaker, 'msg': msg})
+       cur.execute("""INSERT INTO line_entries (rcd_id, date, speaker, msg) VALUES (%(rcd_id)s, %(date)s, %(speaker)s, %(msg)s);""", {'rcd_id': rcd_id, 'date' : date, 'speaker': speaker, 'msg': msg})
        rcd_id = str(int(rcd_id) + 1)
     elif int(rcd_id) < 99:
-       cur.execute("UPDATE line_entries SET (rcd_id, date, speaker, msg) VALUES (%(rcd_id)s, %(date)s, %(speaker)s, %(msg)s) WHERE = %(rcd_id)s;", {'rcd_id': rcd_id, 'date' : date, 'speaker': speaker, 'msg': msg, 'rcd_id': rcd_id})
+       cur.execute("""UPDATE line_entries SET (rcd_id, date, speaker, msg) VALUES (%(rcd_id)s, %(date)s, %(speaker)s, %(msg)s) WHERE = %(rcd_id)s;""", {'rcd_id': rcd_id, 'date' : date, 'speaker': speaker, 'msg': msg, 'rcd_id': rcd_id})
        rcd_id = str(int(rcd_id) + 1)
     elif int(rcd_id) > 99:
-       cur.execute("UPDATE line_entries SET (rcd_id, date, speaker, msg) VALUES (%(rcd_id)s, %(date)s, %(speaker)s, %(msg)s) WHERE = '0';", {'rcd_id': "0", 'date' : date, 'speaker': speaker, 'msg': msg})
+       cur.execute("""UPDATE line_entries SET (rcd_id, date, speaker, msg) VALUES (%(rcd_id)s, %(date)s, %(speaker)s, %(msg)s) WHERE = '0';""", {'rcd_id': "0", 'date' : date, 'speaker': speaker, 'msg': msg})
        rcd_id = str(0)
 
     #データベースへコミットし、テーブル操作のためのカーソルを破棄して、データベースとの接続を解除する
