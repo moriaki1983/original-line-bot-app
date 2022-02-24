@@ -45,7 +45,7 @@ def show_db_record():
     if has_db_table == True:
        if rcd_id == "0":
          cur.execute("""SELECT * FROM line_entries WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id})
-       elif rcd_id > 0:
+       elif int(rcd_id) > int("0"):
          cur.execute("""SELECT * FROM line_entries WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': str(int(rcd_id) - 1)})
        rcd = cur.fetchone()
        cur.close()
