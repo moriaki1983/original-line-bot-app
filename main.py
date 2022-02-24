@@ -23,7 +23,10 @@ handler      = WebhookHandler(YOUR_CHANNEL_SECRET)
 #herokuの環境に設定されている、Postgresにアクセスするためのキーを取得する
 DATABASE_URL = os.environ["DATABASE_URL"]
 
-#データベースに登録・格納するLINEメッセージ(＝レコード)のIDを示す変数を宣言する
+#Postgresデータベース上のテーブル「items」の有無を示す変数を宣言する
+has_db_table = False
+
+#Postgresデータベースに登録・格納するLINEメッセージ(＝レコード)のIDを示す変数を宣言する
 rcd_id = "0"
 
 
@@ -32,8 +35,9 @@ rcd_id = "0"
 #herokuへのデプロイが成功したかどうかを確認する
 @app.route("/")
 def now_online():
-    #データベースへの接続を確立して、カーソルを用意する
+    #データベースに接続して、カーソルを用意する
     conn = psycopg2.connect(DATABASE_URL)
+    conn.set_client_encoding('utf-8') 
     cur  = conn.cursor()
 
     # データベースからLINEメッセージを取得し、jsonifyで整形してブラウザーに引渡しをする
@@ -47,7 +51,6 @@ def now_online():
     conn.close()
 
     return jsonify(row), 200
-    #return rcd_id
 
 
 #LINE-DevelopersのWebhookからURLにイベントが送出されるようにする(内部でイベントハンドラーを呼び出す)
@@ -132,13 +135,18 @@ def db_insert_and_update(event):
     cur  = conn.cursor()
 
     #既にテーブルが作成・用意されていれば、それを破棄して新たにテーブルを作成・用意する
-    if os.environ["HAS_DB_TABLE"] == 'True':
+    #if os.environ["HAS_DB_TABLE"] == 'True':
+    #   cur.execute("DROP TABLE items")
+    #   cur.execute("CREATE TABLE items(rcd_id text, date text, speaker text, msg text)")
+    #else:
+    #   cur.execute("CREATE TABLE items(rcd_id text, date text, speaker text, msg text)")
+    #   os.environ["HAS_DB_TABLE"] = 'True'
+    global has_db_table
+    if has_db_table == False:
        cur.execute("DROP TABLE items")
        cur.execute("CREATE TABLE items(rcd_id text, date text, speaker text, msg text)")
-    else:
-       cur.execute("CREATE TABLE items(rcd_id text, date text, speaker text, msg text)")
-       os.environ["HAS_DB_TABLE"] = 'True'
-    
+       has_db_table = True
+
     #データベースに登録・格納するLINEメッセージ(＝レコード)を構成する情報をまとめて用意する
     global rcd_id
     jst = datetime.timezone(datetime.timedelta(hours=+9), "JST")
