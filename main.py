@@ -43,7 +43,7 @@ def show_db_record():
     # データベースから該当IDのLINEメッセージ(＝レコード)を取得し、jsonifyで整形して呼出し元に引き渡しをする
     #global has_db_table
     global rcd_id
-    has_db_table = cur.execute("SELECT relname, CASE WHEN relname='line_entries' THEN TRUE ELSE FALSE END AS exist_table FROM pg_class WHERE relkind='r';")
+    has_db_table = cur.execute("SELECT CASE WHEN relname = line_entries THEN TRUE ELSE FALSE END AS exist_table FROM pg_class WHERE relkind = 'r';")
     if has_db_table == True:
        if rcd_id == "0":
          cur.execute("SELECT * FROM line_entries WHERE rcd_id = %(rcd_id)s;", {'rcd_id': rcd_id})
@@ -69,7 +69,7 @@ def db_table_drop():
 
     #既にテーブルが作成・用意されていれば、それを破棄する
     tbl_oprtn_rslt = ""
-    has_db_table = cur.execute("SELECT relname, CASE WHEN relname='line_entries' THEN TRUE ELSE FALSE END AS exist_table FROM pg_class WHERE relkind='r';")
+    has_db_table = cur.execute("SELECT CASE WHEN relname = line_entries THEN TRUE ELSE FALSE END AS exist_table FROM pg_class WHERE relkind = 'r';")
     if has_db_table == True:
        cur.execute("DROP TABLE line_entries")
        tbl_oprtn_rslt = "table droped!"
@@ -167,7 +167,7 @@ def db_insert_and_update(event):
 
     #既にテーブルが作成・用意されていれば、それを破棄して新たにテーブルを作成・用意する
     #global has_db_table
-    has_db_table = cur.execute("SELECT relname, CASE WHEN relname='line_entries' THEN TRUE ELSE FALSE END AS exist_table FROM pg_class WHERE relkind='r';")
+    has_db_table = cur.execute("SELECT CASE WHEN relname = line_entries THEN TRUE ELSE FALSE END AS exist_table FROM pg_class WHERE relkind = 'r';")
     if has_db_table == False:
        #cur.execute("DROP TABLE line_entries")
        cur.execute("CREATE TABLE line_entries(rcd_id text, date text, speaker text, msg text)")
