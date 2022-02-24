@@ -67,12 +67,9 @@ def db_table_drop():
     tbl_oprtn_rslt = ""
 
     #既にテーブルが作成・用意されていれば、それを破棄する
-    if has_db_table == True:
-       cur.execute("DROP TABLE line_entries")
-       has_db_table = False
-       tbl_oprtn_rslt = "db-table droped!"
-    else:
-       tbl_oprtn_rslt = "can't droped..."
+    cur.execute("DROP TABLE line_entries")
+    has_db_table   = False
+    tbl_oprtn_rslt = "table droped!"
 
     #データベースに登録・格納するLINEメッセージ(＝レコード)のID(＝レコードカウンタ)を示す変数を初期化する
     global rcd_id
@@ -165,7 +162,6 @@ def db_insert_and_update(event):
     #既にテーブルが作成・用意されていれば、それを破棄して新たにテーブルを作成・用意する
     global has_db_table
     if has_db_table == False:
-       #cur.execute("DROP TABLE items")
        cur.execute("CREATE TABLE line_entries(rcd_id text, date text, speaker text, msg text)")
        has_db_table = True
 
