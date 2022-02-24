@@ -23,21 +23,21 @@ handler      = WebhookHandler(YOUR_CHANNEL_SECRET)
 #herokuの環境に設定されている、Postgresにアクセスするためのキーを取得する
 DATABASE_URL = os.environ["DATABASE_URL"]
 
-#Postgresデータベース上のテーブル「items」の有無を示す変数を宣言する
+#postgresデータベース上のテーブル「items」の有無を示す変数を宣言する
 has_db_table = False
 
-#Postgresデータベースに登録・格納するLINEメッセージ(＝レコード)のIDを示す変数を宣言する
+#postgresデータベースに登録・格納するLINEメッセージ(＝レコード)のID(＝レコードカウンタ)を示す変数を宣言する
 rcd_id = "0"
 
 
 
 
-#herokuへのデプロイが成功したかどうかを確認する
+#postgresデータベース上のテーブル内のレコードを取得して、呼出し元に引き渡しをする
 @app.route("/")
 def now_online():
-    #データベースに接続して、カーソルを用意する
+    #postgresデータベースに接続して、テーブル操作のためのカーソルを用意する
     conn = psycopg2.connect(DATABASE_URL)
-    conn.set_client_encoding('utf-8') 
+    conn.set_client_encoding("utf-8") 
     cur  = conn.cursor()
 
     # データベースからLINEメッセージを取得し、jsonifyで整形してブラウザーに引渡しをする
@@ -49,16 +49,42 @@ def now_online():
     row = cur.fetchone()
     cur.close()
     conn.close()
-
     return jsonify(row), 200
 
 
+#postgresデータベース上のテーブルを破棄する
+@app.route("/table_drop")
+def db_table_drop():
+    #postgresデータベースに接続して、テーブル操作のためのカーソルを用意する
+    conn = psycopg2.connect(DATABASE_URL)
+    conn.set_client_encoding("utf-8") 
+    cur  = conn.cursor()
+    tbl_oprtn_rslt = ""
+
+    #既にテーブルが作成・用意されていれば、それを破棄する
+    if has_db_table == True:
+       cur.execute("DROP TABLE items")
+       has_db_table = False
+       tbl_oprtn_rslt = "db-table droped!"
+    else:
+       tbl_oprtn_rslt = "can't droped..."
+
+    #データベースに登録・格納するLINEメッセージ(＝レコード)のID(＝レコードカウンタ)を示す変数を初期化する
+    global rcd_id
+    rcd_id = "0"
+
+    #データベースへコミットし、テーブル操作のためのカーソルを破棄して、データベースとの接続を解除する
+    cur.close()
+    conn.close()
+    return tbl_oprtn_rslt
+
+
 #LINE-DevelopersのWebhookからURLにイベントが送出されるようにする(内部でイベントハンドラーを呼び出す)
-@app.route("/callback", methods=['POST'])
+@app.route("/callback", methods=["POST"])
 def callback():
     # HTTPリクエストヘッダーから署名検証のためのシグネチャーを取得する
     #signature = request.META['HTTP_X_LINE_SIGNATURE']
-    signature = request.headers['X-Line-Signature']
+    signature = request.headers["X-Line-Signature"]
 
     # HTTPリクエストボディを取得する
     #body = request.body.decode('utf-8')
@@ -69,9 +95,7 @@ def callback():
     try:
         handler.handle(body, signature)
     except InvalidSignatureError:
-        # 署名検証に失敗したら例外を送出する
         abort(400)
-    #呼出し元にステータスコードの引渡しをする
     return 'OK'
 
 
@@ -116,7 +140,7 @@ def generate(tknz_rslt):
     #解析後のLINEメッセージの主語を置き換え、「/」で文節に分けて、呼出し元に引渡しをする
     msg_gnrt_rslt = []
     if tknz_rslt[0] == "わたし":
-          tknz_rslt[0] = "LINE-Client"
+         tknz_rslt[0] = "LINE-Client"
     msg_gnrt_rslt = "/".join(tknz_rslt)
     return msg_gnrt_rslt
 
@@ -129,21 +153,15 @@ def send(event, msg_gnrt_rslt):
 
 #ユーザーから送られるLINEメッセージをpostgresのデータベースに登録・格納する
 def db_insert_and_update(event):
-    #データベースに接続して、カーソルを用意する
+    #postgresデータベースに接続して、テーブル操作のためのカーソルを用意する
     conn = psycopg2.connect(DATABASE_URL)
     conn.set_client_encoding('utf-8') 
     cur  = conn.cursor()
 
     #既にテーブルが作成・用意されていれば、それを破棄して新たにテーブルを作成・用意する
-    #if os.environ["HAS_DB_TABLE"] == 'True':
-    #   cur.execute("DROP TABLE items")
-    #   cur.execute("CREATE TABLE items(rcd_id text, date text, speaker text, msg text)")
-    #else:
-    #   cur.execute("CREATE TABLE items(rcd_id text, date text, speaker text, msg text)")
-    #   os.environ["HAS_DB_TABLE"] = 'True'
     global has_db_table
     if has_db_table == False:
-       cur.execute("DROP TABLE items")
+       #cur.execute("DROP TABLE items")
        cur.execute("CREATE TABLE items(rcd_id text, date text, speaker text, msg text)")
        has_db_table = True
 
@@ -173,7 +191,7 @@ def db_insert_and_update(event):
        cur.execute("""UPDATE items SET (rcd_id, date, speaker, msg) VALUES (%(rcd_id)s, %(date)s, %(speaker)s, %(msg)s) WHERE = '0';""", {'rcd_id': "0", 'date' : date, 'speaker': speaker, 'msg': msg})
        rcd_id = str(0)
 
-    #データベースへコミットし、カーソルを破棄して、接続を解除する。
+    #データベースへコミットし、テーブル操作のためのカーソルを破棄して、データベースとの接続を解除する
     conn.commit()
     cur.close()
     conn.close()
