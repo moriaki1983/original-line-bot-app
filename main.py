@@ -51,7 +51,7 @@ def show_db_record():
        cur.close()
        conn.close()
        return jsonify(rcd), 200
-    elif:
+    else:
        cur.close()
        conn.close()
        return "db-table not exist..."
