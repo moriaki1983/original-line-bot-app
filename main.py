@@ -69,6 +69,7 @@ def db_table_drop():
 
     #既にテーブルが作成・用意されていれば、それを破棄する
     cur.execute("DROP TABLE line_entries")
+    global has_db_table
     has_db_table = False
 
     #データベースに登録・格納するLINEメッセージ(＝レコード)のID(＝レコードカウンタ)を示す変数を初期化する
