@@ -41,6 +41,7 @@ def show_db_record():
     cur  = conn.cursor()
 
     # データベースから該当IDのLINEメッセージ(＝レコード)を取得し、jsonifyで整形して呼出し元に引き渡しをする
+    global has_db_table
     global rcd_id
     if has_db_table == True:
        if rcd_id == "0":
