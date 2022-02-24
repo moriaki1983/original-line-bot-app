@@ -192,10 +192,10 @@ def db_insert_and_update(event):
     if rcd is None:
        cur.execute("""INSERT INTO line_entries (rcd_id, date, speaker, msg) VALUES (%(rcd_id)s, %(date)s, %(speaker)s, %(msg)s);""", {'rcd_id': rcd_id, 'date' : date, 'speaker': speaker, 'msg': msg})
        rcd_id = str(int(rcd_id) + 1)
-    elif rcd_id < 99:
+    elif int(rcd_id) < 99:
        cur.execute("""UPDATE line_entries SET (rcd_id, date, speaker, msg) VALUES (%(rcd_id)s, %(date)s, %(speaker)s, %(msg)s) WHERE = %(rcd_id)s;""", {'rcd_id': rcd_id, 'date' : date, 'speaker': speaker, 'msg': msg, 'rcd_id': rcd_id})
        rcd_id = str(int(rcd_id) + 1)
-    elif rcd_id > 99:
+    elif int(rcd_id) > 99:
        cur.execute("""UPDATE line_entries SET (rcd_id, date, speaker, msg) VALUES (%(rcd_id)s, %(date)s, %(speaker)s, %(msg)s) WHERE = '0';""", {'rcd_id': "0", 'date' : date, 'speaker': speaker, 'msg': msg})
        rcd_id = str(0)
 
