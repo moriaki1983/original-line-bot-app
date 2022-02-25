@@ -163,9 +163,16 @@ def db_insert_and_update(event):
     #既にテーブルが作成・用意されていれば、それを破棄して新たにテーブルを作成・用意する
     global has_db_table
     if has_db_table == False:
-       cur.execute("DROP TABLE line_entries")
-       cur.execute("CREATE TABLE line_entries(rcd_id text, date text, speaker text, msg text)")
-       has_db_table = True
+        try:
+          cur.execute("CREATE TABLE line_entries(rcd_id text, date text, speaker text, msg text)")
+        except Exception as err:
+          app.logger.info("an exception occured! :", + err)
+          app.logger.info("error-type :", + type(error))
+          app.logger.info("table will drop..., and create table!")
+          cur.execute("DROP TABLE line_entries")
+          cur.execute("CREATE TABLE line_entries(rcd_id text, date text, speaker text, msg text)")
+        finally:
+          has_db_table = True
 
     #データベースに登録・格納するLINEメッセージ(＝レコード)を構成する情報をまとめて用意する
     global rcd_id
