@@ -65,7 +65,6 @@ def db_table_drop():
     conn = psycopg2.connect(DATABASE_URL)
     conn.set_client_encoding("utf-8") 
     cur  = conn.cursor()
-    tbl_oprtn_rslt = ""
 
     #既にテーブルが作成・用意されていれば、それを破棄する
     cur.execute("DROP TABLE line_entries")
@@ -166,8 +165,7 @@ def db_insert_and_update(event):
         try:
           cur.execute("CREATE TABLE line_entries(rcd_id text, date text, speaker text, msg text)")
         except Exception as err:
-          app.logger.info("an exception occured! :", + err)
-          app.logger.info("error-type :", + type(error))
+          app.logger.info("an exception occured!")
           app.logger.info("table will drop..., and create table!")
           cur.execute("DROP TABLE line_entries")
           cur.execute("CREATE TABLE line_entries(rcd_id text, date text, speaker text, msg text)")
