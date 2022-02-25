@@ -159,24 +159,13 @@ def db_insert_and_update(event):
     conn.set_client_encoding('utf-8') 
     cur  = conn.cursor()
 
-    #既にテーブルが用意・作成されていれば、それを破棄して新たにテーブルを用意・作成する(例外のチェックも実施する)
+    #既にテーブルが用意・作成されていれば、それを破棄して新たにテーブルを用意・作成する(メモリー上でフラグが揮発するゆえに、念のため、テーブルの破棄を実施する)
     global has_db_table
-    err_flg = False
     if has_db_table == False:
-       try:
-         cur.execute("CREATE TABLE line_entries(rcd_id text, date text, speaker text, msg text)")
-       except Exception as err:
-         app.logger.info("an exception occured!")
-         err_flg = True
+       cur.execute("DROP TABLE line_entries")
+       cur.execute("CREATE TABLE line_entries(rcd_id text, date text, speaker text, msg text)")
+       has_db_table = True
 
-    #直前のブロックで例外が発生したら、状況に合わせて例外を回避するようにテーブル操作を実施する
-    if err_flg == True:
-      app.logger.info("table will drop..., and create table!")
-      cur.execute("DROP TABLE line_entries")
-      cur.execute("CREATE TABLE line_entries(rcd_id text, date text, speaker text, msg text)")
-    else:
-      cur.execute("CREATE TABLE line_entries(rcd_id text, date text, speaker text, msg text)")
-    
     #データベースに登録・格納するLINEメッセージ(＝レコード)を構成する情報をまとめて用意する
     global rcd_id
     jst = datetime.timezone(datetime.timedelta(hours=+9), "JST")
