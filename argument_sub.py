@@ -200,7 +200,7 @@ def extract_intent_from_endnotes(line_msg_txt):
     elif (check_text_terminated_string(rmv_symbl_rslt, "したいな") or
           check_text_terminated_string(rmv_symbl_rslt, "したい") or
           check_text_terminated_string(rmv_symbl_rslt, "やりたいな") or
-          check_text_terminated_string(rmv_symbl_rslt, "やりたい)):
+          check_text_terminated_string(rmv_symbl_rslt, "やりたい")):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "欲求＆欲動"
     elif (check_text_terminated_string(rmv_symbl_rslt, "いいですよ") or
           check_text_terminated_string(rmv_symbl_rslt, "いいよ")):
