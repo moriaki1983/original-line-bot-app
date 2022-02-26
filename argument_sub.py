@@ -130,10 +130,10 @@ def extract_intent_from_short_and_boilerplate(line_msg_txt):
     elif (rmv_symbl_rslt == "死んでください" or
           rmv_symbl_rslt == "死んで" or
           rmv_symbl_rslt == "死ね" or
-          rmv_symbl_rslt == "氏んでください"): or
+          rmv_symbl_rslt == "氏んでください" or
           rmv_symbl_rslt == "氏んで" or
-          rmv_symbl_rslt == "氏ね") or
-          rmv_symbl_rslt == "しんでください") or
+          rmv_symbl_rslt == "氏ね" or
+          rmv_symbl_rslt == "しんでください" or
           rmv_symbl_rslt == "しんで" or
           rmv_symbl_rslt == "しね"):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "人格・存在否定"
