@@ -55,7 +55,7 @@ def check_text_terminated_string(line_msg_txt, str):
 
 
 #ユーザーから送られるLINEメッセージをJanomeで形態素解析する(見出しのみをリストにして出力する)
-def analyze(line_msg_txt):
+def line_msg_analyze(line_msg_txt):
     #メッセージの内容を品詞や単語を単位として分解する(＝文節に分ける)
     tknzr   = Tokenizer()
     tkns    = tknzr.tokenize(line_msg_txt)
@@ -68,7 +68,7 @@ def analyze(line_msg_txt):
 
 
 #ユーザーから送られるLINEメッセージをJanomeで形態素解析する(見出しと品詞のセットをリストにして出力する)
-def analyze2(line_msg_txt):
+def line_msg_analyze2(line_msg_txt):
     #メッセージの内容を品詞や単語を単位として分解する(＝文節に分ける)
     tknzr = Tokenizer()
     tkns  = tknzr.tokenize(line_msg_txt)
