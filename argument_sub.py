@@ -39,11 +39,8 @@ def check_text_start_string(line_msg_txt, str):
 #ユーザーから送られるLINEメッセージが指定された文字列で終結するかを判定する
 def check_text_terminated_string(line_msg_txt, str):
     #メッセージの中に指定された文字列が含まれている場合に、メッセージがこの文字列で終結するかを判定する
-    rmv_symbl_rslt = remove_symbol(line_msg_txt)
-    if str in rmv_symbl_rslt:
-       chk_txt_trmntd_str_rslt = rmv_symbl_rslt.endswith(str)
-    else:
-       chk_txt_trmntd_str_rslt = False
+    rmv_symbl_rslt          = remove_symbol(line_msg_txt)
+    chk_txt_trmntd_str_rslt = rmv_symbl_rslt.endswith(str)
     return chk_txt_trmntd_str_rslt
 
 
