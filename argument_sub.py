@@ -260,7 +260,7 @@ def extract_content_from_top_and_middle(line_msg_txt):
            extrct_cntnt_frm_tp_and_mddl_rslt = re.sub(r"できてません", "", rmv_symbl_rslt)
     elif check_text_terminated_string(rmv_symbl_rslt, "できました"):
            extrct_cntnt_frm_tp_and_mddl_rslt = re.sub(r"できました", "", rmv_symbl_rslt)
-    elif check_text_terminated_string(rmv_symbl_rslt, "できた":
+    elif check_text_terminated_string(rmv_symbl_rslt, "できた"):
            extrct_cntnt_frm_tp_and_mddl_rslt = re.sub(r"できた", "", rmv_symbl_rslt)
     elif check_text_terminated_string(rmv_symbl_rslt, "できていません"):
            extrct_cntnt_frm_tp_and_mddl_rslt = re.sub(r"できていません", "", rmv_symbl_rslt)
