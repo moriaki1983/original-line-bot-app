@@ -7,7 +7,6 @@ from janome.tokenizer import Tokenizer
 #ユーザーから送られるLINEメッセージの中に含まれる記号を除去する
 def remove_symbol(line_msg_txt):
     #メッセージの中に含まれる日本語固有の記号を除去する
-    rmv_symbl_rslt
     rmv_symbl_rslt = re.sub("「", "", line_msg_txt)
     rmv_symbl_rslt = re.sub("」", "", rmv_symbl_rslt)
     rmv_symbl_rslt = re.sub("、", "", rmv_symbl_rslt)
@@ -31,8 +30,6 @@ def remove_symbol(line_msg_txt):
 def check_text_start_string(line_msg_txt, str):
     #メッセージの中に指定された文字列が含まれている場合に、メッセージがこの文字列で開始するかを判定する
     rmv_symbl_rslt = remove_symbol(line_msg_txt)
-    chk_txt_strt_str_rslt
-    str
     if str in rmv_symbl_rslt:
        chk_txt_strt_str_rslt = rmv_symbl_rslt.startswith(str)
     else:
@@ -44,8 +41,6 @@ def check_text_start_string(line_msg_txt, str):
 def check_text_terminated_string(line_msg_txt, str):
     #メッセージの中に指定された文字列が含まれている場合に、メッセージがこの文字列で終結するかを判定する
     rmv_symbl_rslt = remove_symbol(line_msg_txt)
-    chk_txt_trmntd_str_rslt
-    str
     if str in rmv_symbl_rslt:
        chk_txt_trmntd_str_rslt = rmv_symbl_rslt.endswith(str)
     else:
@@ -83,7 +78,6 @@ def line_msg_morpho_analyze2(line_msg_txt):
 def extract_intent_from_short_and_boilerplate(line_msg_txt):
     #メッセージの中に含まれる記号を除去して、短文＆定型文となっているメッセージからインテントを抽出して、これを呼出し元に引渡しをする
     rmv_symbl_rslt = remove_symbol(line_msg_txt)
-    extrct_intnt_frm_shrt_and_blrplt_rslt
     if   (rmv_symbl_rslt == "おはよう" or
           rmv_symbl_rslt == "こんにちは" or
           rmv_symbl_rslt == "こんばんは" or
@@ -134,7 +128,6 @@ def extract_intent_from_short_and_boilerplate(line_msg_txt):
 def extract_intent_from_endnotes(line_msg_txt):
     #メッセージの中に含まれる記号を除去して、メッセージの末尾部分からインテントを抽出して、これを呼出し元に引渡しをする
     rmv_symbl_rslt = remove_symbol(line_msg_txt)
-    extrct_intnt_frm_endnts_rslt
     if   check_text_terminated_string(rmv_symbl_rslt, "する"):
            extrct_intnt_frm_shrt_and_blrplt_rslt = "表明(現在＆肯定)"
     elif check_text_terminated_string(rmv_symbl_rslt, "しない"):
@@ -225,7 +218,6 @@ def extract_intent_from_endnotes(line_msg_txt):
 def extract_content_from_top_and_middle(line_msg_txt):
     #メッセージの中に含まれる記号を除去して、メッセージの先頭・中間部分部分からコンテントを抽出して、これを呼出し元に引渡しをする
     rmv_symbl_rslt = remove_symbol(line_msg_txt)
-    extrct_cntnt_frm_tp_and_mddl_rslt
     if   check_text_terminated_string(rmv_symbl_rslt, "する"):
            extrct_cntnt_frm_tp_and_mddl_rslt = re.sub(r"する", "", rmv_symbl_rslt)
     elif check_text_terminated_string(rmv_symbl_rslt, "しない"):
@@ -335,7 +327,7 @@ def extract_content_from_top_and_middle(line_msg_txt):
     elif check_text_terminated_string(rmv_symbl_rslt, "しろ"):
            extrct_cntnt_frm_tp_and_mddl_rslt = re.sub(r"しろ", "", rmv_symbl_rslt)
     else:
-           extrct_cntnt_frm_tp_and_mddl_rslt = ""
+           extrct_cntnt_frm_tp_and_mddl_rslt = rmv_symbl_rslt
     return extrct_cntnt_frm_tp_and_mddl_rslt
 
 
