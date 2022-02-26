@@ -126,7 +126,7 @@ def handle_follow(event):
 #ユーザーから送られるLINEメッセージを解析する
 def line_msg_analyze(line_msg_text):
     #ユーザーから送られるLINEメッセージをJanomeで形態素解析する
-    line_msg_anlyz_rslt = argument_sub.line_msg_analyze(line_msg_txt)
+    line_msg_anlyz_rslt = argument_sub.line_msg_morpho_analyze(line_msg_txt)
     return line_msg_anlyz_rslt
 
 
@@ -134,7 +134,9 @@ def line_msg_analyze(line_msg_text):
 def line_msg_generate(line_msg_txt, line_msg_anlyz_rslt):
     #解析後のLINEメッセージの主語を置き換え、「/」で文節に分けて、呼出し元に引渡しをする
     #line_msg_gnrt_rslt = "/".join(line_msg_anlyz_rslt)
-    line_msg_gnrt_rslt = argument_sub.extract_intent_from_endnotes(line_msg_txt)
+    line_msg_gnrt_rslt = argument_sub.extract_intent_from_short_and_boilerplate(line_msg_txt)
+    if line_msg_gnrt_rslt == "その他・不明":
+       line_msg_gnrt_rslt = argument_sub.extract_intent_from_endnotes(line_msg_txt)
     return line_msg_gnrt_rslt
 
 
