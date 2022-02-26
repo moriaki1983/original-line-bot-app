@@ -114,10 +114,10 @@ def extract_intent_from_short_and_boilerplate(line_msg_txt):
           rmv_symbl_rslt == "ねぇ" or
           rmv_symbl_rslt == "なぁ"):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "呼掛け"
-    elif (rmv_symbl_rslt == "海"):
+    elif rmv_symbl_rslt == "海":
             extrct_intnt_frm_shrt_and_blrplt_rslt = "掛合い"
-    #else:
-    #     extrct_intnt_frm_shrt_and_blrplt_rslt = "その他・不明"
+    else:
+         extrct_intnt_frm_shrt_and_blrplt_rslt = "その他・不明"
     return extrct_intnt_frm_shrt_and_blrplt_rslt
 
 
