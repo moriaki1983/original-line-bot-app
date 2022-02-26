@@ -213,14 +213,21 @@ def extract_intent_from_short_and_boilerplate(line_msg_txt):
           rmv_symbl_rslt == "ねぇ" or
           rmv_symbl_rslt == "なぁ" or
           rmv_symbl_rslt == "へい"):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "呼掛け"
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "呼掛け"        
+    elif (rmv_symbl_rslt == "ですね" or
+          rmv_symbl_rslt == "そうだね" or
+          rmv_symbl_rslt == "だね"):
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "賛意・賛同"
     elif rmv_symbl_rslt == "海":
             extrct_intnt_frm_shrt_and_blrplt_rslt = "掛合い"
-    elif rmv_symbl_rslt == "じゃんけんぽん" or
-         rmv_symbl_rslt == "じゃんけん" or
-         rmv_symbl_rslt == "ジャンケンポン" or
-         rmv_symbl_rslt == "ジャンケン" or
-         rmv_symbl_rslt == "ジャンケンぽん"):
+    elif (rmv_symbl_rslt == "ですよね" or
+          rmv_symbl_rslt == "だよね"):
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "協調＆阿り"
+    elif (rmv_symbl_rslt == "じゃんけんぽん" or
+          rmv_symbl_rslt == "じゃんけん" or
+          rmv_symbl_rslt == "ジャンケンポン" or
+          rmv_symbl_rslt == "ジャンケン" or
+          rmv_symbl_rslt == "ジャンケンぽん"):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "遊戯"
     else:
          extrct_intnt_frm_shrt_and_blrplt_rslt = "その他・不明"
@@ -314,7 +321,10 @@ def extract_intent_from_endnotes(line_msg_txt):
           check_text_terminated_string(rmv_symbl_rslt, "でした")):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "紹介＆説明＆提示"
     elif (check_text_terminated_string(rmv_symbl_rslt, "でしょうか") or
-          check_text_terminated_string(rmv_symbl_rslt, "ですか")):
+          check_text_terminated_string(rmv_symbl_rslt, "ですか") or
+          check_text_terminated_string(rmv_symbl_rslt, "ですよね") or
+          check_text_terminated_string(rmv_symbl_rslt, "ですね") or
+          check_text_terminated_string(rmv_symbl_rslt, "だね")):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "疑義＆質問"
     elif (check_text_terminated_string(rmv_symbl_rslt, "しませんか") or
           check_text_terminated_string(rmv_symbl_rslt, "しません")):
@@ -346,12 +356,23 @@ def extract_intent_from_endnotes(line_msg_txt):
           check_text_terminated_string(rmv_symbl_rslt, "しなきゃいけないですよ") or
           check_text_terminated_string(rmv_symbl_rslt, "しなきゃいけないです") or
           check_text_terminated_string(rmv_symbl_rslt, "しなきゃいけない") or
+          check_text_terminated_string(rmv_symbl_rslt, "しなきゃならない") or
           check_text_terminated_string(rmv_symbl_rslt, "しなきゃ")):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "強制＆勧告＆肯定"
     elif (check_text_terminated_string(rmv_symbl_rslt, "してはならない") or
           check_text_terminated_string(rmv_symbl_rslt, "したらいけない") or
           check_text_terminated_string(rmv_symbl_rslt, "しちゃいけない")):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "強制＆勧告＆否定"
+    elif (check_text_terminated_string(rmv_symbl_rslt, "だぜ") or
+          check_text_terminated_string(rmv_symbl_rslt, "だ")):
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "顕示＆強調＆男性"
+    elif (check_text_terminated_string(rmv_symbl_rslt, "だわね") or
+          check_text_terminated_string(rmv_symbl_rslt, "だわ")):
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "顕示＆強調＆女性"
+    elif (check_text_terminated_string(rmv_symbl_rslt, "ですよ") or
+          check_text_terminated_string(rmv_symbl_rslt, "だよ")):
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "顕示＆強調＆中性"
+          
     else:
            extrct_intnt_frm_shrt_and_blrplt_rslt = "その他・不明"
     return extrct_intnt_frm_shrt_and_blrplt_rslt
