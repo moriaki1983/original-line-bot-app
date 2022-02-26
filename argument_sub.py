@@ -137,7 +137,7 @@ def extract_intent_from_endnotes(line_msg_txt):
     extrct_intnt_frm_endnts_rslt
     if   check_text_terminated_string(rmv_symbl_rslt, "する"):
            extrct_intnt_frm_shrt_and_blrplt_rslt = "表明(現在＆肯定)"
-    elif check_text_terminated_string"しない":
+    elif check_text_terminated_string(rmv_symbl_rslt, "しない"):
            extrct_intnt_frm_shrt_and_blrplt_rslt = "表明(現在＆否定)"
     elif check_text_terminated_string(rmv_symbl_rslt, "している"):
            extrct_intnt_frm_shrt_and_blrplt_rslt = "表明(現在進行＆肯定)"
