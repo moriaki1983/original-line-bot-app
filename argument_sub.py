@@ -7,13 +7,13 @@ from janome.tokenizer import Tokenizer
 #ユーザーから送られるLINEメッセージの中に含まれる記号を除去する
 def remove_symbol(line_msg_txt):
     #メッセージの中に含まれる日本語固有の記号を除去する
-    #rmv_symbl_rslt = re.sub("(「)", "", line_msg_txt)
-    #rmv_symbl_rslt = re.sub("(」)", "", rmv_symbl_rslt)
-    #rmv_symbl_rslt = re.sub("(、)", "", rmv_symbl_rslt)
-    #rmv_symbl_rslt = re.sub("(。)", "", rmv_symbl_rslt)
-    #rmv_symbl_rslt = re.sub("(？)", "", rmv_symbl_rslt)
-    #rmv_symbl_rslt = re.sub("(！)", "", rmv_symbl_rslt)
-    rmv_symbl_rslt = re.sub("(！)", "", line_msg_txt)
+    rmv_symbl_rslt  = re.sub("(「)", "", line_msg_txt)
+    rmv_symbl_rslt2 = re.sub("(」)", "", rmv_symbl_rslt)
+    rmv_symbl_rslt3 = re.sub("(、)", "", rmv_symbl_rslt2)
+    rmv_symbl_rslt4 = re.sub("(。)", "", rmv_symbl_rslt3)
+    rmv_symbl_rslt5 = re.sub("(？)", "", rmv_symbl_rslt4)
+    rmv_symbl_rslt6 = re.sub("(！)", "", rmv_symbl_rslt5)
+    #rmv_symbl_rslt7 = re.sub("(！)", "", line_msg_txt)
 
     #メッセージの中に含まれる英語固有の記号を除去する
     #rmv_symbl_rslt = re.sub("(,)", "", rmv_symbl_rslt)
@@ -22,8 +22,8 @@ def remove_symbol(line_msg_txt):
     #rmv_symbl_rslt = re.sub("(!)", "", rmv_symbl_rslt)
 
     #メッセージの中に含まれる先頭と末尾の空白と改行を除去する
-    rmv_symbl_rslt = rmv_symbl_rslt.strip()
-    return rmv_symbl_rslt
+    rmv_symbl_rslt_end = rmv_symbl_rslt6.strip()
+    return rmv_symbl_rslt_end
 
 
 #ユーザーから送られるLINEメッセージが指定された文字列で開始するかを判定する
