@@ -73,7 +73,7 @@ def line_msg_morpho_analyze2(line_msg_txt):
 #LINEメッセージが短文＆定型文だったとして、これからインテント(＝意図するもの)を抽出する
 def extract_intent_from_short_and_boilerplate(line_msg_txt):
     #メッセージの中に含まれる記号を除去して、短文＆定型文となっているメッセージからインテントを抽出して、これを呼出し元に引渡しをする
-    rmv_symbl_rslt = remove_symbol(line_msg_txt)
+    #rmv_symbl_rslt = remove_symbol(line_msg_txt)
     if   (rmv_symbl_rslt == "おはよう" or
           rmv_symbl_rslt == "こんにちは" or
           rmv_symbl_rslt == "こんばんは" or
@@ -115,8 +115,8 @@ def extract_intent_from_short_and_boilerplate(line_msg_txt):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "呼掛け"
     elif (rmv_symbl_rslt == "海"):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "掛合い"
-    else:
-         extrct_intnt_frm_shrt_and_blrplt_rslt = "その他・不明"
+    #else:
+    #     extrct_intnt_frm_shrt_and_blrplt_rslt = "その他・不明"
     return extrct_intnt_frm_shrt_and_blrplt_rslt
 
 
