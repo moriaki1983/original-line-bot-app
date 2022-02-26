@@ -23,8 +23,8 @@ def remove_symbol(line_msg_txt):
     rmv_symbl_rslt12 = re.sub("(\")", "", rmv_symbl_rslt11)
     rmv_symbl_rslt13 = re.sub("(,)",  "", rmv_symbl_rslt12)
     rmv_symbl_rslt14 = re.sub("(.)",  "", rmv_symbl_rslt13)
-    rmv_symbl_rslt15 = re.sub("(!)",  "", rmv_symbl_rslt114)
-    rmv_symbl_rslt16 = re.sub("(\?)", "", rmv_symbl_rslt115)
+    rmv_symbl_rslt15 = re.sub("(!)",  "", rmv_symbl_rslt14)
+    rmv_symbl_rslt16 = re.sub("(\?)", "", rmv_symbl_rslt15)
     
     #メッセージの中に含まれる先頭と末尾の空白と改行を除去する
     rmv_symbl_rslt_end = rmv_symbl_rslt16.strip()
