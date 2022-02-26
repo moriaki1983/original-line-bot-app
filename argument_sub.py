@@ -127,7 +127,7 @@ def extract_intent_from_short_and_boilerplate(line_msg_txt):
           rmv_symbl_rslt == "カス" or
           rmv_symbl_rslt == "ゴミ"):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "罵詈＆罵倒"
-    elif (rmv_symbl_rslt == "死んでください") or
+    elif (rmv_symbl_rslt == "死んでください" or
           rmv_symbl_rslt == "死んで" or
           rmv_symbl_rslt == "死ね" or
           rmv_symbl_rslt == "氏んでください"): or
@@ -137,7 +137,7 @@ def extract_intent_from_short_and_boilerplate(line_msg_txt):
           rmv_symbl_rslt == "しんで" or
           rmv_symbl_rslt == "しね"):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "人格・存在否定"
-    elif (rmv_symbl_rslt == "大天才ですか" 
+    elif (rmv_symbl_rslt == "大天才ですか" or
           rmv_symbl_rslt == "天才ですか" or
           rmv_symbl_rslt == "秀才ですか"):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "称賛＆礼賛(半疑問)"
@@ -200,7 +200,7 @@ def extract_intent_from_short_and_boilerplate(line_msg_txt):
           rmv_symbl_rslt == "だめ" or
           rmv_symbl_rslt == "ダメですよ" or
           rmv_symbl_rslt == "ダメです" or
-          rmv_symbl_rslt == "ダメだよ" 
+          rmv_symbl_rslt == "ダメだよ" or
           rmv_symbl_rslt == "ダメ" or
           rmv_symbl_rslt == "禁止ですよ" or
           rmv_symbl_rslt == "禁止です" or
@@ -214,7 +214,7 @@ def extract_intent_from_short_and_boilerplate(line_msg_txt):
           rmv_symbl_rslt == "なぁ" or
           rmv_symbl_rslt == "へい"):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "呼掛け"
-    elif rmv_symbl_rslt == "海"):
+    elif rmv_symbl_rslt == "海":
             extrct_intnt_frm_shrt_and_blrplt_rslt = "掛合い"
     elif rmv_symbl_rslt == "じゃんけんぽん" or
          rmv_symbl_rslt == "じゃんけん" or
