@@ -73,47 +73,155 @@ def extract_intent_from_short_and_boilerplate(line_msg_txt):
     #メッセージの中に含まれる記号を除去して、短文＆定型文となっているメッセージからインテントを抽出して、これを呼出し元に引渡しをする
     rmv_symbl_rslt = remove_symbol(line_msg_txt)
     if   (rmv_symbl_rslt == "おはよう" or
+          rmv_symbl_rslt == "おは" or
           rmv_symbl_rslt == "こんにちは" or
           rmv_symbl_rslt == "こんばんは" or
           rmv_symbl_rslt == "こんばんわ" or
+          rmv_symbl_rslt == "ばんわ" or
           rmv_symbl_rslt == "やあ" or
           rmv_symbl_rslt == "どうも"):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "挨拶"
-    elif (rmv_symbl_rslt == "さすがですね" or
+    elif (rmv_symbl_rslt == "流石ですね" or
+          rmv_symbl_rslt == "流石です" or
+          rmv_symbl_rslt == "流石" or
+          rmv_symbl_rslt == "さすがですね" or
+          rmv_symbl_rslt == "さすがです" or
           rmv_symbl_rslt == "さすが" or
+          rmv_symbl_rslt == "すごいですね" or
+          rmv_symbl_rslt == "すごい" or
+          rmv_symbl_rslt == "凄いですね" or
+          rmv_symbl_rslt == "凄いです" or
+          rmv_symbl_rslt == "凄い" or
           rmv_symbl_rslt == "素晴らしい" or
-          rmv_symbl_rslt == "すばらしい"):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "称賛"
+          rmv_symbl_rslt == "すばらしい" or
+          rmv_symbl_rslt == "賢いですね" or
+          rmv_symbl_rslt == "賢いです" or
+          rmv_symbl_rslt == "賢い" or
+          rmv_symbl_rslt == "偉いですね" or
+          rmv_symbl_rslt == "偉いです" or
+          rmv_symbl_rslt == "偉い" or
+          rmv_symbl_rslt == "エラいですね" or
+          rmv_symbl_rslt == "エラいです" or
+          rmv_symbl_rslt == "エラい" or
+          rmv_symbl_rslt == "立派ですね" or
+          rmv_symbl_rslt == "立派です" or
+          rmv_symbl_rslt == "立派" or
+          rmv_symbl_rslt == "感服しました" or
+          rmv_symbl_rslt == "感服した" or
+          rmv_symbl_rslt == "感服" or
+          rmv_symbl_rslt == "敬服いたします" or
+          rmv_symbl_rslt == "敬服します" or
+          rmv_symbl_rslt == "敬服" or
+          rmv_symbl_rslt == "最高ですね" or
+          rmv_symbl_rslt == "最高です" or
+          rmv_symbl_rslt == "最高" or
+          rmv_symbl_rslt == "あなたに感動しました" or
+          rmv_symbl_rslt == "あなたに感動した" or
+          rmv_symbl_rslt == "あなたに感動"):
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "称賛＆礼賛"
     elif (rmv_symbl_rslt == "最低" or
-          rmv_symbl_rslt == "バカ"):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "罵倒"
-    elif (rmv_symbl_rslt == "天才ですか" or
+          rmv_symbl_rslt == "無能" or
+          rmv_symbl_rslt == "バカ" or
+          rmv_symbl_rslt == "アホ" or
+          rmv_symbl_rslt == "クズ" or
+          rmv_symbl_rslt == "カス" or
+          rmv_symbl_rslt == "ゴミ"):
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "罵詈＆罵倒"
+    elif (rmv_symbl_rslt == "死んでください") or
+          rmv_symbl_rslt == "死んで" or
+          rmv_symbl_rslt == "死ね" or
+          rmv_symbl_rslt == "氏んでください"): or
+          rmv_symbl_rslt == "氏んで" or
+          rmv_symbl_rslt == "氏ね") or
+          rmv_symbl_rslt == "しんでください") or
+          rmv_symbl_rslt == "しんで" or
+          rmv_symbl_rslt == "しね"):
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "人格・存在否定"
+    elif (rmv_symbl_rslt == "大天才ですか" 
+          rmv_symbl_rslt == "天才ですか" or
           rmv_symbl_rslt == "秀才ですか"):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "称賛(半疑問)"
-    elif (rmv_symbl_rslt == "バカですか" or
-          rmv_symbl_rslt == "アホですか"):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "罵倒(半疑問)"
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "称賛＆礼賛(半疑問)"
+    elif (rmv_symbl_rslt == "無能ですか" or
+          rmv_symbl_rslt == "バカですか" or
+          rmv_symbl_rslt == "アホですか" or
+          rmv_symbl_rslt == "クズですか" or
+          rmv_symbl_rslt == "カスですか" or
+          rmv_symbl_rslt == "ゴミですか"):
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "罵詈＆罵倒(半疑問)"
     elif (rmv_symbl_rslt == "何をしますか" or
-          rmv_symbl_rslt == "どうしますか"):
+          rmv_symbl_rslt == "何しますか" or
+          rmv_symbl_rslt == "なにをしますか" or
+          rmv_symbl_rslt == "なにしますか" or
+          rmv_symbl_rslt == "どうしいたますか" or
+          rmv_symbl_rslt == "どうしますか" or
+          rmv_symbl_rslt == "どうします"):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "確認(意図＆目的)(現在)"
     elif (rmv_symbl_rslt == "何をしていますか" or
-          rmv_symbl_rslt == "どうしていますか"):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "確認(意図＆目的)(現在進行)"
+          rmv_symbl_rslt == "何をしてますか" or
+          rmv_symbl_rslt == "何してますか" or
+          rmv_symbl_rslt == "なにをしていますか" or
+          rmv_symbl_rslt == "なにをしてますか" or
+          rmv_symbl_rslt == "なにしてますか" or
+          rmv_symbl_rslt == "どうしていますか" or
+          rmv_symbl_rslt == "どうしてますか"):
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "確認(意図＆目的)(現在＝進行)"
     elif (rmv_symbl_rslt == "何をしてきましたか" or
-          rmv_symbl_rslt == "どうしてきましたか"):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "確認(意図＆目的)(過去)"
+          rmv_symbl_rslt == "何をしてましたか" or
+          rmv_symbl_rslt == "何してましたか" or
+          rmv_symbl_rslt == "何してた" or
+          rmv_symbl_rslt == "なにをしてきましたか" or
+          rmv_symbl_rslt == "なにをしてましたか" or
+          rmv_symbl_rslt == "なにしてましたか" or
+          rmv_symbl_rslt == "なにしてた" or
+          rmv_symbl_rslt == "どうしてきましたか" or
+          rmv_symbl_rslt == "どうしてましたか"):
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "確認(意図＆目的)(過去＝完了)"
     elif (rmv_symbl_rslt == "何をしていきたいですか" or
-          rmv_symbl_rslt == "どうしていきたいですか"):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "確認(意図＆目的)(未来)"
+          rmv_symbl_rslt == "何していきたいですか" or
+          rmv_symbl_rslt == "何していきたい" or
+          rmv_symbl_rslt == "なにをしていきたいですか" or
+          rmv_symbl_rslt == "なにしていきたいですか" or
+          rmv_symbl_rslt == "なにしていきたい" or
+          rmv_symbl_rslt == "どうしていきたいですか" or
+          rmv_symbl_rslt == "どうしていきたい"):
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "確認(意図＆目的)(未来＝未完)"
     elif (rmv_symbl_rslt == "いいですよ" or
-          rmv_symbl_rslt == "いいよ"):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "許可"
+          rmv_symbl_rslt == "いいよ" or
+          rmv_symbl_rslt == "OK" or
+          rmv_symbl_rslt == "おけ"):
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "返答(許可)"
+    elif (rmv_symbl_rslt == "駄目ですよ" or
+          rmv_symbl_rslt == "駄目です" or
+          rmv_symbl_rslt == "駄目だよ" or
+          rmv_symbl_rslt == "駄目" or
+          rmv_symbl_rslt == "だめですよ" or
+          rmv_symbl_rslt == "だめです" or
+          rmv_symbl_rslt == "だめだよ" or
+          rmv_symbl_rslt == "だめ" or
+          rmv_symbl_rslt == "ダメですよ" or
+          rmv_symbl_rslt == "ダメです" or
+          rmv_symbl_rslt == "ダメだよ" 
+          rmv_symbl_rslt == "ダメ" or
+          rmv_symbl_rslt == "禁止ですよ" or
+          rmv_symbl_rslt == "禁止です" or
+          rmv_symbl_rslt == "禁止だよ" or
+          rmv_symbl_rslt == "禁止" or
+          rmv_symbl_rslt == "いけません" or
+          rmv_symbl_rslt == "いけないよ"):
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "返答(不許可)"
     elif (rmv_symbl_rslt == "おい" or
           rmv_symbl_rslt == "ねぇ" or
-          rmv_symbl_rslt == "なぁ"):
+          rmv_symbl_rslt == "なぁ" or
+          rmv_symbl_rslt == "へい"):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "呼掛け"
-    elif rmv_symbl_rslt == "海":
+    elif rmv_symbl_rslt == "海"):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "掛合い"
+    elif rmv_symbl_rslt == "じゃんけんぽん" or
+         rmv_symbl_rslt == "じゃんけん" or
+         rmv_symbl_rslt == "ジャンケンポン" or
+         rmv_symbl_rslt == "ジャンケン" or
+         rmv_symbl_rslt == "ジャンケンぽん"):
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "遊戯"
     else:
          extrct_intnt_frm_shrt_and_blrplt_rslt = "その他・不明"
     return extrct_intnt_frm_shrt_and_blrplt_rslt
