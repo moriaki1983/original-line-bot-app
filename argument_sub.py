@@ -74,6 +74,7 @@ def line_msg_morpho_analyze2(line_msg_txt):
 def extract_intent_from_short_and_boilerplate(line_msg_txt):
     #メッセージの中に含まれる記号を除去して、短文＆定型文となっているメッセージからインテントを抽出して、これを呼出し元に引渡しをする
     #rmv_symbl_rslt = remove_symbol(line_msg_txt)
+    rmv_symbl_rslt = line_msg_txt
     if   (rmv_symbl_rslt == "おはよう" or
           rmv_symbl_rslt == "こんにちは" or
           rmv_symbl_rslt == "こんばんは" or
