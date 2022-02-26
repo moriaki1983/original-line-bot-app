@@ -124,7 +124,7 @@ def handle_follow(event):
 
 
 #ユーザーから送られるLINEメッセージを解析する
-def line_msg_analyze(line_msg_text):
+def line_msg_analyze(line_msg_txt):
     #ユーザーから送られるLINEメッセージをJanomeで形態素解析する
     line_msg_anlyz_rslt = argument_sub.line_msg_morpho_analyze(line_msg_txt)
     return line_msg_anlyz_rslt
