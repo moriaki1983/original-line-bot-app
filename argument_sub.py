@@ -21,7 +21,7 @@ def remove_symbol(line_msg_txt):
     #rmv_symbl_rslt = re.sub("(!)", "", rmv_symbl_rslt)
 
     #メッセージの中に含まれる先頭と末尾の空白と改行を除去する
-    rmv_symbl_rslt = rmv_symbl_rslt.strip()
+    #rmv_symbl_rslt = rmv_symbl_rslt.strip()
     return rmv_symbl_rslt
 
 
@@ -73,8 +73,8 @@ def line_msg_morpho_analyze2(line_msg_txt):
 #LINEメッセージが短文＆定型文だったとして、これからインテント(＝意図するもの)を抽出する
 def extract_intent_from_short_and_boilerplate(line_msg_txt):
     #メッセージの中に含まれる記号を除去して、短文＆定型文となっているメッセージからインテントを抽出して、これを呼出し元に引渡しをする
-    #rmv_symbl_rslt = remove_symbol(line_msg_txt)
-    rmv_symbl_rslt = line_msg_txt
+    rmv_symbl_rslt = remove_symbol(line_msg_txt)
+    #rmv_symbl_rslt = line_msg_txt
     if   (rmv_symbl_rslt == "おはよう" or
           rmv_symbl_rslt == "こんにちは" or
           rmv_symbl_rslt == "こんばんは" or
