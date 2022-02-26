@@ -7,18 +7,18 @@ from janome.tokenizer import Tokenizer
 #ユーザーから送られるLINEメッセージの中に含まれる記号を除去する
 def remove_symbol(line_msg_txt):
     #メッセージの中に含まれる日本語固有の記号を除去する
-    rmv_symbl_rslt = re.sub("「", "", line_msg_txt)
-    rmv_symbl_rslt = re.sub("」", "", rmv_symbl_rslt)
-    rmv_symbl_rslt = re.sub("、", "", rmv_symbl_rslt)
-    rmv_symbl_rslt = re.sub("。", "", rmv_symbl_rslt)
-    rmv_symbl_rslt = re.sub("？", "", rmv_symbl_rslt)
-    rmv_symbl_rslt = re.sub("！", "", rmv_symbl_rslt)
+    rmv_symbl_rslt = re.sub("(「)", "", line_msg_txt)
+    rmv_symbl_rslt = re.sub("(」)", "", rmv_symbl_rslt)
+    rmv_symbl_rslt = re.sub("(、)", "", rmv_symbl_rslt)
+    rmv_symbl_rslt = re.sub("(。)", "", rmv_symbl_rslt)
+    rmv_symbl_rslt = re.sub("(？)", "", rmv_symbl_rslt)
+    rmv_symbl_rslt = re.sub("(！)", "", rmv_symbl_rslt)
 
     #メッセージの中に含まれる英語固有の記号を除去する
-    rmv_symbl_rslt = re.sub(",", "", rmv_symbl_rslt)
-    rmv_symbl_rslt = re.sub(".", "", rmv_symbl_rslt)
-    rmv_symbl_rslt = re.sub("?", "", rmv_symbl_rslt)
-    rmv_symbl_rslt = re.sub("!", "", rmv_symbl_rslt)
+    rmv_symbl_rslt = re.sub("(,)", "", rmv_symbl_rslt)
+    rmv_symbl_rslt = re.sub("(.)", "", rmv_symbl_rslt)
+    rmv_symbl_rslt = re.sub("(?)", "", rmv_symbl_rslt)
+    rmv_symbl_rslt = re.sub("(!)", "", rmv_symbl_rslt)
 
     #メッセージの中に含まれる先頭と末尾の空白と改行を除去する
     rmv_symbl_rslt = rmv_symbl_rslt.strip()
@@ -218,113 +218,113 @@ def extract_content_from_top_and_middle(line_msg_txt):
     #メッセージの中に含まれる記号を除去して、メッセージの先頭・中間部分部分からコンテントを抽出して、これを呼出し元に引渡しをする
     rmv_symbl_rslt = remove_symbol(line_msg_txt)
     if   check_text_terminated_string(rmv_symbl_rslt, "する"):
-           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("する", "", rmv_symbl_rslt)
+           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("(する)", "", rmv_symbl_rslt)
     elif check_text_terminated_string(rmv_symbl_rslt, "しない"):
-           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("しない", "", rmv_symbl_rslt)
+           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("(しない)", "", rmv_symbl_rslt)
     elif check_text_terminated_string(rmv_symbl_rslt, "している"):
-           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("している", "", rmv_symbl_rslt)
+           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("(している)", "", rmv_symbl_rslt)
     elif check_text_terminated_string(rmv_symbl_rslt, "してる"):
-           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("してる", "", rmv_symbl_rslt)
+           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("(してる)", "", rmv_symbl_rslt)
     elif check_text_terminated_string(rmv_symbl_rslt, "しています"):
-           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("しています", "", rmv_symbl_rslt)
+           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("(しています)", "", rmv_symbl_rslt)
     elif check_text_terminated_string(rmv_symbl_rslt, "してます"):
-           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("してます", "", rmv_symbl_rslt)
+           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("(してます)", "", rmv_symbl_rslt)
     elif check_text_terminated_string(rmv_symbl_rslt, "していない"):
-           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("していない", "", rmv_symbl_rslt)
+           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("(していない)", "", rmv_symbl_rslt)
     elif check_text_terminated_string(rmv_symbl_rslt, "してない"):
-           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("してない", "", rmv_symbl_rslt)
+           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("(してない)", "", rmv_symbl_rslt)
     elif check_text_terminated_string(rmv_symbl_rslt, "していません"):
-           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("していません", "", rmv_symbl_rslt)
+           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("(していません)", "", rmv_symbl_rslt)
     elif check_text_terminated_string(rmv_symbl_rslt, "してません"):
-           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("してません", "", rmv_symbl_rslt)
+           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("(してません)", "", rmv_symbl_rslt)
     elif check_text_terminated_string(rmv_symbl_rslt, "できている"):
-           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("できている", "", rmv_symbl_rslt)
+           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("(できている)", "", rmv_symbl_rslt)
     elif check_text_terminated_string(rmv_symbl_rslt, "できてる"):
-           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("できてる", "", rmv_symbl_rslt)
+           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("(できてる)", "", rmv_symbl_rslt)
     elif check_text_terminated_string(rmv_symbl_rslt, "できていない"):
-           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("できていない", "", rmv_symbl_rslt)
+           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("(できていない)", "", rmv_symbl_rslt)
     elif check_text_terminated_string(rmv_symbl_rslt, "できてない"):
-           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("できてない", "", rmv_symbl_rslt)
+           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("(できてない)", "", rmv_symbl_rslt)
     elif check_text_terminated_string(rmv_symbl_rslt, "できていません"):
-           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("できていません", "", rmv_symbl_rslt)
+           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("(できていません)", "", rmv_symbl_rslt)
     elif check_text_terminated_string(rmv_symbl_rslt, "できてません"):
-           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("できてません", "", rmv_symbl_rslt)
+           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("(できてません)", "", rmv_symbl_rslt)
     elif check_text_terminated_string(rmv_symbl_rslt, "できました"):
-           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("できました", "", rmv_symbl_rslt)
+           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("(できました)", "", rmv_symbl_rslt)
     elif check_text_terminated_string(rmv_symbl_rslt, "できた"):
-           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("できた", "", rmv_symbl_rslt)
+           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("(できた)", "", rmv_symbl_rslt)
     elif check_text_terminated_string(rmv_symbl_rslt, "できていません"):
-           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("できていません", "", rmv_symbl_rslt)
+           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("(できていません)", "", rmv_symbl_rslt)
     elif check_text_terminated_string(rmv_symbl_rslt, "できてません"):
-           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("してます", "", rmv_symbl_rslt)
+           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("(してます)", "", rmv_symbl_rslt)
     elif check_text_terminated_string(rmv_symbl_rslt, "できてない"):
-           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("できてない", "", rmv_symbl_rslt)
+           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("(できてない)", "", rmv_symbl_rslt)
     elif check_text_terminated_string(rmv_symbl_rslt, "できます"):
-           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("できます", "", rmv_symbl_rslt)
+           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("(できます)", "", rmv_symbl_rslt)
     elif check_text_terminated_string(rmv_symbl_rslt, "できると思います"):
-           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("できると思います", "", rmv_symbl_rslt)
+           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("(できると思います)", "", rmv_symbl_rslt)
     elif check_text_terminated_string(rmv_symbl_rslt, "できると思う"):
-           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("できると思う", "", rmv_symbl_rslt)
+           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("(できると思う)", "", rmv_symbl_rslt)
     elif check_text_terminated_string(rmv_symbl_rslt, "できません"):
-           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("できません", "", rmv_symbl_rslt)
+           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("(できません)", "", rmv_symbl_rslt)
     elif check_text_terminated_string(rmv_symbl_rslt, "できない"):
-           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("できない", "", rmv_symbl_rslt)
+           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("(できない)", "", rmv_symbl_rslt)
     elif check_text_terminated_string(rmv_symbl_rslt, "しよう"):
-           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("しよう", "", rmv_symbl_rslt)
+           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("(しよう)", "", rmv_symbl_rslt)
     elif check_text_terminated_string(rmv_symbl_rslt, "しようと思います"):
-           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("しようと思います", "", rmv_symbl_rslt)
+           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("(しようと思います)", "", rmv_symbl_rslt)
     elif check_text_terminated_string(rmv_symbl_rslt, "しようと思う"):
-           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("しようと思う", "", rmv_symbl_rslt)
+           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("(しようと思う)", "", rmv_symbl_rslt)
     elif check_text_terminated_string(rmv_symbl_rslt, "しない"):
-           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("しない", "", rmv_symbl_rslt)
+           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("(しない)", "", rmv_symbl_rslt)
     elif check_text_terminated_string(rmv_symbl_rslt, "しないと思う"):
-           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("しないと思う", "", rmv_symbl_rslt)
+           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("(しないと思う)", "", rmv_symbl_rslt)
     elif check_text_terminated_string(rmv_symbl_rslt, "しました"):
-           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("しました", "", rmv_symbl_rslt)
+           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("(しました)", "", rmv_symbl_rslt)
     elif check_text_terminated_string(rmv_symbl_rslt, "した"):
-           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("した", "", rmv_symbl_rslt)
+           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("(した)", "", rmv_symbl_rslt)
     elif check_text_terminated_string(rmv_symbl_rslt, "していません"):
-           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("していません", "", rmv_symbl_rslt)
+           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("(していません)", "", rmv_symbl_rslt)
     elif check_text_terminated_string(rmv_symbl_rslt, "してません"):
-           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("してません", "", rmv_symbl_rslt)
+           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("(してません)", "", rmv_symbl_rslt)
     elif check_text_terminated_string(rmv_symbl_rslt, "してない"):
-           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("してない", "", rmv_symbl_rslt)
+           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("(してない)", "", rmv_symbl_rslt)
     elif check_text_terminated_string(rmv_symbl_rslt, "です"):
-           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("です", "", rmv_symbl_rslt)
+           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("(です)", "", rmv_symbl_rslt)
     elif check_text_terminated_string(rmv_symbl_rslt, "でした"):
-           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("でした", "", rmv_symbl_rslt)
+           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("(でした)", "", rmv_symbl_rslt)
     elif check_text_terminated_string(rmv_symbl_rslt, "でしょうか"):
-           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("でしょうか", "", rmv_symbl_rslt)
+           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("(でしょうか)", "", rmv_symbl_rslt)
     elif check_text_terminated_string(rmv_symbl_rslt, "ですか"):
-           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("ですか", "", rmv_symbl_rslt)
+           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("(ですか)", "", rmv_symbl_rslt)
     elif check_text_terminated_string(rmv_symbl_rslt, "しませんか"):
-           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("しませんか", "", rmv_symbl_rslt)
+           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("(しませんか)", "", rmv_symbl_rslt)
     elif check_text_terminated_string(rmv_symbl_rslt, "しません"):
-           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("しません", "", rmv_symbl_rslt)
+           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("(しません)", "", rmv_symbl_rslt)
     elif check_text_terminated_string(rmv_symbl_rslt, "したいな"):
-           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("したいな", "", rmv_symbl_rslt)
+           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("(したいな)", "", rmv_symbl_rslt)
     elif check_text_terminated_string(rmv_symbl_rslt, "したい"):
-           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("したい", "", rmv_symbl_rslt)
+           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("(したい)", "", rmv_symbl_rslt)
     elif check_text_terminated_string(rmv_symbl_rslt, "やりたいな"):
-           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("やりたいな", "", rmv_symbl_rslt)
+           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("(やりたいな)", "", rmv_symbl_rslt)
     elif check_text_terminated_string(rmv_symbl_rslt, "やりたい"):
-           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("やりたい", "", rmv_symbl_rslt)
+           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("(やりたい)", "", rmv_symbl_rslt)
     elif check_text_terminated_string(rmv_symbl_rslt, "しないように"):
-           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("しないように", "", rmv_symbl_rslt)
+           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("(しないように)", "", rmv_symbl_rslt)
     elif check_text_terminated_string(rmv_symbl_rslt, "しないよう"):
-           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("しないよう", "", rmv_symbl_rslt)
+           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("(しないよう)", "", rmv_symbl_rslt)
     elif check_text_terminated_string(rmv_symbl_rslt, "するなよ"):
-           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("するなよ", "", rmv_symbl_rslt)
+           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("(するなよ)", "", rmv_symbl_rslt)
     elif check_text_terminated_string(rmv_symbl_rslt, "するな"):
-           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("するな", "", rmv_symbl_rslt)
+           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("(するな)", "", rmv_symbl_rslt)
     elif check_text_terminated_string(rmv_symbl_rslt, "してください"):
-          extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("してください", "", rmv_symbl_rslt)
+          extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("(してください)", "", rmv_symbl_rslt)
     elif check_text_terminated_string(rmv_symbl_rslt, "して"):
-           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("して", "", rmv_symbl_rslt)
+           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("(して)", "", rmv_symbl_rslt)
     elif check_text_terminated_string(rmv_symbl_rslt, "しなさい"):
-           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("しなさい", "", rmv_symbl_rslt)
+           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("(しなさい)", "", rmv_symbl_rslt)
     elif check_text_terminated_string(rmv_symbl_rslt, "しろ"):
-           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("しろ", "", rmv_symbl_rslt)
+           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("(しろ)", "", rmv_symbl_rslt)
     else:
            extrct_cntnt_frm_tp_and_mddl_rslt = rmv_symbl_rslt
     return extrct_cntnt_frm_tp_and_mddl_rslt
