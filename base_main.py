@@ -104,47 +104,47 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     #ユーザーから送られるLINEメッセージをJanomeで形態素解析する
-    anlyz_rslt = msg_analyze(event.message.text)
+    line_msg_anlyz_rslt = line_msg_analyze(event.message.text)
 
     #janomeで解析されたユーザーのメッセージを基に返信メッセージを生成する
-    msg_gnrt_rslt = msg_generate(anlyz_rslt)
-    
+    line_msg_gnrt_rslt = line_msg_generate(line_msg_anlyz_rslt)
+
     #LINEBotAPIを使って、ユーザーに生成されたLINEメッセージを送信する
-    msg_send(event, msg_gnrt_rslt)
+    line_msg_send(event, line_msg_gnrt_rslt)
 
     #ユーザーから送られるLINEメッセージをpostgresのデータベースに登録・格納する
-    db_insert_and_update(event)
+    postgres_insert_and_update(event)
 
 
 #LINE-DevelopersのWebhookを介して送られてくるイベントを処理する(＝フォローイベントを処理する)
 @handler.add(FollowEvent)
 def handle_follow(event):
-    follow_msg = "友達追加 ありがとう！"
-    line_bot_api.reply_message(event.reply_token, TextSendMessage(text=follow_msg))
+    fllw_msg = "友達追加 ありがとう！"
+    line_bot_api.reply_message(event.reply_token, TextSendMessage(text=fllw_msg))
 
 
 #ユーザーから送られるLINEメッセージを解析する
-def msg_analyze(line_msg_text):
+def line_msg_analyze(line_msg_text):
     #ユーザーから送られるLINEメッセージをJanomeで形態素解析する
-    anlyz_rslt = argument_sub.tokenize(line_msg_text)
-    return anlyz_rslt
+    line_msg_anlyz_rslt = argument_sub.tokenize(line_msg_text)
+    return line_msg_anlyz_rslt
 
 
 #解析されたユーザーのメッセージを基に返信メッセージを生成する
-def msg_generate(anlyz_rslt):
+def line_msg_generate(line_msg_anlyz_rslt):
     #解析後のLINEメッセージの主語を置き換え、「/」で文節に分けて、呼出し元に引渡しをする
-    msg_gnrt_rslt = "/".join(anlyz_rslt)
-    return msg_gnrt_rslt
+    line_msg_gnrt_rslt = "/".join(line_msg_anlyz_rslt)
+    return line_msg_gnrt_rslt
 
 
 #LINEBotAPIを使って、ユーザーに生成されたLINEメッセージを送信する
-def msg_send(event, msg_gnrt_rslt):
+def line_msg_send(event, line_msg_gnrt_rslt):
     #LINEの返信用トークンと生成されたメッセージをセットにしてLINEBotAPIの呼出しをする
-    line_bot_api.reply_message(event.reply_token, TextSendMessage(text=msg_gnrt_rslt))
+    line_bot_api.reply_message(event.reply_token, TextSendMessage(text=line_msg_gnrt_rslt))
 
 
 #ユーザーから送られるLINEメッセージをpostgresのデータベースに登録・格納する
-def db_insert_and_update(event):
+def postgres_insert_and_update(event):
     #postgresデータベースに接続して、テーブル操作のためのカーソルを用意する
     conn = psycopg2.connect(DATABASE_URL)
     conn.set_client_encoding('utf-8') 
