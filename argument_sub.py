@@ -17,7 +17,6 @@ def remove_symbol(line_msg_txt):
 
     #メッセージの中に含まれる英語固有の記号を除去する
     rmv_symbl_rslt = re.sub("'", "", rmv_symbl_rslt)
-    rmv_symbl_rslt = re.sub(""", "", rmv_symbl_rslt)
     rmv_symbl_rslt = re.sub(",", "", rmv_symbl_rslt)
     rmv_symbl_rslt = re.sub(".", "", rmv_symbl_rslt)
     rmv_symbl_rslt = re.sub("?", "", rmv_symbl_rslt)
@@ -341,7 +340,7 @@ def extract_content_from_top_and_middle(line_msg_txt):
 
 
 #LINEの返信メッセージをインテントとコンテントから生成する
-def line_msg_generate_from_intent_and_content(intnt, cntnt)
+def line_msg_generate_from_intent_and_content(intnt, cntnt):
     #返信メッセージをインテントとコンテントから生成して、これを呼出し元に引渡しをする
     line_msg_gnrt_frm_intnt_and_cntnt_rslt = "test"
     return line_msg_gnrt_frm_intnt_and_cntnt_rslt
