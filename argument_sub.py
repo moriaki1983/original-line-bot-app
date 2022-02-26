@@ -316,7 +316,7 @@ def extract_content_from_top_and_middle(line_msg_txt):
            extrct_cntnt_frm_tp_and_mddl_rslt = re.sub(r"したい", "", rmv_symbl_rslt)
     elif check_text_terminated_string(rmv_symbl_rslt, "やりたいな"):
            extrct_cntnt_frm_tp_and_mddl_rslt = re.sub(r"やりたいな", "", rmv_symbl_rslt)
-    elif check_text_terminated_string(rmv_symbl_rslt, "やりたい):
+    elif check_text_terminated_string(rmv_symbl_rslt, "やりたい"):
            extrct_cntnt_frm_tp_and_mddl_rslt = re.sub(r"やりたい", "", rmv_symbl_rslt)
     elif check_text_terminated_string(rmv_symbl_rslt, "しないように"):
            extrct_cntnt_frm_tp_and_mddl_rslt = re.sub(r"しないように", "", rmv_symbl_rslt)
