@@ -126,14 +126,14 @@ def handle_follow(event):
 #ユーザーから送られるLINEメッセージを解析する
 def msg_analyze(line_msg_text):
     #ユーザーから送られるLINEメッセージをJanomeで形態素解析する
-    tknz_rslt = tokenize(line_msg_text)
-    return tknz_rslt
+    anlyz_rslt = argument_sub.tokenize(line_msg_text)
+    return anlyz_rslt
 
 
 #解析されたユーザーのメッセージを基に返信メッセージを生成する
 def msg_generate(anlyz_rslt):
     #解析後のLINEメッセージの主語を置き換え、「/」で文節に分けて、呼出し元に引渡しをする
-    msg_gnrt_rslt = "test"
+    msg_gnrt_rslt = "/".join(anlyz_rslt)
     return msg_gnrt_rslt
 
 
