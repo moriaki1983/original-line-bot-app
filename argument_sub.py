@@ -150,7 +150,7 @@ def extract_intent_from_endnotes(line_msg_txt):
     elif (check_text_terminated_string(rmv_symbl_rslt, "していない") or
           check_text_terminated_string(rmv_symbl_rslt, "してない") or
           check_text_terminated_string(rmv_symbl_rslt, "していません") or
-          check_text_terminated_string(rmv_symbl_rslt, "してません"):
+          check_text_terminated_string(rmv_symbl_rslt, "してません")):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "表明(現在進行＆否定)"
     elif (check_text_terminated_string(rmv_symbl_rslt, "できている") or
           check_text_terminated_string(rmv_symbl_rslt, "できてる")):
@@ -158,18 +158,18 @@ def extract_intent_from_endnotes(line_msg_txt):
     elif (check_text_terminated_string(rmv_symbl_rslt, "できていない") or
           check_text_terminated_string(rmv_symbl_rslt, "できてない") or
           check_text_terminated_string(rmv_symbl_rslt, "できていません") or
-          check_text_terminated_string(rmv_symbl_rslt, "できてません"):
+          check_text_terminated_string(rmv_symbl_rslt, "できてません")):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "表明(現在進行＆可能＆否定)"
     elif (check_text_terminated_string(rmv_symbl_rslt, "できました") or
-          check_text_terminated_string(rmv_symbl_rslt, "できた"):
+          check_text_terminated_string(rmv_symbl_rslt, "できた")):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "表明(過去＆可能＝完了)"
     elif (check_text_terminated_string(rmv_symbl_rslt, "できていません") or
           check_text_terminated_string(rmv_symbl_rslt, "できてません") or
-          check_text_terminated_string(rmv_symbl_rslt, "できてない"):
+          check_text_terminated_string(rmv_symbl_rslt, "できてない")):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "表明(過去＆不可能＝未完了)"
     elif (check_text_terminated_string(rmv_symbl_rslt, "できます") or
           check_text_terminated_string(rmv_symbl_rslt, "できると思います") or
-          check_text_terminated_string(rmv_symbl_rslt, "できると思う"):
+          check_text_terminated_string(rmv_symbl_rslt, "できると思う")):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "表明(現在＆可能)"
     elif (check_text_terminated_string(rmv_symbl_rslt, "できません") or
           check_text_terminated_string(rmv_symbl_rslt, "できない")):
@@ -179,42 +179,42 @@ def extract_intent_from_endnotes(line_msg_txt):
           check_text_terminated_string(rmv_symbl_rslt, "しようと思う")):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "表明(未来＆肯定)"
     elif (check_text_terminated_string(rmv_symbl_rslt, "しない") or
-          check_text_terminated_string(rmv_symbl_rslt, "しないと思う"):
+          check_text_terminated_string(rmv_symbl_rslt, "しないと思う")):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "表明(未来＆否定)"
     elif (check_text_terminated_string(rmv_symbl_rslt, "しました") or
-          check_text_terminated_string(rmv_symbl_rslt, "した"):
+          check_text_terminated_string(rmv_symbl_rslt, "した")):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "表明(過去＆肯定)"
     elif (check_text_terminated_string(rmv_symbl_rslt, "していません") or
           check_text_terminated_string(rmv_symbl_rslt, "してません") or
-          check_text_terminated_string(rmv_symbl_rslt, "してない"):
+          check_text_terminated_string(rmv_symbl_rslt, "してない")):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "表明(過去＆否定)"
     elif (check_text_terminated_string(rmv_symbl_rslt, "です") or
-          check_text_terminated_string(rmv_symbl_rslt, "でした"):
+          check_text_terminated_string(rmv_symbl_rslt, "でした")):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "紹介＆説明＆提示"
     elif (check_text_terminated_string(rmv_symbl_rslt, "でしょうか") or
-          check_text_terminated_string(rmv_symbl_rslt, "ですか"):
+          check_text_terminated_string(rmv_symbl_rslt, "ですか")):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "疑義＆質問"
     elif (check_text_terminated_string(rmv_symbl_rslt, "しませんか") or
-          check_text_terminated_string(rmv_symbl_rslt, "しません"):
+          check_text_terminated_string(rmv_symbl_rslt, "しません")):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "誘導＆勧誘"
     elif (check_text_terminated_string(rmv_symbl_rslt, "したいな") or
           check_text_terminated_string(rmv_symbl_rslt, "したい") or
           check_text_terminated_string(rmv_symbl_rslt, "やりたいな") or
-          check_text_terminated_string(rmv_symbl_rslt, "やりたい):
+          check_text_terminated_string(rmv_symbl_rslt, "やりたい)):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "欲求＆欲動"
     elif (check_text_terminated_string(rmv_symbl_rslt, "いいですよ") or
-          check_text_terminated_string(rmv_symbl_rslt, "いいよ"):
+          check_text_terminated_string(rmv_symbl_rslt, "いいよ")):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "許可＆認可" 
     elif (check_text_terminated_string(rmv_symbl_rslt, "しないように") or
           check_text_terminated_string(rmv_symbl_rslt, "しないよう") or
           check_text_terminated_string(rmv_symbl_rslt, "するなよ") or
-          check_text_terminated_string(rmv_symbl_rslt, "するな"):
+          check_text_terminated_string(rmv_symbl_rslt, "するな")):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "制止＆禁止"
     elif (check_text_terminated_string(rmv_symbl_rslt, "してください") or
-          check_text_terminated_string(rmv_symbl_rslt, "して"):
+          check_text_terminated_string(rmv_symbl_rslt, "して")):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "依頼"
     elif (check_text_terminated_string(rmv_symbl_rslt, "しなさい") or
-          check_text_terminated_string(rmv_symbl_rslt, "しろ"):
+          check_text_terminated_string(rmv_symbl_rslt, "しろ")):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "命令"
     else:
            extrct_intnt_frm_shrt_and_blrplt_rslt = "その他・不明"
