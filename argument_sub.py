@@ -339,7 +339,7 @@ def extract_intent_from_short_and_boilerplate(rmv_edprtcl_rslt):
           rmv_edprtcl_rslt == "にゃ" or
           rmv_edprtcl_rslt == "ニャ" or
           rmv_edprtcl_rslt == "わんわん" or
-          rmv_edprtcl_rslt == "ワンワン"
+          rmv_edprtcl_rslt == "ワンワン" or
           rmv_edprtcl_rslt == "わん" or
           rmv_edprtcl_rslt == "ワン" or
           rmv_edprtcl_rslt == "しゃ" or
