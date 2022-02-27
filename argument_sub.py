@@ -359,9 +359,13 @@ def extract_intent_from_short_and_boilerplate(rmv_edprtcl_rslt):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "確認(過去完了)(状態＆状況)"
     elif (rmv_edprtcl_rslt == "何をしますか" or
           rmv_edprtcl_rslt == "何しますか" or
+          rmv_edprtcl_rslt == "なにをしますか" or
+          rmv_edprtcl_rslt == "なにしますか" or
           rmv_edprtcl_rslt == "何をしたいですか" or
           rmv_edprtcl_rslt == "何したいですか" or
-          rmv_edprtcl_rslt == "なにをしますか" or
+          rmv_edprtcl_rslt == "なにをしたいですか" or
+          rmv_edprtcl_rslt == "なにしたいですか" or
+          rmv_edprtcl_rslt == "なにしたい" or
           rmv_edprtcl_rslt == "なにしますか" or
           rmv_edprtcl_rslt == "なにします" or
           rmv_edprtcl_rslt == "どうしたいですか" or
