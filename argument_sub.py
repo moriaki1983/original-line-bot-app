@@ -157,7 +157,7 @@ def extract_intent_from_gag_vocal_cord_copy_and_etc(line_msg_txt):
           rmv_edprtcl_rslt == "おっぱっぴ～" or
           rmv_edprtcl_rslt == "オッパッピ～" or
           rmv_edprtcl_rslt == "ぴぃやー" or
-          rmv_edprtcl_rslt == "ピィヤー"
+          rmv_edprtcl_rslt == "ピィヤー" or
           rmv_edprtcl_rslt == "ぴぃや～" or
           rmv_edprtcl_rslt == "ピィヤ～"):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "モノマネ(ギャグ＆一発芸)"
