@@ -167,14 +167,6 @@ def extract_intent_from_short_and_boilerplate(rmv_edprtcl_rslt):
           rmv_edprtcl_rslt == "カスですか" or
           rmv_edprtcl_rslt == "ゴミですか"):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "罵詈＆罵倒(半疑問)"
-    elif (rmv_edprtcl_rslt == "何をしますか" or
-          rmv_edprtcl_rslt == "何しますか" or
-          rmv_edprtcl_rslt == "なにをしますか" or
-          rmv_edprtcl_rslt == "なにしますか" or
-          rmv_edprtcl_rslt == "どうしいたますか" or
-          rmv_edprtcl_rslt == "どうしますか" or
-          rmv_edprtcl_rslt == "どうします"):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "確認(現在)(意図＆目的)"
     elif (rmv_edprtcl_rslt == "何をしていますか" or
           rmv_edprtcl_rslt == "何をしてますか" or
           rmv_edprtcl_rslt == "何してますか" or
@@ -183,7 +175,7 @@ def extract_intent_from_short_and_boilerplate(rmv_edprtcl_rslt):
           rmv_edprtcl_rslt == "なにしてますか" or
           rmv_edprtcl_rslt == "どうしていますか" or
           rmv_edprtcl_rslt == "どうしてますか"):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "確認(現在進行)(意図＆目的)"
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "確認(現在進行)(状態＆状況)"
     elif (rmv_edprtcl_rslt == "何をしてきましたか" or
           rmv_edprtcl_rslt == "何をしてましたか" or
           rmv_edprtcl_rslt == "何してましたか" or
@@ -195,6 +187,28 @@ def extract_intent_from_short_and_boilerplate(rmv_edprtcl_rslt):
           rmv_edprtcl_rslt == "どうしてきましたか" or
           rmv_edprtcl_rslt == "どうしてましたか"):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "確認(過去完了)(状態＆状況)"
+    elif (rmv_edprtcl_rslt == "何をしますか" or
+          rmv_edprtcl_rslt == "何しますか" or
+          rmv_edprtcl_rslt == "何をしたいですか" or
+          rmv_edprtcl_rslt == "何したいですか" or
+          rmv_edprtcl_rslt == "なにをしますか" or
+          rmv_edprtcl_rslt == "なにしますか" or
+          rmv_edprtcl_rslt == "なにします" or
+          rmv_edprtcl_rslt == "どうしたいですか" or
+          rmv_edprtcl_rslt == "どうしますか" or
+          rmv_edprtcl_rslt == "どうします"):
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "確認(現在)(欲求＆欲動)"
+    elif (rmv_edprtcl_rslt == "何をしたかったのですか" or
+          rmv_edprtcl_rslt == "何をしたかったんですか" or
+          rmv_edprtcl_rslt == "何したかったのですか" or
+          rmv_edprtcl_rslt == "何したかったんですか" or
+          rmv_edprtcl_rslt == "なにをしたかったのですか" or
+          rmv_edprtcl_rslt == "なにをしたかったんですか" or
+          rmv_edprtcl_rslt == "なにしたかったのですか" or
+          rmv_edprtcl_rslt == "なにしたかったんですか" or
+          rmv_edprtcl_rslt == "どうしたかったのですか" or
+          rmv_edprtcl_rslt == "どうしたかったんですか"):
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "確認(過去)(欲求＆欲動)"
     elif (rmv_edprtcl_rslt == "何をしていきたいですか" or
           rmv_edprtcl_rslt == "何していきたいですか" or
           rmv_edprtcl_rslt == "何していきたい" or
@@ -203,31 +217,37 @@ def extract_intent_from_short_and_boilerplate(rmv_edprtcl_rslt):
           rmv_edprtcl_rslt == "なにしていきたい" or
           rmv_edprtcl_rslt == "どうしていきたいですか" or
           rmv_edprtcl_rslt == "どうしていきたい"):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "確認(未来未完)(状態＆状況)"
-    elif (rmv_edprtcl_rslt == "いいですよ" or
-          rmv_edprtcl_rslt == "いいよ" or
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "確認(未来)(欲求＆欲動)"
+    elif (rmv_edprtcl_rslt == "どうなのですか" or
+          rmv_edprtcl_rslt == "どうなんですか" or
+          rmv_edprtcl_rslt == "どうなの"):
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "確認(時制不明)(意図＆目的)"
+    elif rmv_edprtcl_rslt == "どう":
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "確認(時制不明)(感想＆感慨)"   
+    elif (rmv_edprtcl_rslt == "いいです" or
+          rmv_edprtcl_rslt == "いい" or
           rmv_edprtcl_rslt == "OK" or
           rmv_edprtcl_rslt == "おけ"):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "返答(許可)"
-    elif (rmv_edprtcl_rslt == "駄目ですよ" or
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "許容＆許可"
+    elif (rmv_edprtcl_rslt == "駄目です" or
           rmv_edprtcl_rslt == "駄目です" or
-          rmv_edprtcl_rslt == "駄目だよ" or
+          rmv_edprtcl_rslt == "駄目だ" or
           rmv_edprtcl_rslt == "駄目" or
-          rmv_edprtcl_rslt == "だめですよ" or
           rmv_edprtcl_rslt == "だめです" or
-          rmv_edprtcl_rslt == "だめだよ" or
+          rmv_edprtcl_rslt == "だめです" or
+          rmv_edprtcl_rslt == "だめだ" or
           rmv_edprtcl_rslt == "だめ" or
-          rmv_edprtcl_rslt == "ダメですよ" or
           rmv_edprtcl_rslt == "ダメです" or
-          rmv_edprtcl_rslt == "ダメだよ" or
+          rmv_edprtcl_rslt == "ダメです" or
+          rmv_edprtcl_rslt == "ダメだ" or
           rmv_edprtcl_rslt == "ダメ" or
-          rmv_edprtcl_rslt == "禁止ですよ" or
           rmv_edprtcl_rslt == "禁止です" or
-          rmv_edprtcl_rslt == "禁止だよ" or
+          rmv_edprtcl_rslt == "禁止です" or
+          rmv_edprtcl_rslt == "禁止だ" or
           rmv_edprtcl_rslt == "禁止" or
           rmv_edprtcl_rslt == "いけません" or
-          rmv_edprtcl_rslt == "いけないよ"):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "返答(不許可)"
+          rmv_edprtcl_rslt == "いけない"):
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "禁止＆不許可"
     elif (rmv_edprtcl_rslt == "おい" or
           rmv_edprtcl_rslt == "ねぇ" or
           rmv_edprtcl_rslt == "なぁ" or
