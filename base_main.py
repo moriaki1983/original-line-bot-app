@@ -127,16 +127,22 @@ def line_msg_analyze(line_msg_txt):
     #ユーザーから送られるLINEメッセージをJanomeで形態素解析する
     #line_msg_anlyz_rslt = argument_sub.line_msg_morpho_analyze(line_msg_txt)
     
-    #ユーザーから送られるLINEメッセージを解析し、インテントを抽出して、これを呼出し元に引渡しをする
-    rmv_symbl_rslt    = argument_sub.remove_symbol(line_msg_txt)
-    rmv_edprtcl_rslt  = argument_sub.remove_endparticle(rmv_symbl_rslt)
-    extrct_intnt_rslt = argument_sub.extract_intent_from_short_and_boilerplate(rmv_edprtcl_rslt)
+    #ユーザーから送られるLINEメッセージを解析し、インテントを抽出して、これを呼出し元に引渡しをする    
+    extrct_intnt_rslt = argument_sub.extract_intent_from_gag_vocal_cord_copy_and_etc(line_msg_txt)
     if extrct_intnt_rslt == "その他・不明":
-       extrct_intnt_rslt_end = argument_sub.extract_intent_from_endnotes(rmv_edprtcl_rslt)
-       line_msg_anlyz_rslt = extrct_intnt_rslt_end
+       rmv_symbl_rslt     = argument_sub.remove_symbol(line_msg_txt)
+       rmv_edprtcl_rslt   = argument_sub.remove_endparticle(rmv_symbl_rslt)
+       extrct_intnt_rslt2 = argument_sub.extract_intent_from_short_and_boilerplate(rmv_edprtcl_rslt)
     else:
-       line_msg_anlyz_rslt = extrct_intnt_rslt
-    return line_msg_anlyz_rslt
+       line_msg_anlyz_rslt =  extrct_intnt_rslt
+       return line_msg_anlyz_rslt
+    if extrct_intnt_rslt2 == "その他・不明":
+       extrct_intnt_rslt_end = argument_sub.extract_intent_from_endnotes(rmv_edprtcl_rslt)
+       line_msg_anlyz_rslt   = extrct_intnt_rslt_end
+    else:
+       line_msg_anlyz_rslt = extrct_intnt_rslt2
+       return line_msg_anlyz_rslt
+    return extrct_intnt_rslt_end
 
 
 #解析されたユーザーのメッセージを基に返信メッセージを生成する
