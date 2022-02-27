@@ -23,14 +23,24 @@ def remove_symbol(line_msg_txt):
     return rmv_symbl_rslt_end
 
 
+#ユーザーから送られるLINEメッセージの中に含まれる終助詞を除去する
+def remove_endparticle(rmv_symbl_rslt):
+    #メッセージの中に含まれる日本語固有の助詞を除去する
+    remove_edprtcl_rslt  = re.sub("(ね)", "", rmv_symbl_rslt)
+    remove_edprtcl_rslt2 = re.sub("(わ)", "", remove_edprtcl_rslt)
+    remove_edprtcl_rslt3 = re.sub("(ぜ)", "", remove_edprtcl_rslt2)
+    remove_edprtcl_rslt4 = re.sub("(よ)", "", remove_edprtcl_rslt3)
+
+    #メッセージの中に含まれる先頭と末尾の空白と改行を除去する
+    remove_edprtcl_rslt_end = remove_edprtcl_rslt4.strip()
+    return remove_edprtcl_rslt_end
+
+
 #ユーザーから送られるLINEメッセージが指定された文字列で開始するかを判定する
 def check_text_start_string(line_msg_txt, str):
     #メッセージの中に指定された文字列が含まれている場合に、メッセージがこの文字列で開始するかを判定する
-    rmv_symbl_rslt = remove_symbol(line_msg_txt)
-    if str in rmv_symbl_rslt:
-       chk_txt_strt_str_rslt = rmv_symbl_rslt.startswith(str)
-    else:
-       chk_txt_strt_str = False
+    rmv_symbl_rslt        = remove_symbol(line_msg_txt)
+    chk_txt_strt_str_rslt = rmv_symbl_rslt.startswith(str)
     return chk_txt_strt_str_rslt
 
 
@@ -69,9 +79,8 @@ def line_msg_morpho_analyze2(line_msg_txt):
 
 
 #LINEメッセージが短文＆定型文だったとして、これからインテント(＝意図するもの)を抽出する
-def extract_intent_from_short_and_boilerplate(line_msg_txt):
+def extract_intent_from_short_and_boilerplate(remove_edprtcl_rslt):
     #メッセージの中に含まれる記号を除去して、短文＆定型文となっているメッセージからインテントを抽出して、これを呼出し元に引渡しをする
-    rmv_symbl_rslt = remove_symbol(line_msg_txt)
     if   (rmv_symbl_rslt == "おはよう" or
           rmv_symbl_rslt == "おは" or
           rmv_symbl_rslt == "こんにちは" or
@@ -237,7 +246,6 @@ def extract_intent_from_short_and_boilerplate(line_msg_txt):
 #LINEメッセージの末尾部分からインテント(＝意図するもの)を抽出する
 def extract_intent_from_endnotes(line_msg_txt):
     #メッセージの中に含まれる記号を除去して、メッセージの末尾部分からインテントを抽出して、これを呼出し元に引渡しをする
-    rmv_symbl_rslt = remove_symbol(line_msg_txt)
     if   check_text_terminated_string(rmv_symbl_rslt, "する"):
            extrct_intnt_frm_shrt_and_blrplt_rslt = "表明(現在＆能動＆肯定)"
     elif check_text_terminated_string(rmv_symbl_rslt, "しない"):
@@ -372,16 +380,14 @@ def extract_intent_from_endnotes(line_msg_txt):
     elif (check_text_terminated_string(rmv_symbl_rslt, "ですよ") or
           check_text_terminated_string(rmv_symbl_rslt, "だよ")):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "顕示＆強調＆中性"
-          
     else:
-           extrct_intnt_frm_shrt_and_blrplt_rslt = "その他・不明"
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "その他・不明"
     return extrct_intnt_frm_shrt_and_blrplt_rslt
 
 
 #LINEメッセージの先頭・中間部分からコンテント(＝意図されるもの)を抽出する
 def extract_content_from_top_and_middle(line_msg_txt):
     #メッセージの中に含まれる記号を除去して、メッセージの先頭・中間部分部分からコンテントを抽出して、これを呼出し元に引渡しをする
-    rmv_symbl_rslt = remove_symbol(line_msg_txt)
     if   check_text_terminated_string(rmv_symbl_rslt, "する"):
            extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("(する)", "", rmv_symbl_rslt)
     elif check_text_terminated_string(rmv_symbl_rslt, "しない"):
