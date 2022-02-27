@@ -160,7 +160,7 @@ def extract_intent_from_gag_vocal_cord_copy_and_etc(line_msg_txt):
           line_msg_txt == "ピィヤー" or
           line_msg_txt == "ぴぃや～" or
           line_msg_txt == "ピィヤ～"):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "モノマネ(ギャグ＆一発芸)"
+            extrct_intnt_frm_gg_vocl_crd_cpy_and_etc_rslt = "モノマネ(ギャグ＆一発芸)"
     elif (line_msg_txt == "にゃー にゃー" or
           line_msg_txt == "ニャー ニャー" or
           line_msg_txt == "にゃーにゃー" or
@@ -231,7 +231,7 @@ def extract_intent_from_gag_vocal_cord_copy_and_etc(line_msg_txt):
           line_msg_txt == "がったんごっとん" or
           line_msg_txt == "ガッタン ゴットン" or
           line_msg_txt == "ガッタンゴットン"):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "モノマネ(声帯模写)"
+            extrct_intnt_frm_gg_vocl_crd_cpy_and_etc_rslt = "モノマネ(声帯模写)"
     elif (line_msg_txt == "ぷー" or
           line_msg_txt == "プー" or
           line_msg_txt == "ぷ～" or
@@ -252,10 +252,10 @@ def extract_intent_from_gag_vocal_cord_copy_and_etc(line_msg_txt):
           line_msg_txt == "ヘブシッ" or
           line_msg_txt == "はっくしょん" or
           line_msg_txt == "ハックション"):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "生理現象"
+            extrct_intnt_frm_gg_vocl_crd_cpy_and_etc_rslt = "生理現象"
     else:
-            extract_intent_from_gag_vocal_cord_copy_and_etc_rslt = "その他・不明"
-    return extract_intent_from_gag_vocal_cord_copy_and_etc_rslt
+            extrct_intnt_frm_gg_vocl_crd_cpy_and_etc_rslt = "その他・不明"
+    return extrct_intnt_frm_gg_vocl_crd_cpy_and_etc_rslt
 
 
 #LINEメッセージが短文＆定型文だったとして、これからインテント(＝意図するもの)を抽出する
