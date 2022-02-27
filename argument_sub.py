@@ -386,7 +386,7 @@ def extract_intent_from_endnotes(rmv_edprtcl_rslt):
           check_text_terminated_string(rmv_edprtcl_rslt, "しちゃいけない") or
           check_text_terminated_string(rmv_edprtcl_rslt, "しちゃならん")):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "強制＆勧告(否定)"
-    elif check_text_terminated_string(rmv_edprtcl_rslt, "だ):
+    elif check_text_terminated_string(rmv_edprtcl_rslt, "だ"):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "顕示＆強調"
     else:
             extrct_intnt_frm_shrt_and_blrplt_rslt = "その他・不明"
