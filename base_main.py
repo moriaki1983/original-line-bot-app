@@ -133,7 +133,9 @@ def line_msg_analyze(line_msg_txt):
     extrct_intnt_rslt = argument_sub.extract_intent_from_short_and_boilerplate(rmv_edprtcl_rslt)
     if extrct_intnt_rslt == "その他・不明":
        extrct_intnt_rslt_end = argument_sub.extract_intent_from_endnotes(rmv_edprtcl_rslt)
-    line_msg_anlyz_rslt = extrct_intnt_rslt_end
+       line_msg_anlyz_rslt = extrct_intnt_rslt_end
+    else:
+       line_msg_anlyz_rslt = extrct_intnt_rslt
     return line_msg_anlyz_rslt
 
 
