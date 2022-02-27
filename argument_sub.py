@@ -26,13 +26,23 @@ def remove_symbol(line_msg_txt):
 #ユーザーから送られるLINEメッセージの中に含まれる終助詞を除去する
 def remove_endparticle(rmv_symbl_rslt):
     #メッセージの中に含まれる日本語固有の助詞を除去する
-    rmv_edprtcl_rslt  = re.sub("(ね)", "", rmv_symbl_rslt)
-    rmv_edprtcl_rslt2 = re.sub("(わ)", "", rmv_edprtcl_rslt)
-    rmv_edprtcl_rslt3 = re.sub("(ぜ)", "", rmv_edprtcl_rslt2)
-    rmv_edprtcl_rslt4 = re.sub("(よ)", "", rmv_edprtcl_rslt3)
-
+    rmv_edprtcl_rslt   = re.sub("(なあ)",  "", rmv_symbl_rslt)
+    rmv_edprtcl_rslt2  = re.sub("(なぁ)",  "", rmv_edprtcl_rslt)
+    rmv_edprtcl_rslt3  = re.sub("(なっ)",  "", rmv_edprtcl_rslt2)
+    rmv_edprtcl_rslt4  = re.sub("(ねえ)",  "", rmv_edprtcl_rslt3)
+    rmv_edprtcl_rslt5  = re.sub("(ねぇ)",  "", rmv_edprtcl_rslt4)
+    rmv_edprtcl_rslt6  = re.sub("(わ)",    "", rmv_edprtcl_rslt5)
+    rmv_edprtcl_rslt7  = re.sub("(わあ)",  "", rmv_edprtcl_rslt6)
+    rmv_edprtcl_rslt8 = re.sub("(わぁ)",   "", rmv_edprtcl_rslt7)
+    rmv_edprtcl_rslt9 = re.sub("(ぜ)",     "", rmv_edprtcl_rslt8)
+    rmv_edprtcl_rslt10 = re.sub("(ぜっ)",  "", rmv_edprtcl_rslt9)
+    rmv_edprtcl_rslt11 = re.sub("(よ)",    "", rmv_edprtcl_rslt10)
+    rmv_edprtcl_rslt12 = re.sub("(よお)",  "", rmv_edprtcl_rslt11)
+    rmv_edprtcl_rslt13 = re.sub("(よぉ)",  "", rmv_edprtcl_rslt12)
+    rmv_edprtcl_rslt114 = re.sub("(よっ)", "", rmv_edprtcl_rslt13)
+    
     #メッセージの中に含まれる先頭と末尾の空白と改行を除去する
-    rmv_edprtcl_rslt_end = rmv_edprtcl_rslt4.strip()
+    rmv_edprtcl_rslt_end = rmv_edprtcl_rslt14.strip()
     return rmv_edprtcl_rslt_end 
 
 
@@ -164,7 +174,7 @@ def extract_intent_from_short_and_boilerplate(rmv_edprtcl_rslt):
           rmv_edprtcl_rslt == "どうしいたますか" or
           rmv_edprtcl_rslt == "どうしますか" or
           rmv_edprtcl_rslt == "どうします"):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "確認(意図＆目的)(現在)"
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "確認(現在)(意図＆目的)"
     elif (rmv_edprtcl_rslt == "何をしていますか" or
           rmv_edprtcl_rslt == "何をしてますか" or
           rmv_edprtcl_rslt == "何してますか" or
@@ -173,7 +183,7 @@ def extract_intent_from_short_and_boilerplate(rmv_edprtcl_rslt):
           rmv_edprtcl_rslt == "なにしてますか" or
           rmv_edprtcl_rslt == "どうしていますか" or
           rmv_edprtcl_rslt == "どうしてますか"):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "確認(意図＆目的＆現在＝進行)"
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "確認(現在進行)(意図＆目的)"
     elif (rmv_edprtcl_rslt == "何をしてきましたか" or
           rmv_edprtcl_rslt == "何をしてましたか" or
           rmv_edprtcl_rslt == "何してましたか" or
@@ -184,7 +194,7 @@ def extract_intent_from_short_and_boilerplate(rmv_edprtcl_rslt):
           rmv_edprtcl_rslt == "なにしてた" or
           rmv_edprtcl_rslt == "どうしてきましたか" or
           rmv_edprtcl_rslt == "どうしてましたか"):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "確認(意図＆目的＆過去＝完了)"
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "確認(過去完了)(状態＆状況)"
     elif (rmv_edprtcl_rslt == "何をしていきたいですか" or
           rmv_edprtcl_rslt == "何していきたいですか" or
           rmv_edprtcl_rslt == "何していきたい" or
@@ -193,7 +203,7 @@ def extract_intent_from_short_and_boilerplate(rmv_edprtcl_rslt):
           rmv_edprtcl_rslt == "なにしていきたい" or
           rmv_edprtcl_rslt == "どうしていきたいですか" or
           rmv_edprtcl_rslt == "どうしていきたい"):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "確認(意図＆目的＆未来＝未完)"
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "確認(未来未完)(状態＆状況)"
     elif (rmv_edprtcl_rslt == "いいですよ" or
           rmv_edprtcl_rslt == "いいよ" or
           rmv_edprtcl_rslt == "OK" or
@@ -225,13 +235,21 @@ def extract_intent_from_short_and_boilerplate(rmv_edprtcl_rslt):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "呼掛け"        
     elif (rmv_edprtcl_rslt == "ですね" or
           rmv_edprtcl_rslt == "そうだね" or
-          rmv_edprtcl_rslt == "だね"):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "賛意・賛同"
+          rmv_edprtcl_rslt == "そだね" or
+          rmv_edprtcl_rslt == "だよねえ" or
+          rmv_edprtcl_rslt == "だよねぇ" or
+          rmv_edprtcl_rslt == "だねえ" or
+          rmv_edprtcl_rslt == "だねぇ"):
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "賛意＆賛同"   
+    elif (rmv_edprtcl_rslt == "歌って" or
+          rmv_edprtcl_rslt == "うたって" or
+          rmv_edprtcl_rslt == "踊って" or
+          rmv_edprtcl_rslt == "おどって" or
+          rmv_edprtcl_rslt == "遊んで" or
+          rmv_edprtcl_rslt == "あそんで"):
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "依頼＆懇願"
     elif rmv_edprtcl_rslt == "海":
             extrct_intnt_frm_shrt_and_blrplt_rslt = "掛合い"
-    elif (rmv_edprtcl_rslt == "ですよね" or
-          rmv_edprtcl_rslt == "だよね"):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "協調＆阿り"
     elif (rmv_edprtcl_rslt == "じゃんけんぽん" or
           rmv_edprtcl_rslt == "じゃんけん" or
           rmv_edprtcl_rslt == "ジャンケンポン" or
@@ -337,17 +355,14 @@ def extract_intent_from_endnotes(rmv_edprtcl_rslt):
     elif (check_text_terminated_string(rmv_edprtcl_rslt, "しませんか") or
           check_text_terminated_string(rmv_edprtcl_rslt, "しません")):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "誘導＆勧誘"
-    elif (check_text_terminated_string(rmv_edprtcl_rslt, "したいな") or
-          check_text_terminated_string(rmv_edprtcl_rslt, "したい") or
-          check_text_terminated_string(rmv_edprtcl_rslt, "やりたいな") or
+    elif (check_text_terminated_string(rmv_edprtcl_rslt, "したい") or
+          check_text_terminated_string(rmv_edprtcl_rslt, "たい") or
           check_text_terminated_string(rmv_edprtcl_rslt, "やりたい")):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "欲求＆欲動"
-    elif (check_text_terminated_string(rmv_edprtcl_rslt, "いいですよ") or
-          check_text_terminated_string(rmv_edprtcl_rslt, "いいよ")):
+    elif (check_text_terminated_string(rmv_edprtcl_rslt, "いいです")):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "許可＆認可" 
     elif (check_text_terminated_string(rmv_edprtcl_rslt, "しないように") or
           check_text_terminated_string(rmv_edprtcl_rslt, "しないよう") or
-          check_text_terminated_string(rmv_edprtcl_rslt, "するなよ") or
           check_text_terminated_string(rmv_edprtcl_rslt, "するな")):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "制止＆禁止"
     elif (check_text_terminated_string(rmv_edprtcl_rslt, "してください") or
@@ -358,28 +373,21 @@ def extract_intent_from_endnotes(rmv_edprtcl_rslt):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "指示＆命令"
     elif (check_text_terminated_string(rmv_edprtcl_rslt, "しなければならない") or
           check_text_terminated_string(rmv_edprtcl_rslt, "しなければ") or
-          check_text_terminated_string(rmv_edprtcl_rslt, "しないといけないですよ") or
           check_text_terminated_string(rmv_edprtcl_rslt, "しないといけないです") or
           check_text_terminated_string(rmv_edprtcl_rslt, "しないといけない") or
-          check_text_terminated_string(rmv_edprtcl_rslt, "しなきゃいけないですよ") or
           check_text_terminated_string(rmv_edprtcl_rslt, "しなきゃいけないです") or
           check_text_terminated_string(rmv_edprtcl_rslt, "しなきゃいけない") or
           check_text_terminated_string(rmv_edprtcl_rslt, "しなきゃならない") or
           check_text_terminated_string(rmv_edprtcl_rslt, "しなきゃ")):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "強制＆勧告＆肯定"
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "強制＆勧告(肯定)"
     elif (check_text_terminated_string(rmv_edprtcl_rslt, "してはならない") or
+          check_text_terminated_string(rmv_edprtcl_rslt, "してはいけない") or
           check_text_terminated_string(rmv_edprtcl_rslt, "したらいけない") or
-          check_text_terminated_string(rmv_edprtcl_rslt, "しちゃいけない")):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "強制＆勧告＆否定"
-    elif (check_text_terminated_string(rmv_edprtcl_rslt, "だぜ") or
-          check_text_terminated_string(rmv_edprtcl_rslt, "だ")):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "顕示＆強調＆男性"
-    elif (check_text_terminated_string(rmv_edprtcl_rslt, "だわね") or
-          check_text_terminated_string(rmv_edprtcl_rslt, "だわ")):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "顕示＆強調＆女性"
-    elif (check_text_terminated_string(rmv_edprtcl_rslt, "ですよ") or
-          check_text_terminated_string(rmv_edprtcl_rslt, "だよ")):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "顕示＆強調＆中性"
+          check_text_terminated_string(rmv_edprtcl_rslt, "しちゃいけない") or
+          check_text_terminated_string(rmv_edprtcl_rslt, "しちゃならん")):
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "強制＆勧告(否定)"
+    elif check_text_terminated_string(rmv_edprtcl_rslt, "だ):
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "顕示＆強調"
     else:
             extrct_intnt_frm_shrt_and_blrplt_rslt = "その他・不明"
     return extrct_intnt_frm_shrt_and_blrplt_rslt
