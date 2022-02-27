@@ -7,7 +7,6 @@ from flask import Flask, jsonify, request, abort
 from linebot import (LineBotApi, WebhookHandler)
 from linebot.exceptions import (InvalidSignatureError)
 from linebot.models import (MessageEvent, FollowEvent, TextMessage, TextSendMessage)
-from janome.tokenizer import Tokenizer
 
 
 
@@ -126,17 +125,23 @@ def handle_follow(event):
 #ユーザーから送られるLINEメッセージを解析する
 def line_msg_analyze(line_msg_txt):
     #ユーザーから送られるLINEメッセージをJanomeで形態素解析する
-    line_msg_anlyz_rslt = argument_sub.line_msg_morpho_analyze(line_msg_txt)
+    #line_msg_anlyz_rslt = argument_sub.line_msg_morpho_analyze(line_msg_txt)
+    
+    #ユーザーから送られるLINEメッセージを解析し、インテントを抽出して、これを呼出し元に引渡しをする
+    rmv_symbl_rslt    = argument_sub.remove_symbol(line_msg_txt)
+    rmv_edprtcl_rslt  = argument_sub.remove_endparticle(rmv_symbl_rslt)
+    extrct_intnt_rslt = argument_sub.extract_intent_from_short_and_boilerplate(rmv_edprtcl_rslt)
+    if extrct_intnt_rslt == "その他・不明":
+       extrct_intnt_rslt_end = argument_sub.extract_intent_from_endnotes(rmv_edprtcl_rslt)
+    line_msg_anlyz_rslt = extrct_intnt_rslt_end
     return line_msg_anlyz_rslt
 
 
 #解析されたユーザーのメッセージを基に返信メッセージを生成する
-def line_msg_generate(line_msg_txt, line_msg_anlyz_rslt):
+def line_msg_generate(line_msg_anlyz_rslt):
     #解析後のLINEメッセージの主語を置き換え、「/」で文節に分けて、呼出し元に引渡しをする
     #line_msg_gnrt_rslt = "/".join(line_msg_anlyz_rslt)
-    line_msg_gnrt_rslt = argument_sub.extract_intent_from_short_and_boilerplate(line_msg_txt)
-    if line_msg_gnrt_rslt == "その他・不明":
-       line_msg_gnrt_rslt = argument_sub.extract_intent_from_endnotes(line_msg_txt)
+    line_msg_gnrt_rslt = line_msg_anlyz_rslt
     return line_msg_gnrt_rslt
 
 
