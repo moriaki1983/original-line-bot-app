@@ -157,7 +157,7 @@ def extract_intent_from_gag_vocal_cord_copy_and_etc(line_msg_txt):
           line_msg_txt == "おっぱっぴ～" or
           line_msg_txt == "オッパッピ～" or
           line_msg_txt == "ぴぃやー" or
-          line_msg_txt == "ピィヤー"
+          line_msg_txt == "ピィヤー" or
           line_msg_txt == "ぴぃや～" or
           line_msg_txt == "ピィヤ～"):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "モノマネ(ギャグ＆一発芸)"
@@ -577,7 +577,8 @@ def extract_intent_from_endnotes(rmv_edprtcl_rslt):
           check_text_terminated_string(rmv_edprtcl_rslt, "しなきゃいけないです") or
           check_text_terminated_string(rmv_edprtcl_rslt, "しなきゃいけない") or
           check_text_terminated_string(rmv_edprtcl_rslt, "しなきゃならない") or
-          check_text_terminated_string(rmv_edprtcl_rslt, "しなきゃ")):
+          check_text_terminated_string(rmv_edprtcl_rslt, "しなきゃ") or
+          check_text_terminated_string(rmv_edprtcl_rslt, "せにゃならん")):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "強制＆勧告(肯定)"
     elif (check_text_terminated_string(rmv_edprtcl_rslt, "してはならない") or
           check_text_terminated_string(rmv_edprtcl_rslt, "してはいけない") or
