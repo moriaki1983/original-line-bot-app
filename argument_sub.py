@@ -289,7 +289,7 @@ def extract_intent_from_short_and_boilerplate(rmv_edprtcl_rslt):
           rmv_edprtcl_rslt == "はいひょっこりはん" or
           rmv_edprtcl_rslt == "プレゼント フォー 肩幅" or
           rmv_edprtcl_rslt == "プレゼントフォー肩幅" or
-          rmv_edprtcl_rslt == "うぃーん合唱団"
+          rmv_edprtcl_rslt == "うぃーん合唱団" or
           rmv_edprtcl_rslt == "早く大人になれ 膝小僧" or
           rmv_edprtcl_rslt == "早く大人になれ膝小僧" or
           rmv_edprtcl_rslt == "プレゼントフォー肩幅" or
