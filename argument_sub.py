@@ -26,14 +26,14 @@ def remove_symbol(line_msg_txt):
 #ユーザーから送られるLINEメッセージの中に含まれる終助詞を除去する
 def remove_endparticle(rmv_symbl_rslt):
     #メッセージの中に含まれる日本語固有の助詞を除去する
-    remove_edprtcl_rslt  = re.sub("(ね)", "", rmv_symbl_rslt)
-    remove_edprtcl_rslt2 = re.sub("(わ)", "", remove_edprtcl_rslt)
-    remove_edprtcl_rslt3 = re.sub("(ぜ)", "", remove_edprtcl_rslt2)
-    remove_edprtcl_rslt4 = re.sub("(よ)", "", remove_edprtcl_rslt3)
+    rmv_edprtcl_rslt  = re.sub("(ね)", "", rmv_symbl_rslt)
+    rmv_edprtcl_rslt2 = re.sub("(わ)", "", rmv_edprtcl_rslt)
+    rmv_edprtcl_rslt3 = re.sub("(ぜ)", "", rmv_edprtcl_rslt2)
+    rmv_edprtcl_rslt4 = re.sub("(よ)", "", rmv_edprtcl_rslt3)
 
     #メッセージの中に含まれる先頭と末尾の空白と改行を除去する
-    remove_edprtcl_rslt_end = remove_edprtcl_rslt4.strip()
-    return remove_edprtcl_rslt_end
+    rmv_edprtcl_rslt_end = rmv_edprtcl_rslt4.strip()
+    return rmv_edprtcl_rslt_end 
 
 
 #ユーザーから送られるLINEメッセージが指定された文字列で開始するかを判定する
@@ -79,7 +79,7 @@ def line_msg_morpho_analyze2(line_msg_txt):
 
 
 #LINEメッセージが短文＆定型文だったとして、これからインテント(＝意図するもの)を抽出する
-def extract_intent_from_short_and_boilerplate(remove_edprtcl_rslt):
+def extract_intent_from_short_and_boilerplate(rmv_edprtcl_rslt):
     #メッセージの中に含まれる記号を除去して、短文＆定型文となっているメッセージからインテントを抽出して、これを呼出し元に引渡しをする
     if   (rmv_symbl_rslt == "おはよう" or
           rmv_symbl_rslt == "おは" or
@@ -244,7 +244,7 @@ def extract_intent_from_short_and_boilerplate(remove_edprtcl_rslt):
 
 
 #LINEメッセージの末尾部分からインテント(＝意図するもの)を抽出する
-def extract_intent_from_endnotes(line_msg_txt):
+def extract_intent_from_endnotes(rmv_edprtcl_rslt):
     #メッセージの中に含まれる記号を除去して、メッセージの末尾部分からインテントを抽出して、これを呼出し元に引渡しをする
     if   check_text_terminated_string(rmv_symbl_rslt, "する"):
            extrct_intnt_frm_shrt_and_blrplt_rslt = "表明(現在＆能動＆肯定)"
@@ -386,7 +386,7 @@ def extract_intent_from_endnotes(line_msg_txt):
 
 
 #LINEメッセージの先頭・中間部分からコンテント(＝意図されるもの)を抽出する
-def extract_content_from_top_and_middle(line_msg_txt):
+def extract_content_from_top_and_middle(rmv_edprtcl_rslt):
     #メッセージの中に含まれる記号を除去して、メッセージの先頭・中間部分部分からコンテントを抽出して、これを呼出し元に引渡しをする
     if   check_text_terminated_string(rmv_symbl_rslt, "する"):
            extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("(する)", "", rmv_symbl_rslt)
