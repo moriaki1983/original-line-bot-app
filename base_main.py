@@ -106,7 +106,7 @@ def handle_message(event):
     line_msg_anlyz_rslt = line_msg_analyze(event.message.text)
 
     #janomeで解析されたユーザーのメッセージを基に返信メッセージを生成する
-    line_msg_gnrt_rslt = line_msg_generate(event.message.text)
+    line_msg_gnrt_rslt = line_msg_generate(line_msg_anlyz_rslt)
 
     #LINEBotAPIを使って、ユーザーに生成されたLINEメッセージを送信する
     line_msg_send(event, line_msg_gnrt_rslt)
@@ -138,10 +138,10 @@ def line_msg_analyze(line_msg_txt):
 
 
 #解析されたユーザーのメッセージを基に返信メッセージを生成する
-def line_msg_generate(line_msg_txt):
+def line_msg_generate(line_msg_anlyz_rslt):
     #解析後のLINEメッセージの主語を置き換え、「/」で文節に分けて、呼出し元に引渡しをする
     #line_msg_gnrt_rslt = "/".join(line_msg_anlyz_rslt)
-    line_msg_gnrt_rslt = line_msg_txt
+    line_msg_gnrt_rslt = line_msg_anlyz_rslt
     return line_msg_gnrt_rslt
 
 
