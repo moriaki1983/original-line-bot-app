@@ -410,7 +410,7 @@ def extract_intent_from_short_and_boilerplate(rmv_edprtcl_rslt):
           rmv_edprtcl_rslt == "アホですか" or
           rmv_edprtcl_rslt == "クズですか" or
           rmv_edprtcl_rslt == "カスですか" or
-          rmv_edprtcl_rslt == "ゴミですか"
+          rmv_edprtcl_rslt == "ゴミですか" or
           rmv_edprtcl_rslt == "ばかですか" or
           rmv_edprtcl_rslt == "あほですか" or
           rmv_edprtcl_rslt == "くずですか" or
