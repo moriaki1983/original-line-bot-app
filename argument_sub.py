@@ -254,7 +254,13 @@ def extract_intent_from_gag_vocal_cord_copy_and_etc(line_msg_txt):
           line_msg_txt == "へぶしっ" or
           line_msg_txt == "ヘブシッ" or
           line_msg_txt == "はっくしょん" or
-          line_msg_txt == "ハックション"):
+          line_msg_txt == "ハックション"
+          line_msg_txt == "ごほっ！" or
+          line_msg_txt == "ゴホッ！" or
+          line_msg_txt == "へぶしっ！" or
+          line_msg_txt == "ヘブシッ！" or
+          line_msg_txt == "はっくしょん！" or
+          line_msg_txt == "ハックション！"):
             extrct_intnt_frm_gg_vocl_crd_cpy_and_etc_rslt = "生理現象"
     elif (line_msg_txt == "なあ" or
           line_msg_txt == "なぁ" or
@@ -262,7 +268,10 @@ def extract_intent_from_gag_vocal_cord_copy_and_etc(line_msg_txt):
           line_msg_txt == "なぁ？" or
           line_msg_txt == "なあ！" or
           line_msg_txt == "なぁ！"):
-            extrct_intnt_frm_gg_vocl_crd_cpy_and_etc_rslt = "呼掛け＆問掛け"
+            extrct_intnt_frm_gg_vocl_crd_cpy_and_etc_rslt = "呼掛け＆問掛け"        
+    elif (line_msg_txt == "ブー！ブー！" or
+          line_msg_txt == "ブー！ ブー！"):
+            extrct_intnt_frm_gg_vocl_crd_cpy_and_etc_rslt = "ブーイング"
     else:
             extrct_intnt_frm_gg_vocl_crd_cpy_and_etc_rslt = "その他・不明"
     return extrct_intnt_frm_gg_vocl_crd_cpy_and_etc_rslt
@@ -445,14 +454,11 @@ def extract_intent_from_short_and_boilerplate(rmv_edprtcl_rslt):
           rmv_edprtcl_rslt == "駄目だ" or
           rmv_edprtcl_rslt == "駄目" or
           rmv_edprtcl_rslt == "だめです" or
-          rmv_edprtcl_rslt == "だめです" or
           rmv_edprtcl_rslt == "だめだ" or
           rmv_edprtcl_rslt == "だめ" or
           rmv_edprtcl_rslt == "ダメです" or
-          rmv_edprtcl_rslt == "ダメです" or
           rmv_edprtcl_rslt == "ダメだ" or
           rmv_edprtcl_rslt == "ダメ" or
-          rmv_edprtcl_rslt == "禁止です" or
           rmv_edprtcl_rslt == "禁止です" or
           rmv_edprtcl_rslt == "禁止だ" or
           rmv_edprtcl_rslt == "禁止" or
