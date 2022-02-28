@@ -479,7 +479,7 @@ def extract_intent_from_endnotes(rmv_edprtcl_rslt):
            extrct_intnt_frm_shrt_and_blrplt_rslt = "表明＆宣言(現在＆未来＆能動＆肯定)"
     elif (check_text_terminated_string(rmv_edprtcl_rslt, "しません") or
           check_text_terminated_string(rmv_edprtcl_rslt, "しない")):
-           extrct_intnt_frm_shrt_and_blrplt_rslt = "表明＆宣言(現在＆未来＆能動＆否定)
+           extrct_intnt_frm_shrt_and_blrplt_rslt = "表明＆宣言(現在＆未来＆能動＆否定)"
     elif (check_text_terminated_string(rmv_edprtcl_rslt, "しています") or
           check_text_terminated_string(rmv_edprtcl_rslt, "してます") or
           check_text_terminated_string(rmv_edprtcl_rslt, "している") or
