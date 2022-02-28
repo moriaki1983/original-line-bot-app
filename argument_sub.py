@@ -498,7 +498,7 @@ def extract_intent_from_short_and_boilerplate(rmv_edprtcl_rslt):
           rmv_edprtcl_rslt == "ジャンケンぽん"):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "遊戯"
     else:
-         extrct_intnt_frm_shrt_and_blrplt_rslt = "その他・不明"
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "その他・不明"
     return extrct_intnt_frm_shrt_and_blrplt_rslt
 
 
