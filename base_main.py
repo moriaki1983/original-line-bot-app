@@ -1,3 +1,4 @@
+# coding: utf-8
 #各モジュールの読み込み
 import os
 import datetime
