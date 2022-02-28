@@ -38,16 +38,18 @@ def remove_endparticle(rmv_symbl_rslt):
     rmv_edprtcl_rslt5  = re.sub("(ねぇ)", "", rmv_edprtcl_rslt4)
     rmv_edprtcl_rslt6  = re.sub("(わ)",   "", rmv_edprtcl_rslt5)
     rmv_edprtcl_rslt7  = re.sub("(わあ)", "", rmv_edprtcl_rslt6)
-    rmv_edprtcl_rslt8  = re.sub("(わぁ)",  "", rmv_edprtcl_rslt7)
-    rmv_edprtcl_rslt9  = re.sub("(ぜ)",    "", rmv_edprtcl_rslt8)
+    rmv_edprtcl_rslt8  = re.sub("(わぁ)", "", rmv_edprtcl_rslt7)
+    rmv_edprtcl_rslt9  = re.sub("(ぜ)",   "", rmv_edprtcl_rslt8)
     rmv_edprtcl_rslt10 = re.sub("(ぜっ)", "", rmv_edprtcl_rslt9)
     rmv_edprtcl_rslt11 = re.sub("(よ)",   "", rmv_edprtcl_rslt10)
     rmv_edprtcl_rslt12 = re.sub("(よお)", "", rmv_edprtcl_rslt11)
     rmv_edprtcl_rslt13 = re.sub("(よぉ)", "", rmv_edprtcl_rslt12)
     rmv_edprtcl_rslt14 = re.sub("(よっ)", "", rmv_edprtcl_rslt13)
-    
+    rmv_edprtcl_rslt15 = re.sub("(っす)", "", rmv_edprtcl_rslt14)
+    rmv_edprtcl_rslt16 = re.sub("(ってばよ)", "", rmv_edprtcl_rslt15)
+
     #メッセージの中に含まれる先頭と末尾の空白と改行を除去する
-    rmv_edprtcl_rslt_end = rmv_edprtcl_rslt14.strip()
+    rmv_edprtcl_rslt_end = rmv_edprtcl_rslt16.strip()
     return rmv_edprtcl_rslt_end 
 
 
@@ -314,7 +316,29 @@ def extract_intent_from_short_and_boilerplate(rmv_edprtcl_rslt):
           rmv_edprtcl_rslt == "最高" or
           rmv_edprtcl_rslt == "あなたに感動しました" or
           rmv_edprtcl_rslt == "あなたに感動した" or
-          rmv_edprtcl_rslt == "あなたに感動"):
+          rmv_edprtcl_rslt == "あなたに感動" or
+          rmv_edprtcl_rslt == "かっこいい" or
+          rmv_edprtcl_rslt == "カッコいい" or
+          rmv_edprtcl_rslt == "カッコイイ" or
+          rmv_edprtcl_rslt == "可愛い" or
+          rmv_edprtcl_rslt == "かわいい" or
+          rmv_edprtcl_rslt == "カワイい" or
+          rmv_edprtcl_rslt == "カワイイ" or
+          rmv_edprtcl_rslt == "かわい" or
+          rmv_edprtcl_rslt == "カワイ" or
+          rmv_edprtcl_rslt == "かわゆす" or
+          rmv_edprtcl_rslt == "カワゆす" or
+          rmv_edprtcl_rslt == "カワユス" or
+          rmv_edprtcl_rslt == "綺麗" or
+          rmv_edprtcl_rslt == "きれい" or
+          rmv_edprtcl_rslt == "キレい" or
+          rmv_edprtcl_rslt == "キレイ" or
+          rmv_edprtcl_rslt == "いけてる" or
+          rmv_edprtcl_rslt == "イケてる" or
+          rmv_edprtcl_rslt == "イケテル" or
+          rmv_edprtcl_rslt == "素敵" or
+          rmv_edprtcl_rslt == "すてき" or
+          rmv_edprtcl_rslt == "ステキ"):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "称賛＆礼賛"
     elif (rmv_edprtcl_rslt == "最低" or
           rmv_edprtcl_rslt == "無能" or
@@ -587,7 +611,9 @@ def extract_intent_from_endnotes(rmv_edprtcl_rslt):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "許可＆認可" 
     elif (check_text_terminated_string(rmv_edprtcl_rslt, "しないように") or
           check_text_terminated_string(rmv_edprtcl_rslt, "しないよう") or
-          check_text_terminated_string(rmv_edprtcl_rslt, "するな")):
+          check_text_terminated_string(rmv_edprtcl_rslt, "するな") or
+          check_text_terminated_string(rmv_edprtcl_rslt, "しちゃ駄目") or
+          check_text_terminated_string(rmv_edprtcl_rslt, "しちゃダメ")):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "制止＆禁止"
     elif (check_text_terminated_string(rmv_edprtcl_rslt, "してください") or
           check_text_terminated_string(rmv_edprtcl_rslt, "して")):
