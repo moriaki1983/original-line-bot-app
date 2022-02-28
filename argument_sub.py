@@ -513,16 +513,16 @@ def extract_intent_from_endnotes(rmv_edprtcl_rslt):
     elif (check_text_terminated_string(rmv_edprtcl_rslt, "できません") or
           check_text_terminated_string(rmv_edprtcl_rslt, "できない")):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "表明＆宣言(現在＆能動＆不可能)"
-    elif (check_text_terminated_string(rmv_edprtcl_rslt, "しようと思います") or
-          check_text_terminated_string(rmv_edprtcl_rslt, "しようと思う" or
-          check_text_terminated_string(rmv_edprtcl_rslt, "しよう") or
-          check_text_terminated_string(rmv_edprtcl_rslt, "したいと思います") or
-          check_text_terminated_string(rmv_edprtcl_rslt, "したいと思う") or
-          check_text_terminated_string(rmv_edprtcl_rslt, "したい") or
-          check_text_terminated_string(rmv_edprtcl_rslt, "をやりたいと思います") or
-          check_text_terminated_string(rmv_edprtcl_rslt, "をやりたいと思う")):# or
+    #elif (check_text_terminated_string(rmv_edprtcl_rslt, "しようと思います") or
+    #      check_text_terminated_string(rmv_edprtcl_rslt, "しようと思う" or
+    #      check_text_terminated_string(rmv_edprtcl_rslt, "しよう") or
+    #      check_text_terminated_string(rmv_edprtcl_rslt, "したいと思います") or
+    #      check_text_terminated_string(rmv_edprtcl_rslt, "したいと思う") or
+    #      check_text_terminated_string(rmv_edprtcl_rslt, "したい") or
+    #      check_text_terminated_string(rmv_edprtcl_rslt, "をやりたいと思います") or
+    #      check_text_terminated_string(rmv_edprtcl_rslt, "をやりたいと思う")):# or
           #check_text_terminated_string(rmv_edprtcl_rslt, "をやります")):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "表明＆宣言(未来＆能動＆肯定)"
+    #        extrct_intnt_frm_shrt_and_blrplt_rslt = "表明＆宣言(未来＆能動＆肯定)"
     elif (check_text_terminated_string(rmv_edprtcl_rslt, "しないと思う") or
           check_text_terminated_string(rmv_edprtcl_rslt, "しない") or
           check_text_terminated_string(rmv_edprtcl_rslt, "はやらないと思います") or
