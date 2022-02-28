@@ -537,7 +537,7 @@ def extract_intent_from_short_and_boilerplate(rmv_edprtcl_rslt):
           rmv_edprtcl_rslt == "苦しい" or
           rmv_edprtcl_rslt == "くるしい" or
           rmv_edprtcl_rslt == "辛い" or
-          rmv_edprtcl_rslt == "つらい"
+          rmv_edprtcl_rslt == "つらい" or
           rmv_edprtcl_rslt == "嬉しい" or
           rmv_edprtcl_rslt == "うれしい" or
           rmv_edprtcl_rslt == "悲しい" or
@@ -716,12 +716,7 @@ def extract_intent_from_endnotes(rmv_edprtcl_rslt):
 #LINEメッセージの先頭・中間部分からコンテント(＝意図されるもの)を抽出する
 def extract_content_from_top_and_middle(rmv_edprtcl_rslt):
     #メッセージの中に含まれる記号を除去して、メッセージの先頭・中間部分部分からコンテントを抽出して、これを呼出し元に引渡しをする
-    if   check_text_terminated_string(rmv_edprtcl_rslt, "する"):
-           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("(する)", "", rmv_edprtcl_rslt)
-    elif check_text_terminated_string(rmv_edprtcl_rslt, "しない"):
-           extrct_cntnt_frm_tp_and_mddl_rslt = re.sub("(しない)", "", rmv_edprtcl_rslt)
-    else:
-           extrct_cntnt_frm_tp_and_mddl_rslt = "その他・不明"
+    extrct_cntnt_frm_tp_and_mddl_rslt = "その他・不明"
     return extrct_cntnt_frm_tp_and_mddl_rslt
 
 
