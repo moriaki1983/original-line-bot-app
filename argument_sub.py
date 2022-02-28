@@ -254,13 +254,7 @@ def extract_intent_from_gag_vocal_cord_copy_and_etc(line_msg_txt):
           line_msg_txt == "へぶしっ" or
           line_msg_txt == "ヘブシッ" or
           line_msg_txt == "はっくしょん" or
-          line_msg_txt == "ハックション"
-          line_msg_txt == "ごほっ！" or
-          line_msg_txt == "ゴホッ！" or
-          line_msg_txt == "へぶしっ！" or
-          line_msg_txt == "ヘブシッ！" or
-          line_msg_txt == "はっくしょん！" or
-          line_msg_txt == "ハックション！"):
+          line_msg_txt == "ハックション"):
             extrct_intnt_frm_gg_vocl_crd_cpy_and_etc_rslt = "生理現象"
     elif (line_msg_txt == "なあ" or
           line_msg_txt == "なぁ" or
