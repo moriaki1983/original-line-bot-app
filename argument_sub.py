@@ -1,3 +1,4 @@
+# coding: utf-8
 import re
 from janome.tokenizer import Tokenizer
 
@@ -512,18 +513,12 @@ def extract_intent_from_endnotes(rmv_edprtcl_rslt):
           check_text_terminated_string(rmv_edprtcl_rslt, "できてない")):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "表明＆宣言(過去＆能受不明＆不可能＝未完了)"
     elif (check_text_terminated_string(rmv_edprtcl_rslt, "できます") or
-          check_text_terminated_string(rmv_edprtcl_rslt, "できる") or
-          check_text_terminated_string(rmv_edprtcl_rslt, "できると思います") or
-          check_text_terminated_string(rmv_edprtcl_rslt, "できると思う")):
+          check_text_terminated_string(rmv_edprtcl_rslt, "できる")):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "表明＆宣言(現在＆能動＆可能)"
     elif (check_text_terminated_string(rmv_edprtcl_rslt, "できません") or
           check_text_terminated_string(rmv_edprtcl_rslt, "できない")):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "表明＆宣言(現在＆能動＆不可能)"
-    elif (check_text_terminated_string(rmv_edprtcl_rslt, "しようと思います") or
-          check_text_terminated_string(rmv_edprtcl_rslt, "しようと思う"):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "表明＆宣言(未来＆能動＆肯定)"
-    elif (check_text_terminated_string(rmv_edprtcl_rslt, "しないと思う") or
-          check_text_terminated_string(rmv_edprtcl_rslt, "しない")):
+    elif (check_text_terminated_string(rmv_edprtcl_rslt, "しない")):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "表明＆宣言(未来＆能動＆否定)"
     elif (check_text_terminated_string(rmv_edprtcl_rslt, "しました") or
           check_text_terminated_string(rmv_edprtcl_rslt, "した") or
@@ -560,19 +555,11 @@ def extract_intent_from_endnotes(rmv_edprtcl_rslt):
           check_text_terminated_string(rmv_edprtcl_rslt, "ではなかった") or
           check_text_terminated_string(rmv_edprtcl_rslt, "でなかった")):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "表明＆宣言(過去完了＆能受不明＆否定)"
-    elif (check_text_terminated_string(rmv_edprtcl_rslt, "していきたいと思います") or
-           check_text_terminated_string(rmv_edprtcl_rslt, "していきたいと思う") or
-           check_text_terminated_string(rmv_edprtcl_rslt, "していきたい") or
-           check_text_terminated_string(rmv_edprtcl_rslt, "をやっていきたいと思います") or
-           check_text_terminated_string(rmv_edprtcl_rslt, "をやっていきたいと思う") or
-           check_text_terminated_string(rmv_edprtcl_rslt, "をやっていきたい")):
+    elif (check_text_terminated_string(rmv_edprtcl_rslt, "していきたい") or
+          check_text_terminated_string(rmv_edprtcl_rslt, "をやっていきたい")):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "表明＆宣言(現在＆未来＆持続＆能動＆肯定)"
-    elif (check_text_terminated_string(rmv_edprtcl_rslt, "していきたいとは思わない") or
-           check_text_terminated_string(rmv_edprtcl_rslt, "していきたいと思わない") or
-           check_text_terminated_string(rmv_edprtcl_rslt, "していきたくない") or
-           check_text_terminated_string(rmv_edprtcl_rslt, "をやっていきたいとは思わない") or
-           check_text_terminated_string(rmv_edprtcl_rslt, "をやっていきたいと思わない") or
-           check_text_terminated_string(rmv_edprtcl_rslt, "をやっていかない")):
+    elif (check_text_terminated_string(rmv_edprtcl_rslt, "していきたくない") or
+          check_text_terminated_string(rmv_edprtcl_rslt, "をやっていかない")):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "表明＆宣言(現在＆未来＆持続＆能動＆否定)"
     elif (check_text_terminated_string(rmv_edprtcl_rslt, "ではなかったです") or
           check_text_terminated_string(rmv_edprtcl_rslt, "ではなかった") or
