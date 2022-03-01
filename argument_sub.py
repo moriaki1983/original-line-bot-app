@@ -176,7 +176,30 @@ def extract_intent_from_gag_vocal_cord_copy_and_etc(line_msg_txt):
           line_msg_txt == "ぴぃやー" or
           line_msg_txt == "ピィヤー" or
           line_msg_txt == "ぴぃや～" or
-          line_msg_txt == "ピィヤ～"):
+          line_msg_txt == "ピィヤ～" or
+          line_msg_txt == "俺の武勇伝" or
+          line_msg_txt == "おれの武勇伝" or
+          line_msg_txt == "オレの武勇伝" or
+          line_msg_txt == "武勇伝" or
+          line_msg_txt == "俺の武勇伝！" or
+          line_msg_txt == "おれの武勇伝！" or
+          line_msg_txt == "オレの武勇伝！" or
+          line_msg_txt == "武勇伝！" or
+          line_msg_txt == "俺の武勇伝を聞きたいか" or
+          line_msg_txt == "おれの武勇伝を聞きたいか" or
+          line_msg_txt == "オレの武勇伝を聞きたいか" or
+          line_msg_txt == "俺の武勇伝を聞きたいか？" or
+          line_msg_txt == "おれの武勇伝を聞きたいか？" or
+          line_msg_txt == "オレの武勇伝を聞きたいか？" or
+          line_msg_txt == "武勇伝武勇伝" or
+          line_msg_txt == "武勇伝 武勇伝" or
+          line_msg_txt == "武勇伝！武勇伝！" or
+          line_msg_txt == "武勇伝！ 武勇伝！" or
+          line_msg_txt == "空前絶後" or
+          line_msg_txt == "空 前 絶 後" or
+          line_msg_txt == "空！前！絶！後！" or
+          line_msg_txt == "空！ 前！ 絶！ 後！" or
+          line_msg_txt == "空前絶後！"):
             extrct_intnt_frm_gg_vocl_crd_cpy_and_etc_rslt = "モノマネ(ギャグ＆一発芸)"
     elif (line_msg_txt == "にゃー にゃー" or
           line_msg_txt == "ニャー ニャー" or
@@ -280,6 +303,11 @@ def extract_intent_from_gag_vocal_cord_copy_and_etc(line_msg_txt):
     elif (line_msg_txt == "ブー！ブー！" or
           line_msg_txt == "ブー！ ブー！"):
             extrct_intnt_frm_gg_vocl_crd_cpy_and_etc_rslt = "ブーイング"
+    elif (rmv_edprtcl_rslt == "分かった" or
+          rmv_edprtcl_rslt == "わかった" or
+          rmv_edprtcl_rslt == "分かった！" or
+          rmv_edprtcl_rslt == "わかった！"):
+            extrct_intnt_frm_gg_vocl_crd_cpy_and_etc_rslt = "理解(感動＆感激)"
     else:
             extrct_intnt_frm_gg_vocl_crd_cpy_and_etc_rslt = "その他・不明"
     return extrct_intnt_frm_gg_vocl_crd_cpy_and_etc_rslt
@@ -589,7 +617,25 @@ def extract_intent_from_short_and_boilerplate(rmv_edprtcl_rslt):
           rmv_edprtcl_rslt == "メンゴ メンゴ" or
           rmv_edprtcl_rslt == "メンゴメンゴ" or
           rmv_edprtcl_rslt == "メンゴ"):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "陳謝・謝罪"            
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "陳謝・謝罪"
+    elif (rmv_edprtcl_rslt == "承知いたしました" or
+          rmv_edprtcl_rslt == "承知しました" or
+          rmv_edprtcl_rslt == "承知した" or
+          rmv_edprtcl_rslt == "承知" or
+          rmv_edprtcl_rslt == "かしこまりました" or
+          rmv_edprtcl_rslt == "かしこまり"):
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "承知・承諾"
+    elif (rmv_edprtcl_rslt == "了解いたしました" or
+          rmv_edprtcl_rslt == "了解しました" or
+          rmv_edprtcl_rslt == "了解した" or
+          rmv_edprtcl_rslt == "了解" or
+          rmv_edprtcl_rslt == "りょ" or
+          rmv_edprtcl_rslt == "リョ" or
+          rmv_edprtcl_rslt == "分かりました" or
+          rmv_edprtcl_rslt == "わかりました" or
+          rmv_edprtcl_rslt == "分かった" or
+          rmv_edprtcl_rslt == "わかった"):
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "了承・了解"
     else:
             extrct_intnt_frm_shrt_and_blrplt_rslt = "その他・不明"
     return extrct_intnt_frm_shrt_and_blrplt_rslt
