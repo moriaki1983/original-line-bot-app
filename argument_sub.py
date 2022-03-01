@@ -303,10 +303,10 @@ def extract_intent_from_gag_vocal_cord_copy_and_etc(line_msg_txt):
     elif (line_msg_txt == "ブー！ブー！" or
           line_msg_txt == "ブー！ ブー！"):
             extrct_intnt_frm_gg_vocl_crd_cpy_and_etc_rslt = "ブーイング"
-    elif (rmv_edprtcl_rslt == "分かった" or
-          rmv_edprtcl_rslt == "わかった" or
-          rmv_edprtcl_rslt == "分かった！" or
-          rmv_edprtcl_rslt == "わかった！"):
+    elif (line_msg_txt == "分かった" or
+          line_msg_txt == "わかった" or
+          line_msg_txt == "分かった！" or
+          line_msg_txt == "わかった！"):
             extrct_intnt_frm_gg_vocl_crd_cpy_and_etc_rslt = "理解(感動＆感激)"
     else:
             extrct_intnt_frm_gg_vocl_crd_cpy_and_etc_rslt = "その他・不明"
@@ -592,8 +592,8 @@ def extract_intent_from_short_and_boilerplate(rmv_edprtcl_rslt):
           rmv_edprtcl_rslt == "らくしょう" or
           rmv_edprtcl_rslt == "ラクショウ" or
           rmv_edprtcl_rslt == "大変" or
-          rmv_edprtcl_rslt == "たいへん" or
-          rmv_edprtcl_rslt == "タイヘン"):
+          rmv_edprtcl_rslt == "疲れた" or
+          rmv_edprtcl_rslt == "つかれた"):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "訴求＆表現(感情＆心理＆精神＆肉体)"
     elif rmv_edprtcl_rslt == "海":
             extrct_intnt_frm_shrt_and_blrplt_rslt = "掛合い"
