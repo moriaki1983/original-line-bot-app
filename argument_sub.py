@@ -291,9 +291,10 @@ def extract_intent_from_short_and_boilerplate(rmv_edprtcl_rslt):
     if   (rmv_edprtcl_rslt == "おはよう" or
           rmv_edprtcl_rslt == "おは" or
           rmv_edprtcl_rslt == "こんにちは" or
-          rmv_edprtcl_rslt == "こんばんは" or
-          rmv_edprtcl_rslt == "こんばんわ" or
-          rmv_edprtcl_rslt == "ばんわ" or
+          rmv_edprtcl_rslt == "こんにち" or
+          rmv_edprtcl_rslt == "こんばん" or
+          rmv_edprtcl_rslt == "ばんは" or
+          rmv_edprtcl_rslt == "ばん" or
           rmv_edprtcl_rslt == "やあ" or
           rmv_edprtcl_rslt == "どうも"):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "挨拶"
@@ -425,7 +426,7 @@ def extract_intent_from_short_and_boilerplate(rmv_edprtcl_rslt):
           rmv_edprtcl_rslt == "なにしてますか" or
           rmv_edprtcl_rslt == "どうしていますか" or
           rmv_edprtcl_rslt == "どうしてますか"):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "確認(現在進行)(状態＆状況)"
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "質問＆確認(現在進行)(状態＆状況)"
     elif (rmv_edprtcl_rslt == "何をしてきましたか" or
           rmv_edprtcl_rslt == "何をしてましたか" or
           rmv_edprtcl_rslt == "何してましたか" or
@@ -436,7 +437,7 @@ def extract_intent_from_short_and_boilerplate(rmv_edprtcl_rslt):
           rmv_edprtcl_rslt == "なにしてた" or
           rmv_edprtcl_rslt == "どうしてきましたか" or
           rmv_edprtcl_rslt == "どうしてましたか"):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "確認(過去完了)(状態＆状況)"
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "質問＆確認(過去完了)(状態＆状況)"
     elif (rmv_edprtcl_rslt == "何をしますか" or
           rmv_edprtcl_rslt == "何しますか" or
           rmv_edprtcl_rslt == "なにをしますか" or
@@ -451,7 +452,7 @@ def extract_intent_from_short_and_boilerplate(rmv_edprtcl_rslt):
           rmv_edprtcl_rslt == "どうしたいですか" or
           rmv_edprtcl_rslt == "どうしますか" or
           rmv_edprtcl_rslt == "どうします"):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "確認(現在)(欲求＆欲動)"
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "質問＆確認(現在)(欲求＆欲動)"
     elif (rmv_edprtcl_rslt == "何をしたかったのですか" or
           rmv_edprtcl_rslt == "何をしたかったんですか" or
           rmv_edprtcl_rslt == "何したかったのですか" or
@@ -462,7 +463,7 @@ def extract_intent_from_short_and_boilerplate(rmv_edprtcl_rslt):
           rmv_edprtcl_rslt == "なにしたかったんですか" or
           rmv_edprtcl_rslt == "どうしたかったのですか" or
           rmv_edprtcl_rslt == "どうしたかったんですか"):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "確認(過去)(欲求＆欲動)"
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "質問＆確認(過去)(欲求＆欲動)"
     elif (rmv_edprtcl_rslt == "何をしていきたいですか" or
           rmv_edprtcl_rslt == "何していきたいですか" or
           rmv_edprtcl_rslt == "何していきたい" or
@@ -471,18 +472,29 @@ def extract_intent_from_short_and_boilerplate(rmv_edprtcl_rslt):
           rmv_edprtcl_rslt == "なにしていきたい" or
           rmv_edprtcl_rslt == "どうしていきたいですか" or
           rmv_edprtcl_rslt == "どうしていきたい"):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "確認(未来)(欲求＆欲動)"
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "質問＆確認(未来)(欲求＆欲動)"
     elif (rmv_edprtcl_rslt == "どうなのですか" or
           rmv_edprtcl_rslt == "どうなんですか" or
           rmv_edprtcl_rslt == "どうなの"):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "確認(時制不明)(意図＆目的)"
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "質問＆確認(時制不明)(意図＆目的)"
     elif rmv_edprtcl_rslt == "どう":
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "確認(時制不明)(感想＆感慨)"
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "質問＆確認(時制不明)(感想＆感慨)"
     elif (rmv_edprtcl_rslt == "どうしてなのですか" or
           rmv_edprtcl_rslt == "どうしてなんですか" or
           rmv_edprtcl_rslt == "どうしてですか" or
           rmv_edprtcl_rslt == "どうして"):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "確認(時制不明)(事由＆理由)"
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "質問＆確認(時制不明)(事由＆理由＆事情)"        
+    elif (rmv_edprtcl_rslt == "何故なのですか" or
+          rmv_edprtcl_rslt == "何故なんですか" or
+          rmv_edprtcl_rslt == "何故ですか" or
+          rmv_edprtcl_rslt == "何故" or
+          rmv_edprtcl_rslt == "なぜなのですか" or
+          rmv_edprtcl_rslt == "なぜなんですか" or
+          rmv_edprtcl_rslt == "なぜですか" or
+          rmv_edprtcl_rslt == "なぜ" or
+          rmv_edprtcl_rslt == "何で" or
+          rmv_edprtcl_rslt == "なんで"):
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "質問＆確認(時制不明)(事由＆理由＆事情)"
     elif (rmv_edprtcl_rslt == "いいです" or
           rmv_edprtcl_rslt == "いい" or
           rmv_edprtcl_rslt == "OK" or
@@ -565,6 +577,19 @@ def extract_intent_from_short_and_boilerplate(rmv_edprtcl_rslt):
           rmv_edprtcl_rslt == "ジャンケン" or
           rmv_edprtcl_rslt == "ジャンケンぽん"):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "遊戯"
+    elif (rmv_edprtcl_rslt == "お願いします" or
+          rmv_edprtcl_rslt == "お願いです" or
+          rmv_edprtcl_rslt == "お願い"):
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "依頼・依願"
+    elif (rmv_edprtcl_rslt == "御免なさい" or
+          rmv_edprtcl_rslt == "御免" or
+          rmv_edprtcl_rslt == "ごめんなさい" or
+          rmv_edprtcl_rslt == "ごめん" or
+          rmv_edprtcl_rslt == "ゴメン" or
+          rmv_edprtcl_rslt == "メンゴ メンゴ" or
+          rmv_edprtcl_rslt == "メンゴメンゴ" or
+          rmv_edprtcl_rslt == "メンゴ"):
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "陳謝・謝罪"            
     else:
             extrct_intnt_frm_shrt_and_blrplt_rslt = "その他・不明"
     return extrct_intnt_frm_shrt_and_blrplt_rslt
