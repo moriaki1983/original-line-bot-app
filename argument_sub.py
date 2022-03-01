@@ -636,6 +636,17 @@ def extract_intent_from_short_and_boilerplate(rmv_edprtcl_rslt):
           rmv_edprtcl_rslt == "分かった" or
           rmv_edprtcl_rslt == "わかった"):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "了承・了解"
+    elif (rmv_edprtcl_rslt == "愛しています" or
+          rmv_edprtcl_rslt == "愛してます" or
+          rmv_edprtcl_rslt == "愛してる" or
+          rmv_edprtcl_rslt == "あいしています" or
+          rmv_edprtcl_rslt == "あいしてます" or
+          rmv_edprtcl_rslt == "あいしてる" or
+          rmv_edprtcl_rslt == "好きです" or
+          rmv_edprtcl_rslt == "好き" or
+          rmv_edprtcl_rslt == "すき" or
+          rmv_edprtcl_rslt == "スキ"):
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "訴求＆表現(求愛＆発情)"
     else:
             extrct_intnt_frm_shrt_and_blrplt_rslt = "その他・不明"
     return extrct_intnt_frm_shrt_and_blrplt_rslt
