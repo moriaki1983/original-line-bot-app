@@ -837,7 +837,7 @@ def extract_content_from_top_and_middle(rmv_edprtcl_rslt):
          check_text_start_string(rmv_edprtcl_rslt, "多く") or
          check_text_start_string(rmv_edprtcl_rslt, "少なくとも")):
            extrct_cntnt_frm_tp_and_mddl_rslt = "断定＆確定"
-    if  check_text_start_string(rmv_edprtcl_rslt, "大層":
+    if  check_text_start_string(rmv_edprtcl_rslt, "大層"):
            extrct_cntnt_frm_tp_and_mddl_rslt = "程度強調"
     else:
           extrct_cntnt_frm_tp_and_mddl_rslt = "その他・不明"
