@@ -743,21 +743,22 @@ def extract_intent_from_endnotes(rmv_edprtcl_rslt):
           check_text_terminated_string(rmv_edprtcl_rslt, "です") or
           check_text_terminated_string(rmv_edprtcl_rslt, "ます")):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "紹介＆説明＆提示＆表明＆宣言(時制不明＆能受不明)"
-    elif check_text_terminated_string(rmv_edprtcl_rslt, "ってました"):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "紹介＆説明＆提示＆表明＆宣言(過去＆能動)"
+    elif (check_text_terminated_string(rmv_edprtcl_rslt, "ってました") or
+          check_text_terminated_string(rmv_edprtcl_rslt, "ってた")):
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "(報告＆連絡)(過去＆能動)"
     elif (check_text_terminated_string(rmv_edprtcl_rslt, "でしょうか") or
           check_text_terminated_string(rmv_edprtcl_rslt, "ですか") or
           check_text_terminated_string(rmv_edprtcl_rslt, "ですよね") or
           check_text_terminated_string(rmv_edprtcl_rslt, "ですね") or
           check_text_terminated_string(rmv_edprtcl_rslt, "だね")):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "疑義＆質問"
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "(疑義＆質問)"
     elif (check_text_terminated_string(rmv_edprtcl_rslt, "しませんか") or
           check_text_terminated_string(rmv_edprtcl_rslt, "しません")):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "誘導＆勧誘"
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "(誘導＆勧誘)"
     elif (check_text_terminated_string(rmv_edprtcl_rslt, "したい") or
           check_text_terminated_string(rmv_edprtcl_rslt, "たい") or
           check_text_terminated_string(rmv_edprtcl_rslt, "やりたい")):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "欲求＆欲動"
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "(欲求＆欲動)"
     elif (check_text_terminated_string(rmv_edprtcl_rslt, "いいです")):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "許可＆認可" 
     elif (check_text_terminated_string(rmv_edprtcl_rslt, "しないように") or
@@ -765,13 +766,13 @@ def extract_intent_from_endnotes(rmv_edprtcl_rslt):
           check_text_terminated_string(rmv_edprtcl_rslt, "するな") or
           check_text_terminated_string(rmv_edprtcl_rslt, "しちゃ駄目") or
           check_text_terminated_string(rmv_edprtcl_rslt, "しちゃダメ")):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "制止＆禁止"
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "(制止＆禁止)"
     elif (check_text_terminated_string(rmv_edprtcl_rslt, "してください") or
           check_text_terminated_string(rmv_edprtcl_rslt, "して")):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "依頼＆要求"
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "(依頼＆要求)"
     elif (check_text_terminated_string(rmv_edprtcl_rslt, "しなさい") or
           check_text_terminated_string(rmv_edprtcl_rslt, "しろ")):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "指示＆命令"
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "(指示＆命令)"
     elif (check_text_terminated_string(rmv_edprtcl_rslt, "しなければならない") or
           check_text_terminated_string(rmv_edprtcl_rslt, "しなければ") or
           check_text_terminated_string(rmv_edprtcl_rslt, "しないといけないです") or
@@ -781,17 +782,33 @@ def extract_intent_from_endnotes(rmv_edprtcl_rslt):
           check_text_terminated_string(rmv_edprtcl_rslt, "しなきゃならない") or
           check_text_terminated_string(rmv_edprtcl_rslt, "しなきゃ") or
           check_text_terminated_string(rmv_edprtcl_rslt, "せにゃならん")):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "強制＆勧告(肯定)"
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "(強制＆勧告)(肯定)"
     elif (check_text_terminated_string(rmv_edprtcl_rslt, "してはならない") or
           check_text_terminated_string(rmv_edprtcl_rslt, "してはいけない") or
           check_text_terminated_string(rmv_edprtcl_rslt, "したらいけない") or
           check_text_terminated_string(rmv_edprtcl_rslt, "しちゃいけない") or
           check_text_terminated_string(rmv_edprtcl_rslt, "しちゃならん")):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "強制＆勧告(否定)"
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "(強制＆勧告)(否定)"
     elif check_text_terminated_string(rmv_edprtcl_rslt, "だ"):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "顕示＆強調"
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "(顕示＆強調)"
+    elif (check_text_terminated_string(rmv_edprtcl_rslt, "でしょう") or
+          check_text_terminated_string(rmv_edprtcl_rslt, "だろう") or
+          check_text_terminated_string(rmv_edprtcl_rslt, "だろ")):
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "(推定＆推測＆推量)(文末)"
+    elif (check_text_terminated_string(rmv_edprtcl_rslt, "だそうです") or
+          check_text_terminated_string(rmv_edprtcl_rslt, "だろう")):
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "(推定＆推測＆推量)(報告＆連絡)(文末)"
+    elif (check_text_terminated_string(rmv_edprtcl_rslt, "がいます") or
+          check_text_terminated_string(rmv_edprtcl_rslt, "がいる")):
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "(報告＆連絡)(存在＆有無)(人間＆動物＆その他)"
+    elif (check_text_terminated_string(rmv_edprtcl_rslt, "にいます") or
+          check_text_terminated_string(rmv_edprtcl_rslt, "にいる")):
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "(報告＆連絡)(所在＆場所)(人間＆動物＆その他)"
+    elif (check_text_terminated_string(rmv_edprtcl_rslt, "があります") or
+          check_text_terminated_string(rmv_edprtcl_rslt, "がある")):
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "(報告＆連絡)(存在＆有無)(物体＆モノ全般)"
     else:
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "その他・不明"
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "(その他・不明)"
     return extrct_intnt_frm_shrt_and_blrplt_rslt
 
 
@@ -800,35 +817,37 @@ def extract_content_from_top_and_middle(line_msg_txt):
     #メッセージの中に含まれる記号を除去して、メッセージの先頭・中間部分部分からコンテントを抽出して、これを呼出し元に引渡しをする
     if   (check_text_start_string(line_msg_txt, "さて") or
           check_text_start_string(line_msg_txt, "ところで")):
-            extrct_cntnt_frm_tp_and_mddl_rslt = "転換＆切替"
+            extrct_cntnt_frm_tp_and_mddl_rslt = "(転換＆切替)"
     elif (check_text_start_string(line_msg_txt, "そして") or
+          check_text_start_string(line_msg_txt, "それで") or
           check_text_start_string(line_msg_txt, "そんで")):
-            extrct_cntnt_frm_tp_and_mddl_rslt = "接続"
+            extrct_cntnt_frm_tp_and_mddl_rslt = "(結論＆結末)"
     elif (check_text_start_string(line_msg_txt, "加えて") or
           check_text_start_string(line_msg_txt, "さらに") or
           check_text_start_string(line_msg_txt, "又") or
           check_text_start_string(line_msg_txt, "また")):
-            extrct_cntnt_frm_tp_and_mddl_rslt = "添加＆追加"
+            extrct_cntnt_frm_tp_and_mddl_rslt = "(添加＆追加)"
     elif (check_text_start_string(line_msg_txt, "多分") or
           check_text_start_string(line_msg_txt, "たぶん") or
           check_text_start_string(line_msg_txt, "恐らくは") or
           check_text_start_string(line_msg_txt, "おそらくは") or
           check_text_start_string(line_msg_txt, "恐らく") or
           check_text_start_string(line_msg_txt, "おそらく")):
-            extrct_cntnt_frm_tp_and_mddl_rslt = "推定＆推測＆推量"
+            extrct_cntnt_frm_tp_and_mddl_rslt = "(推定＆推測＆推量)(文頭)"
     elif (check_text_start_string(line_msg_txt, "又は") or
           check_text_start_string(line_msg_txt, "または")):
-            extrct_cntnt_frm_tp_and_mddl_rslt = "論理和"
+            extrct_cntnt_frm_tp_and_mddl_rslt = "(論理和)"
     elif (check_text_start_string(line_msg_txt, "且つ") or
           check_text_start_string(line_msg_txt, "かつ")):
-            extrct_cntnt_frm_tp_and_mddl_rslt = "論理積"
+            extrct_cntnt_frm_tp_and_mddl_rslt = "(論理積)"
     elif (check_text_start_string(line_msg_txt, "得てして") or
           check_text_start_string(line_msg_txt, "えてして") or
+          check_text_start_string(line_msg_txt, "概して") or
           check_text_start_string(line_msg_txt, "大抵は") or
           check_text_start_string(line_msg_txt, "大抵") or
           check_text_start_string(line_msg_txt, "大概は") or
           check_text_start_string(line_msg_txt, "大概")): 
-            extrct_cntnt_frm_tp_and_mddl_rslt = "概要＆概略"
+            extrct_cntnt_frm_tp_and_mddl_rslt = "(概要＆概略)"
     elif (check_text_start_string(line_msg_txt, "確実に") or
           check_text_start_string(line_msg_txt, "明らかに") or
           check_text_start_string(line_msg_txt, "多くの場合は") or
@@ -836,11 +855,14 @@ def extract_content_from_top_and_middle(line_msg_txt):
           check_text_start_string(line_msg_txt, "多くは") or
           check_text_start_string(line_msg_txt, "多く") or
           check_text_start_string(line_msg_txt, "少なくとも")):
-            extrct_cntnt_frm_tp_and_mddl_rslt = "断定＆確定"
+            extrct_cntnt_frm_tp_and_mddl_rslt = "(断定＆確定)"
     elif  check_text_start_string(line_msg_txt, "大層"):
-            extrct_cntnt_frm_tp_and_mddl_rslt = "程度強調"
+            extrct_cntnt_frm_tp_and_mddl_rslt = "(程度強調)"
+    elif (check_text_start_string(line_msg_txt, "なので") or
+          check_text_start_string(line_msg_txt, "ですから")):
+            extrct_cntnt_frm_tp_and_mddl_rslt = "(説明＆説得)(事由＆理由＆事情＆状況)"
     else:
-            extrct_cntnt_frm_tp_and_mddl_rslt = "その他・不明"
+            extrct_cntnt_frm_tp_and_mddl_rslt = "(その他・不明)"
     return extrct_cntnt_frm_tp_and_mddl_rslt
 
 
