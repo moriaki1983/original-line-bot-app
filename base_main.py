@@ -136,12 +136,12 @@ def line_msg_analyze(line_msg_txt):
        rmv_edprtcl_rslt   = argument_sub.remove_endparticle(rmv_symbl_rslt2)
        extrct_intnt_rslt2 = argument_sub.extract_intent_from_short_and_boilerplate(rmv_edprtcl_rslt)
     else:
-       return extrct_intnt_rslt, extrct_cntnt_frm_tp_and_mddl
+       return extrct_intnt_rslt, extrct_cntnt_frm_tp_and_mddl_rslt
     if extrct_intnt_rslt2 == "その他・不明":
        extrct_intnt_rslt_end = argument_sub.extract_intent_from_endnotes(rmv_edprtcl_rslt)
     else:
-       return extrct_intnt_rslt2, extrct_cntnt_frm_tp_and_mddl
-    return extrct_intnt_rslt_end, extrct_cntnt_frm_tp_and_mddl
+       return extrct_intnt_rslt2, extrct_cntnt_frm_tp_and_mddl_rslt
+    return extrct_intnt_rslt_end, extrct_cntnt_frm_tp_and_mddl_rslt
 
 
 #解析されたユーザーのメッセージを基に返信メッセージを生成する
