@@ -67,6 +67,13 @@ def remove_endparticle(rmv_symbl_rslt):
     return rmv_edprtcl_rslt_end 
 
 
+#ユーザーから送られるLINEメッセージの中に含まれるインテントとコンテントを除去する
+def remove_intent_and_content(line_msg_txt):
+    #メッセージの中に含まれる日本語固有のインテントとコンテントを除去する
+    rmv_intnt_and_cntnt_rslt = ""
+    return rmv_intnt_and_cntnt_rslt
+
+
 #ユーザーから送られるLINEメッセージが指定された文字列で開始するかを判定する
 def check_text_start_string(line_msg_txt, str):
     #メッセージの中に指定された文字列が含まれている場合に、メッセージがこの文字列で開始するかを判定する
@@ -200,7 +207,7 @@ def extract_intent_from_gag_vocal_cord_copy_and_etc(line_msg_txt):
           line_msg_txt == "空！前！絶！後！" or
           line_msg_txt == "空！ 前！ 絶！ 後！" or
           line_msg_txt == "空前絶後！"):
-            extrct_intnt_frm_gag_vocl_crd_cpy_and_etc_rslt = "モノマネ(ギャグ＆一発芸)"
+            extrct_intnt_frm_gag_vocl_crd_cpy_and_etc_rslt = "(モノマネ＝ギャグ＆一発芸)"
     elif (line_msg_txt == "にゃー にゃー" or
           line_msg_txt == "ニャー ニャー" or
           line_msg_txt == "にゃーにゃー" or
@@ -271,7 +278,7 @@ def extract_intent_from_gag_vocal_cord_copy_and_etc(line_msg_txt):
           line_msg_txt == "がったんごっとん" or
           line_msg_txt == "ガッタン ゴットン" or
           line_msg_txt == "ガッタンゴットン"):
-            extrct_intnt_frm_gag_vocl_crd_cpy_and_etc_rslt = "モノマネ(声帯模写)"
+            extrct_intnt_frm_gag_vocl_crd_cpy_and_etc_rslt = "(モノマネ＝声帯模写)"
     elif (line_msg_txt == "ぷー" or
           line_msg_txt == "プー" or
           line_msg_txt == "ぷ～" or
@@ -292,24 +299,24 @@ def extract_intent_from_gag_vocal_cord_copy_and_etc(line_msg_txt):
           line_msg_txt == "ヘブシッ" or
           line_msg_txt == "はっくしょん" or
           line_msg_txt == "ハックション"):
-            extrct_intnt_frm_gag_vocl_crd_cpy_and_etc_rslt = "生理現象"
+            extrct_intnt_frm_gag_vocl_crd_cpy_and_etc_rslt = "(生理現象)"
     elif (line_msg_txt == "なあ" or
           line_msg_txt == "なぁ" or
           line_msg_txt == "なあ？" or
           line_msg_txt == "なぁ？" or
           line_msg_txt == "なあ！" or
           line_msg_txt == "なぁ！"):
-            extrct_intnt_frm_gag_vocl_crd_cpy_and_etc_rslt = "呼掛け＆問掛け"        
+            extrct_intnt_frm_gag_vocl_crd_cpy_and_etc_rslt = "(呼掛け＆問掛け)"        
     elif (line_msg_txt == "ブー！ブー！" or
           line_msg_txt == "ブー！ ブー！"):
-            extrct_intnt_frm_gag_vocl_crd_cpy_and_etc_rslt = "ブーイング"
+            extrct_intnt_frm_gag_vocl_crd_cpy_and_etc_rslt = "(ブーイング)"
     elif (line_msg_txt == "分かった" or
           line_msg_txt == "わかった" or
           line_msg_txt == "分かった！" or
           line_msg_txt == "わかった！"):
-            extrct_intnt_frm_gag_vocl_crd_cpy_and_etc_rslt = "理解(感動＆感激)"
+            extrct_intnt_frm_gag_vocl_crd_cpy_and_etc_rslt = "(理解＆認識)(感動＆感激)"
     else:
-            extrct_intnt_frm_gag_vocl_crd_cpy_and_etc_rslt = "その他・不明"
+            extrct_intnt_frm_gag_vocl_crd_cpy_and_etc_rslt = "(その他・不明)"
     return extrct_intnt_frm_gag_vocl_crd_cpy_and_etc_rslt
 
 
@@ -325,7 +332,7 @@ def extract_intent_from_short_and_boilerplate(rmv_edprtcl_rslt):
           rmv_edprtcl_rslt == "ばん" or
           rmv_edprtcl_rslt == "やあ" or
           rmv_edprtcl_rslt == "どうも"):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "挨拶"
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "(挨拶)"
     elif (rmv_edprtcl_rslt == "流石ですね" or
           rmv_edprtcl_rslt == "流石です" or
           rmv_edprtcl_rslt == "流石" or
@@ -385,7 +392,7 @@ def extract_intent_from_short_and_boilerplate(rmv_edprtcl_rslt):
           rmv_edprtcl_rslt == "素敵" or
           rmv_edprtcl_rslt == "すてき" or
           rmv_edprtcl_rslt == "ステキ"):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "称賛＆礼賛"
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "(称賛＆礼賛)"
     elif (rmv_edprtcl_rslt == "変態" or
           rmv_edprtcl_rslt == "へんたい" or
           rmv_edprtcl_rslt == "ヘンタイ" or
@@ -408,7 +415,7 @@ def extract_intent_from_short_and_boilerplate(rmv_edprtcl_rslt):
           rmv_edprtcl_rslt == "カス" or
           rmv_edprtcl_rslt == "ゴミ" or
           rmv_edprtcl_rslt == "ごみ"):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "罵詈＆罵倒"
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "(罵詈＆罵倒)"
     elif (rmv_edprtcl_rslt == "消えてください" or
           rmv_edprtcl_rslt == "消えて" or
           rmv_edprtcl_rslt == "消えろ" or
@@ -428,12 +435,12 @@ def extract_intent_from_short_and_boilerplate(rmv_edprtcl_rslt):
           rmv_edprtcl_rslt == "死んでろ" or
           rmv_edprtcl_rslt == "氏んでろ" or
           rmv_edprtcl_rslt == "しんでろ"):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "人格・存在否定"
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "(人格・存在否定)"
     elif (rmv_edprtcl_rslt == "大天才ですか" or
           rmv_edprtcl_rslt == "天才ですか" or
           rmv_edprtcl_rslt == "秀才ですか" or
           rmv_edprtcl_rslt == "優秀ですか"):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "称賛＆礼賛(半疑問)"
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "(称賛＆礼賛)(半疑問)"
     elif (rmv_edprtcl_rslt == "無能ですか" or
           rmv_edprtcl_rslt == "バカですか" or
           rmv_edprtcl_rslt == "アホですか" or
@@ -445,7 +452,7 @@ def extract_intent_from_short_and_boilerplate(rmv_edprtcl_rslt):
           rmv_edprtcl_rslt == "くずですか" or
           rmv_edprtcl_rslt == "かすですか" or
           rmv_edprtcl_rslt == "ごみですか"):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "罵詈＆罵倒(半疑問)"
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "(罵詈＆罵倒)(半疑問)"
     elif (rmv_edprtcl_rslt == "何をしていますか" or
           rmv_edprtcl_rslt == "何をしてますか" or
           rmv_edprtcl_rslt == "何してますか" or
@@ -454,7 +461,7 @@ def extract_intent_from_short_and_boilerplate(rmv_edprtcl_rslt):
           rmv_edprtcl_rslt == "なにしてますか" or
           rmv_edprtcl_rslt == "どうしていますか" or
           rmv_edprtcl_rslt == "どうしてますか"):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "質問＆確認(現在進行)(状態＆状況)"
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "(質問＆確認)(現在進行)(状態＆状況)"
     elif (rmv_edprtcl_rslt == "何をしてきましたか" or
           rmv_edprtcl_rslt == "何をしてましたか" or
           rmv_edprtcl_rslt == "何してましたか" or
@@ -465,7 +472,7 @@ def extract_intent_from_short_and_boilerplate(rmv_edprtcl_rslt):
           rmv_edprtcl_rslt == "なにしてた" or
           rmv_edprtcl_rslt == "どうしてきましたか" or
           rmv_edprtcl_rslt == "どうしてましたか"):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "質問＆確認(過去完了)(状態＆状況)"
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "(質問＆確認)(過去完了)(状態＆状況)"
     elif (rmv_edprtcl_rslt == "何をしますか" or
           rmv_edprtcl_rslt == "何しますか" or
           rmv_edprtcl_rslt == "なにをしますか" or
@@ -480,7 +487,7 @@ def extract_intent_from_short_and_boilerplate(rmv_edprtcl_rslt):
           rmv_edprtcl_rslt == "どうしたいですか" or
           rmv_edprtcl_rslt == "どうしますか" or
           rmv_edprtcl_rslt == "どうします"):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "質問＆確認(現在)(欲求＆欲動)"
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "(質問＆確認)(現在)(欲求＆欲動)"
     elif (rmv_edprtcl_rslt == "何をしたかったのですか" or
           rmv_edprtcl_rslt == "何をしたかったんですか" or
           rmv_edprtcl_rslt == "何したかったのですか" or
@@ -594,9 +601,9 @@ def extract_intent_from_short_and_boilerplate(rmv_edprtcl_rslt):
           rmv_edprtcl_rslt == "大変" or
           rmv_edprtcl_rslt == "疲れた" or
           rmv_edprtcl_rslt == "つかれた"):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "訴求＆表現(感情＆心理＆精神＆肉体)"
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "(訴求＆表現)(感情＆心理＆精神＆肉体)"
     elif rmv_edprtcl_rslt == "海":
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "掛合い"
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "(掛合い)"
     elif (rmv_edprtcl_rslt == "最初は グ" or
           rmv_edprtcl_rslt == "最初はグ" or
           rmv_edprtcl_rslt == "じゃんけんぽん" or
@@ -604,11 +611,11 @@ def extract_intent_from_short_and_boilerplate(rmv_edprtcl_rslt):
           rmv_edprtcl_rslt == "ジャンケンポン" or
           rmv_edprtcl_rslt == "ジャンケン" or
           rmv_edprtcl_rslt == "ジャンケンぽん"):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "遊戯"
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "(遊戯)"
     elif (rmv_edprtcl_rslt == "お願いします" or
           rmv_edprtcl_rslt == "お願いです" or
           rmv_edprtcl_rslt == "お願い"):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "依頼・依願"
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "(依頼・依願)"
     elif (rmv_edprtcl_rslt == "御免なさい" or
           rmv_edprtcl_rslt == "御免" or
           rmv_edprtcl_rslt == "ごめんなさい" or
@@ -617,14 +624,14 @@ def extract_intent_from_short_and_boilerplate(rmv_edprtcl_rslt):
           rmv_edprtcl_rslt == "メンゴ メンゴ" or
           rmv_edprtcl_rslt == "メンゴメンゴ" or
           rmv_edprtcl_rslt == "メンゴ"):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "陳謝・謝罪"
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "(陳謝・謝罪)"
     elif (rmv_edprtcl_rslt == "承知いたしました" or
           rmv_edprtcl_rslt == "承知しました" or
           rmv_edprtcl_rslt == "承知した" or
           rmv_edprtcl_rslt == "承知" or
           rmv_edprtcl_rslt == "かしこまりました" or
           rmv_edprtcl_rslt == "かしこまり"):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "承知・承諾"
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "(承知・承諾)"
     elif (rmv_edprtcl_rslt == "了解いたしました" or
           rmv_edprtcl_rslt == "了解しました" or
           rmv_edprtcl_rslt == "了解した" or
@@ -635,7 +642,7 @@ def extract_intent_from_short_and_boilerplate(rmv_edprtcl_rslt):
           rmv_edprtcl_rslt == "わかりました" or
           rmv_edprtcl_rslt == "分かった" or
           rmv_edprtcl_rslt == "わかった"):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "了承・了解"
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "(了承・了解)"
     elif (rmv_edprtcl_rslt == "愛しています" or
           rmv_edprtcl_rslt == "愛してます" or
           rmv_edprtcl_rslt == "愛してる" or
@@ -646,9 +653,9 @@ def extract_intent_from_short_and_boilerplate(rmv_edprtcl_rslt):
           rmv_edprtcl_rslt == "好き" or
           rmv_edprtcl_rslt == "すき" or
           rmv_edprtcl_rslt == "スキ"):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "訴求＆表現(求愛＆発情)"
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "(訴求＆表現)(求愛＆発情)"
     else:
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "その他・不明"
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "(その他・不明)"
     return extrct_intnt_frm_shrt_and_blrplt_rslt
 
 
