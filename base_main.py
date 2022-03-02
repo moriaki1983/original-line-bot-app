@@ -130,7 +130,7 @@ def line_msg_analyze(line_msg_txt):
     #ユーザーから送られるLINEメッセージを解析し、インテントとコンテントを抽出して、これを呼出し元に引渡しをする
     rmv_symbl_rslt1   = argument_sub.remove_symbol(line_msg_txt)
     rmv_edprtcl_rslt1 = argument_sub.remove_endparticle(rmv_symbl_rslt1)
-    extrct_cntnt_frm_tp_and_mddl = extract_content_from_top_and_middle(rmv_edprtcl_rslt1)
+    extrct_cntnt_frm_tp_and_mddl = argument_sub.extract_content_from_top_and_middle(rmv_edprtcl_rslt1)
     extrct_intnt_rslt = argument_sub.extract_intent_from_gag_vocal_cord_copy_and_etc(line_msg_txt)
     if extrct_intnt_rslt == "その他・不明":
        rmv_symbl_rslt2    = argument_sub.remove_symbol(line_msg_txt)
