@@ -127,30 +127,30 @@ def handle_follow(event):
 def line_msg_analyze(line_msg_txt):
     #ユーザーから送られるLINEメッセージをJanomeで形態素解析する
     #line_msg_anlyz_rslt = argument_sub.line_msg_morpho_analyze(line_msg_txt)
-    
-    #ユーザーから送られるLINEメッセージを解析し、インテントを抽出して、これを呼出し元に引渡しをする    
+    #ユーザーから送られるLINEメッセージを解析し、インテントとコンテントを抽出して、これを呼出し元に引渡しをする
+    rmv_symbl_rslt1   = argument_sub.remove_symbol(line_msg_txt)
+    rmv_edprtcl_rslt1 = argument_sub.remove_endparticle(rmv_symbl_rslt1)
+    extrct_cntnt_frm_tp_and_mddl = extract_content_from_top_and_middle(rmv_edprtcl_rslt1)
     extrct_intnt_rslt = argument_sub.extract_intent_from_gag_vocal_cord_copy_and_etc(line_msg_txt)
     if extrct_intnt_rslt == "その他・不明":
-       rmv_symbl_rslt     = argument_sub.remove_symbol(line_msg_txt)
-       rmv_edprtcl_rslt   = argument_sub.remove_endparticle(rmv_symbl_rslt)
-       extrct_intnt_rslt2 = argument_sub.extract_intent_from_short_and_boilerplate(rmv_edprtcl_rslt)
+       rmv_symbl_rslt2    = argument_sub.remove_symbol(line_msg_txt)
+       rmv_edprtcl_rslt2  = argument_sub.remove_endparticle(rmv_symbl_rslt2)
+       extrct_intnt_rslt2 = argument_sub.extract_intent_from_short_and_boilerplate(rmv_edprtcl_rslt2)
     else:
-       line_msg_anlyz_rslt =  extrct_intnt_rslt
-       return line_msg_anlyz_rslt
+       return extrct_intnt_rslt, extrct_cntnt_frm_tp_and_mddl
     if extrct_intnt_rslt2 == "その他・不明":
-       extrct_intnt_rslt_end = argument_sub.extract_intent_from_endnotes(rmv_edprtcl_rslt)
+       extrct_intnt_rslt_end = argument_sub.extract_intent_from_endnotes(rmv_edprtcl_rslt2)
        line_msg_anlyz_rslt   = extrct_intnt_rslt_end
     else:
-       line_msg_anlyz_rslt = extrct_intnt_rslt2
-       return line_msg_anlyz_rslt
-    return extrct_intnt_rslt_end
+       return extrct_intnt_rslt2, extrct_cntnt_frm_tp_and_mddl
+    return extrct_intnt_rslt_end, extrct_cntnt_frm_tp_and_mddl
 
 
 #解析されたユーザーのメッセージを基に返信メッセージを生成する
 def line_msg_generate(line_msg_anlyz_rslt):
     #解析後のLINEメッセージの主語を置き換え、「/」で文節に分けて、呼出し元に引渡しをする
     #line_msg_gnrt_rslt = "/".join(line_msg_anlyz_rslt)
-    line_msg_gnrt_rslt = line_msg_anlyz_rslt
+    line_msg_gnrt_rslt = "インテント: " + line_msg_anlyz_rslt[0] + "\n" + "コンテント: " + line_msg_anlyz_rslt[1] + "\n"
     return line_msg_gnrt_rslt
 
 
