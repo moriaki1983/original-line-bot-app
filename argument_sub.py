@@ -796,51 +796,51 @@ def extract_intent_from_endnotes(rmv_edprtcl_rslt):
 
 
 #LINEメッセージの先頭・中間部分からコンテント(＝意図されるもの)を抽出する
-def extract_content_from_top_and_middle(rmv_symbl_rslt):
+def extract_content_from_top_and_middle(line_msg_txt):
     #メッセージの中に含まれる記号を除去して、メッセージの先頭・中間部分部分からコンテントを抽出して、これを呼出し元に引渡しをする
-    if  (check_text_start_string(rmv_symbl_rslt, "さて") or
-         check_text_start_string(rmv_symbl_rslt, "ところで")):
-           extrct_cntnt_frm_tp_and_mddl_rslt = "転換＆切替"
-    if  (check_text_start_string(rmv_symbl_rslt, "そして") or
-         check_text_start_string(rmv_symbl_rslt, "そんで")):
-           extrct_cntnt_frm_tp_and_mddl_rslt = "接続"
-    if  (check_text_start_string(rmv_symbl_rslt, "加えて") or
-         check_text_start_string(rmv_symbl_rslt, "さらに") or
-         check_text_start_string(rmv_symbl_rslt, "又") or
-         check_text_start_string(rmv_symbl_rslt, "また")):
-           extrct_cntnt_frm_tp_and_mddl_rslt = "添加＆追加"
-    if  (check_text_start_string(rmv_symbl_rslt, "多分") or
-         check_text_start_string(rmv_symbl_rslt, "たぶん") or
-         check_text_start_string(rmv_symbl_rslt, "恐らくは") or
-         check_text_start_string(rmv_symbl_rslt, "おそらくは") or
-         check_text_start_string(rmv_symbl_rslt, "恐らく") or
-         check_text_start_string(rmv_symbl_rslt, "おそらく")):
-           extrct_cntnt_frm_tp_and_mddl_rslt = "推定＆推測＆推量"
-    if  (check_text_start_string(rmv_symbl_rslt, "又は") or
-         check_text_start_string(rmv_symbl_rslt, "または")):
-           extrct_cntnt_frm_tp_and_mddl_rslt = "論理和"
-    if  (check_text_start_string(rmv_symbl_rslt, "且つ") or
-         check_text_start_string(rmv_symbl_rslt, "かつ")):
-           extrct_cntnt_frm_tp_and_mddl_rslt = "論理積"
-    if  (check_text_start_string(rmv_symbl_rslt, "得てして") or
-         check_text_start_string(rmv_symbl_rslt, "えてして") or
-         check_text_start_string(rmv_symbl_rslt, "大抵は") or
-         check_text_start_string(rmv_symbl_rslt, "大抵") or
-         check_text_start_string(rmv_symbl_rslt, "大概は") or
-         check_text_start_string(rmv_symbl_rslt, "大概")): 
-           extrct_cntnt_frm_tp_and_mddl_rslt = "概要＆概略"
-    if  (check_text_start_string(rmv_symbl_rslt, "確実に") or
-         check_text_start_string(rmv_symbl_rslt, "明らかに") or
-         check_text_start_string(rmv_symbl_rslt, "多くの場合は") or
-         check_text_start_string(rmv_symbl_rslt, "多くの場合") or
-         check_text_start_string(rmv_symbl_rslt, "多くは") or
-         check_text_start_string(rmv_symbl_rslt, "多く") or
-         check_text_start_string(rmv_symbl_rslt, "少なくとも")):
-           extrct_cntnt_frm_tp_and_mddl_rslt = "断定＆確定"
-    if  check_text_start_string(rmv_symbl_rslt, "大層"):
-           extrct_cntnt_frm_tp_and_mddl_rslt = "程度強調"
+    if   (check_text_start_string(line_msg_txt, "さて") or
+          check_text_start_string(line_msg_txt, "ところで")):
+            extrct_cntnt_frm_tp_and_mddl_rslt = "転換＆切替"
+    elif (check_text_start_string(line_msg_txt, "そして") or
+          check_text_start_string(line_msg_txt, "そんで")):
+            extrct_cntnt_frm_tp_and_mddl_rslt = "接続"
+    elif (check_text_start_string(line_msg_txt, "加えて") or
+          check_text_start_string(line_msg_txt, "さらに") or
+          check_text_start_string(line_msg_txt, "又") or
+          check_text_start_string(line_msg_txt, "また")):
+            extrct_cntnt_frm_tp_and_mddl_rslt = "添加＆追加"
+    elif (check_text_start_string(line_msg_txt, "多分") or
+          check_text_start_string(line_msg_txt, "たぶん") or
+          check_text_start_string(line_msg_txt, "恐らくは") or
+          check_text_start_string(line_msg_txt, "おそらくは") or
+          check_text_start_string(line_msg_txt, "恐らく") or
+          check_text_start_string(line_msg_txt, "おそらく")):
+            extrct_cntnt_frm_tp_and_mddl_rslt = "推定＆推測＆推量"
+    elif (check_text_start_string(line_msg_txt, "又は") or
+          check_text_start_string(line_msg_txt, "または")):
+            extrct_cntnt_frm_tp_and_mddl_rslt = "論理和"
+    elif (check_text_start_string(line_msg_txt, "且つ") or
+          check_text_start_string(line_msg_txt, "かつ")):
+            extrct_cntnt_frm_tp_and_mddl_rslt = "論理積"
+    elif (check_text_start_string(line_msg_txt, "得てして") or
+          check_text_start_string(line_msg_txt, "えてして") or
+          check_text_start_string(line_msg_txt, "大抵は") or
+          check_text_start_string(line_msg_txt, "大抵") or
+          check_text_start_string(line_msg_txt, "大概は") or
+          check_text_start_string(line_msg_txt, "大概")): 
+            extrct_cntnt_frm_tp_and_mddl_rslt = "概要＆概略"
+    elif (check_text_start_string(line_msg_txt, "確実に") or
+          check_text_start_string(line_msg_txt, "明らかに") or
+          check_text_start_string(line_msg_txt, "多くの場合は") or
+          check_text_start_string(line_msg_txt, "多くの場合") or
+          check_text_start_string(line_msg_txt, "多くは") or
+          check_text_start_string(line_msg_txt, "多く") or
+          check_text_start_string(line_msg_txt, "少なくとも")):
+            extrct_cntnt_frm_tp_and_mddl_rslt = "断定＆確定"
+    elif  check_text_start_string(line_msg_txt, "大層"):
+            extrct_cntnt_frm_tp_and_mddl_rslt = "程度強調"
     else:
-          extrct_cntnt_frm_tp_and_mddl_rslt = "その他・不明"
+            extrct_cntnt_frm_tp_and_mddl_rslt = "その他・不明"
     return extrct_cntnt_frm_tp_and_mddl_rslt
 
 
