@@ -1,0 +1,2 @@
+①heroku上でメモリーが不足してきたら、アプリを再実行することで、メモリーがリセットされて問題が解消することもある。
+heroku restart --app original-line-bot-app
