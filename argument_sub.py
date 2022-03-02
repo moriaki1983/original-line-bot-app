@@ -693,56 +693,56 @@ def extract_intent_from_endnotes(rmv_edprtcl_rslt):
           check_text_terminated_string(rmv_edprtcl_rslt, "できない")):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "表明＆宣言(現在＆能動＆不可能)"
     elif (check_text_terminated_string(rmv_edprtcl_rslt, "しない")):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "表明＆宣言(未来＆能動＆否定)"
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "(表明＆宣言)(未来)(能動)(否定)"
     elif (check_text_terminated_string(rmv_edprtcl_rslt, "しました") or
           check_text_terminated_string(rmv_edprtcl_rslt, "した") or
           check_text_terminated_string(rmv_edprtcl_rslt, "をやりました") or
           check_text_terminated_string(rmv_edprtcl_rslt, "をやった")):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "表明＆宣言(過去＆能動＆肯定)"
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "(表明＆宣言)(過去)(能動)(肯定)"
     elif (check_text_terminated_string(rmv_edprtcl_rslt, "していません") or
           check_text_terminated_string(rmv_edprtcl_rslt, "してません") or
           check_text_terminated_string(rmv_edprtcl_rslt, "してない")):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "表明＆宣言(過去進行＆能動＆否定)"      
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "(表明＆宣言)(過去進行)(能動)(否定)"      
     elif (check_text_terminated_string(rmv_edprtcl_rslt, "がされています") or
           check_text_terminated_string(rmv_edprtcl_rslt, "はされています") or
           check_text_terminated_string(rmv_edprtcl_rslt, "されています") or
           check_text_terminated_string(rmv_edprtcl_rslt, "されてます") or
           check_text_terminated_string(rmv_edprtcl_rslt, "されてます")):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "表明＆宣言(過去進行＆受動＆肯定)"
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "(表明＆宣言)(過去進行)(受動)(肯定)"
     elif (check_text_terminated_string(rmv_edprtcl_rslt, "がされていません") or
           check_text_terminated_string(rmv_edprtcl_rslt, "はされていません") or
           check_text_terminated_string(rmv_edprtcl_rslt, "されていません") or
           check_text_terminated_string(rmv_edprtcl_rslt, "されてません") or
           check_text_terminated_string(rmv_edprtcl_rslt, "されていない") or
           check_text_terminated_string(rmv_edprtcl_rslt, "されてない")):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "表明＆宣言(過去進行＆受動＆否定)"
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "(表明＆宣言)(過去進行)(受動)(否定)"
     elif (check_text_terminated_string(rmv_edprtcl_rslt, "がされました") or
           check_text_terminated_string(rmv_edprtcl_rslt, "はされました") or
           check_text_terminated_string(rmv_edprtcl_rslt, "されました") or
           check_text_terminated_string(rmv_edprtcl_rslt, "された")):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "表明＆宣言(過去完了＆受動＆肯定)"
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "(表明＆宣言)(過去完了)(受動)(肯定)"
     elif (check_text_terminated_string(rmv_edprtcl_rslt, "でした") or
           check_text_terminated_string(rmv_edprtcl_rslt, "だったです") or
           check_text_terminated_string(rmv_edprtcl_rslt, "だった")):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "表明＆宣言(過去完了＆能受不明＆肯定)"
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "(表明＆宣言)(過去完了)(能受不明)(肯定)"
     elif (check_text_terminated_string(rmv_edprtcl_rslt, "ではなかったです") or
           check_text_terminated_string(rmv_edprtcl_rslt, "ではなかった") or
           check_text_terminated_string(rmv_edprtcl_rslt, "でなかった")):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "表明＆宣言(過去完了＆能受不明＆否定)"
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "(表明＆宣言)(過去完了)(能受不明)(否定)"
     elif (check_text_terminated_string(rmv_edprtcl_rslt, "していきたい") or
           check_text_terminated_string(rmv_edprtcl_rslt, "をやっていきたい")):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "表明＆宣言(現在＆未来＆持続＆能動＆肯定)"
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "(表明＆宣言)(現在＆未来)(持続)(能動)肯定)"
     elif (check_text_terminated_string(rmv_edprtcl_rslt, "していきたくない") or
           check_text_terminated_string(rmv_edprtcl_rslt, "をやっていかない")):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "表明＆宣言(現在＆未来＆持続＆能動＆否定)"
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "(表明＆宣言)(現在＆未来)(持続)(能動)(否定)"
     elif (check_text_terminated_string(rmv_edprtcl_rslt, "ではなかったです") or
           check_text_terminated_string(rmv_edprtcl_rslt, "ではなかった") or
           check_text_terminated_string(rmv_edprtcl_rslt, "でなかった")):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "表明＆宣言(現在＆未来＆持続＆能動＆否定)"
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "(表明＆宣言)(現在＆未来)持続)(能動)(否定)"
     elif (check_text_terminated_string(rmv_edprtcl_rslt, "ですから") or
           check_text_terminated_string(rmv_edprtcl_rslt, "です") or
           check_text_terminated_string(rmv_edprtcl_rslt, "ます")):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "紹介＆説明＆提示＆表明＆宣言(時制不明＆能受不明)"
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "(紹介＆説明＆提示)(表明＆宣言)(時制不明)(能受不明)"
     elif (check_text_terminated_string(rmv_edprtcl_rslt, "ってました") or
           check_text_terminated_string(rmv_edprtcl_rslt, "ってた")):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "(報告＆連絡)(過去＆能動)"
@@ -760,7 +760,7 @@ def extract_intent_from_endnotes(rmv_edprtcl_rslt):
           check_text_terminated_string(rmv_edprtcl_rslt, "やりたい")):
             extrct_intnt_frm_shrt_and_blrplt_rslt = "(欲求＆欲動)"
     elif (check_text_terminated_string(rmv_edprtcl_rslt, "いいです")):
-            extrct_intnt_frm_shrt_and_blrplt_rslt = "許可＆認可" 
+            extrct_intnt_frm_shrt_and_blrplt_rslt = "許可＆認可)" 
     elif (check_text_terminated_string(rmv_edprtcl_rslt, "しないように") or
           check_text_terminated_string(rmv_edprtcl_rslt, "しないよう") or
           check_text_terminated_string(rmv_edprtcl_rslt, "するな") or
@@ -856,7 +856,7 @@ def extract_content_from_top_and_middle(line_msg_txt):
           check_text_start_string(line_msg_txt, "多く") or
           check_text_start_string(line_msg_txt, "少なくとも")):
             extrct_cntnt_frm_tp_and_mddl_rslt = "(断定＆確定)"
-    elif  check_text_start_string(line_msg_txt, "大層"):
+    elif  check_text_start_string(line_msg_txt, "(大層"):
             extrct_cntnt_frm_tp_and_mddl_rslt = "(程度強調)"
     elif (check_text_start_string(line_msg_txt, "なので") or
           check_text_start_string(line_msg_txt, "ですから")):
