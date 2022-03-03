@@ -67,13 +67,6 @@ def remove_endparticle(rmv_symbl_rslt):
     return rmv_edprtcl_rslt_end 
 
 
-#ユーザーから送られるLINEメッセージの中に含まれるインテントとコンテントを除去する
-def remove_intent_and_content(line_msg_txt):
-    #メッセージの中に含まれる日本語固有のインテントとコンテントを除去する
-    rmv_intnt_and_cntnt_rslt = ""
-    return rmv_intnt_and_cntnt_rslt
-
-
 #ユーザーから送られるLINEメッセージが指定された文字列で開始するかを判定する
 def check_text_start_string(line_msg_txt, str):
     #メッセージの中に指定された文字列が含まれている場合に、メッセージがこの文字列で開始するかを判定する
@@ -101,6 +94,13 @@ def line_msg_morpho_analyze(line_msg_txt):
     for tkn in tkns:
         anlyz_rslt.append(tkn.surface)
     return anlyz_rslt
+
+
+#ユーザーから送られるLINEメッセージの中に含まれるインテントとコンテントを除去する
+def remove_intent_and_content(line_msg_txt):
+    #メッセージの中に含まれる日本語固有のインテントとコンテントを除去する
+    rmv_intnt_and_cntnt_rslt = ""
+    return rmv_intnt_and_cntnt_rslt
 
 
 #ユーザーから送られるLINEメッセージをJanomeで形態素解析する(見出しと品詞のセットをリストにして出力する)
@@ -882,17 +882,21 @@ def extract_content_from_top_and_middle(line_msg_txt):
             extrct_cntnt_frm_tp_and_mddl_rslt = "(概要＆概略)"
     elif (check_text_start_string(line_msg_txt, "確実に") or
           check_text_start_string(line_msg_txt, "明らかに") or
+          check_text_start_string(line_msg_txt, "多くの場合には") or
           check_text_start_string(line_msg_txt, "多くの場合は") or
           check_text_start_string(line_msg_txt, "多くの場合") or
           check_text_start_string(line_msg_txt, "多くは") or
           check_text_start_string(line_msg_txt, "多く") or
-          check_text_start_string(line_msg_txt, "少なくとも")):
+          check_text_start_string(line_msg_txt, "少なくとも") or
+          check_text_start_string(line_msg_txt, "少なくても")):
             extrct_cntnt_frm_tp_and_mddl_rslt = "(断定＆確定)"
     elif  check_text_start_string(line_msg_txt, "(大層"):
             extrct_cntnt_frm_tp_and_mddl_rslt = "(程度強調)"
     elif (check_text_start_string(line_msg_txt, "なので") or
           check_text_start_string(line_msg_txt, "ですから")):
             extrct_cntnt_frm_tp_and_mddl_rslt = "(説明＆説得)(事由＆理由＆事情＆状況)"
+    elif check_text_start_string(line_msg_txt, "さては"):
+            extrct_cntnt_frm_tp_and_mddl_rslt = "(推定＆推測＆推量)(自然接続＝文末決定型)(文頭)"
     else:
             extrct_cntnt_frm_tp_and_mddl_rslt = "(その他・不明)"
     return extrct_cntnt_frm_tp_and_mddl_rslt
