@@ -1,4 +1,8 @@
 # coding: utf-8
+
+
+
+
 #各モジュールの読み込み
 import os
 import datetime
@@ -27,7 +31,7 @@ DATABASE_URL = os.environ["DATABASE_URL"]
 #postgresデータベース上のテーブル「line_entries」の有無を示す変数を宣言する
 has_db_table = False
 
-#postgresデータベースに登録・格納するLINEメッセージ(＝レコード)のID(＝レコードカウンタ)を示す変数を宣言する
+#postgresデータベースに登録・格納するLINEメッセージ(＝レコード)のID(＝レコードカウンター)を示す変数を宣言する
 rcd_id = "0"
 
 
@@ -36,12 +40,12 @@ rcd_id = "0"
 #postgresデータベース上のテーブル内のレコードを取得して、ブラウザーに引渡しをする
 @app.route("/")
 def show_db_record():
-    #postgresデータベースに接続して、テーブル操作のためのカーソルを用意する
+    #データベースに接続して、テーブル操作のためのカーソルを用意する
     conn = psycopg2.connect(DATABASE_URL)
     conn.set_client_encoding("utf-8") 
     cur  = conn.cursor()
 
-    # データベースから該当IDのLINEメッセージ(＝レコード)を取得し、jsonifyで整形して呼出し元に引き渡しをする
+    # データベースから該当IDのメッセージ(＝レコード)を取得し、jsonifyで整形して呼出し元に引き渡しをする
     global has_db_table
     global rcd_id
     if has_db_table == True:
@@ -62,7 +66,7 @@ def show_db_record():
 #postgresデータベース上のテーブルを破棄する
 @app.route("/table_drop")
 def db_table_drop():
-    #postgresデータベースに接続して、テーブル操作のためのカーソルを用意する
+    #データベースに接続して、テーブル操作のためのカーソルを用意する
     conn = psycopg2.connect(DATABASE_URL)
     conn.set_client_encoding("utf-8") 
     cur  = conn.cursor()
@@ -148,8 +152,6 @@ def line_msg_analyze(line_msg_txt):
 
 #解析されたユーザーのメッセージを基に返信メッセージを生成する
 def line_msg_generate(line_msg_anlyz_rslt):
-    #解析後のLINEメッセージの主語を置き換え、「/」で文節に分けて、呼出し元に引渡しをする
-    #line_msg_gnrt_rslt = "/".join(line_msg_anlyz_rslt)
     line_msg_gnrt_rslt = line_msg_anlyz_rslt
     return line_msg_gnrt_rslt
 
@@ -162,9 +164,9 @@ def line_msg_send(event, line_msg_gnrt_rslt):
 
 #ユーザーから送られるLINEメッセージをpostgresのデータベースに登録・格納する
 def postgres_insert_and_update(event):
-    #postgresデータベースに接続して、テーブル操作のためのカーソルを用意する
+    #データベースに接続して、テーブル操作のためのカーソルを用意する
     conn = psycopg2.connect(DATABASE_URL)
-    conn.set_client_encoding('utf-8') 
+    conn.set_client_encoding("utf-8") 
     cur  = conn.cursor()
 
     #既にテーブルが用意・作成されていれば、それを破棄して新たにテーブルを用意・作成する(メモリー上でフラグが揮発するゆえに、念のため、テーブルの破棄を実施する)
@@ -183,7 +185,7 @@ def postgres_insert_and_update(event):
     speaker = profile.display_name
     msg     = event.message.text
 
-    #該当IDのLINEメッセージ(＝レコード)がなかったら、データベースにインサート(＝挿入)(＝新規に登録・格納)し、既にメッセージがあったらアップデート(＝上書き)する
+    #該当IDのメッセージ(＝レコード)がなかったら、データベースにインサート(＝挿入)(＝新規に登録・格納)し、既にメッセージがあったらアップデート(＝上書き)する
     cur.execute("""SELECT * FROM line_entries WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id})
     rcd = cur.fetchone()
     if rcd is None:
@@ -200,6 +202,41 @@ def postgres_insert_and_update(event):
     conn.commit()
     cur.close()
     conn.close()
+
+
+#postgresのデータベースからレコードを1件取得する
+def postgres_select(rcd_id):
+    #データベースに接続して、テーブル操作のためのカーソルを用意する
+    conn = psycopg2.connect(DATABASE_URL)
+    conn.set_client_encoding("utf-8")
+    cur  = conn.cursor()
+
+    #指定されたIDのレコードをデータベースから個別にセレクトして取得する
+    cur.execute("""SELECT * FROM line_entries WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id})
+    rcd = cur.fetchone()
+
+    #テーブル操作のためのカーソルを破棄して、データベースとの接続を解除する
+    cur.close()
+    conn.close()
+    return rcd
+
+
+#postgresのデータベースからレコードを全件取得する
+def postgres_select_all():
+    #データベースに接続して、テーブル操作のためのカーソルを用意する
+    conn = psycopg2.connect(DATABASE_URL)
+    conn.set_client_encoding("utf-8")
+    cur  = conn.cursor()
+
+    #データベースに登録・格納されている全てのレコードをセレクトして取得する
+    rcd_list = []
+    cur.execute("SELECT * FROM line_entries")
+    rcd_list = cur.fetchall()
+
+    #テーブル操作のためのカーソルを破棄して、データベースとの接続を解除する
+    cur.close()
+    conn.close()
+    return rcd_list
 
 
 

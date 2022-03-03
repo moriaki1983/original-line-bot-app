@@ -1,4 +1,8 @@
 # coding: utf-8
+
+
+
+
 import re
 from janome.tokenizer import Tokenizer
 
@@ -532,12 +536,6 @@ def line_msg_morpho_analyze2(line_msg_txt):
     for tkn in tkns:
         anlyz2_rslt.append([tkn.surface, tkn.part_of_speech])
     return [anlyz2_rslt]
-
-
-#ユーザーから送られるLINEメッセージの中に含まれるコンテントを解析する
-def line_msg_content_analyze(rmv_intnt_rslt):
-    line_msg_cntnt_anlyz_rslt = ""
-    return line_msg_cntnt_anlyz_rslt
 
 
 #LINEメッセージがギャグ＆声帯模写＆その他だったとして、これからインテント(＝意図するもの)を抽出する
@@ -1389,84 +1387,202 @@ def extract_intent_from_endnotes(rmv_edprtcl_rslt):
 
 
 #LINEメッセージの先頭・中間部分からコンテント(＝意図されるもの)を抽出する
-def extract_content_from_top_and_middle(line_msg_txt):
+def extract_content_from_top_and_middle(rmv_edprtcl_rslt):
     #メッセージの先頭・中間部分部分からコンテントを抽出して、これを呼出し元に引渡しをする
-    if   (check_text_start_string(line_msg_txt, "さて") or
-          check_text_start_string(line_msg_txt, "ところで")):
+    if   (check_text_start_string(rmv_edprtcl_rslt, "さて") or
+          check_text_start_string(rmv_edprtcl_rslt, "ところで")):
             extrct_cntnt_frm_tp_and_mddl_rslt = "(転換＆切替)"
-    elif (check_text_start_string(line_msg_txt, "そして") or
-          check_text_start_string(line_msg_txt, "それで") or
-          check_text_start_string(line_msg_txt, "そんで")):
+    elif (check_text_start_string(rmv_edprtcl_rslt, "そして") or
+          check_text_start_string(rmv_edprtcl_rslt, "それで") or
+          check_text_start_string(rmv_edprtcl_rslt, "そんで")):
             extrct_cntnt_frm_tp_and_mddl_rslt = "(結論＆結末)"
-    elif (check_text_start_string(line_msg_txt, "加えて") or
-          check_text_start_string(line_msg_txt, "さらに") or
-          check_text_start_string(line_msg_txt, "又") or
-          check_text_start_string(line_msg_txt, "また")):
+    elif (check_text_start_string(rmv_edprtcl_rslt, "加えて") or
+          check_text_start_string(rmv_edprtcl_rslt, "さらに") or
+          check_text_start_string(rmv_edprtcl_rslt, "又") or
+          check_text_start_string(rmv_edprtcl_rslt, "また")):
             extrct_cntnt_frm_tp_and_mddl_rslt = "(添加＆追加)"
-    elif (check_text_start_string(line_msg_txt, "多分") or
-          check_text_start_string(line_msg_txt, "たぶん") or
-          check_text_start_string(line_msg_txt, "恐らくは") or
-          check_text_start_string(line_msg_txt, "おそらくは") or
-          check_text_start_string(line_msg_txt, "恐らく") or
-          check_text_start_string(line_msg_txt, "おそらく")):
+    elif (check_text_start_string(rmv_edprtcl_rslt, "多分") or
+          check_text_start_string(rmv_edprtcl_rslt, "たぶん") or
+          check_text_start_string(rmv_edprtcl_rslt, "恐らくは") or
+          check_text_start_string(rmv_edprtcl_rslt, "おそらくは") or
+          check_text_start_string(rmv_edprtcl_rslt, "恐らく") or
+          check_text_start_string(rmv_edprtcl_rslt, "おそらく")):
             extrct_cntnt_frm_tp_and_mddl_rslt = "(推定＆推測＆推量)(文頭)"
-    elif (check_text_start_string(line_msg_txt, "又は") or
-          check_text_start_string(line_msg_txt, "または")):
+    elif (check_text_start_string(rmv_edprtcl_rslt, "又は") or
+          check_text_start_string(rmv_edprtcl_rslt, "または")):
             extrct_cntnt_frm_tp_and_mddl_rslt = "(論理和)"
-    elif (check_text_start_string(line_msg_txt, "且つ") or
-          check_text_start_string(line_msg_txt, "かつ")):
+    elif (check_text_start_string(rmv_edprtcl_rslt, "且つ") or
+          check_text_start_string(rmv_edprtcl_rslt, "かつ")):
             extrct_cntnt_frm_tp_and_mddl_rslt = "(論理積)"
-    elif (check_text_start_string(line_msg_txt, "得てして") or
-          check_text_start_string(line_msg_txt, "えてして") or
-          check_text_start_string(line_msg_txt, "概して") or
-          check_text_start_string(line_msg_txt, "大抵は") or
-          check_text_start_string(line_msg_txt, "大抵") or
-          check_text_start_string(line_msg_txt, "大概は") or
-          check_text_start_string(line_msg_txt, "大概")): 
+    elif (check_text_start_string(rmv_edprtcl_rslt, "得てして") or
+          check_text_start_string(rmv_edprtcl_rslt, "えてして") or
+          check_text_start_string(rmv_edprtcl_rslt, "概して") or
+          check_text_start_string(rmv_edprtcl_rslt, "大抵は") or
+          check_text_start_string(rmv_edprtcl_rslt, "大抵") or
+          check_text_start_string(rmv_edprtcl_rslt, "大概は") or
+          check_text_start_string(rmv_edprtcl_rslt, "大概")): 
             extrct_cntnt_frm_tp_and_mddl_rslt = "(概要＆概略)"
-    elif (check_text_start_string(line_msg_txt, "確実に") or
-          check_text_start_string(line_msg_txt, "明らかに") or
-          check_text_start_string(line_msg_txt, "多くの場合には") or
-          check_text_start_string(line_msg_txt, "多くの場合は") or
-          check_text_start_string(line_msg_txt, "多くの場合") or
-          check_text_start_string(line_msg_txt, "多くは") or
-          check_text_start_string(line_msg_txt, "多く") or
-          check_text_start_string(line_msg_txt, "少なくとも") or
-          check_text_start_string(line_msg_txt, "少なくても")):
+    elif (check_text_start_string(rmv_edprtcl_rslt, "確実に") or
+          check_text_start_string(rmv_edprtcl_rslt, "明らかに") or
+          check_text_start_string(rmv_edprtcl_rslt, "多くの場合には") or
+          check_text_start_string(rmv_edprtcl_rslt, "多くの場合は") or
+          check_text_start_string(rmv_edprtcl_rslt, "多くの場合") or
+          check_text_start_string(rmv_edprtcl_rslt, "多くは") or
+          check_text_start_string(rmv_edprtcl_rslt, "多く") or
+          check_text_start_string(rmv_edprtcl_rslt, "少なくとも") or
+          check_text_start_string(rmv_edprtcl_rslt, "少なくても")):
             extrct_cntnt_frm_tp_and_mddl_rslt = "(断定＆確定)"
-    elif  check_text_start_string(line_msg_txt, "(大層"):
+    elif  check_text_start_string(rmv_edprtcl_rslt, "(大層"):
             extrct_cntnt_frm_tp_and_mddl_rslt = "(程度強調)"
-    elif (check_text_start_string(line_msg_txt, "なので") or
-          check_text_start_string(line_msg_txt, "ですから")):
+    elif (check_text_start_string(rmv_edprtcl_rslt, "なので") or
+          check_text_start_string(rmv_edprtcl_rslt, "ですから")):
             extrct_cntnt_frm_tp_and_mddl_rslt = "(説明＆説得)(事由＆理由＆事情＆状況)"
-    elif check_text_start_string(line_msg_txt, "さては"):
+    elif check_text_start_string(rmv_edprtcl_rslt, "さては"):
             extrct_cntnt_frm_tp_and_mddl_rslt = "(推定＆推測＆推量)(自然接続＝文末決定型)(文頭)"
-    elif (check_text_start_string(line_msg_txt, "もしも") or
-          check_text_start_string(line_msg_txt, "もし")):
+    elif (check_text_start_string(rmv_edprtcl_rslt, "もしも") or
+          check_text_start_string(rmv_edprtcl_rslt, "もし")):
             extrct_cntnt_frm_tp_and_mddl_rslt = "(仮定＆仮説)(原因＆要因＆事情＆状況＆状態)"
-    elif (check_text_start_string(line_msg_txt, "例えば") or
-          check_text_start_string(line_msg_txt, "たとえば") or
-          check_text_start_string(line_msg_txt, "例すれば") or
-          check_text_start_string(line_msg_txt, "例せば")):
+    elif (check_text_start_string(rmv_edprtcl_rslt, "例えば") or
+          check_text_start_string(rmv_edprtcl_rslt, "たとえば") or
+          check_text_start_string(rmv_edprtcl_rslt, "例すれば") or
+          check_text_start_string(rmv_edprtcl_rslt, "例せば")):
             extrct_cntnt_frm_tp_and_mddl_rslt = "(比喩＆類例)"
-    elif (check_text_start_string(line_msg_txt, "類すれば") or
-          check_text_start_string(line_msg_txt, "類せば")):
+    elif (check_text_start_string(rmv_edprtcl_rslt, "類すれば") or
+          check_text_start_string(rmv_edprtcl_rslt, "類せば")):
             extrct_cntnt_frm_tp_and_mddl_rslt = "(仮定＆仮説)(比較＆類似)"
-    elif (check_text_start_string(line_msg_txt, "譬え") or
-          check_text_start_string(line_msg_txt, "たとえ") or
-          check_text_start_string(line_msg_txt, "仮に")):
+    elif (check_text_start_string(rmv_edprtcl_rslt, "譬え") or
+          check_text_start_string(rmv_edprtcl_rslt, "たとえ") or
+          check_text_start_string(rmv_edprtcl_rslt, "仮に")):
             extrct_cntnt_frm_tp_and_mddl_rslt = "(仮定＆仮説)(特別・特例言及)"
-    elif (check_text_start_string(line_msg_txt, "或いは") or
-          check_text_start_string(line_msg_txt, "あるいは")):
+    elif (check_text_start_string(rmv_edprtcl_rslt, "或いは") or
+          check_text_start_string(rmv_edprtcl_rslt, "あるいは")):
             extrct_cntnt_frm_tp_and_mddl_rslt = "(選択＆追求)(可能性)"
-    elif (check_text_start_string(line_msg_txt, "若しくは") or
-          check_text_start_string(line_msg_txt, "もしくは") or
-          check_text_start_string(line_msg_txt, "もしか")):
+    elif (check_text_start_string(rmv_edprtcl_rslt, "若しくは") or
+          check_text_start_string(rmv_edprtcl_rslt, "もしくは") or
+          check_text_start_string(rmv_edprtcl_rslt, "もしか")):
             extrct_cntnt_frm_tp_and_mddl_rslt = "(選択＆追求)(可能性)(代理＆代替)(対名詞・存在)"
-    elif (check_text_start_string(line_msg_txt, "乃至は") or
-          check_text_start_string(line_msg_txt, "ないしは") or
-          check_text_start_string(line_msg_txt, "ないし")):
+    elif (check_text_start_string(rmv_edprtcl_rslt, "乃至は") or
+          check_text_start_string(rmv_edprtcl_rslt, "ないしは") or
+          check_text_start_string(rmv_edprtcl_rslt, "ないし")):
             extrct_cntnt_frm_tp_and_mddl_rslt = "(選択＆追求)(可能性)(代理＆代替)(対動詞・行為)"
     else:
             extrct_cntnt_frm_tp_and_mddl_rslt = "(その他・不明)"
     return extrct_cntnt_frm_tp_and_mddl_rslt
+
+
+#ユーザーから送られるLINEメッセージの中に含まれるコンテントを解析する
+def content_analyze(rmv_intnt_rslt):
+    cntnt_anlyz_rslt = ""
+    return cntnt_anlyz_rslt
+
+
+#ユーザーから送られるLINEメッセージの中に含まれるコンテントを除去する
+def remove_content(rmv_edprtcl_rslt):
+    #メッセージの中に含まれる日本語固有のコンテントを除去する
+    rmv_cnddt_cntnt = []
+    if   (check_text_start_string(rmv_edprtcl_rslt, "さて"):
+rmv_cnddt_cntnt.append("")
+          check_text_start_string(rmv_edprtcl_rslt, "ところで"):
+rmv_cnddt_cntnt.append("")
+    if (check_text_start_string(rmv_edprtcl_rslt, "そして"):
+rmv_cnddt_cntnt.append("")
+          check_text_start_string(rmv_edprtcl_rslt, "それで"):
+rmv_cnddt_cntnt.append("")
+          check_text_start_string(rmv_edprtcl_rslt, "そんで"):
+rmv_cnddt_cntnt.append("")
+    if (check_text_start_string(rmv_edprtcl_rslt, "加えて"):
+rmv_cnddt_cntnt.append("")
+          check_text_start_string(rmv_edprtcl_rslt, "さらに"):
+rmv_cnddt_cntnt.append("")
+          check_text_start_string(rmv_edprtcl_rslt, "又"):
+rmv_cnddt_cntnt.append("")
+          check_text_start_string(rmv_edprtcl_rslt, "また"):
+rmv_cnddt_cntnt.append("")
+    if check_text_start_string(rmv_edprtcl_rslt, "多分"):
+rmv_cnddt_cntnt.append("")
+          check_text_start_string(rmv_edprtcl_rslt, "たぶん"):
+rmv_cnddt_cntnt.append("")
+          check_text_start_string(rmv_edprtcl_rslt, "恐らくは"):
+rmv_cnddt_cntnt.append("")
+          check_text_start_string(rmv_edprtcl_rslt, "おそらくは"):
+rmv_cnddt_cntnt.append("")
+          check_text_start_string(rmv_edprtcl_rslt, "恐らく"):
+rmv_cnddt_cntnt.append("")
+          check_text_start_string(rmv_edprtcl_rslt, "おそらく"):
+rmv_cnddt_cntnt.append("")
+    if (check_text_start_string(rmv_edprtcl_rslt, "又は"):
+rmv_cnddt_cntnt.append("")
+          check_text_start_string(rmv_edprtcl_rslt, "または"):
+rmv_cnddt_cntnt.append("")
+    if (check_text_start_string(rmv_edprtcl_rslt, "且つ"):
+rmv_cnddt_cntnt.append("")
+          check_text_start_string(rmv_edprtcl_rslt, "かつ")):
+            extrct_cntnt_frm_tp_and_mddl_rslt = "(論理積)"
+    if (check_text_start_string(rmv_edprtcl_rslt, "得てして") or
+          check_text_start_string(rmv_edprtcl_rslt, "えてして") or
+          check_text_start_string(rmv_edprtcl_rslt, "概して") or
+          check_text_start_string(rmv_edprtcl_rslt, "大抵は") or
+          check_text_start_string(rmv_edprtcl_rslt, "大抵") or
+          check_text_start_string(rmv_edprtcl_rslt, "大概は") or
+          check_text_start_string(rmv_edprtcl_rslt, "大概")): 
+            extrct_cntnt_frm_tp_and_mddl_rslt = "(概要＆概略)"
+    if (check_text_start_string(rmv_edprtcl_rslt, "確実に") or
+          check_text_start_string(rmv_edprtcl_rslt, "明らかに") or
+          check_text_start_string(rmv_edprtcl_rslt, "多くの場合には") or
+          check_text_start_string(rmv_edprtcl_rslt, "多くの場合は") or
+          check_text_start_string(rmv_edprtcl_rslt, "多くの場合") or
+          check_text_start_string(rmv_edprtcl_rslt, "多くは") or
+          check_text_start_string(rmv_edprtcl_rslt, "多く") or
+          check_text_start_string(rmv_edprtcl_rslt, "少なくとも") or
+          check_text_start_string(rmv_edprtcl_rslt, "少なくても")):
+            extrct_cntnt_frm_tp_and_mddl_rslt = "(断定＆確定)"
+    if  check_text_start_string(rmv_edprtcl_rslt, "(大層"):
+          extrct_cntnt_frm_tp_and_mddl_rslt = "(程度強調)"
+    if (check_text_start_string(rmv_edprtcl_rslt, "なので") or
+          check_text_start_string(rmv_edprtcl_rslt, "ですから")):
+            extrct_cntnt_frm_tp_and_mddl_rslt = "(説明＆説得)(事由＆理由＆事情＆状況)"
+    if check_text_start_string(rmv_edprtcl_rslt, "さては"):
+            extrct_cntnt_frm_tp_and_mddl_rslt = "(推定＆推測＆推量)(自然接続＝文末決定型)(文頭)"
+    if (check_text_start_string(rmv_edprtcl_rslt, "もしも") or
+          check_text_start_string(rmv_edprtcl_rslt, "もし")):
+            extrct_cntnt_frm_tp_and_mddl_rslt = "(仮定＆仮説)(原因＆要因＆事情＆状況＆状態)"
+    if (check_text_start_string(rmv_edprtcl_rslt, "例えば") or
+          check_text_start_string(rmv_edprtcl_rslt, "たとえば") or
+          check_text_start_string(rmv_edprtcl_rslt, "例すれば") or
+          check_text_start_string(rmv_edprtcl_rslt, "例せば")):
+            extrct_cntnt_frm_tp_and_mddl_rslt = "(比喩＆類例)"
+    if (check_text_start_string(rmv_edprtcl_rslt, "類すれば") or
+          check_text_start_string(rmv_edprtcl_rslt, "類せば")):
+            extrct_cntnt_frm_tp_and_mddl_rslt = "(仮定＆仮説)(比較＆類似)"
+    if (check_text_start_string(rmv_edprtcl_rslt, "譬え") or
+          check_text_start_string(rmv_edprtcl_rslt, "たとえ") or
+          check_text_start_string(rmv_edprtcl_rslt, "仮に")):
+            extrct_cntnt_frm_tp_and_mddl_rslt = "(仮定＆仮説)(特別・特例言及)"
+    if (check_text_start_string(rmv_edprtcl_rslt, "或いは") or
+          check_text_start_string(rmv_edprtcl_rslt, "あるいは")):
+            extrct_cntnt_frm_tp_and_mddl_rslt = "(選択＆追求)(可能性)"
+    if (check_text_start_string(rmv_edprtcl_rslt, "若しくは") or
+          check_text_start_string(rmv_edprtcl_rslt, "もしくは") or
+          check_text_start_string(rmv_edprtcl_rslt, "もしか")):
+            extrct_cntnt_frm_tp_and_mddl_rslt = "(選択＆追求)(可能性)(代理＆代替)(対名詞・存在)"
+    if (check_text_start_string(rmv_edprtcl_rslt, "乃至は") or
+         check_text_start_string(rmv_edprtcl_rslt, "ないしは") or
+          check_text_start_string(rmv_edprtcl_rslt, "ないし")):
+         rmv_cnddt_cntnt.append("")
+
+    #前段で取得した削除候補の中から実際に削除するインテントを決定して、これを呼出し元に引渡しをする
+    rmv_cnddt_cntnt_list = []
+    for cntnt in rmv_cnddt_cntnt
+        rmv_cnddt_cntnt_list.append([len(cntnt), cntnt])
+    idx       = 0
+    tmp_cntnt = ""
+    for i in rmv_cnddt_cntnt_list
+        if len(rmv_cnddt_cntnt_list) > (i+1):
+           if rmv_cnddt_cntnt_list[i+1][0] > rmv_cnddt_cntnt_list[idx][0]:
+              tmp_cntnt = rmv_cnddt_cntnt_list[i+1][1]
+              idx = i + 1
+           else:
+              continue
+
+    rmv_cntnt_rslt = tmp_cntnt
+    return rmv_cntnt_rslt
