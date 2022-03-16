@@ -1624,18 +1624,6 @@ def extract_intent(rmv_edprtcl_rslt):
           check_text_terminated_string(rmv_edprtcl_rslt, "ではなかった") or
           check_text_terminated_string(rmv_edprtcl_rslt, "でなかった")):
             extrct_intnt_rslt = "(宣言＆表明)(過去完了)(能受不明)(否定)"
-    elif (check_text_terminated_string(rmv_edprtcl_rslt, "をしていきたい") or
-          check_text_terminated_string(rmv_edprtcl_rslt, "をしてたい") or
-          check_text_terminated_string(rmv_edprtcl_rslt, "をやっていきたい")
-          check_text_terminated_string(rmv_edprtcl_rslt, "をやってたい") or
-          check_text_terminated_string(rmv_edprtcl_rslt, "はしていきたい") or
-          check_text_terminated_string(rmv_edprtcl_rslt, "はしてたい") or
-          check_text_terminated_string(rmv_edprtcl_rslt, "はやっていきたい")
-          check_text_terminated_string(rmv_edprtcl_rslt, "はやってたい") or
-          check_text_terminated_string(rmv_edprtcl_rslt, "していきたい") or
-          check_text_terminated_string(rmv_edprtcl_rslt, "してたい") or
-          check_text_terminated_string(rmv_edprtcl_rslt, "いたい")):
-            extrct_intnt_rslt = "(宣言＆表明)(現在＆未来)(持続)(能動)(肯定)"
     elif (check_text_terminated_string(rmv_edprtcl_rslt, "はしていきたくない") or
           check_text_terminated_string(rmv_edprtcl_rslt, "していきたくない") or
           check_text_terminated_string(rmv_edprtcl_rslt, "はしてたくない") or
