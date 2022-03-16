@@ -1543,7 +1543,7 @@ def extract_intent_from_short_and_boilerplate(line_msg_txt):
           line_msg_txt == "ウソですよ" or
           line_msg_txt == "嘘よ" or
           line_msg_txt == "ウソよ" or
-          line_msg_txt == "ウソ ウソ"
+          line_msg_txt == "ウソ ウソ" or
           line_msg_txt == "ウソウソ"):
             extrct_intnt_from_shrt_and_blrplt_rslt = "(宣告)(虚偽であることを告げる)"
     elif (line_msg_txt == "本当ですか" or
