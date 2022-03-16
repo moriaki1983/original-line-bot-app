@@ -41,36 +41,7 @@ def remove_symbol(line_msg_txt):
 #ユーザーから送られるLINEメッセージの中に含まれる終助詞等を除去する
 def remove_endparticle(rmv_symbl_rslt):
     #終助詞等を表す正規表現パターンを用意・作成する
-    pattern   = re.compile(r'よお$')
-    pattern2  = re.compile(r'よぉ$')
-    pattern3  = re.compile(r'よっ$')
-    pattern4  = re.compile(r'ねえ$')
-    pattern5  = re.compile(r'ねぇ$')
-    pattern6  = re.compile(r'ねっ$')
-    pattern7  = re.compile(r'なあ$')
-    pattern8  = re.compile(r'なぁ$')
-    pattern9  = re.compile(r'なっ$')
-    pattern10 = re.compile(r'わあ$')
-    pattern11 = re.compile(r'わぁ$')
-    pattern12 = re.compile(r'わっ$')
-    pattern13 = re.compile(r'ぜえ$')
-    pattern14 = re.compile(r'ぜぇ$')
-    pattern15 = re.compile(r'ぜっ$')
-    pattern16 = re.compile(r'っすよ$')
-    pattern17 = re.compile(r'っすね$')
-    pattern18 = re.compile(r'っす$')
-    pattern19 = re.compile(r'わよ$')
-    pattern20 = re.compile(r'わね$')
-    pattern21 = re.compile(r'ってば$')
-    pattern22 = re.compile(r'ってばよ$')
-    pattern23 = re.compile(r'爆$')
-    pattern24 = re.compile(r'爆笑$')
-    pattern25 = re.compile(r'笑+$')
-    pattern26 = re.compile(r'(わら)+$')
-    pattern27 = re.compile(r'(ワラ)+$')
-    pattern28 = re.compile(r'草+$')
-    pattern29 = re.compile(r'w+$')
-    pattern30 = re.compile(r'W+$')
+
 
     #メッセージの中の正規表現パターンに合致するものを除去する
 
