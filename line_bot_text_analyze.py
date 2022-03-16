@@ -1752,7 +1752,7 @@ def extract_intent(rmv_edprtcl_rslt):
           check_text_terminated_string(rmv_edprtcl_rslt, "してはいけない") or
           check_text_terminated_string(rmv_edprtcl_rslt, "したらいけない") or
           check_text_terminated_string(rmv_edprtcl_rslt, "しちゃいけない") or
-          check_text_terminated_string(rmv_edprtcl_rslt, "しちゃならん"):
+          check_text_terminated_string(rmv_edprtcl_rslt, "しちゃならん")):
             extrct_intnt_rslt = "(勧告)(否定)"
     elif (check_text_terminated_string(rmv_edprtcl_rslt, "がしてはならない") or
           check_text_terminated_string(rmv_edprtcl_rslt, "がしてはいけない") or
