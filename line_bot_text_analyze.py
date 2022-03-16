@@ -1069,7 +1069,7 @@ def extract_intent_from_short_and_boilerplate(line_msg_txt):
           line_msg_txt == "どうしたいですか" or
           line_msg_txt == "どうしたいのかな" or
           line_msg_txt == "どうしたいの") or
-          line_msg_txt == "どうしたい")
+          line_msg_txt == "どうしたい"):
             extrct_intnt_from_shrt_and_blrplt_rslt = "(疑義＆質問＆確認)(現在)(願望・欲求について)(漠然とした様子・様相)"
     elif (line_msg_txt == "どうしたかったのですか" or
           line_msg_txt == "どうしたかったんですか" or
