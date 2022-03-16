@@ -1133,7 +1133,7 @@ def extract_intent_from_short_and_boilerplate(line_msg_txt):
           line_msg_txt == "禁止だ" or
           line_msg_txt == "禁止" or
           line_msg_txt == "いけません" or
-          line_msg_txt == "いけない"
+          line_msg_txt == "いけない" or
           line_msg_txt == "しては駄目です" or
           line_msg_txt == "してはだめです" or
           line_msg_txt == "してはダメです" or
