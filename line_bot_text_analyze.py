@@ -1666,7 +1666,7 @@ def extract_intent(rmv_edprtcl_rslt):
           check_text_terminated_string(rmv_edprtcl_rslt, "をやってたい") or
           check_text_terminated_string(rmv_edprtcl_rslt, "はしていきたい") or
           check_text_terminated_string(rmv_edprtcl_rslt, "はしてたい") or
-          check_text_terminated_string(rmv_edprtcl_rslt, "はやっていきたい")
+          check_text_terminated_string(rmv_edprtcl_rslt, "はやっていきたい") or
           check_text_terminated_string(rmv_edprtcl_rslt, "はやってたい") or
           check_text_terminated_string(rmv_edprtcl_rslt, "していきたい") or
           check_text_terminated_string(rmv_edprtcl_rslt, "してたい") or
