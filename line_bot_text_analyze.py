@@ -1937,7 +1937,7 @@ def extract_intent(rmv_edprtcl_rslt):
           check_text_terminated_string(rmv_edprtcl_rslt, "たいか")):
             extrct_intnt_rslt = "(疑義＆質問＆確認)(願望・欲求について)"
     elif (check_text_terminated_string(rmv_edprtcl_rslt, "いですか")):
-            extrct_intnt_rslt = "(疑義＆質問＆確認)(様子＆様相)(能受不明)")
+            extrct_intnt_rslt = "(疑義＆質問＆確認)(様子＆様相)(能受不明)"
     elif (check_text_terminated_string(rmv_edprtcl_rslt, "をしちゃ駄目ですか") or
           check_text_terminated_string(rmv_edprtcl_rslt, "をしちゃだめですか") or
           check_text_terminated_string(rmv_edprtcl_rslt, "をしちゃダメですか") or
