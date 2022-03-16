@@ -1120,41 +1120,6 @@ def extract_intent_from_short_and_boilerplate(line_msg_txt):
           line_msg_txt == "オケ" or
           line_msg_txt == "OK"):
             extrct_intnt_from_shrt_and_blrplt_rslt = "(許容＆許可)"
-    elif (line_msg_txt == "だめです" or
-          line_msg_txt == "ダメです" or
-          line_msg_txt == "駄目だ" or
-          line_msg_txt == "だめだ" or
-          line_msg_txt == "ダメだ" or
-          line_msg_txt == "駄目" or
-          line_msg_txt == "だめ" or
-          line_msg_txt == "ダメ" or
-          line_msg_txt == "禁止です" or
-          line_msg_txt == "禁止だ" or
-          line_msg_txt == "禁止" or
-          line_msg_txt == "いけません" or
-          line_msg_txt == "いけない"
-          line_msg_txt == "しては駄目です" or
-          line_msg_txt == "してはだめです" or
-          line_msg_txt == "してはダメです" or
-          line_msg_txt == "しては駄目だ" or
-          line_msg_txt == "してはだめだ" or
-          line_msg_txt == "してはダメだ" or
-          line_msg_txt == "しては駄目" or
-          line_msg_txt == "してはだめ" or
-          line_msg_txt == "してはダメ" or
-          line_msg_txt == "するのは禁止です" or
-          line_msg_txt == "するのは禁止" or
-          line_msg_txt == "やるのは禁止です" or
-          line_msg_txt == "やるのは禁止" or
-          line_msg_txt == "してははいけません" or
-          line_msg_txt == "しちゃいけません" or
-          line_msg_txt == "やってはいけません" or
-          line_msg_txt == "やっちゃいけません" or
-          line_msg_txt == "やっちゃ駄目" or
-          line_msg_txt == "やっちゃだめ" or
-          line_msg_txt == "やっちゃダメ" or
-          line_msg_txt == "NG"):
-            extrct_intnt_from_shrt_and_blrplt_rslt = "(禁止＆不許可)"
     elif (line_msg_txt == "ですねえ" or
           line_msg_txt == "ですねぇ" or
           line_msg_txt == "ですね" or
