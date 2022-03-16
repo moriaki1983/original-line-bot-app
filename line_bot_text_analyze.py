@@ -41,7 +41,36 @@ def remove_symbol(line_msg_txt):
 #ユーザーから送られるLINEメッセージの中に含まれる終助詞等を除去する
 def remove_endparticle(rmv_symbl_rslt):
     #終助詞等を表す正規表現パターンを用意・作成する
-
+    pattern   = re.compile("(よお)$")
+    pattern2  = re.compile("(よぉ)$")
+    pattern3  = re.compile("(よっ)$")
+    pattern4  = re.compile("(ねえ)$")
+    pattern5  = re.compile("(ねぇ)$")
+    pattern6  = re.compile("(ねっ)$")
+    pattern7  = re.compile("(なあ)$")
+    pattern8  = re.compile("(なぁ)$")
+    pattern9  = re.compile("(なっ)$")
+    pattern10 = re.compile("(わあ)$")
+    pattern11 = re.compile("(わぁ)$")
+    pattern12 = re.compile("(わっ)$")
+    pattern13 = re.compile("(ぜえ)$")
+    pattern14 = re.compile("(ぜぇ)$")
+    pattern15 = re.compile("(ぜっ)$")
+    pattern16 = re.compile("(っすよ)$")
+    pattern17 = re.compile("(っすね)$")
+    pattern18 = re.compile("(っす)$")
+    pattern19 = re.compile("(わよ)$")
+    pattern20 = re.compile("(わね)$")
+    pattern21 = re.compile("(ってば)$")
+    pattern22 = re.compile("(ってばよ)$")
+    pattern23 = re.compile("(爆)$")
+    pattern24 = re.compile("(爆笑)$")
+    pattern25 = re.compile("(笑)+$")
+    pattern26 = re.compile("(わら)+$")
+    pattern27 = re.compile("(ワラ)+$")
+    pattern28 = re.compile("(草)+$")
+    pattern29 = re.compile("(w)+$")
+    pattern30 = re.compile("(W)+$")
 
     #メッセージの中の正規表現パターンに合致するものを除去する
 
@@ -2244,14 +2273,14 @@ def extract_intent(rmv_edprtcl_rslt):
     elif (check_text_terminated_string(rmv_edprtcl_rslt, "らしくないですよね") or
           check_text_terminated_string(rmv_edprtcl_rslt, "らしくないよね")):
             extrct_intnt_rslt = "(疑義＆質問＆確認)(感想＆感慨)(形容)(否定)"
-   elif  (check_text_terminated_string(rmv_edprtcl_rslt, "という事です") or
+    elif (check_text_terminated_string(rmv_edprtcl_rslt, "という事です") or
           check_text_terminated_string(rmv_edprtcl_rslt, "ということです") or
           check_text_terminated_string(rmv_edprtcl_rslt, "っていう事です") or
           check_text_terminated_string(rmv_edprtcl_rslt, "っていうことです") or
           check_text_terminated_string(rmv_edprtcl_rslt, "って事です") or
           check_text_terminated_string(rmv_edprtcl_rslt, "ってことです")):
             extrct_intnt_rslt = "(紹介＆説明＆提示)(叙述)"
-   elif  (check_text_terminated_string(rmv_edprtcl_rslt, "という事ですか") or
+    elif (check_text_terminated_string(rmv_edprtcl_rslt, "という事ですか") or
           check_text_terminated_string(rmv_edprtcl_rslt, "ということですか") or
           check_text_terminated_string(rmv_edprtcl_rslt, "っていう事ですか") or
           check_text_terminated_string(rmv_edprtcl_rslt, "っていうことですか") or
@@ -2418,7 +2447,7 @@ def extract_subcontent(rmv_edprtcl_rslt):
             extrct_subcntnt_rslt = "(前置き)(最後)"
     elif (check_text_start_string(rmv_edprtcl_rslt, "だけども") or
           check_text_start_string(rmv_edprtcl_rslt, "だけど") or
-    elif  check_text_start_string(rmv_edprtcl_rslt, "それでも") or
+          check_text_start_string(rmv_edprtcl_rslt, "それでも") or
           check_text_start_string(rmv_edprtcl_rslt, "でも")):
             extrct_subcntnt_rslt = "(反駁＆反論)"
     elif (check_text_start_string(rmv_edprtcl_rslt, "言い換えれば") or
@@ -2431,7 +2460,7 @@ def extract_subcontent(rmv_edprtcl_rslt):
             extrct_subcntnt_rslt = "(前置き＆先述)"
     elif (check_text_start_string(rmv_edprtcl_rslt, "初めに断っておくと") or
           check_text_start_string(rmv_edprtcl_rslt, "はじめに断っておくと") or
-    elif (check_text_start_string(rmv_edprtcl_rslt, "初めに断っておくけど") or
+          check_text_start_string(rmv_edprtcl_rslt, "初めに断っておくけど") or
           check_text_start_string(rmv_edprtcl_rslt, "はじめに断っておくけど")):
             extrct_subcntnt_rslt = "(断り＆先述)"
     else:
