@@ -2184,19 +2184,19 @@ def extract_intent(rmv_edprtcl_rslt):
           check_text_terminated_string(rmv_edprtcl_rslt, "をすべきでない") or
           check_text_terminated_string(rmv_edprtcl_rslt, "すべきでない")):
             extrct_intnt_rslt = "(宣言＆表明)(是非)(否定)"
-   elif (check_text_terminated_string(rmv_edprtcl_rslt, "という事でしょう") or
-         check_text_terminated_string(rmv_edprtcl_rslt, "でいうことでしょう") or
-         check_text_terminated_string(rmv_edprtcl_rslt, "という事でしょうね") or
-         check_text_terminated_string(rmv_edprtcl_rslt, "ということでしょうね") or
-         check_text_terminated_string(rmv_edprtcl_rslt, "でしょう") or
-         check_text_terminated_string(rmv_edprtcl_rslt, "でしょうね")):
+    elif (check_text_terminated_string(rmv_edprtcl_rslt, "という事でしょう") or
+          check_text_terminated_string(rmv_edprtcl_rslt, "でいうことでしょう") or
+          check_text_terminated_string(rmv_edprtcl_rslt, "という事でしょうね") or
+          check_text_terminated_string(rmv_edprtcl_rslt, "ということでしょうね") or
+          check_text_terminated_string(rmv_edprtcl_rslt, "でしょう") or
+          check_text_terminated_string(rmv_edprtcl_rslt, "でしょうね")):
             extrct_intnt_rslt = "(推定＆推測＆推量)(進言＆提言)(肯定)"
-   elif (check_text_terminated_string(rmv_edprtcl_rslt, "という事ではないでしょう") or
-         check_text_terminated_string(rmv_edprtcl_rslt, "ということではないでしょう") or
-         check_text_terminated_string(rmv_edprtcl_rslt, "という事ではないでしょうね") or
-         check_text_terminated_string(rmv_edprtcl_rslt, "ということではないでしょうね") or
-         check_text_terminated_string(rmv_edprtcl_rslt, "ではないでしょう") or
-         check_text_terminated_string(rmv_edprtcl_rslt, "ではないでしょうね")):
+    elif (check_text_terminated_string(rmv_edprtcl_rslt, "という事ではないでしょう") or
+          check_text_terminated_string(rmv_edprtcl_rslt, "ということではないでしょう") or
+          check_text_terminated_string(rmv_edprtcl_rslt, "という事ではないでしょうね") or
+          check_text_terminated_string(rmv_edprtcl_rslt, "ということではないでしょうね") or
+          check_text_terminated_string(rmv_edprtcl_rslt, "ではないでしょう") or
+          check_text_terminated_string(rmv_edprtcl_rslt, "ではないでしょうね")):
             extrct_intnt_rslt = "(推定＆推測＆推量)(進言＆提言)(否定)"
     elif (check_text_terminated_string(rmv_edprtcl_rslt, "かも知れないです") or
           check_text_terminated_string(rmv_edprtcl_rslt, "かも知れない") or
