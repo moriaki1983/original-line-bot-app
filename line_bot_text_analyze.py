@@ -419,7 +419,7 @@ def extract_intent_from_gag_vocalcordcopy_and_etc(line_msg_txt):
           line_msg_txt == "うーん" or
           line_msg_txt == "う～ん" or
           line_msg_txt == "うー" or
-          line_msg_txt == "う～):
+          line_msg_txt == "う～"):
             extrct_intnt_from_gag_vclcrdcpy_and_etc_rslt = "(フィラー)(間の引き延ばし)"
     elif (line_msg_txt == "ブー ブー" or
           line_msg_txt == "ブーブー" or
