@@ -1112,7 +1112,7 @@ def extract_intent_from_short_and_boilerplate(line_msg_txt):
           line_msg_txt == "おっけー" or
           line_msg_txt == "オッケー" or
           line_msg_txt == "おけ" or
-          line_msg_txt == "オケ or
+          line_msg_txt == "オケ" or
           line_msg_txt == "OK"):
             extrct_intnt_from_shrt_and_blrplt_rslt = "(許容＆許可)"
     elif (line_msg_txt == "駄目です" or
