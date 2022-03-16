@@ -73,8 +73,67 @@ def remove_endparticle(rmv_symbl_rslt):
     pattern30 = re.compile("(W)+$")
 
     #メッセージの中の正規表現パターンに合致するものを除去する
-
-
+    if pattern.search(rmv_symbl_rslt) == True:
+         rmv_edprtcl_rslt = re.sub(r'よお$', "", rmv_symbl_rslt)
+    if pattern2.search(rmv_symbl_rslt) == True:
+         rmv_edprtcl_rslt = re.sub(r'よぉ$', "", rmv_symbl_rslt)
+    if pattern3.search(rmv_symbl_rslt) == True:
+         rmv_edprtcl_rslt = re.sub(r'よっ$', "", rmv_symbl_rslt)
+    if pattern4.search(rmv_symbl_rslt) == True:
+         rmv_edprtcl_rslt = re.sub(r'ねえ$', "", rmv_symbl_rslt)
+    if pattern5.search(rmv_symbl_rslt) == True:
+         rmv_edprtcl_rslt = re.sub(r'ねぇ$', "", rmv_symbl_rslt)
+    if pattern6.search(rmv_symbl_rslt) == True:
+         rmv_edprtcl_rslt = re.sub(r'ねっ$', "", rmv_symbl_rslt)
+    if pattern7.search(rmv_symbl_rslt) == True:
+         rmv_edprtcl_rslt = re.sub(r'なあ$', "", rmv_symbl_rslt)
+    if pattern8.search(rmv_symbl_rslt) == True:
+         rmv_edprtcl_rslt = re.sub("(わぁ)", "", rmv_symbl_rslt)
+    if pattern9.search(rmv_symbl_rslt) == True:
+         rmv_edprtcl_rslt = re.sub("(わっ)", "", rmv_symbl_rslt)
+    if pattern10.search(rmv_symbl_rslt) == True:
+         rmv_edprtcl_rslt = re.sub("(ぜえ)", "", rmv_symbl_rslt)
+    if pattern11.search(rmv_symbl_rslt) == True:
+         rmv_edprtcl_rslt = re.sub("(ぜぇ)", "", rmv_symbl_rslt)
+    if pattern12.search(rmv_symbl_rslt) == True:
+         rmv_edprtcl_rslt = re.sub("(ぜっ)", "", rmv_symbl_rslt)
+    if pattern13.search(rmv_symbl_rslt) == True:
+         rmv_edprtcl_rslt = re.sub("(よお)", "", rmv_symbl_rslt)
+    if pattern14.search(rmv_symbl_rslt) == True:
+         rmv_edprtcl_rslt = re.sub("(よぉ)", "", rmv_symbl_rslt)
+    if pattern15.search(rmv_symbl_rslt) == True:
+         rmv_edprtcl_rslt = re.sub("(よっ)", "", rmv_symbl_rslt)
+    if pattern16.search(rmv_symbl_rslt) == True:
+         rmv_edprtcl_rslt = re.sub("(っすよ)", "", rmv_symbl_rslt)
+    if pattern17.search(rmv_symbl_rslt) == True:
+         rmv_edprtcl_rslt = re.sub("(っす)", "", rmv_symbl_rslt)
+    if pattern18.search(rmv_symbl_rslt) == True:
+         rmv_edprtcl_rslt = re.sub("(わね)", "", rmv_symbl_rslt)
+    if pattern19.search(rmv_symbl_rslt) == True:
+         rmv_edprtcl_rslt = re.sub("(わよ)", "", rmv_symbl_rslt)
+    if pattern20.search(rmv_symbl_rslt) == True:
+         rmv_edprtcl_rslt = re.sub("(ってば)", "", rmv_symbl_rslt)
+    if pattern21.search(rmv_symbl_rslt) == True:
+         rmv_edprtcl_rslt = re.sub("(笑)", "", rmv_symbl_rslt)
+    if pattern22.search(rmv_symbl_rslt) == True:
+         rmv_edprtcl_rslt = re.sub("(わら)", "", rmv_symbl_rslt)
+    if pattern23.search(rmv_symbl_rslt) == True:
+         rmv_edprtcl_rslt = re.sub("(ワラ)", "", rmv_symbl_rslt)
+    if pattern24.search(rmv_symbl_rslt) == True:
+         rmv_edprtcl_rslt = re.sub("(草)", "", rmv_symbl_rslt)
+    if pattern25.search(rmv_symbl_rslt) == True:
+         rmv_edprtcl_rslt = re.sub("(w)", "", rmv_symbl_rslt)
+    if pattern26.search(rmv_symbl_rslt) == True:
+         rmv_edprtcl_rslt = re.sub("(W)", "", rmv_symbl_rslt)
+    if pattern27.search(rmv_symbl_rslt) == True:
+         rmv_edprtcl_rslt = re.sub("(爆)", "", rmv_symbl_rslt)
+    if pattern28.search(rmv_symbl_rslt) == True:
+         rmv_edprtcl_rslt = re.sub("(爆笑)", "", rmv_symbl_rslt)
+    if pattern29.search(rmv_symbl_rslt) == True:
+         rmv_edprtcl_rslt = re.sub("(爆)", "", rmv_symbl_rslt)
+    if pattern30.search(rmv_symbl_rslt) == True:
+         rmv_edprtcl_rslt = re.sub("(爆笑)", "", rmv_symbl_rslt)
+         
     #メッセージの中に含まれる先頭と末尾の空白と改行を除去する
     #rmv_edprtcl_rslt_end = rmv_edprtcl_rslt.strip()
     #return rmv_edprtcl_rslt_end 
