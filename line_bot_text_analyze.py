@@ -1662,7 +1662,7 @@ def extract_intent(rmv_edprtcl_rslt):
             extrct_intnt_rslt = "(宣言＆表明)(過去完了)(能受不明)(否定)"
     elif (check_text_terminated_string(rmv_edprtcl_rslt, "をしていきたい") or
           check_text_terminated_string(rmv_edprtcl_rslt, "をしてたい") or
-          check_text_terminated_string(rmv_edprtcl_rslt, "をやっていきたい")
+          check_text_terminated_string(rmv_edprtcl_rslt, "をやっていきたい") or
           check_text_terminated_string(rmv_edprtcl_rslt, "をやってたい") or
           check_text_terminated_string(rmv_edprtcl_rslt, "はしていきたい") or
           check_text_terminated_string(rmv_edprtcl_rslt, "はしてたい") or
