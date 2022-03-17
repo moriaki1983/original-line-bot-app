@@ -2247,7 +2247,7 @@ def extract_intent(rmv_edprtcl_rslt):
     elif (check_text_terminated_string(rmv_edprtcl_rslt, "ではないかも知れないです") or
           check_text_terminated_string(rmv_edprtcl_rslt, "ではないかも知れない") or
           check_text_terminated_string(rmv_edprtcl_rslt, "ではないかもしれないです") or
-          check_text_terminated_string(rmv_edprtcl_rslt, "ではないかもしれない" or
+          check_text_terminated_string(rmv_edprtcl_rslt, "ではないかもしれない") or
           check_text_terminated_string(rmv_edprtcl_rslt, "でないかも知れないです") or
           check_text_terminated_string(rmv_edprtcl_rslt, "でないかも知れない") or
           check_text_terminated_string(rmv_edprtcl_rslt, "でないかもしれないです") or
