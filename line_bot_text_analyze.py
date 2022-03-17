@@ -74,9 +74,9 @@ def remove_endparticle(rmv_symbl_rslt):
 
     #メッセージの中の正規表現パターンに合致するものを除去する
     if pattern.search(rmv_symbl_rslt) == True:
-         rmv_edprtcl_rslt = re.sub(r'よお$', "", rmv_symbl_rslt)
+         rmv_edprtcl_rslt = re.sub("(よお)$", "", rmv_symbl_rslt)
     if pattern2.search(rmv_symbl_rslt) == True:
-         rmv_edprtcl_rslt = re.sub(r'よぉ$', "", rmv_symbl_rslt)
+         rmv_edprtcl_rslt = re.sub("(よぉ)$", "", rmv_symbl_rslt)
     if pattern3.search(rmv_symbl_rslt) == True:
          rmv_edprtcl_rslt = re.sub(r'よっ$', "", rmv_symbl_rslt)
     if pattern4.search(rmv_symbl_rslt) == True:
@@ -2289,7 +2289,7 @@ def extract_intent(rmv_edprtcl_rslt):
           check_text_terminated_string(rmv_edprtcl_rslt, "とは思っていなかった") or
           check_text_terminated_string(rmv_edprtcl_rslt, "とは思っていなかったな") or
           check_text_terminated_string(rmv_edprtcl_rslt, "とは思ってなかった") or
-          check_text_terminated_string(rmv_edprtcl_rslt, "とは思ってなかったな" or
+          check_text_terminated_string(rmv_edprtcl_rslt, "とは思ってなかったな") or
           check_text_terminated_string(rmv_edprtcl_rslt, "と思っていませんでした") or
           check_text_terminated_string(rmv_edprtcl_rslt, "と思っていなかった") or
           check_text_terminated_string(rmv_edprtcl_rslt, "と思っていなかったな") or                             
