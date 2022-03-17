@@ -141,8 +141,9 @@ def remove_endparticle(line_msg_txt):
          rmv_edprtcl_rslt = re.sub("(W)+$",     "", line_msg_txt)
 
     #メッセージの中に含まれる先頭と末尾の空白と改行を除去する
-    rmv_edprtcl_rslt_end = rmv_edprtcl_rslt.strip()
-    return rmv_edprtcl_rslt_end
+    #rmv_edprtcl_rslt_end = rmv_edprtcl_rslt.strip()
+    #return rmv_edprtcl_rslt_end
+    return rmv_edprtcl_rslt
 
 
 #ユーザーから送られるLINEメッセージが指定された文字列で開始するかを判定する
