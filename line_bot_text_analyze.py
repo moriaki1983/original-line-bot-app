@@ -2431,10 +2431,10 @@ def extract_subcontent(rmv_edprtcl_rslt):
           check_text_start_string(rmv_edprtcl_rslt, "さぞ")):
             extrct_subcntnt_rslt = "(推定＆推測＆推量)(揣摩＆憶測)(感情＆感性)"
     elif (check_text_start_string(rmv_edprtcl_rslt, "決して") or
-          check_text_start_string(rmv_edprtcl_rslt, "決まって"):
+          check_text_start_string(rmv_edprtcl_rslt, "決まって")):
             extrct_subcntnt_rslt = "(断定＆確定)(限定)"
     elif (check_text_start_string(rmv_edprtcl_rslt, "ひょっとして") or
-          check_text_start_string(rmv_edprtcl_rslt, "もしかして"):
+          check_text_start_string(rmv_edprtcl_rslt, "もしかして")):
             extrct_subcntnt_rslt = "(推定＆推測＆推量)(揣摩＆憶測)(中立＆中性)"
     elif  check_text_start_string(rmv_edprtcl_rslt, "もしかしたら"):
             extrct_subcntnt_rslt = "(推定＆推測＆推量)(揣摩＆憶測)(場合分け)"
@@ -2487,10 +2487,10 @@ def extract_subcontent(rmv_edprtcl_rslt):
           check_text_start_string(rmv_edprtcl_rslt, "まとめると")):
             extrct_subcntnt_rslt = "(総括＆概括)"
     elif (check_text_start_string(rmv_edprtcl_rslt, "初めに") or
-          check_text_start_string(rmv_edprtcl_rslt, "はじめに"):
+          check_text_start_string(rmv_edprtcl_rslt, "はじめに")):
             extrct_subcntnt_rslt = "(前置き)(最初)"
     elif (check_text_start_string(rmv_edprtcl_rslt, "終わりに") or
-          check_text_start_string(rmv_edprtcl_rslt, "おわりに"):
+          check_text_start_string(rmv_edprtcl_rslt, "おわりに")):
             extrct_subcntnt_rslt = "(前置き)(最後)"
     elif (check_text_start_string(rmv_edprtcl_rslt, "だけども") or
           check_text_start_string(rmv_edprtcl_rslt, "だけど") or
