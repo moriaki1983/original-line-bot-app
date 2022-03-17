@@ -75,75 +75,76 @@ def remove_endparticle(line_msg_txt):
     pattern32 = re.compile("(W)+$")
 
     #メッセージの中の正規表現パターンに合致するものを除去する
-    if pattern.search(line_msg_txt) == True:
+    if   pattern.search(line_msg_txt) == True:
          rmv_edprtcl_rslt = re.sub("(よお)$",   "", line_msg_txt)
-    if pattern2.search(line_msg_txt) == True:
+    elif pattern2.search(line_msg_txt) == True:
          rmv_edprtcl_rslt = re.sub("(よぉ)$",   "", line_msg_txt)
-    if pattern3.search(line_msg_txt) == True:
+    elif pattern3.search(line_msg_txt) == True:
          rmv_edprtcl_rslt = re.sub("(よっ)$",   "", line_msg_txt)
-    if pattern4.search(line_msg_txt) == True:
+    elif pattern4.search(line_msg_txt) == True:
          rmv_edprtcl_rslt = re.sub("(ねえ)$",   "", line_msg_txt)
-    if pattern5.search(line_msg_txt) == True:
+    elif pattern5.search(line_msg_txt) == True:
          rmv_edprtcl_rslt = re.sub("(ねぇ)$",   "", line_msg_txt)
-    if pattern6.search(line_msg_txt) == True:
+    elif pattern6.search(line_msg_txt) == True:
          rmv_edprtcl_rslt = re.sub("(ねっ)$",   "", line_msg_txt)
-    if pattern7.search(line_msg_txt) == True:
+    elif pattern7.search(line_msg_txt) == True:
          rmv_edprtcl_rslt = re.sub("(なあ)$",   "", line_msg_txt)
-    if pattern8.search(line_msg_txt) == True:
+    elif pattern8.search(line_msg_txt) == True:
          rmv_edprtcl_rslt = re.sub("(なぁ)$",   "", line_msg_txt)
-    if pattern9.search(line_msg_txt) == True:
+    elif pattern9.search(line_msg_txt) == True:
          rmv_edprtcl_rslt = re.sub("(なっ)$",   "", line_msg_txt)
-    if pattern10.search(line_msg_txt) == True:
+    elif pattern10.search(line_msg_txt) == True:
          rmv_edprtcl_rslt = re.sub("(わあ)$",   "", line_msg_txt)
-    if pattern11.search(line_msg_txt) == True:
+    elif pattern11.search(line_msg_txt) == True:
          rmv_edprtcl_rslt = re.sub("(わぁ)$",   "", line_msg_txt)
-    if pattern12.search(line_msg_txt) == True:
+    elif pattern12.search(line_msg_txt) == True:
          rmv_edprtcl_rslt = re.sub("(わっ)$",   "", line_msg_txt)
-    if pattern13.search(line_msg_txt) == True:
+    elif pattern13.search(line_msg_txt) == True:
          rmv_edprtcl_rslt = re.sub("(ぜえ)$",   "", line_msg_txt)
-    if pattern14.search(line_msg_txt) == True:
+    elif pattern14.search(line_msg_txt) == True:
          rmv_edprtcl_rslt = re.sub("(ぜぇ)$",   "", line_msg_txt)
-    if pattern15.search(line_msg_txt) == True:
+    elif pattern15.search(line_msg_txt) == True:
          rmv_edprtcl_rslt = re.sub("(ぜっ)$",   "", line_msg_txt)
-    if pattern16.search(line_msg_txt) == True:
+    elif pattern16.search(line_msg_txt) == True:
          rmv_edprtcl_rslt = re.sub("(っすよ)$", "", line_msg_txt)
-    if pattern17.search(line_msg_txt) == True:
+    elif pattern17.search(line_msg_txt) == True:
          rmv_edprtcl_rslt = re.sub("(っすね)$", "", line_msg_txt)
-    if pattern18.search(line_msg_txt) == True:
+    elif pattern18.search(line_msg_txt) == True:
          rmv_edprtcl_rslt = re.sub("(でっす)$", "", line_msg_txt)
-    if pattern19.search(line_msg_txt) == True:
+    elif pattern19.search(line_msg_txt) == True:
          rmv_edprtcl_rslt = re.sub("(っす)$",   "", line_msg_txt)
-    if pattern20.search(line_msg_txt) == True:
+    elif pattern20.search(line_msg_txt) == True:
          rmv_edprtcl_rslt = re.sub("(わよ)$",   "", line_msg_txt)
-    if pattern21.search(line_msg_txt) == True:
+    elif pattern21.search(line_msg_txt) == True:
          rmv_edprtcl_rslt = re.sub("(わね)$",   "", line_msg_txt)
-    if pattern22.search(line_msg_txt) == True:
+    elif pattern22.search(line_msg_txt) == True:
          rmv_edprtcl_rslt = re.sub("(ってね)$", "", line_msg_txt)
-    if pattern23.search(line_msg_txt) == True:
+    elif pattern23.search(line_msg_txt) == True:
          rmv_edprtcl_rslt = re.sub("(ってば)$", "", line_msg_txt)
-    if pattern24.search(line_msg_txt) == True:
+    elif pattern24.search(line_msg_txt) == True:
          rmv_edprtcl_rslt = re.sub("(爆)$",     "", line_msg_txt)
-    if pattern25.search(line_msg_txt) == True:
+    elif pattern25.search(line_msg_txt) == True:
          rmv_edprtcl_rslt = re.sub("(爆笑)$",   "", line_msg_txt)
-    if pattern26.search(line_msg_txt) == True:
+    elif pattern26.search(line_msg_txt) == True:
          rmv_edprtcl_rslt = re.sub("(笑)+$",    "", line_msg_txt)
-    if pattern27.search(line_msg_txt) == True:
+    elif pattern27.search(line_msg_txt) == True:
          rmv_edprtcl_rslt = re.sub("(わら)+$",  "", line_msg_txt)
-    if pattern28.search(line_msg_txt) == True:
+    elif pattern28.search(line_msg_txt) == True:
          rmv_edprtcl_rslt = re.sub("(ワラ)+$",  "", line_msg_txt)
-    if pattern29.search(line_msg_txt) == True:
+    elif pattern29.search(line_msg_txt) == True:
          rmv_edprtcl_rslt = re.sub("(草)+$",    "", line_msg_txt)
-    if pattern30.search(line_msg_txt) == True:
+    elif pattern30.search(line_msg_txt) == True:
          rmv_edprtcl_rslt = re.sub("(クサ)+$",  "", line_msg_txt)
-    if pattern31.search(line_msg_txt) == True:
+    elif pattern31.search(line_msg_txt) == True:
          rmv_edprtcl_rslt = re.sub("(w)+$",     "", line_msg_txt)
-    if pattern32.search(line_msg_txt) == True:
+    elif pattern32.search(line_msg_txt) == True:
          rmv_edprtcl_rslt = re.sub("(W)+$",     "", line_msg_txt)
+    else:
+         rmv_edprtcl_rslt = line_msg_txt
 
     #メッセージの中に含まれる先頭と末尾の空白と改行を除去する
-    #rmv_edprtcl_rslt_end = rmv_edprtcl_rslt.strip()
-    #return rmv_edprtcl_rslt_end
-    return rmv_edprtcl_rslt
+    rmv_edprtcl_rslt_end = rmv_edprtcl_rslt.strip()
+    return rmv_edprtcl_rslt_end
 
 
 #ユーザーから送られるLINEメッセージが指定された文字列で開始するかを判定する
