@@ -2242,7 +2242,7 @@ def extract_intent(rmv_edprtcl_rslt):
     elif (check_text_terminated_string(rmv_edprtcl_rslt, "かも知れないです") or
           check_text_terminated_string(rmv_edprtcl_rslt, "かも知れない") or
           check_text_terminated_string(rmv_edprtcl_rslt, "かもしれないです") or
-          check_text_terminated_string(rmv_edprtcl_rslt, "かもしれない"):
+          check_text_terminated_string(rmv_edprtcl_rslt, "かもしれない")):
             extrct_intnt_rslt = "(推定＆推測＆推量)(肯定)"
     elif (check_text_terminated_string(rmv_edprtcl_rslt, "ではないかも知れないです") or
           check_text_terminated_string(rmv_edprtcl_rslt, "ではないかも知れない") or
@@ -2251,7 +2251,7 @@ def extract_intent(rmv_edprtcl_rslt):
           check_text_terminated_string(rmv_edprtcl_rslt, "でないかも知れないです") or
           check_text_terminated_string(rmv_edprtcl_rslt, "でないかも知れない") or
           check_text_terminated_string(rmv_edprtcl_rslt, "でないかもしれないです") or
-          check_text_terminated_string(rmv_edprtcl_rslt, "でないかもしれない"):
+          check_text_terminated_string(rmv_edprtcl_rslt, "でないかもしれない")):
             extrct_intnt_rslt = "(推定＆推測＆推量)(否定)"
     elif (check_text_terminated_string(rmv_edprtcl_rslt, "ではと思っています") or
           check_text_terminated_string(rmv_edprtcl_rslt, "ではと思ってます") or
@@ -2267,7 +2267,7 @@ def extract_intent(rmv_edprtcl_rslt):
           check_text_terminated_string(rmv_edprtcl_rslt, "と思っています") or
           check_text_terminated_string(rmv_edprtcl_rslt, "と思っている") or
           check_text_terminated_string(rmv_edprtcl_rslt, "と思ってる") or
-          check_text_terminated_string(rmv_edprtcl_rslt, "と思う"):
+          check_text_terminated_string(rmv_edprtcl_rslt, "と思う")):
             extrct_intnt_rslt = "(思慮＆考慮)(現在)(肯定)"
     elif (check_text_terminated_string(rmv_edprtcl_rslt, "とは思っていません") or
           check_text_terminated_string(rmv_edprtcl_rslt, "とは思ってません") or
