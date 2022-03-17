@@ -78,23 +78,23 @@ def remove_endparticle(rmv_symbl_rslt):
     if pattern2.search(rmv_symbl_rslt) == True:
          rmv_edprtcl_rslt = re.sub("(よぉ)$", "", rmv_symbl_rslt)
     if pattern3.search(rmv_symbl_rslt) == True:
-         rmv_edprtcl_rslt = re.sub(r'よっ$', "", rmv_symbl_rslt)
+         rmv_edprtcl_rslt = re.sub("(よっ)$", "", rmv_symbl_rslt)
     if pattern4.search(rmv_symbl_rslt) == True:
-         rmv_edprtcl_rslt = re.sub(r'ねえ$', "", rmv_symbl_rslt)
+         rmv_edprtcl_rslt = re.sub("(ねえ)$", "", rmv_symbl_rslt)
     if pattern5.search(rmv_symbl_rslt) == True:
-         rmv_edprtcl_rslt = re.sub(r'ねぇ$', "", rmv_symbl_rslt)
+         rmv_edprtcl_rslt = re.sub("(ねぇ)$", "", rmv_symbl_rslt)
     if pattern6.search(rmv_symbl_rslt) == True:
-         rmv_edprtcl_rslt = re.sub(r'ねっ$', "", rmv_symbl_rslt)
+         rmv_edprtcl_rslt = re.sub("(ねっ)$", "", rmv_symbl_rslt)
     if pattern7.search(rmv_symbl_rslt) == True:
-         rmv_edprtcl_rslt = re.sub(r'なあ$', "", rmv_symbl_rslt)
+         rmv_edprtcl_rslt = re.sub("(なあ)$", "", rmv_symbl_rslt)
     if pattern8.search(rmv_symbl_rslt) == True:
-         rmv_edprtcl_rslt = re.sub("(わぁ)", "", rmv_symbl_rslt)
+         rmv_edprtcl_rslt = re.sub("(なぁ)$", "", rmv_symbl_rslt)
     if pattern9.search(rmv_symbl_rslt) == True:
-         rmv_edprtcl_rslt = re.sub("(わっ)", "", rmv_symbl_rslt)
+         rmv_edprtcl_rslt = re.sub("(なっ)$", "", rmv_symbl_rslt)
     if pattern10.search(rmv_symbl_rslt) == True:
-         rmv_edprtcl_rslt = re.sub("(ぜえ)", "", rmv_symbl_rslt)
+         rmv_edprtcl_rslt = re.sub("(わあ)$", "", rmv_symbl_rslt)
     if pattern11.search(rmv_symbl_rslt) == True:
-         rmv_edprtcl_rslt = re.sub("(ぜぇ)", "", rmv_symbl_rslt)
+         rmv_edprtcl_rslt = re.sub("(わぁ)$", "", rmv_symbl_rslt)
     if pattern12.search(rmv_symbl_rslt) == True:
          rmv_edprtcl_rslt = re.sub("(ぜっ)", "", rmv_symbl_rslt)
     if pattern13.search(rmv_symbl_rslt) == True:
@@ -2281,8 +2281,8 @@ def extract_intent(rmv_edprtcl_rslt):
     elif (check_text_terminated_string(rmv_edprtcl_rslt, "とは思っていました") or
           check_text_terminated_string(rmv_edprtcl_rslt, "とは思っていた") or
           check_text_terminated_string(rmv_edprtcl_rslt, "とは思ってた") or
-          check_text_terminated_string(rmv_edprtcl_rslt, "と思っていました" or
-          check_text_terminated_string(rmv_edprtcl_rslt, "と思っていた" or
+          check_text_terminated_string(rmv_edprtcl_rslt, "と思っていました") or
+          check_text_terminated_string(rmv_edprtcl_rslt, "と思っていた") or
           check_text_terminated_string(rmv_edprtcl_rslt, "と思ってた")):
             extrct_intnt_rslt = "(思慮＆考慮)(過去)(肯定)"
     elif (check_text_terminated_string(rmv_edprtcl_rslt, "とは思っていませんでした") or
