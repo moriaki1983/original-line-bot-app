@@ -2563,7 +2563,7 @@ def remove_subcontent(rmv_edprtcl_rslt):
          rmv_cnddt_subcntnt_list.append("または")
     if check_text_start_string(rmv_edprtcl_rslt, "且つ"):
          rmv_cnddt_subcntnt_list.append("且つ")
-    if check_text_start_string(rmv_edprtcl_rslt, "かつ")):
+    if check_text_start_string(rmv_edprtcl_rslt, "かつ"):
          rmv_cnddt_subcntnt_list.append("かつ")
     if check_text_start_string(rmv_edprtcl_rslt, "得てして"):
          rmv_cnddt_subcntnt_list.append("得てして")
