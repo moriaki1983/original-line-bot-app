@@ -1,4 +1,4 @@
-
+# coding: utf-8
 
 
 
@@ -142,7 +142,7 @@ def line_msg_analyze(line_msg_txt):
     if extrct_intnt2 != "(その他・不明)":
        line_msg_anlyz_rslt = extrct_intnt2
        return line_msg_anlyz_rslt
-    return rmv_symbl
+    return extrct_intnt2
 
 #    extrct_intnt3 = line_bot_text_analyze.extract_intent_from_short_and_boilerplate(line_msg_txt)
 #    if extrct_intnt3 != "(その他・不明)":
@@ -187,7 +187,7 @@ def postgres_insert_and_update(event):
 
     #データベースに登録・格納するLINEメッセージ(＝レコード)を構成する情報をまとめて用意する
     global rcd_id
-    jst = datetime.timezone(datetime.timedelta(hours=+9), "JST")
+    jst     = datetime.timezone(datetime.timedelta(hours=+9), "JST")
     dt_tm   = datetime.datetime.now(jst)
     date    = dt_tm.strftime("%Y/%m/%d %H:%M:%S")
     profile = line_bot_api.get_profile(event.source.user_id)
