@@ -34,7 +34,7 @@ def remove_symbol(line_msg_txt):
 #ユーザーから送られるLINEメッセージの中に含まれる終助詞を除去する
 def remove_endparticle(line_msg_txt):
     #終助詞を表す正規表現パターンを用意・作成する
-    pattern   = re.compile("(よお)$")
+    pattern   = re.compile("(よお$)")
     pattern2  = re.compile("(よぉ)$")
     pattern3  = re.compile("(よっ)$")
     pattern4  = re.compile("(ねえ)$")
@@ -61,7 +61,7 @@ def remove_endparticle(line_msg_txt):
 
     #メッセージの中の正規表現パターンに合致するものを除去する
     if   pattern.search(line_msg_txt) == True:
-         rmv_edprtcl_rslt = re.sub("(よお)$",     "", line_msg_txt)
+         rmv_edprtcl_rslt = re.sub("(よお$)",     "", line_msg_txt)
     elif pattern2.search(line_msg_txt) == True:
          rmv_edprtcl_rslt = re.sub("(よぉ)$",     "", line_msg_txt)
     elif pattern3.search(line_msg_txt) == True:
