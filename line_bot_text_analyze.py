@@ -14,31 +14,21 @@ def remove_symbol(line_msg_txt):
     #メッセージの中に含まれる各種の記号・空白を除去する
     rmv_symbl_rslt   = re.sub("(’)", "", line_msg_txt)
     rmv_symbl_rslt2  = re.sub("(”)", "", rmv_symbl_rslt)
-    rmv_symbl_rslt3  = re.sub("(（)", "", rmv_symbl_rslt2)
-    rmv_symbl_rslt4  = re.sub("(）)", "", rmv_symbl_rslt3)
-    rmv_symbl_rslt5  = re.sub("(「)", "", rmv_symbl_rslt4)
-    rmv_symbl_rslt6  = re.sub("(」)", "", rmv_symbl_rslt5)
-    rmv_symbl_rslt7  = re.sub("(、)", "", rmv_symbl_rslt6)
-    rmv_symbl_rslt8  = re.sub("(。)", "", rmv_symbl_rslt7)
-    rmv_symbl_rslt9  = re.sub("(！)", "", rmv_symbl_rslt8)
-    rmv_symbl_rslt10 = re.sub("(？)", "", rmv_symbl_rslt9)
-    rmv_symbl_rslt11 = re.sub("(ー)", "", rmv_symbl_rslt10)
-    rmv_symbl_rslt12 = re.sub("(～)", "", rmv_symbl_rslt11)
-    rmv_symbl_rslt13 = re.sub("(・)", "", rmv_symbl_rslt12)
-    rmv_symbl_rslt14 = re.sub("(＝)", "", rmv_symbl_rslt13)
-    rmv_symbl_rslt15 = re.sub("(＆)", "", rmv_symbl_rslt14)
-    rmv_symbl_rslt16 = re.sub("(＋)", "", rmv_symbl_rslt15)
-    rmv_symbl_rslt17 = re.sub("( )",  "", rmv_symbl_rslt16)
-    rmv_symbl_rslt18 = re.sub("(　)", "", rmv_symbl_rslt17)
-    rmv_symbl_rslt19 = re.sub("(,)",  "", rmv_symbl_rslt18)
-    rmv_symbl_rslt20 = re.sub("(.)",  "", rmv_symbl_rslt19)
-
-#    rmv_symbl_rslt = re.sub("(！)", "", line_msg_txt)
-#    return rmv_symbl_rslt
-
-    #メッセージの中に含まれる先頭と末尾の空白と改行を除去する
-#    rmv_symbl_rslt_end = rmv_symbl_rslt20.strip()
-    return rmv_symbl_rslt20
+    rmv_symbl_rslt3  = re.sub("(「)", "", rmv_symbl_rslt2)
+    rmv_symbl_rslt4  = re.sub("(」)", "", rmv_symbl_rslt3)
+    rmv_symbl_rslt5  = re.sub("(、)", "", rmv_symbl_rslt4)
+    rmv_symbl_rslt6  = re.sub("(。)", "", rmv_symbl_rslt5)
+    rmv_symbl_rslt7  = re.sub("(！)", "", rmv_symbl_rslt6)
+    rmv_symbl_rslt8  = re.sub("(？)", "", rmv_symbl_rslt7)
+    rmv_symbl_rslt9  = re.sub("(ー)", "", rmv_symbl_rslt8)
+    rmv_symbl_rslt10 = re.sub("(～)", "", rmv_symbl_rslt9)
+    rmv_symbl_rslt11 = re.sub("(・)", "", rmv_symbl_rslt10)
+    rmv_symbl_rslt12 = re.sub("(＝)", "", rmv_symbl_rslt11)
+    rmv_symbl_rslt13 = re.sub("(＆)", "", rmv_symbl_rslt12)
+    rmv_symbl_rslt14 = re.sub("(＋)", "", rmv_symbl_rslt13)
+    rmv_symbl_rslt15 = re.sub("( )",  "", rmv_symbl_rslt14)
+    rmv_symbl_rslt16 = re.sub("(　)", "", rmv_symbl_rslt15)
+    return rmv_symbl_rslt16
 
 
 #ユーザーから送られるLINEメッセージの中に含まれる終助詞等を除去する
