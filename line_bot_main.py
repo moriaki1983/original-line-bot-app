@@ -142,6 +142,7 @@ def line_msg_analyze(line_msg_txt):
     if extrct_intnt2 != "(その他・不明)":
        line_msg_anlyz_rslt = extrct_intnt2
        return line_msg_anlyz_rslt
+    app.logger.info("rmv_symbl: " + rmv_symbl)
     return line_msg_txt
 
 #    extrct_intnt3 = line_bot_text_analyze.extract_intent_from_short_and_boilerplate(line_msg_txt)
