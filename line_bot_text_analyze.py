@@ -34,9 +34,8 @@ def remove_symbol(line_msg_txt):
     rmv_symbl_rslt20 = re.sub("(.)",  "", rmv_symbl_rslt19)
 
     #メッセージの中に含まれる先頭と末尾の空白と改行を除去する
-    #rmv_symbl_rslt_end = rmv_symbl_rslt20.strip()
-    #return rmv_symbl_rslt_end
-    return rmv_symbl_rslt20
+    rmv_symbl_rslt_end = rmv_symbl_rslt20.strip()
+    return rmv_symbl_rslt_end
 
 
 #ユーザーから送られるLINEメッセージの中に含まれる終助詞等を除去する
