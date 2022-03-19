@@ -128,7 +128,7 @@ def remove_etc(line_msg_txt):
     pattern10 = re.compile("(W)+$")
 
     #メッセージの中の正規表現パターンに合致するものを除去する
-   if    pattern.search(line_msg_txt) == True:
+    if   pattern.search(line_msg_txt) == True:
          rmv_edprtcl_rslt = re.sub("(爆)$",    "", line_msg_txt)
     elif pattern2.search(line_msg_txt) == True:
          rmv_edprtcl_rslt = re.sub("(爆笑)$",  "", line_msg_txt)
