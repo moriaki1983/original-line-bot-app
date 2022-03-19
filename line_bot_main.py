@@ -139,25 +139,24 @@ def line_msg_analyze(line_msg_txt):
        return line_msg_anlyz_rslt
     rmv_symbl     = line_bot_text_analyze.remove_symbol(line_msg_txt)
     extrct_intnt2 = line_bot_text_analyze.extract_intent_from_gag_and_vocalcordcopy(rmv_symbl)
-
     if extrct_intnt2 != "(その他・不明)":
        line_msg_anlyz_rslt = extrct_intnt2
        return line_msg_anlyz_rslt
-    extrct_intnt3 = line_bot_text_analyze.extract_intent_from_short_and_boilerplate(line_msg_txt)
+    return extrct_intnt2
 
-    if extrct_intnt3 != "(その他・不明)":
-       line_msg_anlyz_rslt = extrct_intnt3
-       return line_msg_anlyz_rslt
-    rmv_symbl     = line_bot_text_analyze.remove_symbol(line_msg_txt)
-    extrct_intnt4 = line_bot_text_analyze.extract_intent_from_short_and_boilerplate(rmv_symbl)
-
-    if extrct_intnt4 != "(その他・不明)":
-       line_msg_anlyz_rslt = extrct_intnt4
-       return line_msg_anlyz_rslt
-    rmv_symbl        = line_bot_text_analyze.remove_symbol(line_msg_txt)
-    rmv_edprtcl      = line_bot_text_analyze.remove_endparticle(rmv_symbl)
-    extrct_intnt_end = line_bot_text_analyze.extract_intent(rmv_edprtcl)
-    return extrct_intnt_end
+#    extrct_intnt3 = line_bot_text_analyze.extract_intent_from_short_and_boilerplate(line_msg_txt)
+#    if extrct_intnt3 != "(その他・不明)":
+#       line_msg_anlyz_rslt = extrct_intnt3
+#       return line_msg_anlyz_rslt
+#    rmv_symbl     = line_bot_text_analyze.remove_symbol(line_msg_txt)
+#    extrct_intnt4 = line_bot_text_analyze.extract_intent_from_short_and_boilerplate(rmv_symbl)
+#    if extrct_intnt4 != "(その他・不明)":
+#       line_msg_anlyz_rslt = extrct_intnt4
+#       return line_msg_anlyz_rslt
+#    rmv_symbl        = line_bot_text_analyze.remove_symbol(line_msg_txt)
+#    rmv_edprtcl      = line_bot_text_analyze.remove_endparticle(rmv_symbl)
+#    extrct_intnt_end = line_bot_text_analyze.extract_intent(rmv_edprtcl)
+#    return extrct_intnt_end
 
 
 #解析されたユーザーのメッセージを基に返信メッセージを生成する
