@@ -142,7 +142,7 @@ def line_msg_analyze(line_msg_txt):
     if extrct_intnt2 != "(その他・不明)":
        line_msg_anlyz_rslt = extrct_intnt2
        return line_msg_anlyz_rslt
-    return extrct_intnt2
+    return rmv_symbl
 
 #    extrct_intnt3 = line_bot_text_analyze.extract_intent_from_short_and_boilerplate(line_msg_txt)
 #    if extrct_intnt3 != "(その他・不明)":
