@@ -72,13 +72,13 @@ def remove_endparticle(line_msg_txt):
          rmv_edprtcl_rslt = re.sub(r"っすね$",   "", line_msg_txt)
     elif bool(re.search(r"でっす$", line_msg_txt)) == True:
          rmv_edprtcl_rslt = re.sub(r"でっす$",   "", line_msg_txt)
-    elif bool(re.search(r"っす$", line_msg_txt)) == True:
+    elif bool(re.search(r"っす$", line_msg_txt))   == True:
          rmv_edprtcl_rslt = re.sub(r"っす$",     "", line_msg_txt)
-    elif bool(re.search(r"わよ$", line_msg_txt)) == True:
+    elif bool(re.search(r"わよ$", line_msg_txt))   == True:
          rmv_edprtcl_rslt = re.sub(r"わよ$",     "", line_msg_txt)
     elif bool(re.search(r"わよっ$", line_msg_txt)) == True:
          rmv_edprtcl_rslt = re.sub(r"わよっ$",   "", line_msg_txt)
-    elif bool(re.search(r"わね$", line_msg_txt)) == True:
+    elif bool(re.search(r"わね$", line_msg_txt)) ==   True:
          rmv_edprtcl_rslt = re.sub(r"わね$",     "", line_msg_txt)
     elif bool(re.search(r"わねっ$", line_msg_txt)) == True:
          rmv_edprtcl_rslt = re.sub(r"わねっ$",   "", line_msg_txt)
@@ -98,30 +98,30 @@ def remove_endparticle(line_msg_txt):
 #ユーザーから送られるLINEメッセージの中に含まれるその他のもの(＝感情表現のためのもの)を除去する
 def remove_etc(line_msg_txt):
     #メッセージの中に含まれるその他のものを除去する
-    if   bool(re.search(r"泣$", line_msg_txt)) == True:
-         rmv_etc = re.sub(r"泣$",    "", line_msg_txt)
-    elif bool(re.search(r"汗$", line_msg_txt)) == True:
-         rmv_etc = re.sub(r"汗$",    "", line_msg_txt)
-    elif bool(re.search(r"爆$", line_msg_txt)) == True:
-         rmv_etc = re.sub(r"爆$",    "", line_msg_txt)
-    elif bool(re.search(r"爆笑$", line_msg_txt)) == True:
-         rmv_etc = re.sub(r"爆笑$",  "", line_msg_txt)
-    elif bool(re.search(r"笑+$", line_msg_txt)) == True:
-         rmv_etc = re.sub(r"笑+$",  "", line_msg_txt)
-    elif bool(re.search(r"(わら)$+", line_msg_txt)) == True:
-         rmv_etc = re.sub(r"(わら)$+", "", line_msg_txt)
-    elif bool(re.search(r"(ワラ)$+", line_msg_txt)) == True:
-         rmv_etc = re.sub(r"(ワラ)$+", "", line_msg_txt)
-    elif bool(re.search(r"草+$", line_msg_txt)) == True:
-         rmv_etc = re.sub(r"草+$",   "", line_msg_txt)
-    elif bool(re.search(r"(くさ)$+", line_msg_txt)) == True:
-         rmv_etc = re.sub(r"(くさ)$+", "", line_msg_txt)
-    elif bool(re.search(r"(クサ)$+", line_msg_txt)) == True:
-         rmv_etc = re.sub(r"(クサ)$+", "", line_msg_txt)
-    elif bool(re.search(r"w+$", line_msg_txt)) == True:
-         rmv_etc = re.sub(r"w+$",    "", line_msg_txt)
-    elif bool(re.search(r"W+$", line_msg_txt)) == True:
-         rmv_etc = re.sub(r"W+$",    "", line_msg_txt)
+    if   bool(re.search(r"泣$",     line_msg_txt)) == True:
+         rmv_etc = re.sub(r"泣$", "", line_msg_txt)
+    elif bool(re.search(r"汗$",     line_msg_txt)) == True:
+         rmv_etc = re.sub(r"汗$", "", line_msg_txt)
+    elif bool(re.search(r"爆$",     line_msg_txt)) == True:
+         rmv_etc = re.sub(r"爆$", "", line_msg_txt)
+    elif bool(re.search(r"(爆笑)$", line_msg_txt)) == True:
+         rmv_etc = re.sub(r"(爆笑)$", "", line_msg_txt)
+    elif bool(re.search(r"笑+$",    line_msg_txt)) == True:
+         rmv_etc = re.sub(r"笑+$", "", line_msg_txt)
+    elif bool(re.search(r"(わら)$", line_msg_txt)) == True:
+         rmv_etc = re.sub(r"(わら)$", "", line_msg_txt)
+    elif bool(re.search(r"(ワラ)$", line_msg_txt)) == True:
+         rmv_etc = re.sub(r"(ワラ)$", "", line_msg_txt)
+    elif bool(re.search(r"草+$",    line_msg_txt)) == True:
+         rmv_etc = re.sub(r"草+$", "", line_msg_txt)
+    elif bool(re.search(r"(くさ)$", line_msg_txt)) == True:
+         rmv_etc = re.sub(r"(くさ)$", "", line_msg_txt)
+    elif bool(re.search(r"(クサ)$", line_msg_txt)) == True:
+         rmv_etc = re.sub(r"(クサ)$", "", line_msg_txt)
+    elif bool(re.search(r"w+$",     line_msg_txt)) == True:
+         rmv_etc = re.sub(r"w+$", "", line_msg_txt)
+    elif bool(re.search(r"W+$",     line_msg_txt)) == True:
+         rmv_etc = re.sub(r"W+$", "", line_msg_txt)
     else:
          rmv_etc = line_msg_txt
     return rmv_etc
