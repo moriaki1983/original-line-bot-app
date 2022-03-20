@@ -74,57 +74,55 @@ def remove_endparticle(line_msg_txt):
          rmv_edprtcl_rslt = re.sub(r"っす$",     "", line_msg_txt)
     elif bool(re.search(r"わよ$", line_msg_txt)) == True:
          rmv_edprtcl_rslt = re.sub(r"わよ$",     "", line_msg_txt)
+    elif bool(re.search(r"わよっ$", line_msg_txt)) == True:
+         rmv_edprtcl_rslt = re.sub(r"わよっ$",   "", line_msg_txt)
     elif bool(re.search(r"わね$", line_msg_txt)) == True:
          rmv_edprtcl_rslt = re.sub(r"わね$",     "", line_msg_txt)
+    elif bool(re.search(r"わねっ$", line_msg_txt)) == True:
+         rmv_edprtcl_rslt = re.sub(r"わねっ$",   "", line_msg_txt)
     elif bool(re.search(r"ってね$", line_msg_txt)) == True:
          rmv_edprtcl_rslt = re.sub(r"ってね$",   "", line_msg_txt)
     elif bool(re.search(r"ってば$", line_msg_txt)) == True:
          rmv_edprtcl_rslt = re.sub(r"ってば$",   "", line_msg_txt)
     elif bool(re.search(r"ってばよ$", line_msg_txt)) == True:
          rmv_edprtcl_rslt = re.sub(r"ってばよ$", "", line_msg_txt)
+    elif bool(re.search(r"っ$", line_msg_txt)) == True:
+         rmv_edprtcl_rslt = re.sub(r"っ$",       "", line_msg_txt)
     else:
          rmv_edprtcl_rslt = line_msg_txt
     return rmv_edprtcl_rslt
 
 
-#ユーザーから送られるLINEメッセージの中に含まれるその他のものを除去する
+#ユーザーから送られるLINEメッセージの中に含まれるその他のもの(＝感情表現のためのもの)を除去する
 def remove_etc(line_msg_txt):
-    #その他のものを表す正規表現パターンを用意・作成する
-    pattern   = re.compile(r"爆$")
-    pattern2  = re.compile(r"爆笑$")
-    pattern3  = re.compile(r"笑+$")
-    pattern4  = re.compile(r"わら+$")
-    pattern5  = re.compile(r"ワラ+$")
-    pattern6  = re.compile(r"草+$")
-    pattern7  = re.compile(r"くさ+$")
-    pattern8  = re.compile(r"クサ+$")
-    pattern9  = re.compile(r"w+$")
-    pattern10 = re.compile(r"W+$")
-
-    #メッセージの中の正規表現パターンに合致するものを除去する
-    if   re.search(pattern, line_msg_txt) == True:
-         rmv_edprtcl_rslt = re.sub(r"爆$",    "", line_msg_txt)
-    elif re.search(pattern2, line_msg_txt) == True:
-         rmv_edprtcl_rslt = re.sub(r"爆笑$",  "", line_msg_txt)
-    elif re.search(pattern3, line_msg_txt) == True:
-         rmv_edprtcl_rslt = re.sub(r"笑+$",   "", line_msg_txt)
-    elif re.search(pattern4, line_msg_txt) == True:
-         rmv_edprtcl_rslt = re.sub(r"わら+$", "", line_msg_txt)
-    elif re.search(pattern5, line_msg_txt) == True:
-         rmv_edprtcl_rslt = re.sub(r"ワラ+$", "", line_msg_txt)
-    elif re.search(pattern6, line_msg_txt) == True:
-         rmv_edprtcl_rslt = re.sub(r"草+$",   "", line_msg_txt)
-    elif re.search(pattern7, line_msg_txt) == True:
-         rmv_edprtcl_rslt = re.sub(r"くさ+$", "", line_msg_txt)
-    elif re.search(pattern8, line_msg_txt) == True:
-         rmv_edprtcl_rslt = re.sub(r"クサ+$", "", line_msg_txt)
-    elif re.search(pattern9, line_msg_txt) == True:
-         rmv_edprtcl_rslt = re.sub(r"w+$",    "", line_msg_txt)
-    elif re.search(pattern10, line_msg_txt) == True:
-         rmv_edprtcl_rslt = re.sub(r"W+$",    "", line_msg_txt)
+    #メッセージの中に含まれるその他のものを除去する
+    if   bool(re.search(r"泣$", line_msg_txt)) == True:
+         rmv_etc = re.sub(r"泣$",    "", line_msg_txt)
+    elif bool(re.search(r"汗$", line_msg_txt)) == True:
+         rmv_etc = re.sub(r"汗$",    "", line_msg_txt)
+    elif bool(re.search(r"爆$", line_msg_txt)) == True:
+         rmv_etc = re.sub(r"爆$",    "", line_msg_txt)
+    elif bool(re.search(r"爆笑$", line_msg_txt)) == True:
+         rmv_etc = re.sub(r"爆笑$",  "", line_msg_txt)
+    elif bool(re.search(r"笑+$", line_msg_txt)) == True:
+         rmv_etc = re.sub(r"笑+$",   "", line_msg_txt)
+    elif bool(re.search(r"わら+$", line_msg_txt)) == True:
+         rmv_etc = re.sub(r"わら+$", "", line_msg_txt)
+    elif bool(re.search(r"ワラ+$", line_msg_txt)) == True:
+         rmv_etc = re.sub(r"ワラ+$", "", line_msg_txt)
+    elif bool(re.search(r"草+$", line_msg_txt)) == True:
+         rmv_etc = re.sub(r"草+$",   "", line_msg_txt)
+    elif bool(re.search(r"くさ+$, line_msg_txt)) == True:
+         rmv_etc = re.sub(r"くさ+$", "", line_msg_txt)
+    elif bool(re.search(r"クサ+$", line_msg_txt)) == True:
+         rmv_etc = re.sub(r"クサ+$", "", line_msg_txt)
+    elif bool(re.search(r"w+$", line_msg_txt)) == True:
+         rmv_etc = re.sub(r"w+$",    "", line_msg_txt)
+    elif bool(re.search(r"W+$", line_msg_txt)) == True:
+         rmv_etc = re.sub(r"W+$",    "", line_msg_txt)
     else:
-         rmv_edprtcl_rslt = line_msg_txt
-    return rmv_edprtcl_rslt
+         rmv_etc = line_msg_txt
+    return rmv_etc
 
 
 #ユーザーから送られるLINEメッセージが指定された文字列で開始するかを判定する
