@@ -106,22 +106,22 @@ def remove_etc(line_msg_txt):
          rmv_etc = re.sub(r"爆$", "", line_msg_txt)
     elif bool(re.search(r"(爆笑)$", line_msg_txt)) == True:
          rmv_etc = re.sub(r"(爆笑)$", "", line_msg_txt)
-    elif bool(re.search(r"笑+$",    line_msg_txt)) == True:
-         rmv_etc = re.sub(r"笑+$", "", line_msg_txt)
+    elif bool(re.search(r"笑$",     line_msg_txt)) == True:
+         rmv_etc = re.sub(r"笑$", "", line_msg_txt)
     elif bool(re.search(r"(わら)$", line_msg_txt)) == True:
          rmv_etc = re.sub(r"(わら)$", "", line_msg_txt)
     elif bool(re.search(r"(ワラ)$", line_msg_txt)) == True:
          rmv_etc = re.sub(r"(ワラ)$", "", line_msg_txt)
-    elif bool(re.search(r"草+$",    line_msg_txt)) == True:
-         rmv_etc = re.sub(r"草+$", "", line_msg_txt)
+    elif bool(re.search(r"草$",     line_msg_txt)) == True:
+         rmv_etc = re.sub(r"草$", "", line_msg_txt)
     elif bool(re.search(r"(くさ)$", line_msg_txt)) == True:
          rmv_etc = re.sub(r"(くさ)$", "", line_msg_txt)
     elif bool(re.search(r"(クサ)$", line_msg_txt)) == True:
          rmv_etc = re.sub(r"(クサ)$", "", line_msg_txt)
-    elif bool(re.search(r"w+$",     line_msg_txt)) == True:
-         rmv_etc = re.sub(r"w+$", "", line_msg_txt)
-    elif bool(re.search(r"W+$",     line_msg_txt)) == True:
-         rmv_etc = re.sub(r"W+$", "", line_msg_txt)
+    elif bool(re.search(r"w$",     line_msg_txt)) == True:
+         rmv_etc = re.sub(r"w$", "", line_msg_txt)
+    elif bool(re.search(r"W$",     line_msg_txt)) == True:
+         rmv_etc = re.sub(r"W$", "", line_msg_txt)
     else:
          rmv_etc = line_msg_txt
     return rmv_etc
