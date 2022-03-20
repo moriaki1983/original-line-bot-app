@@ -28,7 +28,9 @@ def remove_symbol(line_msg_txt):
     rmv_symbl_rslt14 = re.sub("(＋)", "", rmv_symbl_rslt13)
     rmv_symbl_rslt15 = re.sub("( )",  "", rmv_symbl_rslt14)
     rmv_symbl_rslt16 = re.sub("(　)", "", rmv_symbl_rslt15)
-    return rmv_symbl_rslt16
+    rmv_symbl_rslt17 = re.sub("(!)",  "", rmv_symbl_rslt16)
+    rmv_symbl_rslt18 = re.sub("(?)",  "", rmv_symbl_rslt17)
+    return rmv_symbl_rslt18
 
 
 #ユーザーから送られるLINEメッセージの中に含まれる終助詞を除去する
@@ -106,16 +108,16 @@ def remove_etc(line_msg_txt):
          rmv_etc = re.sub(r"爆笑$",  "", line_msg_txt)
     elif bool(re.search(r"笑+$", line_msg_txt)) == True:
          rmv_etc = re.sub(r"笑+$",  "", line_msg_txt)
-    elif bool(re.search(r"わら+$", line_msg_txt)) == True:
-         rmv_etc = re.sub(r"わら+$", "", line_msg_txt)
-    elif bool(re.search(r"ワラ+$", line_msg_txt)) == True:
-         rmv_etc = re.sub(r"ワラ+$", "", line_msg_txt)
+    elif bool(re.search(r"(わら)+$", line_msg_txt)) == True:
+         rmv_etc = re.sub(r"(わら)+$", "", line_msg_txt)
+    elif bool(re.search(r"(ワラ)+$", line_msg_txt)) == True:
+         rmv_etc = re.sub(r"(ワラ)+$", "", line_msg_txt)
     elif bool(re.search(r"草+$", line_msg_txt)) == True:
          rmv_etc = re.sub(r"草+$",   "", line_msg_txt)
-    elif bool(re.search(r"くさ+$", line_msg_txt)) == True:
-         rmv_etc = re.sub(r"くさ+$", "", line_msg_txt)
-    elif bool(re.search(r"クサ+$", line_msg_txt)) == True:
-         rmv_etc = re.sub(r"クサ+$", "", line_msg_txt)
+    elif bool(re.search(r"(くさ)+$", line_msg_txt)) == True:
+         rmv_etc = re.sub(r"(くさ)+$", "", line_msg_txt)
+    elif bool(re.search(r"(クサ)+$", line_msg_txt)) == True:
+         rmv_etc = re.sub(r"(クサ)+$", "", line_msg_txt)
     elif bool(re.search(r"w+$", line_msg_txt)) == True:
          rmv_etc = re.sub(r"w+$",    "", line_msg_txt)
     elif bool(re.search(r"W+$", line_msg_txt)) == True:
@@ -1691,7 +1693,7 @@ def extract_intent(line_msg_txt):
     elif (check_text_terminate_string(line_msg_txt, "したい") or
           check_text_terminate_string(line_msg_txt, "たい") or
           check_text_terminate_string(line_msg_txt, "やりたい")):
-            extrct_intnt_rslt = "(願望・欲求について)"
+            extrct_intnt_rslt = "(願望＆欲求)"
     elif (check_text_terminate_string(line_msg_txt, "いです")):
             extrct_intnt_rslt = "(紹介＆説明＆提示)"
     elif (check_text_terminate_string(line_msg_txt, "をしないように") or
