@@ -1524,8 +1524,8 @@ def extract_intent_from_short_and_boilerplate(line_msg_txt):
           line_msg_txt == "どうぞお願いいたします" or
           line_msg_txt == "どうぞよろしくお願いします" or
           line_msg_txt == "どうぞよろしく" or
-          line_msg_txt == "よろしく どうぞ") or
-          line_msg_txt == "よろしくどうぞ") or
+          line_msg_txt == "よろしく どうぞ" or
+          line_msg_txt == "よろしくどうぞ" or
           line_msg_txt == "よろしく"):
             extrct_intnt_from_shrt_and_blrplt_rslt = "(初見・顔合わせの決まり文句)(良好な関係を求めて)"
     elif (line_msg_txt == "頑張りましょう" or
@@ -2249,16 +2249,17 @@ def extract_intent(line_msg_txt):
           check_text_terminate_string(line_msg_txt, "をお願い")):
             extrct_intnt_rslt = "(依頼＆依願)"
     elif (check_text_terminate_string(line_msg_txt, "しいです")):
-            extrct_intnt_rslt = "(紹介＆説明＆提示)(形容・表現に近い)"
+            extrct_intnt_rslt = "(紹介＆説明＆提示)(形容的な表現)"
     elif check_text_terminate_string(line_msg_txt, "だ"):
             extrct_intnt_rslt = "(宣言＆表明＆紹介＆説明＆提示)(誇示・顕示して)"
     elif (check_text_terminate_string(line_msg_txt, "でしょう") or
           check_text_terminate_string(line_msg_txt, "だろう") or
           check_text_terminate_string(line_msg_txt, "だろ")):
-            extrct_intnt_rslt = "(推定＆推測＆推量)"
-    elif (check_text_terminate_string(line_msg_txt, "でしょう") or
-          check_text_terminate_string(line_msg_txt, "だろう") or
-          check_text_terminate_string(line_msg_txt, "だろ")):
+            extrct_intnt_rslt = "(推定＆推測＆推量)(肯定形)"
+    elif (check_text_terminate_string(line_msg_txt, "ではないしょう") or
+          check_text_terminate_string(line_msg_txt, "ではないだろう") or
+          check_text_terminate_string(line_msg_txt, "ではないだろ") or
+):
             extrct_intnt_rslt = "(推定＆推測＆推量)"
     elif (check_text_terminate_string(line_msg_txt, "でしょうか") or
           check_text_terminate_string(line_msg_txt, "だろうか") or
