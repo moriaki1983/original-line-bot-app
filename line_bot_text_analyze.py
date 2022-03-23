@@ -1579,6 +1579,16 @@ def extract_intent_from_short_and_boilerplate(line_msg_txt):
           line_msg_txt == "嘘" or
           line_msg_txt == "ウソ"):
             extrct_intnt_from_shrt_and_blrplt_rslt = "(疑義＆質問＆確認)(虚偽であるかどうか)"
+    elif (line_msg_txt == "左様ですか" or
+          line_msg_txt == "そうですか" or
+          line_msg_txt == "はい はい" or
+          line_msg_txt == "はいはい") or
+          line_msg_txt == "うん うん" or
+          line_msg_txt == "うんうん"):
+            extrct_intnt_from_shrt_and_blrplt_rslt = "(相槌＆合いの手)(傾聴している素振り)"
+    elif (line_msg_txt == "その通りです" or
+          line_msg_txt == "その通り"):
+            extrct_intnt_from_shrt_and_blrplt_rslt = "(相槌＆合いの手)(正鵠を得た相手に対して)"
     else:
             extrct_intnt_from_shrt_and_blrplt_rslt = "(その他・不明)"
     return extrct_intnt_from_shrt_and_blrplt_rslt
@@ -1690,42 +1700,88 @@ def extract_intent(line_msg_txt):
           check_text_terminate_string(line_msg_txt, "するのか") or
           check_text_terminate_string(line_msg_txt, "するか")):
            extrct_intnt_rslt = "(疑義＆質問＆確認)(現在＆未来)(能動)(肯定形)(自己の行為・行動について)"
-    elif (check_text_terminate_string(line_msg_txt, "しないのですか") or
+    elif (check_text_terminate_string(line_msg_txt, "をしないのですか") or
+          check_text_terminate_string(line_msg_txt, "はしないのですか") or
+          check_text_terminate_string(line_msg_txt, "をしないんですか") or
+          check_text_terminate_string(line_msg_txt, "はしないんですか") or
+          check_text_terminate_string(line_msg_txt, "をしないのか") or
+          check_text_terminate_string(line_msg_txt, "はしないのか") or
+          check_text_terminate_string(line_msg_txt, "しないのですか") or
           check_text_terminate_string(line_msg_txt, "しないんですか") or
-          check_text_terminate_string(line_msg_txt, "しないか") or
           check_text_terminate_string(line_msg_txt, "しないのか")):
             extrct_intnt_rslt = "(疑義＆質問＆確認)(現在＆未来)(能動)(否定形)(自己の行為・行動について)"
-    elif (check_text_terminate_string(line_msg_txt, "していますか") or
+    elif (check_text_terminate_string(line_msg_txt, "をしていますか") or
+          check_text_terminate_string(line_msg_txt, "はしていますか") or
+          check_text_terminate_string(line_msg_txt, "をしてますか") or
+          check_text_terminate_string(line_msg_txt, "はしてますか") or
+          check_text_terminate_string(line_msg_txt, "をしているか") or
+          check_text_terminate_string(line_msg_txt, "はしているか") or
+          check_text_terminate_string(line_msg_txt, "をしてるか") or
+          check_text_terminate_string(line_msg_txt, "はしてるか") or
+          check_text_terminate_string(line_msg_txt, "していますか") or
           check_text_terminate_string(line_msg_txt, "してますか") or
           check_text_terminate_string(line_msg_txt, "しているか") or
           check_text_terminate_string(line_msg_txt, "してるか")):
            extrct_intnt_rslt = "(疑義＆質問＆確認)(現在進行)(能動)(肯定形)(自己の行為・行動について)"
-    elif (check_text_terminate_string(line_msg_txt, "していませんか") or
+    elif (check_text_terminate_string(line_msg_txt, "をしていませんか") or
+          check_text_terminate_string(line_msg_txt, "はしていませんか") or
+          check_text_terminate_string(line_msg_txt, "をしてませんか") or
+          check_text_terminate_string(line_msg_txt, "はしてませんか") or
+          check_text_terminate_string(line_msg_txt, "をしていないか") or
+          check_text_terminate_string(line_msg_txt, "はしていないか") or
+          check_text_terminate_string(line_msg_txt, "をしてないか") or
+          check_text_terminate_string(line_msg_txt, "はしてないか") or
+          check_text_terminate_string(line_msg_txt, "していませんか") or
           check_text_terminate_string(line_msg_txt, "してませんか") or
           check_text_terminate_string(line_msg_txt, "していないか") or
           check_text_terminate_string(line_msg_txt, "してないか")):
             extrct_intnt_rslt = "(疑義＆質問＆確認)(現在進行)(能動)(否定形)(自己の行為・行動について)"
-    elif (check_text_terminate_string(line_msg_txt, "できていますか") or
+    elif (check_text_terminate_string(line_msg_txt, "ができていますか") or
+          check_text_terminate_string(line_msg_txt, "はできていますか") or
+          check_text_terminate_string(line_msg_txt, "ができてますか") or
+          check_text_terminate_string(line_msg_txt, "はできてますか") or
+          check_text_terminate_string(line_msg_txt, "ができているか") or
+          check_text_terminate_string(line_msg_txt, "はできているか") or
+          check_text_terminate_string(line_msg_txt, "ができてるか") or
+          check_text_terminate_string(line_msg_txt, "はできてるか") or
+          check_text_terminate_string(line_msg_txt, "できていますか") or
           check_text_terminate_string(line_msg_txt, "できてますか") or
           check_text_terminate_string(line_msg_txt, "できているか") or
           check_text_terminate_string(line_msg_txt, "できてるか")):
             extrct_intnt_rslt = "(疑義＆質問＆確認)(現在)(完了)(肯定形)(物事の進行・進捗について)"
-    elif (check_text_terminate_string(line_msg_txt, "できていませんか") or
+    elif (check_text_terminate_string(line_msg_txt, "はできていませんか") or
+          check_text_terminate_string(line_msg_txt, "はできてませんか") or
+          check_text_terminate_string(line_msg_txt, "はできていないか") or
+          check_text_terminate_string(line_msg_txt, "はできてないか") or
+          check_text_terminate_string(line_msg_txt, "できていませんか") or
           check_text_terminate_string(line_msg_txt, "できてませんか") or
           check_text_terminate_string(line_msg_txt, "できていないか") or
           check_text_terminate_string(line_msg_txt, "できてないか")):
             extrct_intnt_rslt = "(疑義＆質問＆確認)(現在)(未完了)(否定形)(物事の進行・進捗について)"
-    elif (check_text_terminate_string(line_msg_txt, "できましたか") or
+    elif (check_text_terminate_string(line_msg_txt, "ができましたか") or
+          check_text_terminate_string(line_msg_txt, "はできましたか") or
+          check_text_terminate_string(line_msg_txt, "ができたか") or
+          check_text_terminate_string(line_msg_txt, "はできたか") or
+          check_text_terminate_string(line_msg_txt, "できましたか") or
           check_text_terminate_string(line_msg_txt, "できたか")):
             extrct_intnt_rslt = "(疑義＆質問＆確認)(過去)(完了)(肯定形)(物事の進行・進捗について)"
-    elif (check_text_terminate_string(line_msg_txt, "できていませんか") or
+    elif (check_text_terminate_string(line_msg_txt, "はできていませんか") or
+          check_text_terminate_string(line_msg_txt, "はできてませんか") or
+          check_text_terminate_string(line_msg_txt, "はできてないか") or
+          check_text_terminate_string(line_msg_txt, "できていませんか") or
           check_text_terminate_string(line_msg_txt, "できてませんか") or
           check_text_terminate_string(line_msg_txt, "できてないか")):
             extrct_intnt_rslt = "(疑義＆質問＆確認)(過去)(未完了)(否定形)(物事の進行・進捗について)"
-    elif (check_text_terminate_string(line_msg_txt, "できますか") or
+    elif (check_text_terminate_string(line_msg_txt, "ができますか") or
+          check_text_terminate_string(line_msg_txt, "はできますか") or
+          check_text_terminate_string(line_msg_txt, "ができるか") or
+          check_text_terminate_string(line_msg_txt, "はできるか") or
+          check_text_terminate_string(line_msg_txt, "できますか") or
           check_text_terminate_string(line_msg_txt, "できるか")):
             extrct_intnt_rslt = "(疑義＆質問＆確認)(現在＆未来)(肯定形)(物事の可能性について)"
-    elif (check_text_terminate_string(line_msg_txt, "できませんか") or
+    elif (check_text_terminate_string(line_msg_txt, "はできませんか") or
+          check_text_terminate_string(line_msg_txt, "はできないか") or
+          check_text_terminate_string(line_msg_txt, "できませんか") or
           check_text_terminate_string(line_msg_txt, "できないか")):
             extrct_intnt_rslt = "(疑義＆質問＆確認)(現在＆未来)(否定形)(物事の可能性について)"
     elif (check_text_terminate_string(line_msg_txt, "がされています") or
