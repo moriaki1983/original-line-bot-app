@@ -1899,8 +1899,8 @@ def extract_intent(line_msg_txt):
             extrct_intnt_rslt = "(疑義＆質問＆確認)(否定形)(他者の願望・欲求に適う、他者の行為・行動について)"
     elif (check_text_terminate_string(line_msg_txt, "をしていきたいですか") or
           check_text_terminate_string(line_msg_txt, "をしていきたいか") or
-          check_text_terminate_string(line_msg_txt, "していきたいか")
-          check_text_terminate_string(line_msg_txt, "をやっていきたいですか")
+          check_text_terminate_string(line_msg_txt, "していきたいか") or
+          check_text_terminate_string(line_msg_txt, "をやっていきたいですか") or
           check_text_terminate_string(line_msg_txt, "をやっていきたいか")):
             extrct_intnt_rslt = "(疑義＆質問＆確認)(現在＆未来)(肯定形)(他者の願望・欲求に適う、他者の行為・行動について)"
     elif (check_text_terminate_string(line_msg_txt, "をしていきたくないですか") or
