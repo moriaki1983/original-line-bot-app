@@ -8,6 +8,7 @@ import os
 import datetime
 import psycopg2
 import line_bot_text_analyze
+import line_bot_text_generate
 from flask import Flask, jsonify, request, abort
 from linebot import (LineBotApi, WebhookHandler)
 from linebot.exceptions import (InvalidSignatureError)
@@ -110,7 +111,7 @@ def handle_message(event):
     #ユーザーから送られるLINEメッセージをJanomeで形態素解析する
     line_msg_anlyz_rslt = line_msg_analyze(event.message.text)
 
-    #janomeで解析されたユーザーのメッセージを基に返信メッセージを生成する
+    #ユーザーから送られるLINEメッセージの解析結果から返信メッセージを生成する
     line_msg_gnrt_rslt = line_msg_generate(line_msg_anlyz_rslt)
 
     #LINEBotAPIを使って、ユーザーに生成されたLINEメッセージを送信する
@@ -157,12 +158,14 @@ def line_msg_analyze(line_msg_txt):
     rmv_symbl        = line_bot_text_analyze.remove_symbol(rmv_etc)
     rmv_edprtcl      = line_bot_text_analyze.remove_endparticle(rmv_symbl)
     extrct_intnt_end = line_bot_text_analyze.extract_intent(rmv_edprtcl)
-    return extrct_intnt_end
+    line_msg_anlyz_rslt = extrct_intnt_end
+    return line_msg_anlyz_rslt
 
 
-#解析されたユーザーのメッセージを基に返信メッセージを生成する
+#ユーザーから送られるLINEメッセージの解析結果から返信メッセージを生成する
 def line_msg_generate(line_msg_anlyz_rslt):
-    line_msg_gnrt_rslt = line_msg_anlyz_rslt
+    #ユーザーから送られるLINEメッセージの解析結果を基に、自然でかつ適切な返信メッセージを生成する
+    line_msg_gnrt_rslt = line_bot_text_generate.text_generate_from_analyze_result(line_msg_anlyz_rslt)
     return line_msg_gnrt_rslt
 
 
