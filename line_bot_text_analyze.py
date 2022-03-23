@@ -971,7 +971,7 @@ def extract_intent_from_short_and_boilerplate(line_msg_txt):
           line_msg_txt == "死んでろ" or
           line_msg_txt == "氏んでろ" or
           line_msg_txt == "しんでろ"):
-            extrct_intnt_from_shrt_and_blrplt_rslt = "(人格・存在否定)"
+            extrct_intnt_from_shrt_and_blrplt_rslt = "(人格・存在の否定)"
     elif (line_msg_txt == "大天才ですか" or
           line_msg_txt == "天才ですか" or
           line_msg_txt == "大秀才ですか" or
@@ -1306,7 +1306,7 @@ def extract_intent_from_short_and_boilerplate(line_msg_txt):
           line_msg_txt == "なぜそうなるの" or
           line_msg_txt == "何故そうなる" or
           line_msg_txt == "なぜそうなる"):
-            extrct_intnt_from_shrt_and_blrplt_rslt = "(疑義＆確認＆質問)(やや反発している・やや反感を抱いている)"
+            extrct_intnt_from_shrt_and_blrplt_rslt = "(疑義＆確認＆質問)(やや反発している、やや反感を抱いている)"
     elif (line_msg_txt == "大丈夫でしょうか" or
           line_msg_txt == "大丈夫ですか" or
           line_msg_txt == "大丈夫"):
@@ -1336,7 +1336,7 @@ def extract_intent_from_short_and_boilerplate(line_msg_txt):
           line_msg_txt == "イヤミったらしい" or
           line_msg_txt == "嫌味っぽい" or
           line_msg_txt == "イヤミっぽい"):
-            extrct_intnt_from_shrt_and_blrplt_rslt = "(訴求＆表現)(反発している・反感を抱いている)(強い嫌悪)"
+            extrct_intnt_from_shrt_and_blrplt_rslt = "(訴求＆表現)(反発している、反感を抱いている)(強い嫌悪)"
     elif (line_msg_txt == "しても良いですか" or
           line_msg_txt == "してもよいですか" or
           line_msg_txt == "良いですか" or
@@ -1782,7 +1782,7 @@ def extract_intent(line_msg_txt):
           check_text_terminate_string(line_msg_txt, "でなかった")):
             extrct_intnt_rslt = "(宣言＆表明)(過去完了)(否定形)"
     elif (check_text_terminate_string(line_msg_txt, "をしていきたい") or
-　　　　　check_text_terminate_string(line_msg_txt, "はしていきたい") or
+          check_text_terminate_string(line_msg_txt, "はしていきたい") or
           check_text_terminate_string(line_msg_txt, "していきたい") or
           check_text_terminate_string(line_msg_txt, "をやっていきたい") or
           check_text_terminate_string(line_msg_txt, "はやっていきたい")):
@@ -2128,21 +2128,68 @@ def extract_intent(line_msg_txt):
           check_text_terminate_string(line_msg_txt, "すべきではないのでしょうか") or
           check_text_terminate_string(line_msg_txt, "すべきでないのでしょうか")):
             extrct_intnt_rslt = "(疑義＆質問＆確認)(否定形)(行為・行動の是非について)"
+    elif (check_text_terminate_string(line_msg_txt, "をしても良いです") or
+          check_text_terminate_string(line_msg_txt, "をしてもいいです") or
+          check_text_terminate_string(line_msg_txt, "をして良いです") or
+          check_text_terminate_string(line_msg_txt, "をしていいです") or
+          check_text_terminate_string(line_msg_txt, "をしても良い") or
+          check_text_terminate_string(line_msg_txt, "をしてもいい") or
+          check_text_terminate_string(line_msg_txt, "をして良い") or
+          check_text_terminate_string(line_msg_txt, "をしていい") or
+          check_text_terminate_string(line_msg_txt, "はしても良いです") or
+          check_text_terminate_string(line_msg_txt, "はしてもいいです") or
+          check_text_terminate_string(line_msg_txt, "はして良いです") or
+          check_text_terminate_string(line_msg_txt, "はしていいです") or
+          check_text_terminate_string(line_msg_txt, "はしても良い") or
+          check_text_terminate_string(line_msg_txt, "はしてもいい") or
+          check_text_terminate_string(line_msg_txt, "はして良い") or
+          check_text_terminate_string(line_msg_txt, "はしていい") or
+          check_text_terminate_string(line_msg_txt, "をやっても良いです") or
+          check_text_terminate_string(line_msg_txt, "をやってもいいです") or
+          check_text_terminate_string(line_msg_txt, "はやっても良いです") or
+          check_text_terminate_string(line_msg_txt, "はやってもいいです") or
+          check_text_terminate_string(line_msg_txt, "しても良いです") or
+          check_text_terminate_string(line_msg_txt, "してもいいです") or
+          check_text_terminate_string(line_msg_txt, "して良いです") or
+          check_text_terminate_string(line_msg_txt, "していいです") or
+          check_text_terminate_string(line_msg_txt, "しても良い") or
+          check_text_terminate_string(line_msg_txt, "してもいい") or
+          check_text_terminate_string(line_msg_txt, "して良い") or
+          check_text_terminate_string(line_msg_txt, "していい")):
+            extrct_intnt_rslt = "(許容＆許可)"
     elif (check_text_terminate_string(line_msg_txt, "をしないように") or
           check_text_terminate_string(line_msg_txt, "をしないよう") or
           check_text_terminate_string(line_msg_txt, "をするな") or
-          check_text_terminate_string(line_msg_txt, "をしちゃ駄目") or
-          check_text_terminate_string(line_msg_txt, "をしちゃだめ") or
-          check_text_terminate_string(line_msg_txt, "をしちゃダメ") or
+          check_text_terminate_string(line_msg_txt, "をしてはいけない") or
+          check_text_terminate_string(line_msg_txt, "をしちゃいけない") or
           check_text_terminate_string(line_msg_txt, "はしないように") or
           check_text_terminate_string(line_msg_txt, "はしないよう") or
           check_text_terminate_string(line_msg_txt, "はするな") or
+          check_text_terminate_string(line_msg_txt, "はしてはいけない") or
+          check_text_terminate_string(line_msg_txt, "はしちゃいけない") or
+          check_text_terminate_string(line_msg_txt, "をやってはいけない") or
+          check_text_terminate_string(line_msg_txt, "をやっちゃいけない") or
+          check_text_terminate_string(line_msg_txt, "はやってはいけない") or
+          check_text_terminate_string(line_msg_txt, "はやっちゃいけない") or
+          check_text_terminate_string(line_msg_txt, "をしちゃ駄目だ") or
+          check_text_terminate_string(line_msg_txt, "をしちゃだめだ") or
+          check_text_terminate_string(line_msg_txt, "をしちゃダメだ") or
+          check_text_terminate_string(line_msg_txt, "はしちゃ駄目だ") or
+          check_text_terminate_string(line_msg_txt, "はしちゃだめだ") or
+          check_text_terminate_string(line_msg_txt, "をしちゃ駄目") or
+          check_text_terminate_string(line_msg_txt, "をしちゃだめ") or
+          check_text_terminate_string(line_msg_txt, "をしちゃダメ") or
           check_text_terminate_string(line_msg_txt, "はしちゃ駄目") or
           check_text_terminate_string(line_msg_txt, "はしちゃだめ") or
-          check_text_terminate_string(line_msg_txt, "しちゃダメ") or
           check_text_terminate_string(line_msg_txt, "しないように") or
           check_text_terminate_string(line_msg_txt, "しないよう") or
           check_text_terminate_string(line_msg_txt, "するな") or
+          check_text_terminate_string(line_msg_txt, "してはいけない") or
+          check_text_terminate_string(line_msg_txt, "しちゃいけない") or
+          check_text_terminate_string(line_msg_txt, "はいけない") or
+          check_text_terminate_string(line_msg_txt, "しちゃ駄目だ") or
+          check_text_terminate_string(line_msg_txt, "しちゃだめだ") or
+          check_text_terminate_string(line_msg_txt, "しちゃダメだ") or
           check_text_terminate_string(line_msg_txt, "しちゃ駄目") or
           check_text_terminate_string(line_msg_txt, "しちゃだめ") or
           check_text_terminate_string(line_msg_txt, "しちゃダメ")):
@@ -2150,17 +2197,36 @@ def extract_intent(line_msg_txt):
     elif (check_text_terminate_string(line_msg_txt, "がしないように") or
           check_text_terminate_string(line_msg_txt, "がしないよう") or
           check_text_terminate_string(line_msg_txt, "がするな") or
+          check_text_terminate_string(line_msg_txt, "がやってはいけない") or
+          check_text_terminate_string(line_msg_txt, "がやっちゃいけない") or
+          check_text_terminate_string(line_msg_txt, "がやっちゃ駄目だ") or
+          check_text_terminate_string(line_msg_txt, "がやっちゃだめだ") or
+          check_text_terminate_string(line_msg_txt, "がやっちゃダメだ") or
+          check_text_terminate_string(line_msg_txt, "がやっちゃ駄目") or
+          check_text_terminate_string(line_msg_txt, "がやっちゃだめ") or
+          check_text_terminate_string(line_msg_txt, "がやっちゃダメ") or
+          check_text_terminate_string(line_msg_txt, "がしちゃ駄目だ") or
+          check_text_terminate_string(line_msg_txt, "がしちゃだめだ") or
+          check_text_terminate_string(line_msg_txt, "がしちゃダメだ") or
           check_text_terminate_string(line_msg_txt, "がしちゃ駄目") or
           check_text_terminate_string(line_msg_txt, "がしちゃだめ") or
           check_text_terminate_string(line_msg_txt, "がしちゃダメ")):
             extrct_intnt_rslt = "(禁止＆制限)(特定個人についてのみ)"
     elif (check_text_terminate_string(line_msg_txt, "をしてはいけませんか") or
+          check_text_terminate_string(line_msg_txt, "をしてはいけないですか") or
           check_text_terminate_string(line_msg_txt, "をしてはいけないか") or
+          check_text_terminate_string(line_msg_txt, "はしてはいけませんか") or
+          check_text_terminate_string(line_msg_txt, "はしてはいけないですか") or
+          check_text_terminate_string(line_msg_txt, "はしてはいけないか") or
+          check_text_terminate_string(line_msg_txt, "をやってはいけませんか") or
+          check_text_terminate_string(line_msg_txt, "をやってはいけないですか") or
+          check_text_terminate_string(line_msg_txt, "をやってはいけないか") or
+          check_text_terminate_string(line_msg_txt, "をやっちゃ駄目か") or
+          check_text_terminate_string(line_msg_txt, "をやっちゃだめか") or
+          check_text_terminate_string(line_msg_txt, "をやっちゃダメか") or
           check_text_terminate_string(line_msg_txt, "をしちゃ駄目ですか") or
           check_text_terminate_string(line_msg_txt, "をしちゃだめですか") or
           check_text_terminate_string(line_msg_txt, "をしちゃダメですか") or
-          check_text_terminate_string(line_msg_txt, "はしてはいけませんか") or
-          check_text_terminate_string(line_msg_txt, "はしてはいけないか") or
           check_text_terminate_string(line_msg_txt, "はしちゃ駄目ですか") or
           check_text_terminate_string(line_msg_txt, "はしちゃだめですか") or
           check_text_terminate_string(line_msg_txt, "はしちゃダメですか") or
@@ -2176,6 +2242,10 @@ def extract_intent(line_msg_txt):
             extrct_intnt_rslt = "(疑義＆質問＆確認)(禁止・制限事項について)"
     elif (check_text_terminate_string(line_msg_txt, "がしてはいけませんか") or
           check_text_terminate_string(line_msg_txt, "がしてはいけないか") or
+          check_text_terminate_string(line_msg_txt, "がやってはいけないか") or
+          check_text_terminate_string(line_msg_txt, "がやっちゃ駄目か") or
+          check_text_terminate_string(line_msg_txt, "がやっちゃだめか") or
+          check_text_terminate_string(line_msg_txt, "がやっちゃダメか") or
           check_text_terminate_string(line_msg_txt, "がしちゃ駄目か") or
           check_text_terminate_string(line_msg_txt, "がしちゃだめか") or
           check_text_terminate_string(line_msg_txt, "がしちゃダメか")):
@@ -2256,25 +2326,24 @@ def extract_intent(line_msg_txt):
           check_text_terminate_string(line_msg_txt, "だろう") or
           check_text_terminate_string(line_msg_txt, "だろ")):
             extrct_intnt_rslt = "(推定＆推測＆推量)(肯定形)"
-    elif (check_text_terminate_string(line_msg_txt, "ではないしょう") or
+    elif (check_text_terminate_string(line_msg_txt, "ではないでしょう") or
           check_text_terminate_string(line_msg_txt, "ではないだろう") or
-          check_text_terminate_string(line_msg_txt, "ではないだろ") or
-):
-            extrct_intnt_rslt = "(推定＆推測＆推量)"
+          check_text_terminate_string(line_msg_txt, "ではないだろ")):
+            extrct_intnt_rslt = "(推定＆推測＆推量)(否定形)"
     elif (check_text_terminate_string(line_msg_txt, "でしょうか") or
           check_text_terminate_string(line_msg_txt, "だろうか") or
           check_text_terminate_string(line_msg_txt, "だろか")):
-            extrct_intnt_rslt = "(疑義＆質問＆確認)(推定・推測・推量について)"
-    elif (check_text_terminate_string(line_msg_txt, "でしょうか") or
-          check_text_terminate_string(line_msg_txt, "だろうか") or
-          check_text_terminate_string(line_msg_txt, "だろか")):
-            extrct_intnt_rslt = "(疑義＆質問＆確認)(推定・推測・推量について)"
+            extrct_intnt_rslt = "(疑義＆質問＆確認)(肯定形)(推定・推測・推量について)"
+    elif (check_text_terminate_string(line_msg_txt, "ではないでしょうか") or
+          check_text_terminate_string(line_msg_txt, "ではないだろうか") or
+          check_text_terminate_string(line_msg_txt, "ではないだろか")):
+            extrct_intnt_rslt = "(疑義＆質問＆確認)(否定形)(推定・推測・推量について)"
     elif (check_text_terminate_string(line_msg_txt, "だそうです") or
           check_text_terminate_string(line_msg_txt, "だそう")):
-            extrct_intnt_rslt = "(報告＆連絡)(推定・推測・推量して)"
-    elif (check_text_terminate_string(line_msg_txt, "だそうです") or
-          check_text_terminate_string(line_msg_txt, "だそう")):
-            extrct_intnt_rslt = "(報告＆連絡)(推定・推測・推量して)"
+            extrct_intnt_rslt = "(報告＆連絡)(肯定形)(推定・推測・推量して)"
+    elif (check_text_terminate_string(line_msg_txt, "ではないそうです") or
+          check_text_terminate_string(line_msg_txt, "ではないそう")):
+            extrct_intnt_rslt = "(報告＆連絡)(否定形)(推定・推測・推量して)"
     elif (check_text_terminate_string(line_msg_txt, "はいます") or
           check_text_terminate_string(line_msg_txt, "はいる")):
             extrct_intnt_rslt = "(報告＆連絡)(肯定形)(存在の有無について)"
