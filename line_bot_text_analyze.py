@@ -2517,7 +2517,7 @@ def extract_intent(line_msg_txt):
           check_text_terminate_string(line_msg_txt, "が要りますでしょうか") or
           check_text_terminate_string(line_msg_txt, "は要りますでしょうか") or
           check_text_terminate_string(line_msg_txt, "が要りますか") or
-          check_text_terminate_string(line_msg_txt, "は要りますか") or):
+          check_text_terminate_string(line_msg_txt, "は要りますか")):
             extrct_intnt_rslt = "(疑義＆質問＆確認)(肯定形)(物事の要否について)"
     elif (check_text_terminate_string(line_msg_txt, "が不要でしょうか") or
           check_text_terminate_string(line_msg_txt, "は不要でしょうか") or
