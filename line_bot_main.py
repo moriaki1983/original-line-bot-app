@@ -168,9 +168,10 @@ def line_msg_generate(line_msg_anlyz_rslt):
     #ユーザーから送られるLINEメッセージの解析結果を基に、自然でかつ適切な返信メッセージを生成する
     global rcd_id
     if rcd_id == "0":
-       lst_tm_rcd = ""
-    lst_tm_rcd = postgres_select(str(int(rcd_id)-1))
-    line_msg_gnrt_rslt = line_bot_text_generate.text_generate_from_analyze_result(line_msg_anlyz_rslt, lst_tm_rcd)
+       lsttm_msg = ""
+    lsttm_rcd = postgres_select(str(int(rcd_id)-1))
+    lsttm_msg = lsttm_rcd[3]
+    line_msg_gnrt_rslt = line_bot_text_generate.text_generate_from_analyze_result(line_msg_anlyz_rslt, lsttm_msg)
     return line_msg_gnrt_rslt
 
 
