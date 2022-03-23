@@ -19,7 +19,7 @@ def text_generate_from_analyze_result(line_msg_anlyz_rslt, lsttm_intnt):
          rply_msg_lst = ["またまた～ お上手ですね", "そう言われても何も出ませんよ"]
          txt_gnrt_from_anlyz_rslt = random.choice(rply_msg_lst)
          cmpltn_flg = True
-    if   flw_of_uttrnc == "(辱め)(卑猥な言動)"→:
+    if   flw_of_uttrnc == "(辱め)(卑猥な言動)→":
          rply_msg_lst = ["やめてください", "(/ω＼)ｲﾔﾝ"]
          txt_gnrt_from_anlyz_rslt = random.choice(rply_msg_lst)
          cmpltn_flg = False
@@ -28,6 +28,6 @@ def text_generate_from_analyze_result(line_msg_anlyz_rslt, lsttm_intnt):
          txt_gnrt_from_anlyz_rslt = random.choice(rply_msg_lst)
          cmpltn_flg = True
     else:
-       txt_gnrt_from_anlyz_rslt = "既存フロウに該当しない"
+       txt_gnrt_from_anlyz_rslt = "また おしゃべりしましょう♪"
        cmpltn_flg = True
     return txt_gnrt_from_anlyz_rslt, cmpltn_flg
