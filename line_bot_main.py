@@ -169,10 +169,14 @@ def line_msg_generate(line_msg_anlyz_rslt):
     global rcd_id
     if rcd_id == "0":
        lsttm_msg = ""
-    lsttm_rcd = postgres_select(str(int(rcd_id)-1))
-    lsttm_msg = lsttm_rcd[3]
-    line_msg_gnrt_rslt = line_bot_text_generate.text_generate_from_analyze_result(line_msg_anlyz_rslt, lsttm_msg)
-    return line_msg_gnrt_rslt
+       line_msg_gnrt_rslt = line_bot_text_generate.text_generate_from_analyze_result(line_msg_anlyz_rslt, lsttm_msg)
+       return line_msg_gnrt_rslt
+    else:
+       lsttm_rcd = postgres_select(str(int(rcd_id)-1))
+       #app.logger.info("lsttm_rcd[3]: " + lsttm_rcd[3])
+       lsttm_msg = lsttm_rcd[3]
+       line_msg_gnrt_rslt = line_bot_text_generate.text_generate_from_analyze_result(line_msg_anlyz_rslt, lsttm_msg)
+       return line_msg_gnrt_rslt
 
 
 #LINEBotAPIを使って、ユーザーに生成されたLINEメッセージを送信する
