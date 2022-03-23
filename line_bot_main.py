@@ -130,27 +130,28 @@ def handle_follow(event):
 
 #ユーザーから送られるLINEメッセージを解析する
 def line_msg_analyze(line_msg_txt):
-    #ユーザーから送られるLINEメッセージをJanomeで形態素解析する
-    #line_msg_anlyz_rslt = line_bot_text_analyze.line_msg_morpho_analyze(line_msg_txt)
-
     #ユーザーから送られるLINEメッセージを解析し、インテントを抽出して、これを呼出し元に引渡しをする
-    extrct_intnt = line_bot_text_analyze.extract_intent_from_gag_and_vocalcordcopy(line_msg_txt)
+    rmv_etc       = line_bot_text_analyze.remove_etc(line_msg_txt)
+    extrct_intnt = line_bot_text_analyze.extract_intent_from_gag_and_vocalcordcopy(rmv_etc)
     if extrct_intnt != "(その他・不明)":
        line_msg_anlyz_rslt = extrct_intnt
        return line_msg_anlyz_rslt
-    rmv_symbl     = line_bot_text_analyze.remove_symbol(line_msg_txt)
+    rmv_etc       = line_bot_text_analyze.remove_etc(line_msg_txt)
+    rmv_symbl     = line_bot_text_analyze.remove_symbol(rmv_etc)
     extrct_intnt2 = line_bot_text_analyze.extract_intent_from_gag_and_vocalcordcopy(rmv_symbl)
     if extrct_intnt2 != "(その他・不明)":
        line_msg_anlyz_rslt = extrct_intnt2
        return line_msg_anlyz_rslt
-    rmv_symbl     = line_bot_text_analyze.remove_symbol(line_msg_txt)
+    rmv_etc       = line_bot_text_analyze.remove_etc(line_msg_txt)
+    rmv_symbl     = line_bot_text_analyze.remove_symbol(rmv_etc)
     extrct_intnt3 = line_bot_text_analyze.extract_intent_from_short_and_boilerplate(rmv_symbl)
     if extrct_intnt3 != "(その他・不明)":
        line_msg_anlyz_rslt = extrct_intnt3
        return line_msg_anlyz_rslt
-    rmv_etc       = line_bot_text_analyze.remove_etc(line_msg_txt)
-    rmv_symbl     = line_bot_text_analyze.remove_symbol(rmv_etc)
-    extrct_intnt4 = line_bot_text_analyze.extract_intent_from_short_and_boilerplate(rmv_symbl)
+    rmv_etc          = line_bot_text_analyze.remove_etc(line_msg_txt)
+    rmv_symbl        = line_bot_text_analyze.remove_symbol(rmv_etc)
+    rmv_edprtcl      = line_bot_text_analyze.remove_endparticle(rmv_symbl)
+    extrct_intnt4 = line_bot_text_analyze.extract_intent_from_short_and_boilerplate(rmv_edprtcl)
     if extrct_intnt4 != "(その他・不明)":
        line_msg_anlyz_rslt = extrct_intnt4
        return line_msg_anlyz_rslt
@@ -165,7 +166,11 @@ def line_msg_analyze(line_msg_txt):
 #ユーザーから送られるLINEメッセージの解析結果から返信メッセージを生成する
 def line_msg_generate(line_msg_anlyz_rslt):
     #ユーザーから送られるLINEメッセージの解析結果を基に、自然でかつ適切な返信メッセージを生成する
-    line_msg_gnrt_rslt = line_bot_text_generate.text_generate_from_analyze_result(line_msg_anlyz_rslt)
+    global rcd_id
+    if rcd_id == "0":
+       lst_tm_rcd = ""
+    lst_tm_rcd = postgres_select(str(int(rcd_id)-1))
+    line_msg_gnrt_rslt = line_bot_text_generate.text_generate_from_analyze_result(line_msg_anlyz_rslt, lst_tm_rcd)
     return line_msg_gnrt_rslt
 
 

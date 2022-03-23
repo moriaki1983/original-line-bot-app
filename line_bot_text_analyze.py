@@ -9,6 +9,82 @@ from janome.tokenizer import Tokenizer
 
 
 
+#ユーザーから送られるLINEメッセージが指定された文字列で開始するかを判定する
+def check_text_start_string(line_msg_txt, str):
+    #メッセージの中に指定された文字列が含まれている場合に、メッセージがこの文字列で開始するかを判定する
+    rmv_symbl_rslt        = remove_symbol(line_msg_txt)
+    chk_txt_strt_str_rslt = rmv_symbl_rslt.startswith(str)
+    return chk_txt_strt_str_rslt
+
+
+#ユーザーから送られるLINEメッセージが指定された文字列で終結するかを判定する
+def check_text_terminate_string(line_msg_txt, str):
+    #メッセージの中に指定された文字列が含まれている場合に、メッセージがこの文字列で終結するかを判定する
+    rmv_symbl_rslt          = remove_symbol(line_msg_txt)
+    chk_txt_trmntd_str_rslt = rmv_symbl_rslt.endswith(str)
+    return chk_txt_trmntd_str_rslt
+
+
+#ユーザーから送られるLINEメッセージをJanomeで形態素解析する(見出しのみをリストにして出力する)
+def line_msg_morpho_analyze(line_msg_txt):
+    #メッセージの内容を品詞や単語を単位として分解する(＝文節に分ける)
+    tknzr   = Tokenizer()
+    tkns    = tknzr.tokenize(line_msg_txt)
+
+    #分解後のメッセージをリストに格納、これを呼出し元に引渡しをする
+    anlyz_rslt = []
+    for tkn in tkns:
+        anlyz_rslt.append(tkn.surface)
+    return anlyz_rslt
+
+
+#ユーザーから送られるLINEメッセージをJanomeで形態素解析する(見出しと品詞のセットをリストにして出力する)
+def line_msg_morpho_analyze2(line_msg_txt):
+    #メッセージの内容を品詞や単語を単位として分解する(＝文節に分ける)
+    tknzr = Tokenizer()
+    tkns  = tknzr.tokenize(line_msg_txt)
+
+    #分解後のメッセージをリストに格納、これを呼出し元に引渡しをする
+    anlyz2_rslt = []
+    for tkn in tkns:
+        anlyz2_rslt.append([tkn.surface, tkn.part_of_speech])
+    return [anlyz2_rslt]
+
+
+#ユーザーから送られるLINEメッセージの中に含まれるその他のもの(＝感情表現のためのもの)を除去する
+def remove_etc(line_msg_txt):
+    #メッセージの中に含まれるその他のものを除去する
+    if   bool(re.search(r"怒$",      line_msg_txt)) == True:
+         rmv_etc = re.sub(r"怒$", "", line_msg_txt)
+    elif bool(re.search(r"泣$",      line_msg_txt)) == True:
+         rmv_etc = re.sub(r"泣$", "", line_msg_txt)
+    elif bool(re.search(r"汗$",      line_msg_txt)) == True:
+         rmv_etc = re.sub(r"汗$", "", line_msg_txt)
+    elif bool(re.search(r"爆$",      line_msg_txt)) == True:
+         rmv_etc = re.sub(r"爆$", "", line_msg_txt)
+    elif bool(re.search(r"(爆笑)$",  line_msg_txt)) == True:
+         rmv_etc = re.sub(r"(爆笑)$", "", line_msg_txt)
+    elif bool(re.search(r"笑+$",     line_msg_txt)) == True:
+         rmv_etc = re.sub(r"笑+$", "", line_msg_txt)
+    elif bool(re.search(r"(わら)+$", line_msg_txt)) == True:
+         rmv_etc = re.sub(r"(わら)+$", "", line_msg_txt)
+    elif bool(re.search(r"(ワラ)+$", line_msg_txt)) == True:
+         rmv_etc = re.sub(r"(ワラ)+$", "", line_msg_txt)
+    elif bool(re.search(r"草+$",     line_msg_txt)) == True:
+         rmv_etc = re.sub(r"草+$", "", line_msg_txt)
+    elif bool(re.search(r"(くさ)+$", line_msg_txt)) == True:
+         rmv_etc = re.sub(r"(くさ)+$", "", line_msg_txt)
+    elif bool(re.search(r"(クサ)+$", line_msg_txt)) == True:
+         rmv_etc = re.sub(r"(クサ)+$", "", line_msg_txt)
+    elif bool(re.search(r"w+$",      line_msg_txt)) == True:
+         rmv_etc = re.sub(r"w+$", "", line_msg_txt)
+    elif bool(re.search(r"W+$",      line_msg_txt)) == True:
+         rmv_etc = re.sub(r"W+$", "", line_msg_txt)
+    else:
+         rmv_etc = line_msg_txt
+    return rmv_etc
+
+
 #ユーザーから送られるLINEメッセージの中に含まれる記号を除去する
 def remove_symbol(line_msg_txt):
     #メッセージの中に含まれる各種の記号・空白を除去する
@@ -103,113 +179,6 @@ def remove_endparticle(line_msg_txt):
     else:
          rmv_edprtcl_rslt = line_msg_txt
     return rmv_edprtcl_rslt
-
-
-#ユーザーから送られるLINEメッセージの中に含まれるその他のもの(＝感情表現のためのもの)を除去する
-def remove_etc(line_msg_txt):
-    #メッセージの中に含まれるその他のものを除去する
-    if   bool(re.search(r"怒$",      line_msg_txt)) == True:
-         rmv_etc = re.sub(r"怒$", "", line_msg_txt)
-    elif bool(re.search(r"泣$",      line_msg_txt)) == True:
-         rmv_etc = re.sub(r"泣$", "", line_msg_txt)
-    elif bool(re.search(r"汗$",      line_msg_txt)) == True:
-         rmv_etc = re.sub(r"汗$", "", line_msg_txt)
-    elif bool(re.search(r"爆$",      line_msg_txt)) == True:
-         rmv_etc = re.sub(r"爆$", "", line_msg_txt)
-    elif bool(re.search(r"(爆笑)$",  line_msg_txt)) == True:
-         rmv_etc = re.sub(r"(爆笑)$", "", line_msg_txt)
-    elif bool(re.search(r"笑+$",     line_msg_txt)) == True:
-         rmv_etc = re.sub(r"笑+$", "", line_msg_txt)
-    elif bool(re.search(r"(わら)+$", line_msg_txt)) == True:
-         rmv_etc = re.sub(r"(わら)+$", "", line_msg_txt)
-    elif bool(re.search(r"(ワラ)+$", line_msg_txt)) == True:
-         rmv_etc = re.sub(r"(ワラ)+$", "", line_msg_txt)
-    elif bool(re.search(r"草+$",     line_msg_txt)) == True:
-         rmv_etc = re.sub(r"草+$", "", line_msg_txt)
-    elif bool(re.search(r"(くさ)+$", line_msg_txt)) == True:
-         rmv_etc = re.sub(r"(くさ)+$", "", line_msg_txt)
-    elif bool(re.search(r"(クサ)+$", line_msg_txt)) == True:
-         rmv_etc = re.sub(r"(クサ)+$", "", line_msg_txt)
-    elif bool(re.search(r"w+$",      line_msg_txt)) == True:
-         rmv_etc = re.sub(r"w+$", "", line_msg_txt)
-    elif bool(re.search(r"W+$",      line_msg_txt)) == True:
-         rmv_etc = re.sub(r"W+$", "", line_msg_txt)
-    else:
-         rmv_etc = line_msg_txt
-    return rmv_etc
-
-
-#ユーザーから送られるLINEメッセージが指定された文字列で開始するかを判定する
-def check_text_start_string(line_msg_txt, str):
-    #メッセージの中に指定された文字列が含まれている場合に、メッセージがこの文字列で開始するかを判定する
-    rmv_symbl_rslt        = remove_symbol(line_msg_txt)
-    chk_txt_strt_str_rslt = rmv_symbl_rslt.startswith(str)
-    return chk_txt_strt_str_rslt
-
-
-#ユーザーから送られるLINEメッセージが指定された文字列で終結するかを判定する
-def check_text_terminate_string(line_msg_txt, str):
-    #メッセージの中に指定された文字列が含まれている場合に、メッセージがこの文字列で終結するかを判定する
-    rmv_symbl_rslt          = remove_symbol(line_msg_txt)
-    chk_txt_trmntd_str_rslt = rmv_symbl_rslt.endswith(str)
-    return chk_txt_trmntd_str_rslt
-
-
-#ユーザーから送られるLINEメッセージの中に含まれるインテントを除去する
-def remove_intent(line_msg_txt):
-    #メッセージの中に含まれる日本語固有のインテントの削除候補をリストアップする
-    rmv_cnddt_intnt_list = []
-    #if check_text_terminate_string(line_msg_txt, "します"):
-    #     rmv_cnddt_intnt_list.append("します")
-
-
-    #前段で取得した削除候補の中から実際に削除するインテントを決定して、これを呼出し元に引渡しをする
-    rmv_cnddt_intnt_list_tmp = []
-    for intnt in rmv_cnddt_intnt_list:
-        rmv_cnddt_intnt_list_tmp.append([len(intnt), intnt])
-    if  len(rmv_cnddt_intnt_list_tmp) == 0:
-        rmv_intnt_rslt = line_msg_txt
-        return rmv_intnt_rslt
-    if  len(rmv_cnddt_intnt_list_tmp) == 1:
-        tmp_intnt      = rmv_cnddt_intnt_list_tmp[0][1]
-        rmv_intnt_rslt = re.sub(tmp_intnt, "", line_msg_txt)
-        return rmv_intnt_rslt
-    idx       = 0
-    tmp_intnt = ""
-    while len(rmv_cnddt_intnt_list_tmp) > (idx+1):
-          if rmv_cnddt_intnt_list_tmp[idx+1][0] > rmv_cnddt_intnt_list_tmp[idx][0]:
-             tmp_intnt = rmv_cnddt_intnt_list_tmp[idx+1][1]
-             idx = idx + 1
-          else:
-             continue
-    rmv_intnt_rslt = re.sub(tmp_intnt, "", line_msg_txt)
-    return rmv_intnt_rslt
-
-
-#ユーザーから送られるLINEメッセージをJanomeで形態素解析する(見出しのみをリストにして出力する)
-def line_msg_morpho_analyze(line_msg_txt):
-    #メッセージの内容を品詞や単語を単位として分解する(＝文節に分ける)
-    tknzr   = Tokenizer()
-    tkns    = tknzr.tokenize(line_msg_txt)
-
-    #分解後のメッセージをリストに格納、これを呼出し元に引渡しをする
-    anlyz_rslt = []
-    for tkn in tkns:
-        anlyz_rslt.append(tkn.surface)
-    return anlyz_rslt
-
-
-#ユーザーから送られるLINEメッセージをJanomeで形態素解析する(見出しと品詞のセットをリストにして出力する)
-def line_msg_morpho_analyze2(line_msg_txt):
-    #メッセージの内容を品詞や単語を単位として分解する(＝文節に分ける)
-    tknzr = Tokenizer()
-    tkns  = tknzr.tokenize(line_msg_txt)
-
-    #分解後のメッセージをリストに格納、これを呼出し元に引渡しをする
-    anlyz2_rslt = []
-    for tkn in tkns:
-        anlyz2_rslt.append([tkn.surface, tkn.part_of_speech])
-    return [anlyz2_rslt]
 
 
 #ユーザーから送られるLINEメッセージがギャグ＆声帯模写だったとして、これからインテント(＝発話の意図するもの)を抽出する
@@ -451,24 +420,27 @@ def extract_intent_from_short_and_boilerplate(line_msg_txt):
           line_msg_txt == "おはようございます" or
           line_msg_txt == "おはよう" or
           line_msg_txt == "おはっす" or
-          line_msg_txt == "おは" or
-          line_msg_txt == "こんにちは" or
+          line_msg_txt == "おは"):
+           extrct_intnt_from_shrt_and_blrplt_rslt = "(挨拶)(朝)"
+    elif (line_msg_txt == "こんにちは" or
           line_msg_txt == "こんにちわ" or
           line_msg_txt == "ちはっす" or
-          line_msg_txt == "ちわっす" or
-          line_msg_txt == "こんばんは" or
+          line_msg_txt == "ちわっす"):
+           extrct_intnt_from_shrt_and_blrplt_rslt = "(挨拶)(昼)"
+    elif (line_msg_txt == "こんばんは" or
           line_msg_txt == "こんばんわ" or
           line_msg_txt == "ばんわ" or
           line_msg_txt == "ばんは" or
           line_msg_txt == "ばんっす" or
-          line_msg_txt == "ばん" or
-          line_msg_txt == "やあ" or
+          line_msg_txt == "ばん"):
+           extrct_intnt_from_shrt_and_blrplt_rslt = "(挨拶)(夜)"
+    elif (line_msg_txt == "やあ" or
           line_msg_txt == "どうも" or
           line_msg_txt == "御免遊ばせ" or
           line_msg_txt == "御免あそばせ" or
           line_msg_txt == "ごめん遊ばせ" or
           line_msg_txt == "ごめんあそばせ"):
-            extrct_intnt_from_shrt_and_blrplt_rslt = "(挨拶)"
+            extrct_intnt_from_shrt_and_blrplt_rslt = "(挨拶)(時間帯を問わない)"
     elif (line_msg_txt == "流石ですね" or
           line_msg_txt == "流石です" or
           line_msg_txt == "流石ね" or
@@ -2826,10 +2798,35 @@ def extract_subcontent(line_msg_txt):
     return extrct_subcntnt_rslt
 
 
-#ユーザーから送られるLINEメッセージの中に含まれるコンテントを解析する
-def analyze_content(rmv_intnt_rslt):
-    anlyz_cntnt_rslt = ""
-    return anlyz_cntnt_rslt
+#ユーザーから送られるLINEメッセージの中に含まれるインテントを除去する
+def remove_intent(line_msg_txt):
+    #メッセージの中に含まれる日本語固有のインテントの削除候補をリストアップする
+    rmv_cnddt_intnt_list = []
+    #if check_text_terminate_string(line_msg_txt, "します"):
+    #     rmv_cnddt_intnt_list.append("します")
+
+
+    #前段で取得した削除候補の中から実際に削除するインテントを決定して、これを呼出し元に引渡しをする
+    rmv_cnddt_intnt_list_tmp = []
+    for intnt in rmv_cnddt_intnt_list:
+        rmv_cnddt_intnt_list_tmp.append([len(intnt), intnt])
+    if  len(rmv_cnddt_intnt_list_tmp) == 0:
+        rmv_intnt_rslt = line_msg_txt
+        return rmv_intnt_rslt
+    if  len(rmv_cnddt_intnt_list_tmp) == 1:
+        tmp_intnt      = rmv_cnddt_intnt_list_tmp[0][1]
+        rmv_intnt_rslt = re.sub(tmp_intnt, "", line_msg_txt)
+        return rmv_intnt_rslt
+    idx       = 0
+    tmp_intnt = ""
+    while len(rmv_cnddt_intnt_list_tmp) > (idx+1):
+          if rmv_cnddt_intnt_list_tmp[idx+1][0] > rmv_cnddt_intnt_list_tmp[idx][0]:
+             tmp_intnt = rmv_cnddt_intnt_list_tmp[idx+1][1]
+             idx = idx + 1
+          else:
+             continue
+    rmv_intnt_rslt = re.sub(tmp_intnt, "", line_msg_txt)
+    return rmv_intnt_rslt
 
 
 #ユーザーから送られるLINEメッセージの中に含まれるサブコンテント(＝発話の意図される内容)(＝副詞＆前置詞＆接続詞)を除去する
