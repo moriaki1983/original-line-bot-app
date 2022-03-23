@@ -163,15 +163,16 @@ def line_msg_analyze(line_msg_txt):
     rmv_edprtcl      = line_bot_text_analyze.remove_endparticle(rmv_symbl)
     extrct_intnt_end = line_bot_text_analyze.extract_intent(rmv_edprtcl)
     line_msg_anlyz_rslt = extrct_intnt_end
+
+    #
     global rcd_id
     global cmpltn_flg
     if (rcd_id == "0" or cmpltn_flg == True):
        lsttm_intnt = ""
        return line_msg_anlyz_rslt, lsttm_intnt
-    else:
-       lsttm_rcd   = postgres_select(str(int(rcd_id)-1))
-       lsttm_intnt = line_bot_text_analyze.extract_intent_from_short_and_boilerplate(lsttm_rcd[3])
-       return line_msg_anlyz_rslt, lsttm_intnt
+    lsttm_rcd   = postgres_select(str(int(rcd_id)-1))
+    lsttm_intnt = line_bot_text_analyze.extract_intent_from_short_and_boilerplate(lsttm_rcd[3])
+    return line_msg_anlyz_rslt, lsttm_intnt
 
 
 #ユーザーから送られるLINEメッセージの解析結果から返信メッセージを生成する
