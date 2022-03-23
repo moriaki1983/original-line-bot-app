@@ -2473,61 +2473,71 @@ def extract_intent(line_msg_txt):
           check_text_terminate_string(line_msg_txt, "ってことではないんですか")):
             extrct_intnt_rslt = "(疑義＆質問＆確認)(否定形)(なんらかの内容についての叙述)"
     elif (check_text_terminate_string(line_msg_txt, "は大丈夫です") or
+          check_text_terminate_string(line_msg_txt, "は大丈夫だ") or
           check_text_terminate_string(line_msg_txt, "は大丈夫")):
-            extrct_intnt_rslt = "(宣言＆表明)(安否)(健康状態)(肯定形)"
+            extrct_intnt_rslt = "(宣言＆表明)(肯定形)(安否・健康状態について)"
     elif (check_text_terminate_string(line_msg_txt, "は大丈夫ではない") or
-          check_text_terminate_string(line_msg_txt, "は大丈夫でない")):
-            extrct_intnt_rslt = "(宣言＆表明)(安否)(健康状態)(否定形)"
+          check_text_terminate_string(line_msg_txt, "は大丈夫でない") or
+          check_text_terminate_string(line_msg_txt, "は大丈夫じゃない")):
+            extrct_intnt_rslt = "(宣言＆表明)(否定形)(安否・健康状態について)"
     elif (check_text_terminate_string(line_msg_txt, "は大丈夫でしょうか") or
-          check_text_terminate_string(line_msg_txt, "は大丈夫ですか")):
-            extrct_intnt_rslt = "(疑義＆質問＆確認)(安否)(健康状態)(肯定形)"
+          check_text_terminate_string(line_msg_txt, "は大丈夫ですか") or
+          check_text_terminate_string(line_msg_txt, "は大丈夫か")):
+            extrct_intnt_rslt = "(疑義＆質問＆確認)(肯定形)(安否・健康状態について)"
     elif (check_text_terminate_string(line_msg_txt, "は大丈夫ではないのでしょうか") or
           check_text_terminate_string(line_msg_txt, "は大丈夫ではないんですか") or
           check_text_terminate_string(line_msg_txt, "は大丈夫じゃないんですか")):
-            extrct_intnt_rslt = "(疑義＆質問＆確認)(安否)(健康状態)(否定形)"
-    elif (check_text_terminate_string(line_msg_txt, "は必要です") or
-          check_text_terminate_string(line_msg_txt, "が必要です") or
-          check_text_terminate_string(line_msg_txt, "は必要") or
+            extrct_intnt_rslt = "(疑義＆質問＆確認)(否定形)(安否・健康状態について)"
+    elif (check_text_terminate_string(line_msg_txt, "が必要です") or
+          check_text_terminate_string(line_msg_txt, "は必要です") or
+          check_text_terminate_string(line_msg_txt, "が必要だ") or
+          check_text_terminate_string(line_msg_txt, "は必要だ") or
           check_text_terminate_string(line_msg_txt, "が必要") or
-          check_text_terminate_string(line_msg_txt, "は要ります") or
-          check_text_terminate_string(line_msg_txt, "が要ります") or
-          check_text_terminate_string(line_msg_txt, "は要る") or
-          check_text_terminate_string(line_msg_txt, "が要る")):
-            extrct_intnt_rslt = "(宣言＆表明)(要否)(肯定形)"
-    elif (check_text_terminate_string(line_msg_txt, "は必要です") or
-          check_text_terminate_string(line_msg_txt, "が必要です") or
           check_text_terminate_string(line_msg_txt, "は必要") or
-          check_text_terminate_string(line_msg_txt, "が必要") or
-          check_text_terminate_string(line_msg_txt, "は要ります") or
           check_text_terminate_string(line_msg_txt, "が要ります") or
-          check_text_terminate_string(line_msg_txt, "は要る") or
-          check_text_terminate_string(line_msg_txt, "が要る")):
-            extrct_intnt_rslt = "(宣言＆表明)(要否)(肯定形)"
-    elif (check_text_terminate_string(line_msg_txt, "は必要でしょうか") or
-          check_text_terminate_string(line_msg_txt, "は必要ですか") or
-          check_text_terminate_string(line_msg_txt, "は要りますでしょうか") or
-          check_text_terminate_string(line_msg_txt, "は要りますか")):
-            extrct_intnt_rslt = "(疑義＆質問＆確認)(要否)(肯定形)"
-    elif (check_text_terminate_string(line_msg_txt, "は要らないでしょうか") or
-          check_text_terminate_string(line_msg_txt, "要らないでしょうか") or
-          check_text_terminate_string(line_msg_txt, "は要らないですか") or
-          check_text_terminate_string(line_msg_txt, "要らないですか") or
-          check_text_terminate_string(line_msg_txt, "は要らないですか") or
-          check_text_terminate_string(line_msg_txt, "は要らない") or
-          check_text_terminate_string(line_msg_txt, "要らない") or
-          check_text_terminate_string(line_msg_txt, "は不要でしょうか") or
-          check_text_terminate_string(line_msg_txt, "不要でしょうか") or
-          check_text_terminate_string(line_msg_txt, "は不要ですか") or
-          check_text_terminate_string(line_msg_txt, "不要ですか") or
+          check_text_terminate_string(line_msg_txt, "は要ります") or
+          check_text_terminate_string(line_msg_txt, "が要る") or
+          check_text_terminate_string(line_msg_txt, "は要る")):
+            extrct_intnt_rslt = "(宣言＆表明)(肯定形)(物事の要否について)"
+    elif (check_text_terminate_string(line_msg_txt, "が不要です") or
+          check_text_terminate_string(line_msg_txt, "は不要です") or
+          check_text_terminate_string(line_msg_txt, "が不要だ") or
+          check_text_terminate_string(line_msg_txt, "は不要だ") or
+          check_text_terminate_string(line_msg_txt, "が不要") or
           check_text_terminate_string(line_msg_txt, "は不要") or
-          check_text_terminate_string(line_msg_txt, "不要")):
-            extrct_intnt_rslt = "(疑義＆質問＆確認)(要否)(否定形)"
+          check_text_terminate_string(line_msg_txt, "が要りません") or
+          check_text_terminate_string(line_msg_txt, "は要りません") or
+          check_text_terminate_string(line_msg_txt, "が要らない") or
+          check_text_terminate_string(line_msg_txt, "は要らない")):
+            extrct_intnt_rslt = "(宣言＆表明)(否定形)(物事の要否について)"
+    elif (check_text_terminate_string(line_msg_txt, "が必要でしょうか") or
+          check_text_terminate_string(line_msg_txt, "は必要でしょうか") or
+          check_text_terminate_string(line_msg_txt, "が必要ですか") or
+          check_text_terminate_string(line_msg_txt, "は必要ですか") or
+          check_text_terminate_string(line_msg_txt, "が要りますでしょうか") or
+          check_text_terminate_string(line_msg_txt, "は要りますでしょうか") or
+          check_text_terminate_string(line_msg_txt, "が要りますか") or
+          check_text_terminate_string(line_msg_txt, "は要りますか") or):
+            extrct_intnt_rslt = "(疑義＆質問＆確認)(肯定形)(物事の要否について)"
+    elif (check_text_terminate_string(line_msg_txt, "が不要でしょうか") or
+          check_text_terminate_string(line_msg_txt, "は不要でしょうか") or
+          check_text_terminate_string(line_msg_txt, "が不要ですか") or
+          check_text_terminate_string(line_msg_txt, "は不要ですか") or
+          check_text_terminate_string(line_msg_txt, "が要りませんか") or
+          check_text_terminate_string(line_msg_txt, "は要りませんか") or
+          check_text_terminate_string(line_msg_txt, "が要らないのですか") or
+          check_text_terminate_string(line_msg_txt, "は要らないのですか") or
+          check_text_terminate_string(line_msg_txt, "が要らないのか") or
+          check_text_terminate_string(line_msg_txt, "は要らないのか") or
+          check_text_terminate_string(line_msg_txt, "が要らないか") or
+          check_text_terminate_string(line_msg_txt, "は要らないか")):
+            extrct_intnt_rslt = "(疑義＆質問＆確認)(否定形)(物事の要否について)"
     elif (check_text_terminate_string(line_msg_txt, "という事でしょう") or
           check_text_terminate_string(line_msg_txt, "ということでしょう")):
-            extrct_intnt_rslt = "(推定＆推測＆推量)(進言＆提言)(肯定形)"
+            extrct_intnt_rslt = "(推定＆推測＆推量)(肯定形)(進言・提言に近い)"
     elif (check_text_terminate_string(line_msg_txt, "という事ではないでしょう") or
           check_text_terminate_string(line_msg_txt, "ということではないでしょう")):
-            extrct_intnt_rslt = "(推定＆推測＆推量)(進言＆提言)(否定形)"
+            extrct_intnt_rslt = "(推定＆推測＆推量)(否定形)(進言・提言に近い)"
     elif (check_text_terminate_string(line_msg_txt, "かも知れないです") or
           check_text_terminate_string(line_msg_txt, "かもしれないです") or
           check_text_terminate_string(line_msg_txt, "かも知れない") or
@@ -2536,17 +2546,9 @@ def extract_intent(line_msg_txt):
     elif (check_text_terminate_string(line_msg_txt, "ではないかも知れないです") or
           check_text_terminate_string(line_msg_txt, "ではないかもしれないです") or
           check_text_terminate_string(line_msg_txt, "ではないかも知れない") or
-          check_text_terminate_string(line_msg_txt, "ではないかもしれない") or
-          check_text_terminate_string(line_msg_txt, "でないかも知れないです") or
-          check_text_terminate_string(line_msg_txt, "でないかもしれないです") or
-          check_text_terminate_string(line_msg_txt, "でないかも知れない") or
-          check_text_terminate_string(line_msg_txt, "でないかもしれない")):
+          check_text_terminate_string(line_msg_txt, "ではないかもしれない")):
             extrct_intnt_rslt = "(推定＆推測＆推量)(否定形)"
-    elif (check_text_terminate_string(line_msg_txt, "ではと思っています") or
-          check_text_terminate_string(line_msg_txt, "ではと思ってます") or
-          check_text_terminate_string(line_msg_txt, "ではと思っている") or
-          check_text_terminate_string(line_msg_txt, "ではと思ってる") or
-          check_text_terminate_string(line_msg_txt, "とは思っています") or
+    elif (check_text_terminate_string(line_msg_txt, "とは思っています") or
           check_text_terminate_string(line_msg_txt, "とは思ってます") or
           check_text_terminate_string(line_msg_txt, "とは思っている") or
           check_text_terminate_string(line_msg_txt, "とは思ってる") or
@@ -2583,10 +2585,10 @@ def extract_intent(line_msg_txt):
             extrct_intnt_rslt = "(思慮＆考慮)(過去)(否定形)"
     elif (check_text_terminate_string(line_msg_txt, "らしいです") or
           check_text_terminate_string(line_msg_txt, "らしい")):
-            extrct_intnt_rslt = "(感想＆感慨)(形容)(肯定形)"
+            extrct_intnt_rslt = "(感想＆感慨)(肯定形)(形容的な表現)"
     elif (check_text_terminate_string(line_msg_txt, "らしくないです") or
           check_text_terminate_string(line_msg_txt, "らしくない")):
-            extrct_intnt_rslt = "(感想＆感慨)(形容)(否定形)"
+            extrct_intnt_rslt = "(感想＆感慨)(否定形)(形容的な表現)"
     else:
             extrct_intnt_rslt = "(その他・不明)"
     return extrct_intnt_rslt
@@ -2746,6 +2748,10 @@ def extract_subcontent(line_msg_txt):
           check_text_start_string(line_msg_txt, "それでも") or
           check_text_start_string(line_msg_txt, "でも")):
             extrct_subcntnt_rslt = "(反駁＆反論)"
+    elif (check_text_start_string(line_msg_txt, "如何せん") or
+          check_text_start_string(line_msg_txt, "いかんせん") or
+          check_text_start_string(line_msg_txt, "残念ながら")):
+            extrct_subcntnt_rslt = "(言い訳)"
     elif (check_text_start_string(line_msg_txt, "言い換えれば") or
           check_text_start_string(line_msg_txt, "言い換えると")):
             extrct_subcntnt_rslt = "(換言＆言換え)"
@@ -2994,6 +3000,12 @@ def remove_subcontent(line_msg_txt):
          rmv_cnddt_subcntnt_list.append("それでも")
     if check_text_start_string(line_msg_txt, "でも"):
          rmv_cnddt_subcntnt_list.append("でも")
+    if check_text_start_string(line_msg_txt, "如何せん"):
+         rmv_cnddt_subcntnt_list.append("如何せん")
+    if check_text_start_string(line_msg_txt, "いかんせん"):
+         rmv_cnddt_subcntnt_list.append("いかんせん")
+    if check_text_start_string(line_msg_txt, "残念ながら"):
+         rmv_cnddt_subcntnt_list.append("残念ながら")
     if check_text_start_string(line_msg_txt, "言い換えれば"):
          rmv_cnddt_subcntnt_list.append("言い換えれば")
     if check_text_start_string(line_msg_txt, "言い換えると"):
