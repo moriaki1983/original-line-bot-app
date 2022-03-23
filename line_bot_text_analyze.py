@@ -1590,7 +1590,7 @@ def extract_intent(line_msg_txt):
     if   (check_text_terminate_string(line_msg_txt, "を行います") or
           check_text_terminate_string(line_msg_txt, "を行う") or
           check_text_terminate_string(line_msg_txt, "をします") or
-          check_text_terminate_string(line_msg_txt, "をする" or
+          check_text_terminate_string(line_msg_txt, "をする") or
           check_text_terminate_string(line_msg_txt, "はします") or
           check_text_terminate_string(line_msg_txt, "はする") or
           check_text_terminate_string(line_msg_txt, "します") or
