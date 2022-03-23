@@ -1251,7 +1251,19 @@ def extract_intent_from_short_and_boilerplate(line_msg_txt):
           line_msg_txt == "好き" or
           line_msg_txt == "すき" or
           line_msg_txt == "スキ"):
-            extrct_intnt_from_shrt_and_blrplt_rslt = "(訴求＆表現)(求愛・発情している)"
+            extrct_intnt_from_shrt_and_blrplt_rslt = "(訴求)(求愛している)"
+    elif (line_msg_txt == "Hなことしたい" or
+          line_msg_txt == "Hなことしよう" or
+          line_msg_txt == "Hしたい" or
+          line_msg_txt == "Hしよう" or
+          line_msg_txt == "セックスしたい" or
+          line_msg_txt == "セックスしよう"):
+            extrct_intnt_from_shrt_and_blrplt_rslt = "(訴求)(発情している)"
+    elif (line_msg_txt == "アナルは好きですか" or
+          line_msg_txt == "アナルは好き" or
+          line_msg_txt == "どこを責められたい" or
+          line_msg_txt == "どこ責められたい"):
+            extrct_intnt_from_shrt_and_blrplt_rslt = "(辱め)(卑猥な言動)"
     elif (line_msg_txt == "何故そうなるのですか" or
           line_msg_txt == "なぜそうなるのですか" or
           line_msg_txt == "何故そうなるんですか" or
