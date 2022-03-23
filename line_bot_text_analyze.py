@@ -1582,7 +1582,7 @@ def extract_intent_from_short_and_boilerplate(line_msg_txt):
     elif (line_msg_txt == "左様ですか" or
           line_msg_txt == "そうですか" or
           line_msg_txt == "はい はい" or
-          line_msg_txt == "はいはい") or
+          line_msg_txt == "はいはい" or
           line_msg_txt == "うん うん" or
           line_msg_txt == "うんうん"):
             extrct_intnt_from_shrt_and_blrplt_rslt = "(相槌＆合いの手)(傾聴している素振り)"
