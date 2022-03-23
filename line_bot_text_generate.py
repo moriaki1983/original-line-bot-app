@@ -16,15 +16,14 @@ def text_generate_from_analyze_result(line_msg_anlyz_rslt, lsttm_intnt):
          txt_gnrt_from_anlyz_rslt = random.choice(rply_msg_lst)
          cmpltn_flg = False
     elif flw_of_uttrnc == "(称賛＆礼賛)→(称賛＆礼賛)":
-         rply_msg_lst = ["またまた～ お上手ですね", "そう言われても何も出ませんよ 笑"]
+         rply_msg_lst = ["またまた～ お上手ですね", "そう言われても何も出ませんよ"]
          txt_gnrt_from_anlyz_rslt = random.choice(rply_msg_lst)
          cmpltn_flg = True
     elif flw_of_uttrnc == "(モノマネ＆ギャグ＆一発芸)(人物・キャラクターに基づいて)→":
          rply_msg_lst = ["それはギャグですか？", "面白いです", "楽しませてくれてありがとう"]
          txt_gnrt_from_anlyz_rslt = random.choice(rply_msg_lst)
          cmpltn_flg = False
-    elif flw_of_uttrnc == "(モノマネ＆ギャグ＆一発芸)(人物・キャラクターに基づいて)" + "→" + \
-                          "(モノマネ＆ギャグ＆一発芸)(人物・キャラクターに基づいて)":
+    elif flw_of_uttrnc == "(モノマネ＆ギャグ＆一発芸)(人物・キャラクターに基づいて)→(モノマネ＆ギャグ＆一発芸)(人物・キャラクターに基づいて)":
          rply_msg_lst = ["アハハ！", "オモロ 笑", "そんなに笑わせないでよ！"]
          txt_gnrt_from_anlyz_rslt = random.choice(rply_msg_lst)
          cmpltn_flg = True
