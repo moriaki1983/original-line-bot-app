@@ -53,10 +53,14 @@ def show_db_record():
     global has_db_table
     global rcd_id
     if has_db_table == True:
-       if rcd_id == "0":
-         cur.execute("""SELECT * FROM line_entries WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id})
-       elif int(rcd_id) > int("0"):
-         cur.execute("""SELECT * FROM line_entries WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': str(int(rcd_id) - 1)})
+       if int(rcd_id) == int("-1"):
+          return "table-record not exist..."
+       if int(rcd_id) == int("0"):
+          cur.execute("""SELECT * FROM line_entries WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': "0"})
+       if int(rcd_id) >= int("1"):
+          cur.execute("""SELECT * FROM line_entries WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': str(int(rcd_id)-1)})
+       if int(rcd_id) >= int("100"):
+          cur.execute("""SELECT * FROM line_entries WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': "100"})
        rcd = cur.fetchone()
        cur.close()
        conn.close()
@@ -121,7 +125,7 @@ def handle_message(event):
     line_msg_send(event, line_msg_gnrt_rslt)
 
     #ユーザーから送られるLINEメッセージをpostgresのデータベースに登録・格納する
-    postgres_insert_and_update(event, line_msg_anlyz_rslt)
+    postgres_insert_and_update(event, line_msg_intnt)
 
 
 #LINE-DevelopersのWebhookを介して送られてくるイベントを処理する(＝フォローイベントを処理する)
@@ -137,16 +141,61 @@ def line_msg_analyze(line_msg_txt):
     global rcd_id
     global cmpltn_flg
     prv_msgrcd_lst = []
-    if (rcd_id == "0" or cmpltn_flg == True):
-       for idx in range(4):
-           prv_msgrcd_lst.append(["", "", ""])
-    else:
-       for idx in range(1, 5):
-           prv_msgrcd_tmp = postgres_select(str(int(rcd_id)-idx))
-           if prv_msgrcd_tmp == []:
-              prv_msgrcd_lst.append(["", "", ""])
-           else:
-              prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[3], prv_msgrcd_tmp[4]])
+    if (int(rcd_id) == -1 or cmpltn_flg == True):
+        prv_msgrcd_lst.append(["", "", ""])
+        prv_msgrcd_lst.append(["", "", ""])
+        prv_msgrcd_lst.append(["", "", ""])
+        prv_msgrcd_lst.append(["", "", ""])
+        prv_msgrcd_lst.append(["", "", ""])
+    if (int(rcd_id) == 0 or cmpltn_flg == True):
+        prv_msgrcd_tmp = postgres_select("0")
+        prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[3], prv_msgrcd_tmp[4]])
+        prv_msgrcd_lst.append(["", "", ""])
+        prv_msgrcd_lst.append(["", "", ""])
+        prv_msgrcd_lst.append(["", "", ""])
+        prv_msgrcd_lst.append(["", "", ""])
+    if (int(rcd_id) == 1 or cmpltn_flg == True):
+        prv_msgrcd_tmp  = postgres_select("0")
+        prv_msgrcd_tmp2 = postgres_select("1")
+        prv_msgrcd_lst.append([prv_msgrcd_tmp[1],  prv_msgrcd_tmp[3],  prv_msgrcd_tmp[4]])
+        prv_msgrcd_lst.append([prv_msgrcd_tmp2[1], prv_msgrcd_tmp2[3], prv_msgrcd_tmp2[4]])
+        prv_msgrcd_lst.append(["", "", ""])
+        prv_msgrcd_lst.append(["", "", ""])
+        prv_msgrcd_lst.append(["", "", ""])
+    if (int(rcd_id) == 2 or cmpltn_flg == True):
+        prv_msgrcd_tmp  = postgres_select("0")
+        prv_msgrcd_tmp2 = postgres_select("1")
+        prv_msgrcd_tmp3 = postgres_select("2")
+        prv_msgrcd_lst.append([prv_msgrcd_tmp[1],  prv_msgrcd_tmp[3],  prv_msgrcd_tmp[4]])
+        prv_msgrcd_lst.append([prv_msgrcd_tmp2[1], prv_msgrcd_tmp2[3], prv_msgrcd_tmp2[4]])
+        prv_msgrcd_lst.append([prv_msgrcd_tmp3[1], prv_msgrcd_tmp3[3], prv_msgrcd_tmp3[4]])
+        prv_msgrcd_lst.append(["", "", ""])
+        prv_msgrcd_lst.append(["", "", ""])
+    if (int(rcd_id) == 3 or cmpltn_flg == True):
+        prv_msgrcd_tmp  = postgres_select("0")
+        prv_msgrcd_tmp2 = postgres_select("1")
+        prv_msgrcd_tmp3 = postgres_select("2")
+        prv_msgrcd_tmp4 = postgres_select("3")
+        prv_msgrcd_lst.append([prv_msgrcd_tmp[1],  prv_msgrcd_tmp[3],  prv_msgrcd_tmp[4]])
+        prv_msgrcd_lst.append([prv_msgrcd_tmp2[1], prv_msgrcd_tmp2[3], prv_msgrcd_tmp2[4]])
+        prv_msgrcd_lst.append([prv_msgrcd_tmp3[1], prv_msgrcd_tmp3[3], prv_msgrcd_tmp3[4]])
+        prv_msgrcd_lst.append([prv_msgrcd_tmp4[1], prv_msgrcd_tmp4[3], prv_msgrcd_tmp4[4]])
+        prv_msgrcd_lst.append(["", "", ""])
+    if (int(rcd_id) == 4 or cmpltn_flg == True):
+        prv_msgrcd_tmp  = postgres_select("0")
+        prv_msgrcd_tmp2 = postgres_select("1")
+        prv_msgrcd_tmp3 = postgres_select("2")
+        prv_msgrcd_tmp4 = postgres_select("3")
+        prv_msgrcd_tmp5 = postgres_select("4")
+        prv_msgrcd_lst.append([prv_msgrcd_tmp[1],  prv_msgrcd_tmp[3],  prv_msgrcd_tmp[4]])
+        prv_msgrcd_lst.append([prv_msgrcd_tmp2[1], prv_msgrcd_tmp2[3], prv_msgrcd_tmp2[4]])
+        prv_msgrcd_lst.append([prv_msgrcd_tmp3[1], prv_msgrcd_tmp3[3], prv_msgrcd_tmp3[4]])
+        prv_msgrcd_lst.append([prv_msgrcd_tmp4[1], prv_msgrcd_tmp4[3], prv_msgrcd_tmp4[4]])
+        prv_msgrcd_lst.append([prv_msgrcd_tmp5[1], prv_msgrcd_tmp5[3], prv_msgrcd_tmp5[4]])
+    if (int(rcd_id) >= 5 or cmpltn_flg == True):
+        for idx in range(0, 4):
+          prv_msgrcd_tmp = postgres_select(str(int(rcd_id)-idx))
+          prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[3], prv_msgrcd_tmp[4]])
 
     #
     rmv_etc      = line_bot_text_analyze.remove_etc(line_msg_txt)
@@ -196,7 +245,7 @@ def line_msg_send(event, line_msg_gnrt_rslt):
 
 
 #ユーザーから送られるLINEメッセージをpostgresのデータベースに登録・格納する
-def postgres_insert_and_update(event, line_msg_anlyz_rslt):
+def postgres_insert_and_update(event, line_msg_intnt):
     #データベースに接続して、テーブル操作のためのカーソルを用意する
     conn = psycopg2.connect(DATABASE_URL)
     conn.set_client_encoding("utf-8") 
@@ -225,12 +274,12 @@ def postgres_insert_and_update(event, line_msg_anlyz_rslt):
     if rcd is None:
        cur.execute("""INSERT INTO line_entries (rcd_id, date, speaker, msg) VALUES (%(rcd_id)s, %(date)s, %(speaker)s, %(msg)s), %(intnt)s);""", {'rcd_id': rcd_id, 'date' : date, 'speaker': speaker, 'msg': msg, 'intnt': intnt})
        rcd_id = str(int(rcd_id) + 1)
-    elif int(rcd_id) < 99:
+    elif int(rcd_id) < 100:
        cur.execute("""UPDATE line_entries SET (rcd_id, date, speaker, msg) VALUES (%(rcd_id)s, %(date)s, %(speaker)s, %(msg)s, %(intnt)s) WHERE = %(rcd_id)s;""", {'rcd_id': rcd_id, 'date' : date, 'speaker': speaker, 'msg': msg, 'intnt': intnt, 'rcd_id': rcd_id})
        rcd_id = str(int(rcd_id) + 1)
-    elif int(rcd_id) > 99:
-       cur.execute("""UPDATE line_entries SET (rcd_id, date, speaker, msg) VALUES (%(rcd_id)s, %(date)s, %(speaker)s, %(msg)s, %(intnt)s) WHERE = '0';""", {'rcd_id': "0", 'date' : date, 'speaker': speaker, 'msg': msg, 'intnt': intnt})
-       rcd_id = str(0)
+    elif int(rcd_id) >= 100:
+       cur.execute("""UPDATE line_entries SET (rcd_id, date, speaker, msg) VALUES (%(rcd_id)s, %(date)s, %(speaker)s, %(msg)s, %(intnt)s) WHERE = '99';""", {'rcd_id': "99", 'date' : date, 'speaker': speaker, 'msg': msg, 'intnt': intnt})
+       rcd_id = "-1"
 
     #データベースへコミットし、テーブル操作のためのカーソルを破棄して、データベースとの接続を解除する
     conn.commit()
