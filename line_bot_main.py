@@ -33,7 +33,7 @@ DATABASE_URL = os.environ["DATABASE_URL"]
 has_db_table = False
 
 #postgresデータベースに登録・格納するLINEメッセージ(＝レコード)のID(＝レコードカウンター)を示す変数を宣言する
-rcd_id = "0"
+rcd_id = "-1"
 
 #
 cmpltn_flg = False
@@ -53,13 +53,13 @@ def show_db_record():
     global has_db_table
     global rcd_id
     if has_db_table == True:
-       if int(rcd_id) == int("-1"):
+       if int(rcd_id) == -1:
           return "table-record not exist..."
-       if int(rcd_id) == int("0"):
+       if int(rcd_id) == 0:
           cur.execute("""SELECT * FROM line_entries WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': "0"})
-       if int(rcd_id) >= int("1"):
+       if int(rcd_id) >= 1:
           cur.execute("""SELECT * FROM line_entries WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': str(int(rcd_id)-1)})
-       if int(rcd_id) >= int("100"):
+       if int(rcd_id) >= 100:
           cur.execute("""SELECT * FROM line_entries WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': "100"})
        rcd = cur.fetchone()
        cur.close()
@@ -86,7 +86,7 @@ def db_table_drop():
 
     #データベースに登録・格納するLINEメッセージ(＝レコード)のID(＝レコードカウンタ)を示す変数を初期化する
     global rcd_id
-    rcd_id = "0"
+    rcd_id = "-1"
 
     #データベースへコミットし、テーブル操作のためのカーソルを破棄して、データベースとの接続を解除する
     cur.close()
@@ -272,13 +272,13 @@ def postgres_insert_and_update(event, line_msg_intnt):
     cur.execute("""SELECT * FROM line_entries WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id})
     rcd = cur.fetchone()
     if rcd is None:
-       cur.execute("""INSERT INTO line_entries (rcd_id, date, speaker, msg) VALUES (%(rcd_id)s, %(date)s, %(speaker)s, %(msg)s), %(intnt)s);""", {'rcd_id': rcd_id, 'date' : date, 'speaker': speaker, 'msg': msg, 'intnt': intnt})
+       cur.execute("""INSERT INTO line_entries (rcd_id, date, speaker, msg, intnt) VALUES (%(rcd_id)s, %(date)s, %(speaker)s, %(msg)s), %(intnt)s);""", {'rcd_id': rcd_id, 'date' : date, 'speaker': speaker, 'msg': msg, 'intnt': intnt})
        rcd_id = str(int(rcd_id) + 1)
     elif int(rcd_id) < 100:
-       cur.execute("""UPDATE line_entries SET (rcd_id, date, speaker, msg) VALUES (%(rcd_id)s, %(date)s, %(speaker)s, %(msg)s, %(intnt)s) WHERE = %(rcd_id)s;""", {'rcd_id': rcd_id, 'date' : date, 'speaker': speaker, 'msg': msg, 'intnt': intnt, 'rcd_id': rcd_id})
+       cur.execute("""UPDATE line_entries SET (rcd_id, date, speaker, msg, intnt) VALUES (%(rcd_id)s, %(date)s, %(speaker)s, %(msg)s, %(intnt)s) WHERE = %(rcd_id)s;""", {'rcd_id': rcd_id, 'date' : date, 'speaker': speaker, 'msg': msg, 'intnt': intnt, 'rcd_id': rcd_id})
        rcd_id = str(int(rcd_id) + 1)
     elif int(rcd_id) >= 100:
-       cur.execute("""UPDATE line_entries SET (rcd_id, date, speaker, msg) VALUES (%(rcd_id)s, %(date)s, %(speaker)s, %(msg)s, %(intnt)s) WHERE = '99';""", {'rcd_id': "99", 'date' : date, 'speaker': speaker, 'msg': msg, 'intnt': intnt})
+       cur.execute("""UPDATE line_entries SET (rcd_id, date, speaker, msg, intnt) VALUES (%(rcd_id)s, %(date)s, %(speaker)s, %(msg)s, %(intnt)s) WHERE = '99';""", {'rcd_id': "99", 'date' : date, 'speaker': speaker, 'msg': msg, 'intnt': intnt})
        rcd_id = "-1"
 
     #データベースへコミットし、テーブル操作のためのカーソルを破棄して、データベースとの接続を解除する
