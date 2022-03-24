@@ -273,7 +273,7 @@ def postgres_insert_and_update(event, line_msg_intnt):
     profile = line_bot_api.get_profile(event.source.user_id)
     speaker = profile.display_name
     msg     = event.message.text
-    intnt   = line_msg_anlyz_rslt
+    intnt   = line_msg_intnt
 
     #該当IDのメッセージ(＝レコード)がなかったら、データベースにインサート(＝挿入)(＝新規に登録・格納)し、既にメッセージがあったらアップデート(＝上書き)する
     cur.execute("""SELECT * FROM line_entries WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id})
