@@ -178,6 +178,7 @@ def line_msg_analyze(line_msg_txt):
 #ユーザーから送られるLINEメッセージの解析結果から返信メッセージを生成する
 def line_msg_generate(line_msg_anlyz_rslt, lsttm_intnt):
     #ユーザーから送られるLINEメッセージの解析結果を基に、自然でかつ適切な返信メッセージを生成する
+    global cmpltn_flg
     line_msg_gnrt_rslt, cmpltn_flg = line_bot_text_generate.text_generate_from_analyze_result(line_msg_anlyz_rslt, lsttm_intnt)
     return line_msg_gnrt_rslt
 
