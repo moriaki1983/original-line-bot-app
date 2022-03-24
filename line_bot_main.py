@@ -112,16 +112,16 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     #ユーザーから送られるLINEメッセージをJanomeで形態素解析する
-    line_msg_anlyz_rslt, lsttm_intnt = line_msg_analyze(event.message.text)
+    line_msg_intnt, prv_msgrcd_lst = line_msg_analyze(event.message.text)
 
     #ユーザーから送られるLINEメッセージの解析結果から返信メッセージを生成する
-    line_msg_gnrt_rslt = line_msg_generate(line_msg_anlyz_rslt, lsttm_intnt)
+    line_msg_gnrt_rslt = line_msg_generate(event.message.text, line_msg_intnt, prv_msgrcd_lst)
 
     #LINEBotAPIを使って、ユーザーに生成されたLINEメッセージを送信する
     line_msg_send(event, line_msg_gnrt_rslt)
 
     #ユーザーから送られるLINEメッセージをpostgresのデータベースに登録・格納する
-    postgres_insert_and_update(event)
+    postgres_insert_and_update(event, line_msg_anlyz_rslt)
 
 
 #LINE-DevelopersのWebhookを介して送られてくるイベントを処理する(＝フォローイベントを処理する)
@@ -136,50 +136,56 @@ def line_msg_analyze(line_msg_txt):
     #
     global rcd_id
     global cmpltn_flg
+    prv_msgrcd_lst = []
     if (rcd_id == "0" or cmpltn_flg == True):
-       lsttm_intnt = ""
+       for idx in range(4):
+           prv_msgrcd_lst.append(["", "", ""])
     else:
-       lsttm_rcd   = postgres_select(str(int(rcd_id)-1))
-       lsttm_intnt = line_bot_text_analyze.extract_intent_from_short_and_boilerplate(lsttm_rcd[3])
+       for idx in range(1, 5):
+           prv_msgrcd_tmp = postgres_select(str(int(rcd_id)-idx))
+           if prv_msgrcd_tmp == []:
+              prv_msgrcd_lst.append(["", "", ""])
+           else:
+              prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[3], prv_msgrcd_tmp[4]])
 
     #
     rmv_etc      = line_bot_text_analyze.remove_etc(line_msg_txt)
     extrct_intnt = line_bot_text_analyze.extract_intent_from_gag_and_vocalcordcopy(rmv_etc)
     if extrct_intnt != "(その他・不明)":
-       line_msg_anlyz_rslt = extrct_intnt
-       return line_msg_anlyz_rslt, lsttm_intnt
+       line_msg_intnt = extrct_intnt
+       return line_msg_intnt, prv_msgrcd_lst
     rmv_etc       = line_bot_text_analyze.remove_etc(line_msg_txt)
     rmv_symbl     = line_bot_text_analyze.remove_symbol(rmv_etc)
     extrct_intnt2 = line_bot_text_analyze.extract_intent_from_gag_and_vocalcordcopy(rmv_symbl)
     if extrct_intnt2 != "(その他・不明)":
-       line_msg_anlyz_rslt = extrct_intnt2
-       return line_msg_anlyz_rslt, lsttm_intnt
+       line_msg_intnt = extrct_intnt2
+       return line_msg_intnt, prv_msgrcd_lst
     rmv_etc       = line_bot_text_analyze.remove_etc(line_msg_txt)
     rmv_symbl     = line_bot_text_analyze.remove_symbol(rmv_etc)
     extrct_intnt3 = line_bot_text_analyze.extract_intent_from_short_and_boilerplate(rmv_symbl)
     if extrct_intnt3 != "(その他・不明)":
-       line_msg_anlyz_rslt = extrct_intnt3
-       return line_msg_anlyz_rslt, lsttm_intnt
+       line_msg_intnt = extrct_intnt3
+       return line_msg_intnt, prv_msgrcd_lst
     rmv_etc          = line_bot_text_analyze.remove_etc(line_msg_txt)
     rmv_symbl        = line_bot_text_analyze.remove_symbol(rmv_etc)
     rmv_edprtcl      = line_bot_text_analyze.remove_endparticle(rmv_symbl)
     extrct_intnt4 = line_bot_text_analyze.extract_intent_from_short_and_boilerplate(rmv_edprtcl)
     if extrct_intnt4 != "(その他・不明)":
-       line_msg_anlyz_rslt = extrct_intnt4
-       return line_msg_anlyz_rslt, lsttm_intnt
+       line_msg_intnt = extrct_intnt4
+       return line_msg_intnt, prv_msgrcd_lst
     rmv_etc          = line_bot_text_analyze.remove_etc(line_msg_txt)
     rmv_symbl        = line_bot_text_analyze.remove_symbol(rmv_etc)
     rmv_edprtcl      = line_bot_text_analyze.remove_endparticle(rmv_symbl)
     extrct_intnt_end = line_bot_text_analyze.extract_intent(rmv_edprtcl)
-    line_msg_anlyz_rslt = extrct_intnt_end
-    return line_msg_anlyz_rslt, lsttm_intnt
+    line_msg_intnt = extrct_intnt_end
+    return line_msg_intnt, prv_msgrcd_lst
 
 
 #ユーザーから送られるLINEメッセージの解析結果から返信メッセージを生成する
-def line_msg_generate(line_msg_anlyz_rslt, lsttm_intnt):
+def line_msg_generate(line_msg_txt, line_msg_intnt, prv_msgrcd_lst):
     #ユーザーから送られるLINEメッセージの解析結果を基に、自然でかつ適切な返信メッセージを生成する
     global cmpltn_flg
-    line_msg_gnrt_rslt, cmpltn_flg = line_bot_text_generate.text_generate_from_analyze_result(line_msg_anlyz_rslt, lsttm_intnt)
+    line_msg_gnrt_rslt, cmpltn_flg = line_bot_text_generate.text_generate_from_analyze_result(line_msg_txt, line_msg_intnt, prv_msgrcd_lst)
     return line_msg_gnrt_rslt
 
 
@@ -190,7 +196,7 @@ def line_msg_send(event, line_msg_gnrt_rslt):
 
 
 #ユーザーから送られるLINEメッセージをpostgresのデータベースに登録・格納する
-def postgres_insert_and_update(event):
+def postgres_insert_and_update(event, line_msg_anlyz_rslt):
     #データベースに接続して、テーブル操作のためのカーソルを用意する
     conn = psycopg2.connect(DATABASE_URL)
     conn.set_client_encoding("utf-8") 
@@ -200,7 +206,7 @@ def postgres_insert_and_update(event):
     global has_db_table
     if has_db_table == False:
        cur.execute("DROP TABLE line_entries")
-       cur.execute("CREATE TABLE line_entries(rcd_id text, date text, speaker text, msg text)")
+       cur.execute("CREATE TABLE line_entries(rcd_id text, date text, speaker text, msg text, intnt text)")
        has_db_table = True
 
     #データベースに登録・格納するLINEメッセージ(＝レコード)を構成する情報をまとめて用意する
@@ -211,18 +217,19 @@ def postgres_insert_and_update(event):
     profile = line_bot_api.get_profile(event.source.user_id)
     speaker = profile.display_name
     msg     = event.message.text
+    intnt   = line_msg_anlyz_rslt
 
     #該当IDのメッセージ(＝レコード)がなかったら、データベースにインサート(＝挿入)(＝新規に登録・格納)し、既にメッセージがあったらアップデート(＝上書き)する
     cur.execute("""SELECT * FROM line_entries WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id})
     rcd = cur.fetchone()
     if rcd is None:
-       cur.execute("""INSERT INTO line_entries (rcd_id, date, speaker, msg) VALUES (%(rcd_id)s, %(date)s, %(speaker)s, %(msg)s);""", {'rcd_id': rcd_id, 'date' : date, 'speaker': speaker, 'msg': msg})
+       cur.execute("""INSERT INTO line_entries (rcd_id, date, speaker, msg) VALUES (%(rcd_id)s, %(date)s, %(speaker)s, %(msg)s), %(intnt)s);""", {'rcd_id': rcd_id, 'date' : date, 'speaker': speaker, 'msg': msg, 'intnt': intnt})
        rcd_id = str(int(rcd_id) + 1)
     elif int(rcd_id) < 99:
-       cur.execute("""UPDATE line_entries SET (rcd_id, date, speaker, msg) VALUES (%(rcd_id)s, %(date)s, %(speaker)s, %(msg)s) WHERE = %(rcd_id)s;""", {'rcd_id': rcd_id, 'date' : date, 'speaker': speaker, 'msg': msg, 'rcd_id': rcd_id})
+       cur.execute("""UPDATE line_entries SET (rcd_id, date, speaker, msg) VALUES (%(rcd_id)s, %(date)s, %(speaker)s, %(msg)s, %(intnt)s) WHERE = %(rcd_id)s;""", {'rcd_id': rcd_id, 'date' : date, 'speaker': speaker, 'msg': msg, 'intnt': intnt, 'rcd_id': rcd_id})
        rcd_id = str(int(rcd_id) + 1)
     elif int(rcd_id) > 99:
-       cur.execute("""UPDATE line_entries SET (rcd_id, date, speaker, msg) VALUES (%(rcd_id)s, %(date)s, %(speaker)s, %(msg)s) WHERE = '0';""", {'rcd_id': "0", 'date' : date, 'speaker': speaker, 'msg': msg})
+       cur.execute("""UPDATE line_entries SET (rcd_id, date, speaker, msg) VALUES (%(rcd_id)s, %(date)s, %(speaker)s, %(msg)s, %(intnt)s) WHERE = '0';""", {'rcd_id': "0", 'date' : date, 'speaker': speaker, 'msg': msg, 'intnt': intnt})
        rcd_id = str(0)
 
     #データベースへコミットし、テーブル操作のためのカーソルを破棄して、データベースとの接続を解除する

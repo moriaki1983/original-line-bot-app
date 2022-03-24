@@ -9,8 +9,9 @@ import random
 
 
 #ユーザーから送られるLINEメッセージの解析結果を基に、自然でかつ適切な返信メッセージを生成する
-def text_generate_from_analyze_result(line_msg_anlyz_rslt, lsttm_intnt):
-    flw_of_uttrnc = line_msg_anlyz_rslt + "→" + lsttm_intnt
+def text_generate_from_analyze_result(line_msg_txt, line_msg_intnt, prv_msgrcd_lst):
+    flw_of_uttrnc = prv_msgrcd_lst[0][2] + "→" + prv_msgrcd_lst[1][2] +"→" + \
+                    prv_msgrcd_lst[2][2] + "→" + prv_msgrcd_lst[3][2] + "→" + line_msg_intnt
     if   flw_of_uttrnc == "(称賛＆礼賛)→":
          rply_msg_lst = ["ありがとうございます", "嬉しいです", "あなたが好きです"]
          txt_gnrt_from_anlyz_rslt = random.choice(rply_msg_lst)
