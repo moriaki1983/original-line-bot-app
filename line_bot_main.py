@@ -141,61 +141,68 @@ def line_msg_analyze(line_msg_txt):
     global rcd_id
     global cmpltn_flg
     prv_msgrcd_lst = []
-    if (int(rcd_id) == -1 or cmpltn_flg == True):
+    if (cmpltn_flg == True):
         prv_msgrcd_lst.append(["", "", ""])
         prv_msgrcd_lst.append(["", "", ""])
         prv_msgrcd_lst.append(["", "", ""])
         prv_msgrcd_lst.append(["", "", ""])
         prv_msgrcd_lst.append(["", "", ""])
-    if (int(rcd_id) == 0 or cmpltn_flg == True):
-        prv_msgrcd_tmp = postgres_select("0")
-        prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[3], prv_msgrcd_tmp[4]])
-        prv_msgrcd_lst.append(["", "", ""])
-        prv_msgrcd_lst.append(["", "", ""])
-        prv_msgrcd_lst.append(["", "", ""])
-        prv_msgrcd_lst.append(["", "", ""])
-    if (int(rcd_id) == 1 or cmpltn_flg == True):
-        prv_msgrcd_tmp  = postgres_select("0")
-        prv_msgrcd_tmp2 = postgres_select("1")
-        prv_msgrcd_lst.append([prv_msgrcd_tmp[1],  prv_msgrcd_tmp[3],  prv_msgrcd_tmp[4]])
-        prv_msgrcd_lst.append([prv_msgrcd_tmp2[1], prv_msgrcd_tmp2[3], prv_msgrcd_tmp2[4]])
-        prv_msgrcd_lst.append(["", "", ""])
-        prv_msgrcd_lst.append(["", "", ""])
-        prv_msgrcd_lst.append(["", "", ""])
-    if (int(rcd_id) == 2 or cmpltn_flg == True):
-        prv_msgrcd_tmp  = postgres_select("0")
-        prv_msgrcd_tmp2 = postgres_select("1")
-        prv_msgrcd_tmp3 = postgres_select("2")
-        prv_msgrcd_lst.append([prv_msgrcd_tmp[1],  prv_msgrcd_tmp[3],  prv_msgrcd_tmp[4]])
-        prv_msgrcd_lst.append([prv_msgrcd_tmp2[1], prv_msgrcd_tmp2[3], prv_msgrcd_tmp2[4]])
-        prv_msgrcd_lst.append([prv_msgrcd_tmp3[1], prv_msgrcd_tmp3[3], prv_msgrcd_tmp3[4]])
-        prv_msgrcd_lst.append(["", "", ""])
-        prv_msgrcd_lst.append(["", "", ""])
-    if (int(rcd_id) == 3 or cmpltn_flg == True):
-        prv_msgrcd_tmp  = postgres_select("0")
-        prv_msgrcd_tmp2 = postgres_select("1")
-        prv_msgrcd_tmp3 = postgres_select("2")
-        prv_msgrcd_tmp4 = postgres_select("3")
-        prv_msgrcd_lst.append([prv_msgrcd_tmp[1],  prv_msgrcd_tmp[3],  prv_msgrcd_tmp[4]])
-        prv_msgrcd_lst.append([prv_msgrcd_tmp2[1], prv_msgrcd_tmp2[3], prv_msgrcd_tmp2[4]])
-        prv_msgrcd_lst.append([prv_msgrcd_tmp3[1], prv_msgrcd_tmp3[3], prv_msgrcd_tmp3[4]])
-        prv_msgrcd_lst.append([prv_msgrcd_tmp4[1], prv_msgrcd_tmp4[3], prv_msgrcd_tmp4[4]])
-        prv_msgrcd_lst.append(["", "", ""])
-    if (int(rcd_id) == 4 or cmpltn_flg == True):
-        prv_msgrcd_tmp  = postgres_select("0")
-        prv_msgrcd_tmp2 = postgres_select("1")
-        prv_msgrcd_tmp3 = postgres_select("2")
-        prv_msgrcd_tmp4 = postgres_select("3")
-        prv_msgrcd_tmp5 = postgres_select("4")
-        prv_msgrcd_lst.append([prv_msgrcd_tmp[1],  prv_msgrcd_tmp[3],  prv_msgrcd_tmp[4]])
-        prv_msgrcd_lst.append([prv_msgrcd_tmp2[1], prv_msgrcd_tmp2[3], prv_msgrcd_tmp2[4]])
-        prv_msgrcd_lst.append([prv_msgrcd_tmp3[1], prv_msgrcd_tmp3[3], prv_msgrcd_tmp3[4]])
-        prv_msgrcd_lst.append([prv_msgrcd_tmp4[1], prv_msgrcd_tmp4[3], prv_msgrcd_tmp4[4]])
-        prv_msgrcd_lst.append([prv_msgrcd_tmp5[1], prv_msgrcd_tmp5[3], prv_msgrcd_tmp5[4]])
-    if (int(rcd_id) >= 5 or cmpltn_flg == True):
-        for idx in range(0, 4):
-          prv_msgrcd_tmp = postgres_select(str(int(rcd_id)-idx))
-          prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[3], prv_msgrcd_tmp[4]])
+    else:
+        if (int(rcd_id) == -1):
+            prv_msgrcd_lst.append(["", "", ""])
+            prv_msgrcd_lst.append(["", "", ""])
+            prv_msgrcd_lst.append(["", "", ""])
+            prv_msgrcd_lst.append(["", "", ""])
+            prv_msgrcd_lst.append(["", "", ""])
+        if (int(rcd_id) == 0):
+            prv_msgrcd_tmp = postgres_select("0")
+            prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[3], prv_msgrcd_tmp[4]])
+            prv_msgrcd_lst.append(["", "", ""])
+            prv_msgrcd_lst.append(["", "", ""])
+            prv_msgrcd_lst.append(["", "", ""])
+            prv_msgrcd_lst.append(["", "", ""])
+        if (int(rcd_id) == 1):
+            prv_msgrcd_tmp  = postgres_select("0")
+            prv_msgrcd_tmp2 = postgres_select("1")
+            prv_msgrcd_lst.append([prv_msgrcd_tmp[1],  prv_msgrcd_tmp[3],  prv_msgrcd_tmp[4]])
+            prv_msgrcd_lst.append([prv_msgrcd_tmp2[1], prv_msgrcd_tmp2[3], prv_msgrcd_tmp2[4]])
+            prv_msgrcd_lst.append(["", "", ""])
+            prv_msgrcd_lst.append(["", "", ""])
+            prv_msgrcd_lst.append(["", "", ""])
+        if (int(rcd_id) == 2):
+            prv_msgrcd_tmp  = postgres_select("0")
+            prv_msgrcd_tmp2 = postgres_select("1")
+            prv_msgrcd_tmp3 = postgres_select("2")
+            prv_msgrcd_lst.append([prv_msgrcd_tmp[1],  prv_msgrcd_tmp[3],  prv_msgrcd_tmp[4]])
+            prv_msgrcd_lst.append([prv_msgrcd_tmp2[1], prv_msgrcd_tmp2[3], prv_msgrcd_tmp2[4]])
+            prv_msgrcd_lst.append([prv_msgrcd_tmp3[1], prv_msgrcd_tmp3[3], prv_msgrcd_tmp3[4]])
+            prv_msgrcd_lst.append(["", "", ""])
+            prv_msgrcd_lst.append(["", "", ""])
+        if (int(rcd_id) == 3):
+            prv_msgrcd_tmp  = postgres_select("0")
+            prv_msgrcd_tmp2 = postgres_select("1")
+            prv_msgrcd_tmp3 = postgres_select("2")
+            prv_msgrcd_tmp4 = postgres_select("3")
+            prv_msgrcd_lst.append([prv_msgrcd_tmp[1],  prv_msgrcd_tmp[3],  prv_msgrcd_tmp[4]])
+            prv_msgrcd_lst.append([prv_msgrcd_tmp2[1], prv_msgrcd_tmp2[3], prv_msgrcd_tmp2[4]])
+            prv_msgrcd_lst.append([prv_msgrcd_tmp3[1], prv_msgrcd_tmp3[3], prv_msgrcd_tmp3[4]])
+            prv_msgrcd_lst.append([prv_msgrcd_tmp4[1], prv_msgrcd_tmp4[3], prv_msgrcd_tmp4[4]])
+            prv_msgrcd_lst.append(["", "", ""])
+        if (int(rcd_id) == 4):
+            prv_msgrcd_tmp  = postgres_select("0")
+            prv_msgrcd_tmp2 = postgres_select("1")
+            prv_msgrcd_tmp3 = postgres_select("2")
+            prv_msgrcd_tmp4 = postgres_select("3")
+            prv_msgrcd_tmp5 = postgres_select("4")
+            prv_msgrcd_lst.append([prv_msgrcd_tmp[1],  prv_msgrcd_tmp[3],  prv_msgrcd_tmp[4]])
+            prv_msgrcd_lst.append([prv_msgrcd_tmp2[1], prv_msgrcd_tmp2[3], prv_msgrcd_tmp2[4]])
+            prv_msgrcd_lst.append([prv_msgrcd_tmp3[1], prv_msgrcd_tmp3[3], prv_msgrcd_tmp3[4]])
+            prv_msgrcd_lst.append([prv_msgrcd_tmp4[1], prv_msgrcd_tmp4[3], prv_msgrcd_tmp4[4]])
+            prv_msgrcd_lst.append([prv_msgrcd_tmp5[1], prv_msgrcd_tmp5[3], prv_msgrcd_tmp5[4]])
+        if (int(rcd_id) >= 5):
+            for idx in range(0, 4):
+            prv_msgrcd_tmp = postgres_select(str(int(rcd_id)-idx))
+            prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[3], prv_msgrcd_tmp[4]])
 
     #
     rmv_etc      = line_bot_text_analyze.remove_etc(line_msg_txt)
