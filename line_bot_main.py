@@ -201,8 +201,8 @@ def line_msg_analyze(line_msg_txt):
             prv_msgrcd_lst.append([prv_msgrcd_tmp5[1], prv_msgrcd_tmp5[3], prv_msgrcd_tmp5[4]])
         if (int(rcd_id) >= 5):
             for idx in range(0, 4):
-            prv_msgrcd_tmp = postgres_select(str(int(rcd_id)-idx))
-            prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[3], prv_msgrcd_tmp[4]])
+                prv_msgrcd_tmp = postgres_select(str(int(rcd_id)-idx))
+                prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[3], prv_msgrcd_tmp[4]])
 
     #
     rmv_etc      = line_bot_text_analyze.remove_etc(line_msg_txt)
