@@ -28,6 +28,6 @@ def text_generate_from_analyze_result(line_msg_anlyz_rslt, lsttm_intnt):
          txt_gnrt_from_anlyz_rslt = random.choice(rply_msg_lst)
          cmpltn_flg = True
     else:
-       txt_gnrt_from_anlyz_rslt = "また おしゃべりしましょう♪"
-       cmpltn_flg = True
+         txt_gnrt_from_anlyz_rslt = "また おしゃべりしましょう♪"
+         cmpltn_flg = True
     return txt_gnrt_from_anlyz_rslt, cmpltn_flg

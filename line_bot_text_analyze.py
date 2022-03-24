@@ -918,7 +918,7 @@ def extract_intent_from_short_and_boilerplate(line_msg_txt):
           line_msg_txt == "このゲス" or
           line_msg_txt == "げす" or
           line_msg_txt == "ゲス"):
-            extrct_intnt_from_shrt_and_blrplt_rslt = "(罵詈＆罵倒)"
+            extrct_intnt_from_shrt_and_blrplt_rslt = "(罵倒＆貶め)"
     elif (line_msg_txt == "消えてください" or
           line_msg_txt == "消えて" or
           line_msg_txt == "消えな" or
@@ -1178,7 +1178,7 @@ def extract_intent_from_short_and_boilerplate(line_msg_txt):
           line_msg_txt == "悲しい" or
           line_msg_txt == "かなしい" or
           line_msg_txt == "哀しい"):
-            extrct_intnt_from_shrt_and_blrplt_rslt = "(訴求＆表現)(心理・感情について)"
+            extrct_intnt_from_shrt_and_blrplt_rslt = "(訴求＆表出)(心理・感情について)"
     elif (line_msg_txt == "楽" or
           line_msg_txt == "らく" or
           line_msg_txt == "ラク" or
@@ -1192,7 +1192,7 @@ def extract_intent_from_short_and_boilerplate(line_msg_txt):
           line_msg_txt == "タイヘン" or
           line_msg_txt == "疲れた" or
           line_msg_txt == "つかれた"):
-            extrct_intnt_from_shrt_and_blrplt_rslt = "(訴求＆表現)(精神・肉体について)"
+            extrct_intnt_from_shrt_and_blrplt_rslt = "(訴求＆表出)(精神・肉体について)"
     elif (line_msg_txt == "最初は グー" or
           line_msg_txt == "最初はグー" or
           line_msg_txt == "じゃんけんぽん" or
@@ -1251,14 +1251,14 @@ def extract_intent_from_short_and_boilerplate(line_msg_txt):
           line_msg_txt == "好き" or
           line_msg_txt == "すき" or
           line_msg_txt == "スキ"):
-            extrct_intnt_from_shrt_and_blrplt_rslt = "(訴求)(求愛している)"
+            extrct_intnt_from_shrt_and_blrplt_rslt = "(訴求＆表出)(求愛している)"
     elif (line_msg_txt == "Hなことしたい" or
           line_msg_txt == "Hなことしよう" or
           line_msg_txt == "Hしたい" or
           line_msg_txt == "Hしよう" or
           line_msg_txt == "セックスしたい" or
           line_msg_txt == "セックスしよう"):
-            extrct_intnt_from_shrt_and_blrplt_rslt = "(訴求)(発情している)"
+            extrct_intnt_from_shrt_and_blrplt_rslt = "(訴求＆表出)(発情している)"
     elif (line_msg_txt == "アナルは好きですか" or
           line_msg_txt == "アナルは好き" or
           line_msg_txt == "どこを責められたい" or
