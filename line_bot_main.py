@@ -285,7 +285,7 @@ def postgres_insert_and_update(event, line_msg_intnt):
        cur.execute("""INSERT INTO line_entries (rcd_id, date, speaker, msg, intnt) VALUES (%(rcd_id)s, %(date)s, %(speaker)s, %(msg)s, %(intnt)s);""", {'rcd_id': rcd_id, 'date' : date, 'speaker': speaker, 'msg': msg, 'intnt': intnt})
        rcd_id = str(int(rcd_id) + 1)
     if int(rcd_id) == -1:
-       cur.execute("""UPDATE line_entries SET (rcd_id, date, speaker, msg, intnt) VALUES (%(rcd_id)s, %(date)s, %(speaker)s, %(msg)s, %(intnt)s) WHERE = '0';""", {'rcd_id': "0", 'date' : date, 'speaker': speaker, 'msg': msg, 'intnt': intnt, 'rcd_id': rcd_id})
+       cur.execute("""UPDATE line_entries SET (rcd_id, date, speaker, msg, intnt) VALUES (%(rcd_id)s, %(date)s, %(speaker)s, %(msg)s, %(intnt)s) WHERE = '0';""", {'rcd_id': "0", 'date' : date, 'speaker': speaker, 'msg': msg, 'intnt': intnt})
        rcd_id = str(int(rcd_id) + 1)
     if int(rcd_id) < 100:
        cur.execute("""UPDATE line_entries SET (rcd_id, date, speaker, msg, intnt) VALUES (%(rcd_id)s, %(date)s, %(speaker)s, %(msg)s, %(intnt)s) WHERE = %(rcd_id)s;""", {'rcd_id': rcd_id, 'date' : date, 'speaker': speaker, 'msg': msg, 'intnt': intnt, 'rcd_id': rcd_id})
