@@ -313,7 +313,7 @@ def postgres_select(rcd_id):
     #テーブル操作のためのカーソルを破棄して、データベースとの接続を解除する
     cur.close()
     conn.close()
-    return rcd_list
+    return rcd
 
 
 #Postgresのデータベースからレコードを全件取得する
