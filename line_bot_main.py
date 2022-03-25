@@ -55,13 +55,8 @@ def show_db_record():
     if has_db_table == True:
        if int(rcd_id) == -1:
           return "table-record not exist..."
-       if int(rcd_id) == 0:
-          cur.execute("""SELECT * FROM line_entries WHERE rcd_id = '0';""")
-
        if int(rcd_id) >= 1:
           cur.execute("""SELECT * FROM line_entries WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': str(int(rcd_id)-1)})
-       if int(rcd_id) >= 100:
-          cur.execute("""SELECT * FROM line_entries WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': "100"})
        rcd = cur.fetchone()
        cur.close()
        conn.close()
@@ -155,55 +150,56 @@ def line_msg_analyze(line_msg_txt):
             prv_msgrcd_lst.append(["", "", ""])
             prv_msgrcd_lst.append(["", "", ""])
             prv_msgrcd_lst.append(["", "", ""])
-        if  int(rcd_id) == 0:
-            prv_msgrcd_tmp = postgres_select("0")
-            prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[3], prv_msgrcd_tmp[4]])
-            prv_msgrcd_lst.append(["", "", ""])
-            prv_msgrcd_lst.append(["", "", ""])
-            prv_msgrcd_lst.append(["", "", ""])
-            prv_msgrcd_lst.append(["", "", ""])
         if  int(rcd_id) == 1:
             prv_msgrcd_tmp  = postgres_select("0")
-            prv_msgrcd_tmp2 = postgres_select("1")
             prv_msgrcd_lst.append([prv_msgrcd_tmp[1],  prv_msgrcd_tmp[3],  prv_msgrcd_tmp[4]])
-            prv_msgrcd_lst.append([prv_msgrcd_tmp2[1], prv_msgrcd_tmp2[3], prv_msgrcd_tmp2[4]])
+            prv_msgrcd_lst.append(["", "", ""])
             prv_msgrcd_lst.append(["", "", ""])
             prv_msgrcd_lst.append(["", "", ""])
             prv_msgrcd_lst.append(["", "", ""])
         if  int(rcd_id) == 2:
             prv_msgrcd_tmp  = postgres_select("0")
             prv_msgrcd_tmp2 = postgres_select("1")
-            prv_msgrcd_tmp3 = postgres_select("2")
             prv_msgrcd_lst.append([prv_msgrcd_tmp[1],  prv_msgrcd_tmp[3],  prv_msgrcd_tmp[4]])
             prv_msgrcd_lst.append([prv_msgrcd_tmp2[1], prv_msgrcd_tmp2[3], prv_msgrcd_tmp2[4]])
-            prv_msgrcd_lst.append([prv_msgrcd_tmp3[1], prv_msgrcd_tmp3[3], prv_msgrcd_tmp3[4]])
+            prv_msgrcd_lst.append(["", "", ""])
             prv_msgrcd_lst.append(["", "", ""])
             prv_msgrcd_lst.append(["", "", ""])
         if  int(rcd_id) == 3:
             prv_msgrcd_tmp  = postgres_select("0")
             prv_msgrcd_tmp2 = postgres_select("1")
             prv_msgrcd_tmp3 = postgres_select("2")
-            prv_msgrcd_tmp4 = postgres_select("3")
             prv_msgrcd_lst.append([prv_msgrcd_tmp[1],  prv_msgrcd_tmp[3],  prv_msgrcd_tmp[4]])
             prv_msgrcd_lst.append([prv_msgrcd_tmp2[1], prv_msgrcd_tmp2[3], prv_msgrcd_tmp2[4]])
             prv_msgrcd_lst.append([prv_msgrcd_tmp3[1], prv_msgrcd_tmp3[3], prv_msgrcd_tmp3[4]])
-            prv_msgrcd_lst.append([prv_msgrcd_tmp4[1], prv_msgrcd_tmp4[3], prv_msgrcd_tmp4[4]])
+            prv_msgrcd_lst.append(["", "", ""])
             prv_msgrcd_lst.append(["", "", ""])
         if  int(rcd_id) == 4:
             prv_msgrcd_tmp  = postgres_select("0")
             prv_msgrcd_tmp2 = postgres_select("1")
             prv_msgrcd_tmp3 = postgres_select("2")
             prv_msgrcd_tmp4 = postgres_select("3")
-            prv_msgrcd_tmp5 = postgres_select("4")
             prv_msgrcd_lst.append([prv_msgrcd_tmp[1],  prv_msgrcd_tmp[3],  prv_msgrcd_tmp[4]])
             prv_msgrcd_lst.append([prv_msgrcd_tmp2[1], prv_msgrcd_tmp2[3], prv_msgrcd_tmp2[4]])
             prv_msgrcd_lst.append([prv_msgrcd_tmp3[1], prv_msgrcd_tmp3[3], prv_msgrcd_tmp3[4]])
             prv_msgrcd_lst.append([prv_msgrcd_tmp4[1], prv_msgrcd_tmp4[3], prv_msgrcd_tmp4[4]])
-            prv_msgrcd_lst.append([prv_msgrcd_tmp5[1], prv_msgrcd_tmp5[3], prv_msgrcd_tmp5[4]])
+            prv_msgrcd_lst.append(["", "", ""])
         if  int(rcd_id) >= 5:
-            for idx in range(0, 4):
-                prv_msgrcd_tmp = postgres_select(str(int(rcd_id)-idx))
-                prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[3], prv_msgrcd_tmp[4]])
+            idx = int(rcd_id) - 5
+            prv_msgrcd_tmp = postgres_select(str(idx))
+            prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[3], prv_msgrcd_tmp[4]])
+            idx = int(rcd_id) - 4
+            prv_msgrcd_tmp = postgres_select(str(idx))
+            prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[3], prv_msgrcd_tmp[4]])
+            idx = int(rcd_id) - 3
+            prv_msgrcd_tmp = postgres_select(str(idx))
+            prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[3], prv_msgrcd_tmp[4]])
+            idx = int(rcd_id) - 2
+            prv_msgrcd_tmp = postgres_select(str(idx))
+            prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[3], prv_msgrcd_tmp[4]])
+            idx = int(rcd_id) - 1
+            prv_msgrcd_tmp = postgres_select(str(idx))
+            prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[3], prv_msgrcd_tmp[4]])
 
     #ユーザーから送られるLINEメッセージの中に含まれるインテントを抽出する
     rmv_etc      = line_bot_text_analyze.remove_etc(line_msg_txt)
