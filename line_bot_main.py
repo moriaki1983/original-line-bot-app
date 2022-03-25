@@ -276,7 +276,10 @@ def postgres_insert_and_update(event, line_msg_intnt):
     intnt   = line_msg_intnt
 
     #該当IDのメッセージ(＝レコード)がなかったら、データベースにインサート(＝新規に登録・格納)し、既にメッセージがあったらアップデート(＝上書き)する
-    cur.execute("""SELECT * FROM line_entries WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id})
+    if int(rcd_id) == -1:
+       cur.execute("""SELECT * FROM line_entries WHERE rcd_id = '0';""")
+    if int(rcd_id) >= 0:
+       cur.execute("""SELECT * FROM line_entries WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id})
     rcd = cur.fetchone()
     if rcd is None:
        cur.execute("""INSERT INTO line_entries (rcd_id, date, speaker, msg, intnt) VALUES (%(rcd_id)s, %(date)s, %(speaker)s, %(msg)s, %(intnt)s);""", {'rcd_id': rcd_id, 'date' : date, 'speaker': speaker, 'msg': msg, 'intnt': intnt})
