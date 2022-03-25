@@ -303,7 +303,7 @@ def postgres_select(rcd_id):
 
     #指定されたIDのメッセージ(＝レコード)をデータベースから個別にセレクトして取得する
     global rcd_id
-    if (int(rcd_id) == -1) or (int(rcd_id) == 0)):
+    if ((int(rcd_id) == -1) or (int(rcd_id) == 0)):
         cur.execute("""SELECT * FROM line_entries WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': "0"})
     if (int(rcd_id) >= 1):
         cur.execute("""SELECT * FROM line_entries WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id})
