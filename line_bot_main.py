@@ -56,7 +56,8 @@ def show_db_record():
        if int(rcd_id) == -1:
           return "table-record not exist..."
        if int(rcd_id) == 0:
-          cur.execute("""SELECT * FROM line_entries WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': "0"})
+          cur.execute("""SELECT * FROM line_entries WHERE rcd_id = '0';""")
+
        if int(rcd_id) >= 1:
           cur.execute("""SELECT * FROM line_entries WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': str(int(rcd_id)-1)})
        if int(rcd_id) >= 100:
@@ -141,27 +142,27 @@ def line_msg_analyze(line_msg_txt):
     global rcd_id
     global cmpltn_flg
     prv_msgrcd_lst = []
-    if (cmpltn_flg == True):
+    if  cmpltn_flg == True:
         prv_msgrcd_lst.append(["", "", ""])
         prv_msgrcd_lst.append(["", "", ""])
         prv_msgrcd_lst.append(["", "", ""])
         prv_msgrcd_lst.append(["", "", ""])
         prv_msgrcd_lst.append(["", "", ""])
     else:
-        if (int(rcd_id) == -1):
+        if  int(rcd_id) == -1:
             prv_msgrcd_lst.append(["", "", ""])
             prv_msgrcd_lst.append(["", "", ""])
             prv_msgrcd_lst.append(["", "", ""])
             prv_msgrcd_lst.append(["", "", ""])
             prv_msgrcd_lst.append(["", "", ""])
-        if (int(rcd_id) == 0):
+        if  int(rcd_id) == 0:
             prv_msgrcd_tmp = postgres_select("0")
             prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[3], prv_msgrcd_tmp[4]])
             prv_msgrcd_lst.append(["", "", ""])
             prv_msgrcd_lst.append(["", "", ""])
             prv_msgrcd_lst.append(["", "", ""])
             prv_msgrcd_lst.append(["", "", ""])
-        if (int(rcd_id) == 1):
+        if  int(rcd_id) == 1:
             prv_msgrcd_tmp  = postgres_select("0")
             prv_msgrcd_tmp2 = postgres_select("1")
             prv_msgrcd_lst.append([prv_msgrcd_tmp[1],  prv_msgrcd_tmp[3],  prv_msgrcd_tmp[4]])
@@ -169,7 +170,7 @@ def line_msg_analyze(line_msg_txt):
             prv_msgrcd_lst.append(["", "", ""])
             prv_msgrcd_lst.append(["", "", ""])
             prv_msgrcd_lst.append(["", "", ""])
-        if (int(rcd_id) == 2):
+        if  int(rcd_id) == 2:
             prv_msgrcd_tmp  = postgres_select("0")
             prv_msgrcd_tmp2 = postgres_select("1")
             prv_msgrcd_tmp3 = postgres_select("2")
@@ -178,7 +179,7 @@ def line_msg_analyze(line_msg_txt):
             prv_msgrcd_lst.append([prv_msgrcd_tmp3[1], prv_msgrcd_tmp3[3], prv_msgrcd_tmp3[4]])
             prv_msgrcd_lst.append(["", "", ""])
             prv_msgrcd_lst.append(["", "", ""])
-        if (int(rcd_id) == 3):
+        if  int(rcd_id) == 3:
             prv_msgrcd_tmp  = postgres_select("0")
             prv_msgrcd_tmp2 = postgres_select("1")
             prv_msgrcd_tmp3 = postgres_select("2")
@@ -188,7 +189,7 @@ def line_msg_analyze(line_msg_txt):
             prv_msgrcd_lst.append([prv_msgrcd_tmp3[1], prv_msgrcd_tmp3[3], prv_msgrcd_tmp3[4]])
             prv_msgrcd_lst.append([prv_msgrcd_tmp4[1], prv_msgrcd_tmp4[3], prv_msgrcd_tmp4[4]])
             prv_msgrcd_lst.append(["", "", ""])
-        if (int(rcd_id) == 4):
+        if  int(rcd_id) == 4:
             prv_msgrcd_tmp  = postgres_select("0")
             prv_msgrcd_tmp2 = postgres_select("1")
             prv_msgrcd_tmp3 = postgres_select("2")
@@ -199,7 +200,7 @@ def line_msg_analyze(line_msg_txt):
             prv_msgrcd_lst.append([prv_msgrcd_tmp3[1], prv_msgrcd_tmp3[3], prv_msgrcd_tmp3[4]])
             prv_msgrcd_lst.append([prv_msgrcd_tmp4[1], prv_msgrcd_tmp4[3], prv_msgrcd_tmp4[4]])
             prv_msgrcd_lst.append([prv_msgrcd_tmp5[1], prv_msgrcd_tmp5[3], prv_msgrcd_tmp5[4]])
-        if (int(rcd_id) >= 5):
+        if  int(rcd_id) >= 5:
             for idx in range(0, 4):
                 prv_msgrcd_tmp = postgres_select(str(int(rcd_id)-idx))
                 prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[3], prv_msgrcd_tmp[4]])
@@ -283,10 +284,10 @@ def postgres_insert_and_update(event, line_msg_intnt):
     if rcd is None:
        cur.execute("""INSERT INTO line_entries (rcd_id, date, speaker, msg, intnt) VALUES (%(rcd_id)s, %(date)s, %(speaker)s, %(msg)s, %(intnt)s);""", {'rcd_id': rcd_id, 'date' : date, 'speaker': speaker, 'msg': msg, 'intnt': intnt})
        rcd_id = str(int(rcd_id) + 1)
-    if int(rcd_id) >= 0 and int(rcd_id) < 100:
+    if (rcd is not None and int(rcd_id) >= 0 and int(rcd_id) < 100):
        cur.execute("""UPDATE line_entries SET (rcd_id, date, speaker, msg, intnt) VALUES (%(rcd_id)s, %(date)s, %(speaker)s, %(msg)s, %(intnt)s) WHERE = %(rcd_id)s;""", {'rcd_id': rcd_id, 'date' : date, 'speaker': speaker, 'msg': msg, 'intnt': intnt, 'rcd_id': rcd_id})
        rcd_id = str(int(rcd_id) + 1)
-    if int(rcd_id) == 100:
+    if (rcd is not None and int(rcd_id) == 100):
        cur.execute("""UPDATE line_entries SET (rcd_id, date, speaker, msg, intnt) VALUES (%(rcd_id)s, %(date)s, %(speaker)s, %(msg)s, %(intnt)s) WHERE = '99';""", {'rcd_id': "99", 'date' : date, 'speaker': speaker, 'msg': msg, 'intnt': intnt})
        rcd_id = "-1"
 
@@ -304,11 +305,11 @@ def postgres_select(rcd_id):
     cur  = conn.cursor()
 
     #指定されたIDのメッセージ(＝レコード)をデータベースから個別にセレクトして取得する
-    if (int(rcd_id) == -1 or int(rcd_id) == 0):
+    if (int(rcd_id) <= -1 or int(rcd_id) == 0):
         cur.execute("""SELECT * FROM line_entries WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': "0"})
     if  int(rcd_id) >= 1:
         cur.execute("""SELECT * FROM line_entries WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id})
-    if  int(rcd_id) == 100:
+    if  int(rcd_id) >= 100:
         cur.execute("""SELECT * FROM line_entries WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': "99"})
     rcd = cur.fetchone()
 
