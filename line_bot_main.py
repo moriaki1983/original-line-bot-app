@@ -207,26 +207,26 @@ def line_msg_analyze(line_msg_txt):
     #ユーザーから送られるLINEメッセージの中に含まれるインテントを抽出する
     rmv_etc      = line_bot_text_analyze.remove_etc(line_msg_txt)
     extrct_intnt = line_bot_text_analyze.extract_intent_from_gag_and_vocalcordcopy(rmv_etc)
-    if extrct_intnt != "(その他・不明)":
+    if extrct_intnt != "#その他・不明":
        line_msg_intnt = extrct_intnt
        return line_msg_intnt, prv_msgrcd_lst
     rmv_etc       = line_bot_text_analyze.remove_etc(line_msg_txt)
     rmv_symbl     = line_bot_text_analyze.remove_symbol(rmv_etc)
     extrct_intnt2 = line_bot_text_analyze.extract_intent_from_gag_and_vocalcordcopy(rmv_symbl)
-    if extrct_intnt2 != "(その他・不明)":
+    if extrct_intnt2 != "#その他・不明":
        line_msg_intnt = extrct_intnt2
        return line_msg_intnt, prv_msgrcd_lst
     rmv_etc       = line_bot_text_analyze.remove_etc(line_msg_txt)
     rmv_symbl     = line_bot_text_analyze.remove_symbol(rmv_etc)
     extrct_intnt3 = line_bot_text_analyze.extract_intent_from_short_and_boilerplate(rmv_symbl)
-    if extrct_intnt3 != "(その他・不明)":
+    if extrct_intnt3 != "#その他・不明":
        line_msg_intnt = extrct_intnt3
        return line_msg_intnt, prv_msgrcd_lst
     rmv_etc          = line_bot_text_analyze.remove_etc(line_msg_txt)
     rmv_symbl        = line_bot_text_analyze.remove_symbol(rmv_etc)
     rmv_edprtcl      = line_bot_text_analyze.remove_endparticle(rmv_symbl)
     extrct_intnt4 = line_bot_text_analyze.extract_intent_from_short_and_boilerplate(rmv_edprtcl)
-    if extrct_intnt4 != "(その他・不明)":
+    if extrct_intnt4 != "#その他・不明":
        line_msg_intnt = extrct_intnt4
        return line_msg_intnt, prv_msgrcd_lst
     rmv_etc          = line_bot_text_analyze.remove_etc(line_msg_txt)
