@@ -20,28 +20,28 @@ from linebot.models import (MessageEvent, FollowEvent, TextMessage, TextSendMess
 #Flaskのアプリケーションモジュールを作成する
 app = Flask(__name__)
 
-#herokuの環境変数に設定されている、LINE-Developersのアクセストークンとチャンネルシークレットを取得する
+#Herokuの環境変数に設定されている、LINE-Developersのアクセストークンとチャンネルシークレットを取得する
 YOUR_CHANNEL_ACCESS_TOKEN = os.environ["YOUR_CHANNEL_ACCESS_TOKEN"]
 YOUR_CHANNEL_SECRET       = os.environ["YOUR_CHANNEL_SECRET"]
 line_bot_api = LineBotApi(YOUR_CHANNEL_ACCESS_TOKEN)
 handler      = WebhookHandler(YOUR_CHANNEL_SECRET)
 
-#herokuの環境に設定されている、postgresにアクセスするためのキーを取得する
+#Herokuの環境に設定されている、postgresにアクセスするためのキーを取得する
 DATABASE_URL = os.environ["DATABASE_URL"]
 
-#postgresデータベース上のテーブル「line_entries」の有無を示す変数を宣言する
+#Postgresデータベース上のテーブル「line_entries」の有無を示すフラグを宣言する
 has_db_table = False
 
-#postgresデータベースに登録・格納するLINEメッセージ(＝レコード)のID(＝レコードカウンター)を示す変数を宣言する
+#Postgresデータベースに登録・格納するLINEメッセージ(＝レコード)のID(＝レコードカウンター)を宣言する
 rcd_id = "-1"
 
-#
+#ユーザーの発話の流れ(＝複数回のLINEメッセージの送信)を区切るためのフラグを宣言する
 cmpltn_flg = False
 
 
 
 
-#postgresデータベース上のテーブル内のレコードを取得して、ブラウザーに引渡しをする
+#Postgresデータベース上のテーブル内のレコードを取得して、ブラウザーに引渡しをする
 @app.route("/")
 def show_db_record():
     #データベースに接続して、テーブル操作のためのカーソルを用意する
@@ -71,7 +71,7 @@ def show_db_record():
        return "db-table not exist..."
 
 
-#postgresデータベース上のテーブルを破棄する
+#Postgresデータベース上のテーブルを破棄する
 @app.route("/table_drop")
 def db_table_drop():
     #データベースに接続して、テーブル操作のためのカーソルを用意する
@@ -121,7 +121,7 @@ def handle_message(event):
     #ユーザーから送られるLINEメッセージの解析結果から返信メッセージを生成する
     line_msg_gnrt_rslt = line_msg_generate(event.message.text, line_msg_intnt, prv_msgrcd_lst)
 
-    #LINEBotAPIを使って、ユーザーに生成されたLINEメッセージを送信する
+    #LINEBotAPIを使って生成されるLINEメッセージをユーザーに対して送信する
     line_msg_send(event, line_msg_gnrt_rslt)
 
     #ユーザーから送られるLINEメッセージをpostgresのデータベースに登録・格納する
@@ -137,7 +137,7 @@ def handle_follow(event):
 
 #ユーザーから送られるLINEメッセージを解析する
 def line_msg_analyze(line_msg_txt):
-    #
+    #過去５件分のユーザーからのLINEメッセージ(＝レコード)をデータベースから取得する
     global rcd_id
     global cmpltn_flg
     prv_msgrcd_lst = []
@@ -204,7 +204,7 @@ def line_msg_analyze(line_msg_txt):
                 prv_msgrcd_tmp = postgres_select(str(int(rcd_id)-idx))
                 prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[3], prv_msgrcd_tmp[4]])
 
-    #
+    #ユーザーから送られるLINEメッセージの中に含まれるインテントを抽出する
     rmv_etc      = line_bot_text_analyze.remove_etc(line_msg_txt)
     extrct_intnt = line_bot_text_analyze.extract_intent_from_gag_and_vocalcordcopy(rmv_etc)
     if extrct_intnt != "(その他・不明)":
@@ -245,7 +245,7 @@ def line_msg_generate(line_msg_txt, line_msg_intnt, prv_msgrcd_lst):
     return line_msg_gnrt_rslt
 
 
-#LINEBotAPIを使って、ユーザーに生成されたLINEメッセージを送信する
+#LINEBotAPIを使って生成されるLINEメッセージをユーザーに対して送信する
 def line_msg_send(event, line_msg_gnrt_rslt):
     #LINEの返信用トークンと生成されたメッセージをセットにしてLINEBotAPIの呼出しをする
     line_bot_api.reply_message(event.reply_token, TextSendMessage(text=line_msg_gnrt_rslt))
@@ -258,7 +258,7 @@ def postgres_insert_and_update(event, line_msg_intnt):
     conn.set_client_encoding("utf-8") 
     cur  = conn.cursor()
 
-    #既にテーブルが用意・作成されていれば、それを破棄して新たにテーブルを用意・作成する(メモリー上でフラグが揮発するゆえに、念のため、テーブルの破棄を実施する)
+    #既にテーブルが用意・作成されていれば、それを破棄して新たにテーブルを用意・作成する
     global has_db_table
     if has_db_table == False:
        cur.execute("DROP TABLE line_entries")
@@ -275,7 +275,7 @@ def postgres_insert_and_update(event, line_msg_intnt):
     msg     = event.message.text
     intnt   = line_msg_intnt
 
-    #該当IDのメッセージ(＝レコード)がなかったら、データベースにインサート(＝挿入)(＝新規に登録・格納)し、既にメッセージがあったらアップデート(＝上書き)する
+    #該当IDのメッセージ(＝レコード)がなかったら、データベースにインサート(＝新規に登録・格納)し、既にメッセージがあったらアップデート(＝上書き)する
     cur.execute("""SELECT * FROM line_entries WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id})
     rcd = cur.fetchone()
     if rcd is None:
@@ -284,7 +284,7 @@ def postgres_insert_and_update(event, line_msg_intnt):
     elif int(rcd_id) < 100:
        cur.execute("""UPDATE line_entries SET (rcd_id, date, speaker, msg, intnt) VALUES (%(rcd_id)s, %(date)s, %(speaker)s, %(msg)s, %(intnt)s) WHERE = %(rcd_id)s;""", {'rcd_id': rcd_id, 'date' : date, 'speaker': speaker, 'msg': msg, 'intnt': intnt, 'rcd_id': rcd_id})
        rcd_id = str(int(rcd_id) + 1)
-    elif int(rcd_id) >= 100:
+    elif int(rcd_id) == 100:
        cur.execute("""UPDATE line_entries SET (rcd_id, date, speaker, msg, intnt) VALUES (%(rcd_id)s, %(date)s, %(speaker)s, %(msg)s, %(intnt)s) WHERE = '99';""", {'rcd_id': "99", 'date' : date, 'speaker': speaker, 'msg': msg, 'intnt': intnt})
        rcd_id = "-1"
 
@@ -294,24 +294,30 @@ def postgres_insert_and_update(event, line_msg_intnt):
     conn.close()
 
 
-#postgresのデータベースからレコードを1件取得する
+#Postgresのデータベースからレコードを1件取得する
 def postgres_select(rcd_id):
     #データベースに接続して、テーブル操作のためのカーソルを用意する
     conn = psycopg2.connect(DATABASE_URL)
     conn.set_client_encoding("utf-8")
     cur  = conn.cursor()
 
-    #指定されたIDのレコードをデータベースから個別にセレクトして取得する
-    cur.execute("""SELECT * FROM line_entries WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id})
+    #指定されたIDのメッセージ(＝レコード)をデータベースから個別にセレクトして取得する
+    global rcd_id
+    if (int(rcd_id) == -1) or (int(rcd_id) == 0)):
+        cur.execute("""SELECT * FROM line_entries WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': "0"})
+    if (int(rcd_id) >= 1):
+        cur.execute("""SELECT * FROM line_entries WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id})
+    if (int(rcd_id) == 100):
+        cur.execute("""SELECT * FROM line_entries WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': "99"})
     rcd = cur.fetchone()
 
     #テーブル操作のためのカーソルを破棄して、データベースとの接続を解除する
     cur.close()
     conn.close()
-    return rcd
+    return rcd_list
 
 
-#postgresのデータベースからレコードを全件取得する
+#Postgresのデータベースからレコードを全件取得する
 def postgres_select_all():
     #データベースに接続して、テーブル操作のためのカーソルを用意する
     conn = psycopg2.connect(DATABASE_URL)
