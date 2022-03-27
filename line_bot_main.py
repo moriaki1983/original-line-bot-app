@@ -137,93 +137,87 @@ def line_msg_analyze(line_msg_txt):
     global rcd_id
     global cmpltn_flg
     prv_msgrcd_lst = []
-    if  cmpltn_flg == True:
+    if  (cmpltn_flg == True or int(rcd_id) == -1):
         prv_msgrcd_lst.append(["", "", ""])
         prv_msgrcd_lst.append(["", "", ""])
         prv_msgrcd_lst.append(["", "", ""])
         prv_msgrcd_lst.append(["", "", ""])
         prv_msgrcd_lst.append(["", "", ""])
     else:
-        if  int(rcd_id) == -1:
-            prv_msgrcd_lst.append(["", "", ""])
-            prv_msgrcd_lst.append(["", "", ""])
-            prv_msgrcd_lst.append(["", "", ""])
-            prv_msgrcd_lst.append(["", "", ""])
-            prv_msgrcd_lst.append(["", "", ""])
-        if  int(rcd_id) == 1:
-            prv_msgrcd_tmp  = postgres_select("0")
-            prv_msgrcd_lst.append([prv_msgrcd_tmp[1],  prv_msgrcd_tmp[3],  prv_msgrcd_tmp[4]])
-            prv_msgrcd_lst.append(["", "", ""])
-            prv_msgrcd_lst.append(["", "", ""])
-            prv_msgrcd_lst.append(["", "", ""])
-            prv_msgrcd_lst.append(["", "", ""])
-        if  int(rcd_id) == 2:
-            prv_msgrcd_tmp  = postgres_select("0")
-            prv_msgrcd_tmp2 = postgres_select("1")
-            prv_msgrcd_lst.append([prv_msgrcd_tmp[1],  prv_msgrcd_tmp[3],  prv_msgrcd_tmp[4]])
-            prv_msgrcd_lst.append([prv_msgrcd_tmp2[1], prv_msgrcd_tmp2[3], prv_msgrcd_tmp2[4]])
-            prv_msgrcd_lst.append(["", "", ""])
-            prv_msgrcd_lst.append(["", "", ""])
-            prv_msgrcd_lst.append(["", "", ""])
-        if  int(rcd_id) == 3:
-            prv_msgrcd_tmp  = postgres_select("0")
-            prv_msgrcd_tmp2 = postgres_select("1")
-            prv_msgrcd_tmp3 = postgres_select("2")
-            prv_msgrcd_lst.append([prv_msgrcd_tmp[1],  prv_msgrcd_tmp[3],  prv_msgrcd_tmp[4]])
-            prv_msgrcd_lst.append([prv_msgrcd_tmp2[1], prv_msgrcd_tmp2[3], prv_msgrcd_tmp2[4]])
-            prv_msgrcd_lst.append([prv_msgrcd_tmp3[1], prv_msgrcd_tmp3[3], prv_msgrcd_tmp3[4]])
-            prv_msgrcd_lst.append(["", "", ""])
-            prv_msgrcd_lst.append(["", "", ""])
-        if  int(rcd_id) == 4:
-            prv_msgrcd_tmp  = postgres_select("0")
-            prv_msgrcd_tmp2 = postgres_select("1")
-            prv_msgrcd_tmp3 = postgres_select("2")
-            prv_msgrcd_tmp4 = postgres_select("3")
-            prv_msgrcd_lst.append([prv_msgrcd_tmp[1],  prv_msgrcd_tmp[3],  prv_msgrcd_tmp[4]])
-            prv_msgrcd_lst.append([prv_msgrcd_tmp2[1], prv_msgrcd_tmp2[3], prv_msgrcd_tmp2[4]])
-            prv_msgrcd_lst.append([prv_msgrcd_tmp3[1], prv_msgrcd_tmp3[3], prv_msgrcd_tmp3[4]])
-            prv_msgrcd_lst.append([prv_msgrcd_tmp4[1], prv_msgrcd_tmp4[3], prv_msgrcd_tmp4[4]])
-            prv_msgrcd_lst.append(["", "", ""])
-        if  int(rcd_id) >= 5:
-            idx = int(rcd_id) - 5
-            prv_msgrcd_tmp = postgres_select(str(idx))
-            prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[3], prv_msgrcd_tmp[4]])
-            idx = int(rcd_id) - 4
-            prv_msgrcd_tmp = postgres_select(str(idx))
-            prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[3], prv_msgrcd_tmp[4]])
-            idx = int(rcd_id) - 3
-            prv_msgrcd_tmp = postgres_select(str(idx))
-            prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[3], prv_msgrcd_tmp[4]])
-            idx = int(rcd_id) - 2
-            prv_msgrcd_tmp = postgres_select(str(idx))
-            prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[3], prv_msgrcd_tmp[4]])
-            idx = int(rcd_id) - 1
-            prv_msgrcd_tmp = postgres_select(str(idx))
-            prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[3], prv_msgrcd_tmp[4]])
+        if int(rcd_id) == 1:
+           prv_msgrcd_tmp  = postgres_select("0")
+           prv_msgrcd_lst.append([prv_msgrcd_tmp[1],  prv_msgrcd_tmp[3],  prv_msgrcd_tmp[4]])
+           prv_msgrcd_lst.append(["", "", ""])
+           prv_msgrcd_lst.append(["", "", ""])
+           prv_msgrcd_lst.append(["", "", ""])
+           prv_msgrcd_lst.append(["", "", ""])
+        if int(rcd_id) == 2:
+           prv_msgrcd_tmp  = postgres_select("0")
+           prv_msgrcd_tmp2 = postgres_select("1")
+           prv_msgrcd_lst.append([prv_msgrcd_tmp[1],  prv_msgrcd_tmp[3],  prv_msgrcd_tmp[4]])
+           prv_msgrcd_lst.append([prv_msgrcd_tmp2[1], prv_msgrcd_tmp2[3], prv_msgrcd_tmp2[4]])
+           prv_msgrcd_lst.append(["", "", ""])
+           prv_msgrcd_lst.append(["", "", ""])
+           prv_msgrcd_lst.append(["", "", ""])
+        if int(rcd_id) == 3:
+           prv_msgrcd_tmp  = postgres_select("0")
+           prv_msgrcd_tmp2 = postgres_select("1")
+           prv_msgrcd_tmp3 = postgres_select("2")
+           prv_msgrcd_lst.append([prv_msgrcd_tmp[1],  prv_msgrcd_tmp[3],  prv_msgrcd_tmp[4]])
+           prv_msgrcd_lst.append([prv_msgrcd_tmp2[1], prv_msgrcd_tmp2[3], prv_msgrcd_tmp2[4]])
+           prv_msgrcd_lst.append([prv_msgrcd_tmp3[1], prv_msgrcd_tmp3[3], prv_msgrcd_tmp3[4]])
+           prv_msgrcd_lst.append(["", "", ""])
+           prv_msgrcd_lst.append(["", "", ""])
+        if int(rcd_id) == 4:
+           prv_msgrcd_tmp  = postgres_select("0")
+           prv_msgrcd_tmp2 = postgres_select("1")
+           prv_msgrcd_tmp3 = postgres_select("2")
+           prv_msgrcd_tmp4 = postgres_select("3")
+           prv_msgrcd_lst.append([prv_msgrcd_tmp[1],  prv_msgrcd_tmp[3],  prv_msgrcd_tmp[4]])
+           prv_msgrcd_lst.append([prv_msgrcd_tmp2[1], prv_msgrcd_tmp2[3], prv_msgrcd_tmp2[4]])
+           prv_msgrcd_lst.append([prv_msgrcd_tmp3[1], prv_msgrcd_tmp3[3], prv_msgrcd_tmp3[4]])
+           prv_msgrcd_lst.append([prv_msgrcd_tmp4[1], prv_msgrcd_tmp4[3], prv_msgrcd_tmp4[4]])
+           prv_msgrcd_lst.append(["", "", ""])
+        if int(rcd_id) >= 5:
+           idx = int(rcd_id) - 5
+           prv_msgrcd_tmp = postgres_select(str(idx))
+           prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[3], prv_msgrcd_tmp[4]])
+           idx = int(rcd_id) - 4
+           prv_msgrcd_tmp = postgres_select(str(idx))
+           prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[3], prv_msgrcd_tmp[4]])
+           idx = int(rcd_id) - 3
+           prv_msgrcd_tmp = postgres_select(str(idx))
+           prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[3], prv_msgrcd_tmp[4]])
+           idx = int(rcd_id) - 2
+           prv_msgrcd_tmp = postgres_select(str(idx))
+           prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[3], prv_msgrcd_tmp[4]])
+           idx = int(rcd_id) - 1
+           prv_msgrcd_tmp = postgres_select(str(idx))
+           prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[3], prv_msgrcd_tmp[4]])
 
     #ユーザーから送られるLINEメッセージの中に含まれるインテントを抽出する
     rmv_etc      = line_bot_text_analyze.remove_etc(line_msg_txt)
     extrct_intnt = line_bot_text_analyze.extract_intent_from_gag_and_vocalcordcopy(rmv_etc)
-    if extrct_intnt != "その他・不明":
+    if extrct_intnt != "<その他・不明>":
        line_msg_intnt = extrct_intnt
        return line_msg_intnt, prv_msgrcd_lst
     rmv_etc       = line_bot_text_analyze.remove_etc(line_msg_txt)
     rmv_symbl     = line_bot_text_analyze.remove_symbol(rmv_etc)
     extrct_intnt2 = line_bot_text_analyze.extract_intent_from_gag_and_vocalcordcopy(rmv_symbl)
-    if extrct_intnt2 != "その他・不明":
+    if extrct_intnt2 != "<その他・不明>":
        line_msg_intnt = extrct_intnt2
        return line_msg_intnt, prv_msgrcd_lst
     rmv_etc       = line_bot_text_analyze.remove_etc(line_msg_txt)
     rmv_symbl     = line_bot_text_analyze.remove_symbol(rmv_etc)
     extrct_intnt3 = line_bot_text_analyze.extract_intent_from_short_and_boilerplate(rmv_symbl)
-    if extrct_intnt3 != "その他・不明":
+    if extrct_intnt3 != "<その他・不明>":
        line_msg_intnt = extrct_intnt3
        return line_msg_intnt, prv_msgrcd_lst
     rmv_etc          = line_bot_text_analyze.remove_etc(line_msg_txt)
     rmv_symbl        = line_bot_text_analyze.remove_symbol(rmv_etc)
     rmv_edprtcl      = line_bot_text_analyze.remove_endparticle(rmv_symbl)
     extrct_intnt4 = line_bot_text_analyze.extract_intent_from_short_and_boilerplate(rmv_edprtcl)
-    if extrct_intnt4 != "その他・不明":
+    if extrct_intnt4 != "<その他・不明>":
        line_msg_intnt = extrct_intnt4
        return line_msg_intnt, prv_msgrcd_lst
     rmv_etc          = line_bot_text_analyze.remove_etc(line_msg_txt)
