@@ -25,12 +25,12 @@ def text_generate_from_analyze_result(line_msg_txt, line_msg_intnt, prv_msgrcd_l
        rply_msg = random.choice(rply_msg_cnddt)
        cmpltn_flg = True
        return rply_msg, cmpltn_flg
-    if flw_of_uttrnc == "<辱め 卑猥な言動>":
+    if flw_of_uttrnc == "<卑猥な言動 辱め>":
        rply_msg_cnddt = ["やめてください", "/ω＼)ｲﾔﾝ", "いやらしいですよね"]
        rply_msg = random.choice(rply_msg_cnddt)
        cmpltn_flg = False
        return rply_msg, cmpltn_flg
-    if flw_of_uttrnc == "<辱め 卑猥な言動><辱め 卑猥な言動>":
+    if flw_of_uttrnc == "<卑猥な言動 辱め><卑猥な言動 辱め>":
        rply_msg_cnddt = ["もうええわ", "そんなこと言ってると 女性に嫌われますよ"]
        rply_msg = random.choice(rply_msg_cnddt)
        cmpltn_flg = True
