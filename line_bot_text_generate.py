@@ -16,11 +16,15 @@ def text_generate_from_analyze_result(line_msg_txt, line_msg_intnt, prv_msgrcd_l
 
     #ユーザーの発話の流れに沿った返信メッセージを生成する
     if flw_of_uttrnc == "<称賛＆礼賛>":
-       rply_msg_cnddt = ["ありがとうございます", "嬉しいです", "あなたが好きです"]
+       rply_msg_cnddt = ["ありがとうございます", "嬉しいです"]
        rply_msg = random.choice(rply_msg_cnddt)
        return rply_msg
     if flw_of_uttrnc == "<称賛＆礼賛><称賛＆礼賛>":
-       rply_msg_cnddt = ["またまた～ お上手ですね", "そう言われても何も出ませんよ"]
+       rply_msg_cnddt = ["またまた～ お上手ですね", "褒められるとテレます"]
+       rply_msg = random.choice(rply_msg_cnddt)
+       return rply_msg
+    if flw_of_uttrnc == "<称賛＆礼賛><称賛＆礼賛><称賛＆礼賛>":
+       rply_msg_cnddt = ["またまたまた～", "そう言われても何も出ませんよ 笑"]
        rply_msg = random.choice(rply_msg_cnddt)
        return rply_msg
     if flw_of_uttrnc == "<卑猥な言動 辱め>":
