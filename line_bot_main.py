@@ -20,23 +20,23 @@ from linebot.models import (MessageEvent, FollowEvent, TextMessage, TextSendMess
 #Flaskのアプリケーションモジュールを作成する
 app = Flask(__name__)
 
-#Herokuの環境変数に設定されている、LINE-Developersのアクセストークンとチャンネルシークレットを取得する
+#Herokuの環境変数に設定されている、LINE-Developersのアクセストークンとチャネルシークレットを取得する
 YOUR_CHANNEL_ACCESS_TOKEN = os.environ["YOUR_CHANNEL_ACCESS_TOKEN"]
 YOUR_CHANNEL_SECRET       = os.environ["YOUR_CHANNEL_SECRET"]
 line_bot_api = LineBotApi(YOUR_CHANNEL_ACCESS_TOKEN)
 handler      = WebhookHandler(YOUR_CHANNEL_SECRET)
 
-#Herokuの環境に設定されている、postgresにアクセスするためのキーを取得する
+#Herokuの環境に設定されている、Postgresにアクセスするためのキーを取得する
 DATABASE_URL = os.environ["DATABASE_URL"]
 
-#Postgresデータベース上のテーブル「line_entries」の有無を示すフラグを宣言する
+#Postgresデータベース上の、ユーザーごとのテーブルの有無を示すフラグを宣言する
 has_db_table = False
+
+#Postgresデータベース上の、ユーザーごとのテーブルの名前として使用するLINEユーザーのIDを宣言する
+usr_id = ""
 
 #Postgresデータベースに登録・格納するLINEメッセージ(＝レコード)のID(＝レコードカウンター)を宣言する
 rcd_id = "-1"
-
-#ユーザーの発話の流れ(＝複数回のLINEメッセージの送信)を区切るためのフラグを宣言する
-cmpltn_flg = False
 
 
 
@@ -51,12 +51,13 @@ def show_db_record():
 
     # データベースから該当IDのメッセージ(＝レコード)を取得し、jsonifyで整形して呼出し元に引き渡しをする
     global has_db_table
+    global usr_id
     global rcd_id
     if has_db_table == True:
        if int(rcd_id) == -1:
           return "table-record not exist..."
        if int(rcd_id) >= 1:
-          cur.execute("""SELECT * FROM line_entries WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': str(int(rcd_id)-1)})
+          cur.execute("""SELECT * FROM %(usr_id)s WHERE rcd_id = %(rcd_id)s;""", {'usr_id':usr_id, 'rcd_id': str(int(rcd_id)-1)})
        rcd = cur.fetchone()
        cur.close()
        conn.close()
@@ -75,13 +76,14 @@ def db_table_drop():
     conn.set_client_encoding("utf-8") 
     cur  = conn.cursor()
 
-    #既にテーブルが作成・用意されていれば、それを破棄する
-    cur.execute("DROP TABLE line_entries")
+    #既にテーブルが用意・作成されていれば、それを破棄する
     global has_db_table
-    has_db_table = False
-
-    #データベースに登録・格納するLINEメッセージ(＝レコード)のID(＝レコードカウンタ)を示す変数を初期化する
+    global usr_id
     global rcd_id
+    cur.execute("""DROP TABLE %(usr_id)s;""", {'usr_id':usr_id})
+    
+    #各種のプログラムの実行状態を示す変数を初期化する
+    has_db_table = False
     rcd_id = "-1"
 
     #データベースへコミットし、テーブル操作のためのカーソルを破棄して、データベースとの接続を解除する
@@ -210,11 +212,17 @@ def line_msg_analyze(line_msg_txt):
 
 
 #ユーザーから送られるLINEメッセージの解析結果から返信メッセージを生成する
-def line_msg_generate(line_spkr_id, line_msg_txt, line_msg_intnt, prv_msgrcd_lst):
+def line_msg_generate(line_usr_id, line_msg_txt, line_msg_intnt, prv_msgrcd_lst):
     #ユーザーから送られるLINEメッセージの解析結果を基に、自然でかつ適切な返信メッセージを生成する
-    line_prfl    = line_bot_api.get_profile(line_spkr_id)
-    line_spkr_nm = line_prfl.display_name
-    gnrtd_msg    = line_bot_text_generate.text_generate_from_analyze_result(line_spkr_nm, line_msg_txt, line_msg_intnt, prv_msgrcd_lst)
+    global usr_id
+    usr_id           = line_usr_id
+    line_prfl        = line_bot_api.get_profile(line_usr_id)
+    line_usr_nm      = line_prfl.display_name
+    jst              = datetime.timezone(datetime.timedelta(hours=+9), "JST")
+    dttm_tmp         = datetime.datetime.now(jst)
+    line_msg_dttm    = dttm_tmp.strftime("%Y/%m/%d %H:%M:%S")
+    crrnt_msgrcd_lst = [line_msg_dttm, line_msg_txt, line_msg_intnt]
+    gnrtd_msg        = line_bot_text_generate.text_generate_from_analyze_result(line_usr_nm, crrnt_msgrcd_lst, prv_msgrcd_lst)
     return gnrtd_msg
 
 
@@ -233,18 +241,19 @@ def postgres_insert_and_update(event, line_msg_intnt):
 
     #既にテーブルが用意・作成されていれば、それを破棄して新たにテーブルを用意・作成する
     global has_db_table
+    global usr_id
     if has_db_table == False:
-       cur.execute("DROP TABLE line_entries")
-       cur.execute("CREATE TABLE line_entries(rcd_id text, dt_tm text, spkr text, msg text, intnt text)")
+       cur.execute("""DROP TABLE %(usr_id)s;""", {'usr_id':usr_id})
+       cur.execute("""CREATE TABLE %(usr_id)s(rcd_id text, dttm text, usr_nm text, msg text, intnt text);""", {'usr_id':usr_id})
        has_db_table = True
 
     #データベースに登録・格納するLINEメッセージ(＝レコード)を構成する情報をまとめて用意する
     global rcd_id
     jst       = datetime.timezone(datetime.timedelta(hours=+9), "JST")
-    dt_tm_tmp = datetime.datetime.now(jst)
-    dt_tm     = dt_tm_tmp.strftime("%Y/%m/%d %H:%M:%S")
+    dttm_tmp  = datetime.datetime.now(jst)
+    dttm      = dttm_tmp.strftime("%Y/%m/%d %H:%M:%S")
     prfl      = line_bot_api.get_profile(event.source.user_id)
-    spkr      = prfl.display_name
+    usr_nm   = prfl.display_name
     msg       = event.message.text
     intnt     = line_msg_intnt
 
@@ -252,13 +261,13 @@ def postgres_insert_and_update(event, line_msg_intnt):
     if int(rcd_id) == -1:
        rcd_id = "0"
     if int(rcd_id) != 100:
-       cur.execute("""SELECT * FROM line_entries WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id})
+       cur.execute("""SELECT * FROM %(usr_id)s WHERE rcd_id = %(rcd_id)s;""", {'usr_id':usr_id, 'rcd_id': rcd_id})
        rcd = cur.fetchone()
        if  rcd is None:
-           cur.execute("""INSERT INTO line_entries (rcd_id, dt_tm, spkr, msg, intnt) VALUES (%(rcd_id)s, %(dt_tm)s, %(spkr)s, %(msg)s, %(intnt)s);""", {'rcd_id': rcd_id, 'dt_tm' : dt_tm, 'spkr': spkr, 'msg': msg, 'intnt': intnt})
+           cur.execute("""INSERT INTO %(usr_id)s (rcd_id, dttm, usr_nm, msg, intnt) VALUES (%(rcd_id)s, %(dttm)s, %(usr_nm)s, %(msg)s, %(intnt)s);""", {'usr_id':usr_id, 'rcd_id': rcd_id, 'dttm' : dttm, 'usr_nm': usr_nm, 'msg': msg, 'intnt': intnt})
            rcd_id = str(int(rcd_id) + 1)
        if (rcd is not None and int(rcd_id) >= 0 and int(rcd_id) <= 99):
-           cur.execute("""UPDATE line_entries SET (rcd_id, dt_tm, spkr, msg, intnt) VALUES (%(rcd_id)s, %(dt_tm)s, %(spkr)s, %(msg)s, %(intnt)s) WHERE = %(rcd_id)s;""", {'rcd_id': rcd_id, 'dt_tm' : dt_tm, 'spkr': spkr, 'msg': msg, 'intnt': intnt, 'rcd_id': rcd_id})
+           cur.execute("""UPDATE %(usr_id)s SET (rcd_id, dttm, usr_nm, msg, intnt) VALUES (%(rcd_id)s, %(dttm)s, %(usr_nm)s, %(msg)s, %(intnt)s) WHERE = %(rcd_id)s;""", {'usr_id':usr_id, 'rcd_id': rcd_id, 'dttm' : dttm, 'usr_nm': usr_nm, 'msg': msg, 'intnt': intnt, 'rcd_id': rcd_id})
            rcd_id = str(int(rcd_id) + 1)
     else:
        rcd_id = "-1"
@@ -277,12 +286,14 @@ def postgres_select(rcd_id):
     cur  = conn.cursor()
 
     #指定されたIDのメッセージ(＝レコード)をデータベースから個別にセレクトして取得する
+    global usr_id
+    global rcd_id
     if (int(rcd_id) <= -1 or int(rcd_id) == 0):
-        cur.execute("""SELECT * FROM line_entries WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': "0"})
+        cur.execute("""SELECT * FROM %(usr_id)s WHERE rcd_id = %(rcd_id)s;""", {'usr_id':usr_id, 'rcd_id': "0"})
     if (int(rcd_id) >= 1 and int(rcd_id) <= 99):
-        cur.execute("""SELECT * FROM line_entries WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id})
+        cur.execute("""SELECT * FROM %(usr_id)s WHERE rcd_id = %(rcd_id)s;""", {'usr_id':usr_id, 'rcd_id': rcd_id})
     if  int(rcd_id) >= 100:
-        cur.execute("""SELECT * FROM line_entries WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': "99"})
+        cur.execute("""SELECT * FROM %(usr_id)s WHERE rcd_id = %(rcd_id)s;""", {'usr_id':usr_id, 'rcd_id': "99"})
     rcd = cur.fetchone()
 
     #テーブル操作のためのカーソルを破棄して、データベースとの接続を解除する
@@ -299,8 +310,9 @@ def postgres_select_all():
     cur  = conn.cursor()
 
     #データベースに登録・格納されている全てのレコードをセレクトして取得する
+    global usr_id
     rcd_list = []
-    cur.execute("SELECT * FROM line_entries")
+    cur.execute("""SELECT * FROM %(usr_id)s""", {'usr_id':usr_id})
     rcd_list = cur.fetchall()
 
     #テーブル操作のためのカーソルを破棄して、データベースとの接続を解除する
