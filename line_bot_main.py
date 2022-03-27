@@ -135,19 +135,17 @@ def handle_follow(event):
 def line_msg_analyze(line_msg_txt):
     #過去５件分のユーザーからのLINEメッセージ(＝レコード)をデータベースから取得する
     global rcd_id
-    global cmpltn_flg
+    #global cmpltn_flg
     prv_msgrcd_lst = []
-    if  (cmpltn_flg == True or int(rcd_id) == -1):
-        prv_msgrcd_lst.append(["", "", ""])
-        prv_msgrcd_lst.append(["", "", ""])
-        prv_msgrcd_lst.append(["", "", ""])
-        prv_msgrcd_lst.append(["", "", ""])
-        prv_msgrcd_lst.append(["", "", ""])
+    if  (int(rcd_id) == -1):
+         prv_msgrcd_lst.append(["", "", ""])
+         prv_msgrcd_lst.append(["", "", ""])
+         prv_msgrcd_lst.append(["", "", ""])
+         prv_msgrcd_lst.append(["", "", ""])
     else:
-        if int(rcd_id) == 1:
-           prv_msgrcd_tmp  = postgres_select("0")
+         if int(rcd_id) == 1:
+            prv_msgrcd_tmp  = postgres_select("0")
            prv_msgrcd_lst.append([prv_msgrcd_tmp[1],  prv_msgrcd_tmp[3],  prv_msgrcd_tmp[4]])
-           prv_msgrcd_lst.append(["", "", ""])
            prv_msgrcd_lst.append(["", "", ""])
            prv_msgrcd_lst.append(["", "", ""])
            prv_msgrcd_lst.append(["", "", ""])
@@ -158,7 +156,6 @@ def line_msg_analyze(line_msg_txt):
            prv_msgrcd_lst.append([prv_msgrcd_tmp2[1], prv_msgrcd_tmp2[3], prv_msgrcd_tmp2[4]])
            prv_msgrcd_lst.append(["", "", ""])
            prv_msgrcd_lst.append(["", "", ""])
-           prv_msgrcd_lst.append(["", "", ""])
         if int(rcd_id) == 3:
            prv_msgrcd_tmp  = postgres_select("0")
            prv_msgrcd_tmp2 = postgres_select("1")
@@ -167,21 +164,7 @@ def line_msg_analyze(line_msg_txt):
            prv_msgrcd_lst.append([prv_msgrcd_tmp2[1], prv_msgrcd_tmp2[3], prv_msgrcd_tmp2[4]])
            prv_msgrcd_lst.append([prv_msgrcd_tmp3[1], prv_msgrcd_tmp3[3], prv_msgrcd_tmp3[4]])
            prv_msgrcd_lst.append(["", "", ""])
-           prv_msgrcd_lst.append(["", "", ""])
-        if int(rcd_id) == 4:
-           prv_msgrcd_tmp  = postgres_select("0")
-           prv_msgrcd_tmp2 = postgres_select("1")
-           prv_msgrcd_tmp3 = postgres_select("2")
-           prv_msgrcd_tmp4 = postgres_select("3")
-           prv_msgrcd_lst.append([prv_msgrcd_tmp[1],  prv_msgrcd_tmp[3],  prv_msgrcd_tmp[4]])
-           prv_msgrcd_lst.append([prv_msgrcd_tmp2[1], prv_msgrcd_tmp2[3], prv_msgrcd_tmp2[4]])
-           prv_msgrcd_lst.append([prv_msgrcd_tmp3[1], prv_msgrcd_tmp3[3], prv_msgrcd_tmp3[4]])
-           prv_msgrcd_lst.append([prv_msgrcd_tmp4[1], prv_msgrcd_tmp4[3], prv_msgrcd_tmp4[4]])
-           prv_msgrcd_lst.append(["", "", ""])
-        if int(rcd_id) >= 5:
-           idx = int(rcd_id) - 5
-           prv_msgrcd_tmp = postgres_select(str(idx))
-           prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[3], prv_msgrcd_tmp[4]])
+        if int(rcd_id) >= 4:
            idx = int(rcd_id) - 4
            prv_msgrcd_tmp = postgres_select(str(idx))
            prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[3], prv_msgrcd_tmp[4]])
@@ -231,8 +214,8 @@ def line_msg_analyze(line_msg_txt):
 #ユーザーから送られるLINEメッセージの解析結果から返信メッセージを生成する
 def line_msg_generate(line_msg_txt, line_msg_intnt, prv_msgrcd_lst):
     #ユーザーから送られるLINEメッセージの解析結果を基に、自然でかつ適切な返信メッセージを生成する
-    global cmpltn_flg
-    line_msg_gnrt_rslt, cmpltn_flg = line_bot_text_generate.text_generate_from_analyze_result(line_msg_txt, line_msg_intnt, prv_msgrcd_lst)
+    #global cmpltn_flg
+    line_msg_gnrt_rslt = line_bot_text_generate.text_generate_from_analyze_result(line_msg_txt, line_msg_intnt, prv_msgrcd_lst)
     return line_msg_gnrt_rslt
 
 
