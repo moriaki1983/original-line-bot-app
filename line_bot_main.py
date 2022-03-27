@@ -115,7 +115,7 @@ def handle_message(event):
     line_msg_intnt, prv_msgrcd_lst = line_msg_analyze(event.message.text)
 
     #ユーザーから送られるLINEメッセージの解析結果から返信メッセージを生成する
-    line_msg_gnrt_rslt = line_msg_generate(event.message.text, line_msg_intnt, prv_msgrcd_lst)
+    line_msg_gnrt_rslt = line_msg_generate(event.source.user_id, event.message.text, line_msg_intnt, prv_msgrcd_lst)
 
     #LINEBotAPIを使って生成されるLINEメッセージをユーザーに対して送信する
     line_msg_send(event, line_msg_gnrt_rslt)
@@ -210,10 +210,12 @@ def line_msg_analyze(line_msg_txt):
 
 
 #ユーザーから送られるLINEメッセージの解析結果から返信メッセージを生成する
-def line_msg_generate(line_msg_txt, line_msg_intnt, prv_msgrcd_lst):
+def line_msg_generate(line_spkr_id, line_msg_txt, line_msg_intnt, prv_msgrcd_lst):
     #ユーザーから送られるLINEメッセージの解析結果を基に、自然でかつ適切な返信メッセージを生成する
-    line_msg_gnrt_rslt = line_bot_text_generate.text_generate_from_analyze_result(line_msg_txt, line_msg_intnt, prv_msgrcd_lst)
-    return line_msg_gnrt_rslt
+    line_prfl    = line_bot_api.get_profile(line_spkr_id)
+    line_spkr_nm = line_prfl.display_name
+    gnrtd_msg    = line_bot_text_generate.text_generate_from_analyze_result(line_spkr_nm, line_msg_txt, line_msg_intnt, prv_msgrcd_lst)
+    return gnrtd_msg
 
 
 #LINEBotAPIを使って生成されるLINEメッセージをユーザーに対して送信する
@@ -233,18 +235,18 @@ def postgres_insert_and_update(event, line_msg_intnt):
     global has_db_table
     if has_db_table == False:
        cur.execute("DROP TABLE line_entries")
-       cur.execute("CREATE TABLE line_entries(rcd_id text, date text, speaker text, msg text, intnt text)")
+       cur.execute("CREATE TABLE line_entries(rcd_id text, dt_tm text, spkr text, msg text, intnt text)")
        has_db_table = True
 
     #データベースに登録・格納するLINEメッセージ(＝レコード)を構成する情報をまとめて用意する
     global rcd_id
-    jst     = datetime.timezone(datetime.timedelta(hours=+9), "JST")
-    dt_tm   = datetime.datetime.now(jst)
-    date    = dt_tm.strftime("%Y/%m/%d %H:%M:%S")
-    profile = line_bot_api.get_profile(event.source.user_id)
-    speaker = profile.display_name
-    msg     = event.message.text
-    intnt   = line_msg_intnt
+    jst       = datetime.timezone(datetime.timedelta(hours=+9), "JST")
+    dt_tm_tmp = datetime.datetime.now(jst)
+    dt_tm     = dt_tm_tmp.strftime("%Y/%m/%d %H:%M:%S")
+    prfl      = line_bot_api.get_profile(event.source.user_id)
+    spkr      = prfl.display_name
+    msg       = event.message.text
+    intnt     = line_msg_intnt
 
     #該当IDのメッセージ(＝レコード)がなかったら、データベースにインサート(＝新規に登録・格納)し、既にメッセージがあったらアップデート(＝上書き)する
     if int(rcd_id) == -1:
@@ -253,10 +255,10 @@ def postgres_insert_and_update(event, line_msg_intnt):
        cur.execute("""SELECT * FROM line_entries WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id})
        rcd = cur.fetchone()
        if  rcd is None:
-           cur.execute("""INSERT INTO line_entries (rcd_id, date, speaker, msg, intnt) VALUES (%(rcd_id)s, %(date)s, %(speaker)s, %(msg)s, %(intnt)s);""", {'rcd_id': rcd_id, 'date' : date, 'speaker': speaker, 'msg': msg, 'intnt': intnt})
+           cur.execute("""INSERT INTO line_entries (rcd_id, dt_tm, spkr, msg, intnt) VALUES (%(rcd_id)s, %(dt_tm)s, %(spkr)s, %(msg)s, %(intnt)s);""", {'rcd_id': rcd_id, 'dt_tm' : dt_tm, 'spkr': spkr, 'msg': msg, 'intnt': intnt})
            rcd_id = str(int(rcd_id) + 1)
        if (rcd is not None and int(rcd_id) >= 0 and int(rcd_id) <= 99):
-           cur.execute("""UPDATE line_entries SET (rcd_id, date, speaker, msg, intnt) VALUES (%(rcd_id)s, %(date)s, %(speaker)s, %(msg)s, %(intnt)s) WHERE = %(rcd_id)s;""", {'rcd_id': rcd_id, 'date' : date, 'speaker': speaker, 'msg': msg, 'intnt': intnt, 'rcd_id': rcd_id})
+           cur.execute("""UPDATE line_entries SET (rcd_id, dt_tm, spkr, msg, intnt) VALUES (%(rcd_id)s, %(dt_tm)s, %(spkr)s, %(msg)s, %(intnt)s) WHERE = %(rcd_id)s;""", {'rcd_id': rcd_id, 'dt_tm' : dt_tm, 'spkr': spkr, 'msg': msg, 'intnt': intnt, 'rcd_id': rcd_id})
            rcd_id = str(int(rcd_id) + 1)
     else:
        rcd_id = "-1"
