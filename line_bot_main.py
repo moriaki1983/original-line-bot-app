@@ -51,12 +51,14 @@ def show_db_record():
 
     # データベースから該当IDのメッセージ(＝レコード)を取得し、jsonifyで整形して呼出し元に引き渡しをする
     global has_db_table
+    global usr_id
     global rcd_id
     if has_db_table == True:
        if int(rcd_id) == -1:
           return "table-record not exist..."
        if int(rcd_id) >= 1:
-          cur.execute("""SELECT * FROM msg_entry WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': str(int(rcd_id)-1)})
+          qry_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = %(rcd_id)s;"""
+          cur.execute(qry_str, {'rcd_id': str(int(rcd_id)-1)})
        rcd = cur.fetchone()
        cur.close()
        conn.close()
@@ -77,8 +79,10 @@ def db_table_drop():
 
     #既にテーブルが用意・作成されていれば、それを破棄する
     global has_db_table
+    global usr_id
     global rcd_id
-    cur.execute("""DROP TABLE msg_entry;""")
+    qry_str = """DROP TABLE """ + usr_id + """;"""
+    cur.execute(qry_str)
     
     #各種のプログラムの実行状態を示す変数を初期化する
     has_db_table = False
@@ -239,15 +243,14 @@ def postgres_insert_and_update(event, line_msg_intnt):
 
     #既にテーブルが用意・作成されていれば、それを破棄して新たにテーブルを用意・作成する
     global has_db_table
+    global usr_id
+    global rcd_id
     if has_db_table == False:
-       qry_str = """DROP TABLE """ + usr_id + """;"""
-       #cur.execute("""DROP TABLE msg_entry;""")
+       qry_str = """CREATE TABLE """ + usr_id + """(rcd_id text, dttm text, usr_nm text, msg text, intnt text);"""
        cur.execute(qry_str)
-       cur.execute("""CREATE TABLE msg_entry(rcd_id text, dttm text, usr_nm text, msg text, intnt text);""")
        has_db_table = True
 
     #データベースに登録・格納するLINEメッセージ(＝レコード)を構成する情報をまとめて用意する
-    global rcd_id
     jst       = datetime.timezone(datetime.timedelta(hours=+9), "JST")
     dttm_tmp  = datetime.datetime.now(jst)
     dttm      = dttm_tmp.strftime("%Y/%m/%d %H:%M:%S")
@@ -260,13 +263,16 @@ def postgres_insert_and_update(event, line_msg_intnt):
     if int(rcd_id) == -1:
        rcd_id = "0"
     if int(rcd_id) != 100:
-       cur.execute("""SELECT * FROM msg_entry WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id})
+       qry_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = %(rcd_id)s;"""
+       cur.execute(qry_str,{'rcd_id': rcd_id})
        rcd = cur.fetchone()
        if  rcd is None:
-           cur.execute("""INSERT INTO msg_entry (rcd_id, dttm, usr_nm, msg, intnt) VALUES (%(rcd_id)s, %(dttm)s, %(usr_nm)s, %(msg)s, %(intnt)s);""", {'rcd_id': rcd_id, 'dttm' : dttm, 'usr_nm': usr_nm, 'msg': msg, 'intnt': intnt})
+           qry_str = """INSERT INTO """ + usr_id + """ (rcd_id, dttm, usr_nm, msg, intnt) VALUES (%(rcd_id)s, %(dttm)s, %(usr_nm)s, %(msg)s, %(intnt)s);"""
+           cur.execute(qry_str,{'rcd_id': rcd_id, 'dttm' : dttm, 'usr_nm': usr_nm, 'msg': msg, 'intnt': intnt})
            rcd_id = str(int(rcd_id) + 1)
        if (rcd is not None and int(rcd_id) >= 0 and int(rcd_id) <= 99):
-           cur.execute("""UPDATE msg_entry SET (rcd_id, dttm, usr_nm, msg, intnt) VALUES (%(rcd_id)s, %(dttm)s, %(usr_nm)s, %(msg)s, %(intnt)s) WHERE = %(rcd_id)s;""", {'rcd_id': rcd_id, 'dttm' : dttm, 'usr_nm': usr_nm, 'msg': msg, 'intnt': intnt, 'rcd_id': rcd_id})
+           qry_str = """UPDATE """ + usr_id + """ SET (rcd_id, dttm, usr_nm, msg, intnt) VALUES (%(rcd_id)s, %(dttm)s, %(usr_nm)s, %(msg)s, %(intnt)s) WHERE = %(rcd_id)s;"""
+           cur.execute(qry_str, {'rcd_id': rcd_id, 'dttm' : dttm, 'usr_nm': usr_nm, 'msg': msg, 'intnt': intnt, 'rcd_id': rcd_id})
            rcd_id = str(int(rcd_id) + 1)
     else:
        rcd_id = "-1"
@@ -287,11 +293,14 @@ def postgres_select(rcd_id):
     #指定されたIDのメッセージ(＝レコード)をデータベースから個別にセレクトして取得する
     global usr_id
     if (int(rcd_id) <= -1 or int(rcd_id) == 0):
-        cur.execute("""SELECT * FROM msg_entry WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': "0"})
+        qry_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = %(rcd_id)s;"""
+        cur.execute(qry_str, {'rcd_id': "0"})
     if (int(rcd_id) >= 1 and int(rcd_id) <= 99):
-        cur.execute("""SELECT * FROM msg_entry WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id})
+        qry_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = %(rcd_id)s;"""
+        cur.execute(qry_str, {'rcd_id': rcd_id})
     if  int(rcd_id) >= 100:
-        cur.execute("""SELECT * FROM msg_entry WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': "99"})
+        qry_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = %(rcd_id)s;"""
+        cur.execute(qry_str, {'rcd_id': "99"})
     rcd = cur.fetchone()
 
     #テーブル操作のためのカーソルを破棄して、データベースとの接続を解除する
@@ -310,7 +319,8 @@ def postgres_select_all():
     #データベースに登録・格納されている全てのレコードをセレクトして取得する
     global usr_id
     rcd_list = []
-    cur.execute("""SELECT * FROM msg_entry""")
+    qry_str = """SELECT * FROM """ + usr_id + """;"""
+    cur.execute(qry_str)
     rcd_list = cur.fetchall()
 
     #テーブル操作のためのカーソルを破棄して、データベースとの接続を解除する
