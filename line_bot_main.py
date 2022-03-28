@@ -155,7 +155,7 @@ def line_msg_analyze(line_msg_txt):
        prv_msgrcd_lst.append(["", "", ""])
        prv_msgrcd_lst.append(["", "", ""])
     if int(rcd_id) == 1:
-       prv_msgrcd_tmp  = postgres_select("0")
+       prv_msgrcd_tmp = postgres_select("0")
        prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3]])
        prv_msgrcd_lst.append(["", "", ""])
        prv_msgrcd_lst.append(["", "", ""])
@@ -273,12 +273,12 @@ def postgres_insert_and_update(event, line_msg_intnt):
 
     #該当IDのメッセージ(＝レコード)がなかったら、データベースにインサート(＝新規に登録・格納)し、既にメッセージがあったらアップデート(＝上書き)する
     if int(rcd_id) == -1:
-       rcd_id = "0"
+       rcd_id = str(int(rcd_id) + 1)
     if int(rcd_id) != 100:
        qry_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = %(rcd_id)s;"""
        cur.execute(qry_str,{'rcd_id': rcd_id})
        rcd = cur.fetchone()
-       if  rcd is None:
+       if (rcd is None and int(rcd_id) >= 0 and int(rcd_id) <= 99):
            qry_str = """INSERT INTO """ + usr_id + """ (rcd_id, dttm, msg, intnt) VALUES (%(rcd_id)s, %(dttm)s, %(msg)s, %(intnt)s);"""
            cur.execute(qry_str,{'rcd_id': rcd_id, 'dttm' : dttm, 'msg': msg, 'intnt': intnt})
            rcd_id = str(int(rcd_id) + 1)
@@ -303,7 +303,6 @@ def postgres_select(rcd_id):
     cur  = conn.cursor()
 
     #指定されたIDのメッセージ(＝レコード)をデータベースから個別にセレクトして取得する
-    global usr_id
     if (int(rcd_id) <= -1 or int(rcd_id) == 0):
         qry_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = %(rcd_id)s;"""
         cur.execute(qry_str, {'rcd_id': "0"})
