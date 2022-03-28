@@ -240,9 +240,7 @@ def postgres_insert_and_update(event, line_msg_intnt):
     #既にテーブルが用意・作成されていれば、それを破棄して新たにテーブルを用意・作成する
     global has_db_table
     if has_db_table == False:
-       qry_str = """DROP TABLE""" + usr_id + """;"""
-       #index = my_string.find("DROP TABLE ")
-       #final_string = my_string[index:] + 
+       qry_str = """DROP TABLE """ + usr_id + """;"""
        #cur.execute("""DROP TABLE msg_entry;""")
        cur.execute(qry_str)
        cur.execute("""CREATE TABLE msg_entry(rcd_id text, dttm text, usr_nm text, msg text, intnt text);""")
