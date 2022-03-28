@@ -268,11 +268,11 @@ def postgres_insert_and_update(event, line_msg_intnt):
        rcd = cur.fetchone()
        if  rcd is None:
            qry_str = """INSERT INTO """ + usr_id + """ (rcd_id, dttm, msg, intnt) VALUES (%(rcd_id)s, %(dttm)s, %(msg)s, %(intnt)s);"""
-           cur.execute(qry_str,{'rcd_id': rcd_id, 'dttm' : dttm, 'usr_nm': 'msg': msg, 'intnt': intnt})
+           cur.execute(qry_str,{'rcd_id': rcd_id, 'dttm' : dttm, 'msg': msg, 'intnt': intnt})
            rcd_id = str(int(rcd_id) + 1)
        if (rcd is not None and int(rcd_id) >= 0 and int(rcd_id) <= 99):
            qry_str = """UPDATE """ + usr_id + """ SET (rcd_id, dttm, msg, intnt) VALUES (%(rcd_id)s, %(dttm)s, %(msg)s, %(intnt)s) WHERE = %(rcd_id)s;"""
-           cur.execute(qry_str, {'rcd_id': rcd_id, 'dttm' : dttm, 'usr_nm': 'msg': msg, 'intnt': intnt, 'rcd_id': rcd_id})
+           cur.execute(qry_str, {'rcd_id': rcd_id, 'dttm' : dttm, 'msg': msg, 'intnt': intnt, 'rcd_id': rcd_id})
            rcd_id = str(int(rcd_id) + 1)
     else:
        rcd_id = "-1"
