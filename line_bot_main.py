@@ -242,7 +242,7 @@ def postgres_insert_and_update(event, line_msg_intnt):
     if has_db_table == False:
        my_string = """DROP TABLE ;"""
        index = my_string.find("DROP TABLE ")
-       final_string = my_string[:index] + usr_id + my_string[index:]
+       final_string = my_string[index:] + usr_id
        #cur.execute("""DROP TABLE msg_entry;""")
        cur.execute(final_string)
        cur.execute("""CREATE TABLE msg_entry(rcd_id text, dttm text, usr_nm text, msg text, intnt text);""")
