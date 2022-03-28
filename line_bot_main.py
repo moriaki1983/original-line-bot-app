@@ -141,44 +141,44 @@ def line_msg_analyze(line_msg_txt):
     global rcd_id
     prv_msgrcd_lst = []
     if int(rcd_id) == -1:
-       prv_msgrcd_lst.append(["", "", "", ""])
-       prv_msgrcd_lst.append(["", "", "", ""])
-       prv_msgrcd_lst.append(["", "", "", ""])
-       prv_msgrcd_lst.append(["", "", "", ""])
+       prv_msgrcd_lst.append(["", "", ""])
+       prv_msgrcd_lst.append(["", "", ""])
+       prv_msgrcd_lst.append(["", "", ""])
+       prv_msgrcd_lst.append(["", "", ""])
     if int(rcd_id) == 1:
        prv_msgrcd_tmp  = postgres_select("0")
-       prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3],  prv_msgrcd_tmp[4]])
-       prv_msgrcd_lst.append(["", "", "", ""])
-       prv_msgrcd_lst.append(["", "", "", ""])
-       prv_msgrcd_lst.append(["", "", "", ""])
+       prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3]])
+       prv_msgrcd_lst.append(["", "", ""])
+       prv_msgrcd_lst.append(["", "", ""])
+       prv_msgrcd_lst.append(["", "", ""])
     if int(rcd_id) == 2:
        prv_msgrcd_tmp  = postgres_select("0")
        prv_msgrcd_tmp2 = postgres_select("1")
-       prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3],  prv_msgrcd_tmp[4]])
-       prv_msgrcd_lst.append([prv_msgrcd_tmp2[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp2[3], prv_msgrcd_tmp2[4]])
-       prv_msgrcd_lst.append(["", "", "", ""])
-       prv_msgrcd_lst.append(["", "", "", ""])
+       prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3]])
+       prv_msgrcd_lst.append([prv_msgrcd_tmp2[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp2[3]])
+       prv_msgrcd_lst.append(["", "", ""])
+       prv_msgrcd_lst.append(["", "", ""])
     if int(rcd_id) == 3:
        prv_msgrcd_tmp  = postgres_select("0")
        prv_msgrcd_tmp2 = postgres_select("1")
        prv_msgrcd_tmp3 = postgres_select("2")
-       prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3],  prv_msgrcd_tmp[4]])
-       prv_msgrcd_lst.append([prv_msgrcd_tmp2[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp2[3], prv_msgrcd_tmp2[4]])
-       prv_msgrcd_lst.append([prv_msgrcd_tmp3[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp3[3], prv_msgrcd_tmp3[4]])
-       prv_msgrcd_lst.append(["", "", "", ""])
+       prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3]])
+       prv_msgrcd_lst.append([prv_msgrcd_tmp2[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp2[3]])
+       prv_msgrcd_lst.append([prv_msgrcd_tmp3[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp3[3]])
+       prv_msgrcd_lst.append(["", "", ""])
     if int(rcd_id) >= 4:
        idx = int(rcd_id) - 4
        prv_msgrcd_tmp = postgres_select(str(idx))
-       prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3], prv_msgrcd_tmp[4]])
+       prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3]])
        idx = int(rcd_id) - 3
        prv_msgrcd_tmp = postgres_select(str(idx))
-       prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3], prv_msgrcd_tmp[4]])
+       prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3]])
        idx = int(rcd_id) - 2
        prv_msgrcd_tmp = postgres_select(str(idx))
-       prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3], prv_msgrcd_tmp[4]])
+       prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3]])
        idx = int(rcd_id) - 1
        prv_msgrcd_tmp = postgres_select(str(idx))
-       prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3], prv_msgrcd_tmp[4]])
+       prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3]])
 
     #ユーザーから送られるLINEメッセージの中に含まれるインテントを抽出する
     rmv_etc      = line_bot_text_analyze.remove_etc(line_msg_txt)
@@ -223,8 +223,8 @@ def line_msg_generate(line_usr_id, line_msg_txt, line_msg_intnt, prv_msgrcd_lst)
     jst              = datetime.timezone(datetime.timedelta(hours=+9), "JST")
     dttm_tmp         = datetime.datetime.now(jst)
     line_msg_dttm    = dttm_tmp.strftime("%Y/%m/%d %H:%M:%S")
-    crrnt_msgrcd_lst = [line_usr_nm, line_msg_dttm, line_msg_txt, line_msg_intnt]
-    gnrtd_msg        = line_bot_text_generate.text_generate_from_analyze_result(crrnt_msgrcd_lst, prv_msgrcd_lst)
+    crrnt_msgrcd_lst = [line_msg_dttm, line_msg_txt, line_msg_intnt]
+    gnrtd_msg        = line_bot_text_generate.text_generate_from_analyze_result(line_usr_nm, crrnt_msgrcd_lst, prv_msgrcd_lst)
     return gnrtd_msg
 
 
@@ -246,7 +246,7 @@ def postgres_insert_and_update(event, line_msg_intnt):
     global usr_id
     global rcd_id
     if has_db_table == False:
-       qry_str = """CREATE TABLE """ + usr_id + """(rcd_id text, dttm text, usr_nm text, msg text, intnt text);"""
+       qry_str = """CREATE TABLE """ + usr_id + """(rcd_id text, dttm text, msg text, intnt text);"""
        cur.execute(qry_str)
        has_db_table = True
 
@@ -267,12 +267,12 @@ def postgres_insert_and_update(event, line_msg_intnt):
        cur.execute(qry_str,{'rcd_id': rcd_id})
        rcd = cur.fetchone()
        if  rcd is None:
-           qry_str = """INSERT INTO """ + usr_id + """ (rcd_id, dttm, usr_nm, msg, intnt) VALUES (%(rcd_id)s, %(dttm)s, %(usr_nm)s, %(msg)s, %(intnt)s);"""
-           cur.execute(qry_str,{'rcd_id': rcd_id, 'dttm' : dttm, 'usr_nm': usr_nm, 'msg': msg, 'intnt': intnt})
+           qry_str = """INSERT INTO """ + usr_id + """ (rcd_id, dttm, msg, intnt) VALUES (%(rcd_id)s, %(dttm)s, %(msg)s, %(intnt)s);"""
+           cur.execute(qry_str,{'rcd_id': rcd_id, 'dttm' : dttm, 'usr_nm': 'msg': msg, 'intnt': intnt})
            rcd_id = str(int(rcd_id) + 1)
        if (rcd is not None and int(rcd_id) >= 0 and int(rcd_id) <= 99):
-           qry_str = """UPDATE """ + usr_id + """ SET (rcd_id, dttm, usr_nm, msg, intnt) VALUES (%(rcd_id)s, %(dttm)s, %(usr_nm)s, %(msg)s, %(intnt)s) WHERE = %(rcd_id)s;"""
-           cur.execute(qry_str, {'rcd_id': rcd_id, 'dttm' : dttm, 'usr_nm': usr_nm, 'msg': msg, 'intnt': intnt, 'rcd_id': rcd_id})
+           qry_str = """UPDATE """ + usr_id + """ SET (rcd_id, dttm, msg, intnt) VALUES (%(rcd_id)s, %(dttm)s, %(msg)s, %(intnt)s) WHERE = %(rcd_id)s;"""
+           cur.execute(qry_str, {'rcd_id': rcd_id, 'dttm' : dttm, 'usr_nm': 'msg': msg, 'intnt': intnt, 'rcd_id': rcd_id})
            rcd_id = str(int(rcd_id) + 1)
     else:
        rcd_id = "-1"
