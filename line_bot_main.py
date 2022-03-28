@@ -247,6 +247,7 @@ def postgres_insert_and_update(event, line_msg_intnt):
     global usr_id
     global rcd_id
     if has_db_table == False:
+       has_db_table = True
        qry_str = """CREATE TABLE """ + usr_id + """(rcd_id text, dttm text, msg text, intnt text);"""
        cur.execute(qry_str)
        has_db_table = True
