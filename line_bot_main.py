@@ -288,7 +288,7 @@ def postgres_insert_and_update(event, line_msg_intnt):
           qry_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = %(rcd_id)s;"""
           cur.execute(qry_str,{'rcd_id': rcd_id})
           rcd = cur.fetchone()
-          if  rcd is None and:
+          if  rcd is None:
               qry_str = """INSERT INTO """ + usr_id + """ (rcd_id, dttm, msg, intnt) VALUES (%(rcd_id)s, %(dttm)s, %(msg)s, %(intnt)s);"""
               cur.execute(qry_str,{'rcd_id': rcd_id, 'dttm' : dttm, 'msg': msg, 'intnt': intnt})
               rcd_id = str(int(rcd_id) + 1)
