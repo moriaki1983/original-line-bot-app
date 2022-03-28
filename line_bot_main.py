@@ -53,6 +53,7 @@ def show_db_record():
     global has_db_table
     global usr_id
     global rcd_id
+    app.logger.info("has_db_table: " + has_db_table)
     if has_db_table == True:
        if int(rcd_id) == -1:
           return "table-record not exist..."
@@ -83,7 +84,7 @@ def db_table_drop():
     global rcd_id
     qry_str = """DROP TABLE """ + usr_id + """;"""
     cur.execute(qry_str)
-    
+
     #各種のプログラムの実行状態を示す変数を初期化する
     has_db_table = False
     rcd_id       = "-1"
