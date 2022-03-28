@@ -58,11 +58,11 @@ def show_db_record():
           return "table-record not exist..."
        if int(rcd_id) >= 1:
           qry_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = %(rcd_id)s;"""
-          cur.execute(qry_str, {'rcd_id': str(int(rcd_id)-1)})
-       rcd = cur.fetchone()
-       cur.close()
-       conn.close()
-       return jsonify(rcd), 200
+          cur.execute(qry_str, {'rcd_id': str(int(rcd_id) - 1)})
+          rcd = cur.fetchone()
+          cur.close()
+          conn.close()
+          return jsonify(rcd), 200
     else:
        cur.close()
        conn.close()
@@ -86,7 +86,7 @@ def db_table_drop():
     
     #各種のプログラムの実行状態を示す変数を初期化する
     has_db_table = False
-    rcd_id = "-1"
+    rcd_id       = "-1"
 
     #データベースへコミットし、テーブル操作のためのカーソルを破棄して、データベースとの接続を解除する
     cur.close()
@@ -238,7 +238,7 @@ def line_msg_send(event, line_gnrtd_msg):
 def postgres_insert_and_update(event, line_msg_intnt):
     #データベースに接続して、テーブル操作のためのカーソルを用意する
     conn = psycopg2.connect(DATABASE_URL)
-    conn.set_client_encoding("utf-8") 
+    conn.set_client_encoding("utf-8")
     cur  = conn.cursor()
 
     #既にテーブルが用意・作成されていれば、それを破棄して新たにテーブルを用意・作成する
