@@ -115,10 +115,10 @@ def handle_message(event):
     line_msg_intnt, prv_msgrcd_lst = line_msg_analyze(event.message.text)
 
     #ユーザーから送られるLINEメッセージの解析結果から返信メッセージを生成する
-    line_msg_gnrt_rslt = line_msg_generate(event.source.user_id, event.message.text, line_msg_intnt, prv_msgrcd_lst)
+    gnrtd_msg = line_msg_generate(event.source.user_id, event.message.text, line_msg_intnt, prv_msgrcd_lst)
 
     #LINEBotAPIを使って生成されるLINEメッセージをユーザーに対して送信する
-    line_msg_send(event, line_msg_gnrt_rslt)
+    line_msg_send(event, gnrtd_msg)
 
     #ユーザーから送られるLINEメッセージをPostgresのデータベースに登録・格納する
     postgres_insert_and_update(event, line_msg_intnt)
@@ -137,23 +137,23 @@ def line_msg_analyze(line_msg_txt):
     global rcd_id
     prv_msgrcd_lst = []
     if int(rcd_id) == -1:
-       prv_msgrcd_lst.append(["", "", ""])
-       prv_msgrcd_lst.append(["", "", ""])
-       prv_msgrcd_lst.append(["", "", ""])
-       prv_msgrcd_lst.append(["", "", ""])
+       prv_msgrcd_lst.append(["", "", "", ""])
+       prv_msgrcd_lst.append(["", "", "", ""])
+       prv_msgrcd_lst.append(["", "", "", ""])
+       prv_msgrcd_lst.append(["", "", "", ""])
     if int(rcd_id) == 1:
        prv_msgrcd_tmp  = postgres_select("0")
        prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3],  prv_msgrcd_tmp[4]])
-       prv_msgrcd_lst.append(["", "", ""])
-       prv_msgrcd_lst.append(["", "", ""])
-       prv_msgrcd_lst.append(["", "", ""])
+       prv_msgrcd_lst.append(["", "", "", ""])
+       prv_msgrcd_lst.append(["", "", "", ""])
+       prv_msgrcd_lst.append(["", "", "", ""])
     if int(rcd_id) == 2:
        prv_msgrcd_tmp  = postgres_select("0")
        prv_msgrcd_tmp2 = postgres_select("1")
        prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3],  prv_msgrcd_tmp[4]])
        prv_msgrcd_lst.append([prv_msgrcd_tmp2[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp2[3], prv_msgrcd_tmp2[4]])
-       prv_msgrcd_lst.append(["", "", ""])
-       prv_msgrcd_lst.append(["", "", ""])
+       prv_msgrcd_lst.append(["", "", "", ""])
+       prv_msgrcd_lst.append(["", "", "", ""])
     if int(rcd_id) == 3:
        prv_msgrcd_tmp  = postgres_select("0")
        prv_msgrcd_tmp2 = postgres_select("1")
@@ -161,7 +161,7 @@ def line_msg_analyze(line_msg_txt):
        prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3],  prv_msgrcd_tmp[4]])
        prv_msgrcd_lst.append([prv_msgrcd_tmp2[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp2[3], prv_msgrcd_tmp2[4]])
        prv_msgrcd_lst.append([prv_msgrcd_tmp3[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp3[3], prv_msgrcd_tmp3[4]])
-       prv_msgrcd_lst.append(["", "", ""])
+       prv_msgrcd_lst.append(["", "", "", ""])
     if int(rcd_id) >= 4:
        idx = int(rcd_id) - 4
        prv_msgrcd_tmp = postgres_select(str(idx))
@@ -225,9 +225,9 @@ def line_msg_generate(line_usr_id, line_msg_txt, line_msg_intnt, prv_msgrcd_lst)
 
 
 #LINEBotAPIを使って生成されるLINEメッセージをユーザーに対して送信する
-def line_msg_send(event, line_msg_gnrt_rslt):
+def line_msg_send(event, line_gnrtd_msg):
     #LINEの返信用トークンと生成されたメッセージをセットにしてLINEBotAPIの呼出しをする
-    line_bot_api.reply_message(event.reply_token, TextSendMessage(text=line_msg_gnrt_rslt))
+    line_bot_api.reply_message(event.reply_token, TextSendMessage(text=line_gnrtd_msg))
 
 
 #ユーザーから送られるLINEメッセージをpostgresのデータベースに登録・格納する
