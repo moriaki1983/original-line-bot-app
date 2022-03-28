@@ -146,7 +146,7 @@ def handle_follow(event):
 
 #ユーザーから送られるLINEメッセージを解析する
 def line_msg_analyze(line_msg_txt):
-    #過去５件分のユーザーからのLINEメッセージ(＝レコード)をデータベースから取得する
+    #過去４件分のユーザーからのLINEメッセージ(＝レコード)をデータベースから取得する
     global rcd_id
     prv_msgrcd_lst = []
     if int(rcd_id) == -1:
@@ -154,20 +154,20 @@ def line_msg_analyze(line_msg_txt):
        prv_msgrcd_lst.append(["", "", ""])
        prv_msgrcd_lst.append(["", "", ""])
        prv_msgrcd_lst.append(["", "", ""])
-    if int(rcd_id) == 1:
+    if int(rcd_id) == 0:
        prv_msgrcd_tmp = postgres_select("0")
        prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3]])
        prv_msgrcd_lst.append(["", "", ""])
        prv_msgrcd_lst.append(["", "", ""])
        prv_msgrcd_lst.append(["", "", ""])
-    if int(rcd_id) == 2:
+    if int(rcd_id) == 1:
        prv_msgrcd_tmp  = postgres_select("0")
        prv_msgrcd_tmp2 = postgres_select("1")
        prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3]])
        prv_msgrcd_lst.append([prv_msgrcd_tmp2[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp2[3]])
        prv_msgrcd_lst.append(["", "", ""])
        prv_msgrcd_lst.append(["", "", ""])
-    if int(rcd_id) == 3:
+    if int(rcd_id) == 2:
        prv_msgrcd_tmp  = postgres_select("0")
        prv_msgrcd_tmp2 = postgres_select("1")
        prv_msgrcd_tmp3 = postgres_select("2")
@@ -175,10 +175,7 @@ def line_msg_analyze(line_msg_txt):
        prv_msgrcd_lst.append([prv_msgrcd_tmp2[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp2[3]])
        prv_msgrcd_lst.append([prv_msgrcd_tmp3[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp3[3]])
        prv_msgrcd_lst.append(["", "", ""])
-    if int(rcd_id) >= 4:
-       idx = int(rcd_id) - 4
-       prv_msgrcd_tmp = postgres_select(str(idx))
-       prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3]])
+    if int(rcd_id) >= 3:
        idx = int(rcd_id) - 3
        prv_msgrcd_tmp = postgres_select(str(idx))
        prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3]])
@@ -186,6 +183,9 @@ def line_msg_analyze(line_msg_txt):
        prv_msgrcd_tmp = postgres_select(str(idx))
        prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3]])
        idx = int(rcd_id) - 1
+       prv_msgrcd_tmp = postgres_select(str(idx))
+       prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3]])
+       idx = int(rcd_id)
        prv_msgrcd_tmp = postgres_select(str(idx))
        prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3]])
 
@@ -273,19 +273,29 @@ def postgres_insert_and_update(event, line_msg_intnt):
 
     #該当IDのメッセージ(＝レコード)がなかったら、データベースにインサート(＝新規に登録・格納)し、既にメッセージがあったらアップデート(＝上書き)する
     if int(rcd_id) == -1:
-       rcd_id = str(int(rcd_id) + 1)
-    if int(rcd_id) != 100:
-       qry_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = %(rcd_id)s;"""
-       cur.execute(qry_str,{'rcd_id': rcd_id})
+       qry_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = '0';"""
+       cur.execute(qry_str)
        rcd = cur.fetchone()
-       if (rcd is None and int(rcd_id) >= 0 and int(rcd_id) <= 99):
-           qry_str = """INSERT INTO """ + usr_id + """ (rcd_id, dttm, msg, intnt) VALUES (%(rcd_id)s, %(dttm)s, %(msg)s, %(intnt)s);"""
-           cur.execute(qry_str,{'rcd_id': rcd_id, 'dttm' : dttm, 'msg': msg, 'intnt': intnt})
-           rcd_id = str(int(rcd_id) + 1)
-       if (rcd is not None and int(rcd_id) >= 0 and int(rcd_id) <= 99):
-           qry_str = """UPDATE """ + usr_id + """ SET (rcd_id, dttm, msg, intnt) VALUES (%(rcd_id)s, %(dttm)s, %(msg)s, %(intnt)s) WHERE = %(rcd_id)s;"""
-           cur.execute(qry_str, {'rcd_id': rcd_id, 'dttm' : dttm, 'msg': msg, 'intnt': intnt, 'rcd_id': rcd_id})
-           rcd_id = str(int(rcd_id) + 1)
+       if rcd is None:
+          qry_str = """INSERT INTO """ + usr_id + """ (rcd_id, dttm, msg, intnt) VALUES (%(rcd_id)s, %(dttm)s, %(msg)s, %(intnt)s);"""
+          cur.execute(qry_str,{'rcd_id': '0', 'dttm' : dttm, 'msg': msg, 'intnt': intnt})
+          rcd_id = str(int(rcd_id) + 1)
+       if rcd is not None:
+          qry_str = """UPDATE """ + usr_id + """ SET (rcd_id, dttm, msg, intnt) VALUES (%(rcd_id)s, %(dttm)s, %(msg)s, %(intnt)s) WHERE = %(rcd_id)s;"""
+          cur.execute(qry_str, {'rcd_id': '0', 'dttm' : dttm, 'msg': msg, 'intnt': intnt, 'rcd_id': '0'})
+          rcd_id = str(int(rcd_id) + 1)
+    elif  (int(rcd_id) >= 0 and int(rcd_id) <= 99):
+          qry_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = %(rcd_id)s;"""
+          cur.execute(qry_str,{'rcd_id': rcd_id})
+          rcd = cur.fetchone()
+          if  rcd is None and:
+              qry_str = """INSERT INTO """ + usr_id + """ (rcd_id, dttm, msg, intnt) VALUES (%(rcd_id)s, %(dttm)s, %(msg)s, %(intnt)s);"""
+              cur.execute(qry_str,{'rcd_id': rcd_id, 'dttm' : dttm, 'msg': msg, 'intnt': intnt})
+              rcd_id = str(int(rcd_id) + 1)
+          if  rcd is not None:
+              qry_str = """UPDATE """ + usr_id + """ SET (rcd_id, dttm, msg, intnt) VALUES (%(rcd_id)s, %(dttm)s, %(msg)s, %(intnt)s) WHERE = %(rcd_id)s;"""
+              cur.execute(qry_str, {'rcd_id': rcd_id, 'dttm' : dttm, 'msg': msg, 'intnt': intnt, 'rcd_id': rcd_id})
+              rcd_id = str(int(rcd_id) + 1)
     else:
        rcd_id = "-1"
 
