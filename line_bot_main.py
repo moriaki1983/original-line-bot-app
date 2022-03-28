@@ -215,7 +215,7 @@ def line_msg_analyze(line_msg_txt):
 def line_msg_generate(line_usr_id, line_msg_txt, line_msg_intnt, prv_msgrcd_lst):
     #ユーザーから送られるLINEメッセージの解析結果を基に、自然でかつ適切な返信メッセージを生成する
     global usr_id
-    usr_id           = line_usr_id.lstrip("U")
+    usr_id           = "akky"
     line_prfl        = line_bot_api.get_profile(line_usr_id)
     line_usr_nm      = line_prfl.display_name
     jst              = datetime.timezone(datetime.timedelta(hours=+9), "JST")
