@@ -287,7 +287,6 @@ def postgres_select(rcd_id):
 
     #指定されたIDのメッセージ(＝レコード)をデータベースから個別にセレクトして取得する
     global usr_id
-    global rcd_id
     if (int(rcd_id) <= -1 or int(rcd_id) == 0):
         cur.execute("""SELECT * FROM %(usr_id)s WHERE rcd_id = %(rcd_id)s;""", {'usr_id':usr_id, 'rcd_id': "0"})
     if (int(rcd_id) >= 1 and int(rcd_id) <= 99):
