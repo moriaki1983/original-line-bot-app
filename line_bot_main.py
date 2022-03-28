@@ -243,7 +243,7 @@ def postgres_insert_and_update(event, line_msg_intnt):
     global has_db_table
     global usr_id
     if has_db_table == False:
-       cur.execute("""DROP TABLE %(usr_id)s;""", {'usr_id':usr_id})
+       #cur.execute("""DROP TABLE %(usr_id)s;""", {'usr_id':usr_id})
        cur.execute("""CREATE TABLE %(usr_id)s(rcd_id text, dttm text, usr_nm text, msg text, intnt text);""", {'usr_id':usr_id})
        has_db_table = True
 
@@ -253,7 +253,7 @@ def postgres_insert_and_update(event, line_msg_intnt):
     dttm_tmp  = datetime.datetime.now(jst)
     dttm      = dttm_tmp.strftime("%Y/%m/%d %H:%M:%S")
     prfl      = line_bot_api.get_profile(event.source.user_id)
-    usr_nm   = prfl.display_name
+    usr_nm    = prfl.display_name
     msg       = event.message.text
     intnt     = line_msg_intnt
 
