@@ -53,10 +53,18 @@ def show_db_record():
     global has_db_table
     global usr_id
     global rcd_id
+    app.logger.info(rcd_id)
     app.logger.info(has_db_table)
     if has_db_table == True:
        if int(rcd_id) == -1:
           return "table-record not exist..."
+       if int(rcd_id) == 0:
+          qry_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = %(rcd_id)s;"""
+          cur.execute(qry_str, {'rcd_id': "0"})
+          rcd = cur.fetchone()
+          cur.close()
+          conn.close()
+          return jsonify(rcd), 200
        if int(rcd_id) >= 1:
           qry_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = %(rcd_id)s;"""
           cur.execute(qry_str, {'rcd_id': str(int(rcd_id) - 1)})
@@ -248,9 +256,11 @@ def postgres_insert_and_update(event, line_msg_intnt):
     global rcd_id
     if has_db_table == False:
        has_db_table = True
-       qry_str = """CREATE TABLE """ + usr_id + """(rcd_id text, dttm text, msg text, intnt text);"""
-       cur.execute(qry_str)
-       has_db_table = True
+       try:
+           qry_str = """CREATE TABLE """ + usr_id + """(rcd_id text, dttm text, msg text, intnt text);"""
+           cur.execute(qry_str)
+       except Exception:
+           pass
 
     #データベースに登録・格納するLINEメッセージ(＝レコード)を構成する情報をまとめて用意する
     jst       = datetime.timezone(datetime.timedelta(hours=+9), "JST")
