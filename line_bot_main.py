@@ -53,7 +53,7 @@ def show_db_record():
     global has_db_table
     global usr_id
     global rcd_id
-    app.logger.info("has_db_table: " + has_db_table)
+    app.logger.info(has_db_table)
     if has_db_table == True:
        if int(rcd_id) == -1:
           return "table-record not exist..."
