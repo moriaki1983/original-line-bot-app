@@ -276,20 +276,21 @@ def postgres_insert_and_update(event, line_msg_intnt):
     intnt     = line_msg_intnt
 
     #該当IDのメッセージ(＝レコード)がなかったら、データベースにインサート(＝新規に登録・格納)し、既にメッセージがあったらアップデート(＝上書き)する
+    global rcd_id
     if int(rcd_id) == -1:
+       #global rcd_id
        qry_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = '0';"""
        cur.execute(qry_str)
        rcd = cur.fetchone()
        if rcd is None:
-          global rcd_id
           qry_str = """INSERT INTO """ + usr_id + """ (rcd_id, dttm, msg, intnt) VALUES (%(rcd_id)s, %(dttm)s, %(msg)s, %(intnt)s);"""
           cur.execute(qry_str,{'rcd_id': "0", 'dttm' : dttm, 'msg': msg, 'intnt': intnt})
        if rcd is not None:
           qry_str = """UPDATE """ + usr_id + """ SET (rcd_id, dttm, msg, intnt) VALUES (%(rcd_id)s, %(dttm)s, %(msg)s, %(intnt)s) WHERE = '0';"""
           cur.execute(qry_str, {'rcd_id': "0", 'dttm' : dttm, 'msg': msg, 'intnt': intnt})
        rcd_id = str(int(rcd_id) + 1)
-    elif  (int(rcd_id) >= 0 and int(rcd_id) <= 99):
-          global rcd_id
+    elif (int(rcd_id) >= 0 and int(rcd_id) <= 99):
+          #global rcd_id
           qry_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = %(rcd_id)s;"""
           cur.execute(qry_str,{'rcd_id': rcd_id})
           rcd = cur.fetchone()
@@ -301,7 +302,7 @@ def postgres_insert_and_update(event, line_msg_intnt):
               cur.execute(qry_str, {'rcd_id': rcd_id, 'dttm' : dttm, 'msg': msg, 'intnt': intnt, 'rcd_id': rcd_id})
           rcd_id = str(int(rcd_id) + 1)
     else:
-       global rcd_id
+       #global rcd_id
        rcd_id = "-1"
 
     #データベースへコミットし、テーブル操作のためのカーソルを破棄して、データベースとの接続を解除する
