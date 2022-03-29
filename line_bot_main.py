@@ -177,7 +177,7 @@ def line_msg_analyze(line_msg_txt):
        prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3]])
        prv_msgrcd_lst.append([prv_msgrcd_tmp2[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp2[3]])
        prv_msgrcd_lst.append([prv_msgrcd_tmp3[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp3[3]])
-       prv_msgrcd_lst.append(["", "", ""})
+       prv_msgrcd_lst.append(["", "", ""])
     if rcd_id >= 3:
        idx = rcd_id - 3
        prv_msgrcd_tmp = postgres_select(idx)
