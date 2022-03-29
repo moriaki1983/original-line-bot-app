@@ -151,7 +151,7 @@ def handle_follow(event):
 def line_msg_analyze(line_msg_txt):
     #過去４件分のユーザーからのLINEメッセージ(＝レコード)をデータベースから取得する
     global rcd_id
-    prv_msgrcd_lst = {}
+    prv_msgrcd_lst = []
     if rcd_id == -1:
        prv_msgrcd_lst.append(["", "", ""])
        prv_msgrcd_lst.append(["", "", ""])
@@ -330,7 +330,7 @@ def postgres_select_all():
 
     #データベースに登録・格納されている全てのレコードをセレクトして取得する
     global usr_id
-    rcd_list = {}
+    rcd_list = []
     qry_str = """SELECT * FROM """ + usr_id + """;"""
     cur.execute(qry_str)
     rcd_list = cur.fetchall()
