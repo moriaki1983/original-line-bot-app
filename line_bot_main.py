@@ -69,7 +69,8 @@ def show_db_record():
           return jsonify(rcd), 200
        if int(rcd_id) >= 1:
           qry_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = %(rcd_id)s;"""
-          cur.execute(qry_str, ({str(int(rcd_id) - 1)})
+          rcd_id_tmp = str(int(rcd_id) - 1)
+          cur.execute(qry_str, ({rcd_id_tmp}))
           rcd = cur.fetchone()
           cur.close()
           conn.close()
@@ -314,13 +315,15 @@ def postgres_select(rcd_id):
     #指定されたIDのメッセージ(＝レコード)をデータベースから個別にセレクトして取得する
     if (int(rcd_id) <= -1 or int(rcd_id) == 0):
         qry_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = %(rcd_id)s;"""
-        cur.execute(qry_str, ({str(0)}))
+        rcd_id_tmp = str(0)
+        cur.execute(qry_str, ({rcd_id_tmp}))
     if (int(rcd_id) >= 1 and int(rcd_id) <= 99):
         qry_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = %(rcd_id)s;"""
         cur.execute(qry_str, ({rcd_id}))
     if  int(rcd_id) >= 100:
         qry_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = %(rcd_id)s;"""
-        cur.execute(qry_str, ({str(99)}))
+        rcd_id_tmp = str(99)
+        cur.execute(qry_str, ({rcd_id_tmp}))
     rcd = cur.fetchone()
 
     #テーブル操作のためのカーソルを破棄して、データベースとの接続を解除する
