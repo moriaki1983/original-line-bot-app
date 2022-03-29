@@ -93,7 +93,7 @@ def db_table_drop():
     global has_db_table
     global usr_id
     global rcd_id
-    qry_str = """DROP TABLE """ + """U437a76c1393023b59a5bca38e390133b""" + """;"""
+    qry_str = """DROP TABLE """ + usr_id + """;"""
     cur.execute(qry_str)
 
     #各種のプログラムの実行状態を示す変数を初期化する
@@ -107,10 +107,10 @@ def db_table_drop():
 
 
 #LINE-DevelopersのWebhookからURLにイベントが送出されるようにする(内部でイベントハンドラーを呼び出す)
-@app.route("/callback", methods={"POST"})
+@app.route("/callback", methods=["POST"])
 def callback():
     #HTTPリクエストヘッダーから署名検証のためのシグネチャーを取得する
-    signature = request.headers{"X-Line-Signature"}
+    signature = request.headers["X-Line-Signature"]
 
     #HTTPリクエストボディを取得して、ログに記録する
     body = request.get_data(as_text=True)
