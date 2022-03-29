@@ -158,38 +158,38 @@ def line_msg_analyze(line_msg_txt):
        prv_msgrcd_lst.append(["", "", ""])
        prv_msgrcd_lst.append(["", "", ""])
     if rcd_id == 0:
-       prv_msgrcd_tmp = postgres_select("0")
+       prv_msgrcd_tmp = postgres_select(0)
        prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3]])
        prv_msgrcd_lst.append(["", "", ""])
        prv_msgrcd_lst.append(["", "", ""])
        prv_msgrcd_lst.append(["", "", ""])
     if rcd_id == 1:
-       prv_msgrcd_tmp  = postgres_select("0")
-       prv_msgrcd_tmp2 = postgres_select("1")
+       prv_msgrcd_tmp  = postgres_select(0)
+       prv_msgrcd_tmp2 = postgres_select(1)
        prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3]])
        prv_msgrcd_lst.append([prv_msgrcd_tmp2[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp2[3]])
        prv_msgrcd_lst.append(["", "", ""])
        prv_msgrcd_lst.append(["", "", ""])
     if rcd_id == 2:
-       prv_msgrcd_tmp  = postgres_select("0")
-       prv_msgrcd_tmp2 = postgres_select("1")
-       prv_msgrcd_tmp3 = postgres_select("2")
+       prv_msgrcd_tmp  = postgres_select(0)
+       prv_msgrcd_tmp2 = postgres_select(1)
+       prv_msgrcd_tmp3 = postgres_select(2)
        prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3]])
        prv_msgrcd_lst.append([prv_msgrcd_tmp2[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp2[3]])
        prv_msgrcd_lst.append([prv_msgrcd_tmp3[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp3[3]])
        prv_msgrcd_lst.append(["", "", ""])
     if rcd_id >= 3:
        idx = rcd_id - 3
-       prv_msgrcd_tmp = postgres_select(str(idx))
+       prv_msgrcd_tmp = postgres_select(idx)
        prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3]])
        idx = rcd_id - 2
-       prv_msgrcd_tmp = postgres_select(str(idx))
+       prv_msgrcd_tmp = postgres_select(idx)
        prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3]])
        idx = rcd_id - 1
-       prv_msgrcd_tmp = postgres_select(str(idx))
+       prv_msgrcd_tmp = postgres_select(idx)
        prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3]])
        idx = rcd_id
-       prv_msgrcd_tmp = postgres_select(str(idx))
+       prv_msgrcd_tmp = postgres_select(idx)
        prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3]])
 
     #ユーザーから送られるLINEメッセージの中に含まれるインテントを抽出する
@@ -275,9 +275,7 @@ def postgres_insert_and_update(event, line_msg_intnt):
     #該当IDのメッセージ(＝レコード)がなかったら、データベースにインサート(＝新規に登録・格納)し、既にメッセージがあったらアップデート(＝上書き)する
     if rcd_id == -1:
        rcd_id = 0
-    qry_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = %(rcd_id)s;"""
-    cur.execute(qry_str, ([rcd_id]))
-    rcd = cur.fetchone()
+    rcd = postgres_select(rcd_id)
     if (rcd_id >= 0 and rcd_id <= 99):
         if  rcd is None:
             qry_str = """INSERT INTO """ + usr_id + """ (rcd_id, dttm, msg, intnt) VALUES (%(rcd_id)s, %(dttm)s, %(msg)s, %(intnt)s);"""
@@ -303,6 +301,7 @@ def postgres_select(rcd_id):
     cur  = conn.cursor()
 
     #指定されたIDのメッセージ(＝レコード)をデータベースから個別にセレクトして取得する
+    global usr_id
     if (rcd_id <= -1 or rcd_id == 0):
         qry_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = %(rcd_id)s;"""
         rcd_id_tmp = 0
