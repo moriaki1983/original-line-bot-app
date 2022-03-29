@@ -230,6 +230,7 @@ def line_msg_analyze(line_msg_txt):
 #ユーザーから送られるLINEメッセージの解析結果から返信メッセージを生成する
 def line_msg_generate(line_usr_id, line_msg_txt, line_msg_intnt, prv_msgrcd_lst):
     #ユーザーから送られるLINEメッセージの解析結果を基に、自然でかつ適切な返信メッセージを生成する
+    global has_db_table
     global usr_id
     if (has_db_table == True and usr_id != line_usr_id):
         has_db_table = False
