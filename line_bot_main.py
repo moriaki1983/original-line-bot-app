@@ -69,7 +69,7 @@ def show_db_record():
           return jsonify(rcd), 200
        if int(rcd_id) >= 1:
           qry_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = %(rcd_id)s;"""
-          cur.execute(qry_str, {'rcd_id': str(int(rcd_id) - 1)})
+          cur.execute(qry_str, ({str(int(rcd_id) - 1)})
           rcd = cur.fetchone()
           cur.close()
           conn.close()
@@ -285,15 +285,15 @@ def postgres_insert_and_update(event, line_msg_intnt):
        #rcd_id = str(int(rcd_id) + 1)
        rcd_id = str(0)
     qry_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = %(rcd_id)s;"""
-    cur.execute(qry_str, {'rcd_id': rcd_id})
+    cur.execute(qry_str, ({rcd_id}))
     rcd = cur.fetchone()
     if (int(rcd_id) >= 0 and int(rcd_id) <= 99):
         if  rcd is None:
             qry_str = """INSERT INTO """ + usr_id + """ (rcd_id, dttm, msg, intnt) VALUES (%(rcd_id)s, %(dttm)s, %(msg)s, %(intnt)s);"""
-            cur.execute(qry_str, {'rcd_id': rcd_id, 'dttm' : dttm, 'msg': msg, 'intnt': intnt})
+            cur.execute(qry_str, ({rcd_id, dttm, msg, intnt}))
         if  rcd is not None:
             qry_str = """UPDATE """ + usr_id + """ SET (rcd_id, dttm, msg, intnt) VALUES (%(rcd_id)s, %(dttm)s, %(msg)s, %(intnt)s) WHERE = %(rcd_id)s;"""
-            cur.execute(qry_str, {'rcd_id': rcd_id, 'dttm' : dttm, 'msg': msg, 'intnt': intnt, 'rcd_id': rcd_id})
+            cur.execute(qry_str, ({rcd_id, dttm, msg, intnt, rcd_id}))
         rcd_id = str(int(rcd_id) + 1)
     if int(rcd_id) == 100:
        rcd_id = str(-1)
@@ -314,13 +314,13 @@ def postgres_select(rcd_id):
     #指定されたIDのメッセージ(＝レコード)をデータベースから個別にセレクトして取得する
     if (int(rcd_id) <= -1 or int(rcd_id) == 0):
         qry_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = %(rcd_id)s;"""
-        cur.execute(qry_str, {'rcd_id': "0"})
+        cur.execute(qry_str, ({str(0)}))
     if (int(rcd_id) >= 1 and int(rcd_id) <= 99):
         qry_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = %(rcd_id)s;"""
-        cur.execute(qry_str, {'rcd_id': rcd_id})
+        cur.execute(qry_str, ({rcd_id}))
     if  int(rcd_id) >= 100:
         qry_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = %(rcd_id)s;"""
-        cur.execute(qry_str, {'rcd_id': "99"})
+        cur.execute(qry_str, ({str(99)}))
     rcd = cur.fetchone()
 
     #テーブル操作のためのカーソルを破棄して、データベースとの接続を解除する
