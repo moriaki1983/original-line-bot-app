@@ -264,7 +264,8 @@ def postgres_insert_and_update(event, line_msg_intnt):
            qry_str = """CREATE TABLE """ + usr_id + """(rcd_id text, dttm text, msg text, intnt text);"""
            cur.execute(qry_str)
        except Exception:
-           pass
+           #pass
+           sys.exc_clear()
 
     #データベースに登録・格納するLINEメッセージ(＝レコード)を構成する情報をまとめて用意する
     global rcd_id
