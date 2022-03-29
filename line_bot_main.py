@@ -90,8 +90,11 @@ def db_table_drop():
     global has_db_table
     global usr_id
     global rcd_id
-    qry_str = """DROP TABLE """ + usr_id + """;"""
-    cur.execute(qry_str)
+    try:
+        qry_str = """DROP TABLE """ + usr_id + """;"""
+        cur.execute(qry_str)
+    except Exception:
+        pass
 
     #各種のプログラムの実行状態を示す変数を初期化する
     has_db_table = False
@@ -277,25 +280,30 @@ def postgres_insert_and_update(event, line_msg_intnt):
        cur.execute(qry_str)
        rcd = cur.fetchone()
        if rcd is None:
-          qry_str = """INSERT INTO """ + usr_id + """ (rcd_id, dttm, msg, intnt) VALUES (%(rcd_id)s, %(dttm)s, %(msg)s, %(intnt)s);"""
-          cur.execute(qry_str,{'rcd_id': '0', 'dttm' : dttm, 'msg': msg, 'intnt': intnt})
-          rcd_id = str(int(rcd_id) + 1)
+          rcd_id     = str(int(rcd_id) + 1)
+          rcd_id_tmp = str(int(rcd_id) + 1)
+          qry_str = """INSERT INTO """ + usr_id + """ (rcd_id, dttm, msg, intnt) VALUES (%(rcd_id_tmp)s, %(dttm)s, %(msg)s, %(intnt)s);"""
+          cur.execute(qry_str,{'rcd_id_tmp': "0", 'dttm' : dttm, 'msg': msg, 'intnt': intnt})
        if rcd is not None:
-          qry_str = """UPDATE """ + usr_id + """ SET (rcd_id, dttm, msg, intnt) VALUES (%(rcd_id)s, %(dttm)s, %(msg)s, %(intnt)s) WHERE = %(rcd_id)s;"""
-          cur.execute(qry_str, {'rcd_id': '0', 'dttm' : dttm, 'msg': msg, 'intnt': intnt, 'rcd_id': '0'})
-          rcd_id = str(int(rcd_id) + 1)
+          rcd_id     = str(int(rcd_id) + 1)
+          rcd_id_tmp = str(int(rcd_id) + 1)
+          qry_str = """UPDATE """ + usr_id + """ SET (rcd_id, dttm, msg, intnt) VALUES (%(rcd_id_tmp)s, %(dttm)s, %(msg)s, %(intnt)s) WHERE = '0';"""
+          cur.execute(qry_str, {'rcd_id_tmp': "0", 'dttm' : dttm, 'msg': msg, 'intnt': intnt})
     elif  (int(rcd_id) >= 0 and int(rcd_id) <= 99):
           qry_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = %(rcd_id)s;"""
           cur.execute(qry_str,{'rcd_id': rcd_id})
           rcd = cur.fetchone()
           if  rcd is None:
-              qry_str = """INSERT INTO """ + usr_id + """ (rcd_id, dttm, msg, intnt) VALUES (%(rcd_id)s, %(dttm)s, %(msg)s, %(intnt)s);"""
-              cur.execute(qry_str,{'rcd_id': rcd_id, 'dttm' : dttm, 'msg': msg, 'intnt': intnt})
+              rcd_id     = str(int(rcd_id) + 1)
+              rcd_id_tmp = str(int(rcd_id) + 1)
+              qry_str = """INSERT INTO """ + usr_id + """ (rcd_id, dttm, msg, intnt) VALUES (%(rcd_id_tmp)s, %(dttm)s, %(msg)s, %(intnt)s);"""
+              cur.execute(qry_str,{'rcd_id_tmp': rcd_id_tmp, 'dttm' : dttm, 'msg': msg, 'intnt': intnt})
               rcd_id = str(int(rcd_id) + 1)
           if  rcd is not None:
-              qry_str = """UPDATE """ + usr_id + """ SET (rcd_id, dttm, msg, intnt) VALUES (%(rcd_id)s, %(dttm)s, %(msg)s, %(intnt)s) WHERE = %(rcd_id)s;"""
-              cur.execute(qry_str, {'rcd_id': rcd_id, 'dttm' : dttm, 'msg': msg, 'intnt': intnt, 'rcd_id': rcd_id})
-              rcd_id = str(int(rcd_id) + 1)
+              rcd_id     = str(int(rcd_id) + 1)
+              rcd_id_tmp = str(int(rcd_id) + 1)
+              qry_str = """UPDATE """ + usr_id + """ SET (rcd_id, dttm, msg, intnt) VALUES (%(rcd_id_tmp)s, %(dttm)s, %(msg)s, %(intnt)s) WHERE = %(rcd_id)s;"""
+              cur.execute(qry_str, {'rcd_id_tmp': rcd_id_tmp, 'dttm' : dttm, 'msg': msg, 'intnt': intnt, 'rcd_id': rcd_id})
     else:
        rcd_id = "-1"
 
