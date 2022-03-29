@@ -37,7 +37,7 @@ has_db_table = False
 usr_id = ""
 
 #Postgresデータベースに登録・格納するLINEメッセージ(＝レコード)のID(＝レコードカウンター)を宣言する
-rcd_id = "-1"
+rcd_id = -1
 
 
 
