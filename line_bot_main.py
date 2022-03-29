@@ -58,18 +58,18 @@ def show_db_record():
     app.logger.info(rcd_id)
     app.logger.info(usr_id)
     if has_db_table == True:
-       if int(rcd_id) == -1:
+       if rcd_id == -1:
           return "table-record not exist..."
-       if int(rcd_id) == 0:
+       if rcd_id == 0:
           qry_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = '0';"""
           cur.execute(qry_str)
           rcd = cur.fetchone()
           cur.close()
           conn.close()
           return jsonify(rcd), 200
-       if int(rcd_id) >= 1:
+       if rcd_id >= 1:
           qry_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = %(rcd_id)s;"""
-          rcd_id_tmp = str(int(rcd_id) - 1)
+          rcd_id_tmp = str(rcd_id - 1)
           cur.execute(qry_str, ([rcd_id_tmp]))
           rcd = cur.fetchone()
           cur.close()
@@ -155,25 +155,25 @@ def line_msg_analyze(line_msg_txt):
     #過去４件分のユーザーからのLINEメッセージ(＝レコード)をデータベースから取得する
     global rcd_id
     prv_msgrcd_lst = []
-    if int(rcd_id) == -1:
+    if rcd_id == -1:
        prv_msgrcd_lst.append(["", "", ""])
        prv_msgrcd_lst.append(["", "", ""])
        prv_msgrcd_lst.append(["", "", ""])
        prv_msgrcd_lst.append(["", "", ""])
-    if int(rcd_id) == 0:
+    if rcd_id == 0:
        prv_msgrcd_tmp = postgres_select("0")
        prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3]])
        prv_msgrcd_lst.append(["", "", ""])
        prv_msgrcd_lst.append(["", "", ""])
        prv_msgrcd_lst.append(["", "", ""])
-    if int(rcd_id) == 1:
+    if rcd_id == 1:
        prv_msgrcd_tmp  = postgres_select("0")
        prv_msgrcd_tmp2 = postgres_select("1")
        prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3]])
        prv_msgrcd_lst.append([prv_msgrcd_tmp2[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp2[3]])
        prv_msgrcd_lst.append(["", "", ""])
        prv_msgrcd_lst.append(["", "", ""])
-    if int(rcd_id) == 2:
+    if rcd_id == 2:
        prv_msgrcd_tmp  = postgres_select("0")
        prv_msgrcd_tmp2 = postgres_select("1")
        prv_msgrcd_tmp3 = postgres_select("2")
@@ -181,17 +181,17 @@ def line_msg_analyze(line_msg_txt):
        prv_msgrcd_lst.append([prv_msgrcd_tmp2[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp2[3]])
        prv_msgrcd_lst.append([prv_msgrcd_tmp3[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp3[3]])
        prv_msgrcd_lst.append(["", "", ""])
-    if int(rcd_id) >= 3:
-       idx = int(rcd_id) - 3
+    if rcd_id >= 3:
+       idx = rcd_id - 3
        prv_msgrcd_tmp = postgres_select(str(idx))
        prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3]])
-       idx = int(rcd_id) - 2
+       idx = rcd_id - 2
        prv_msgrcd_tmp = postgres_select(str(idx))
        prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3]])
-       idx = int(rcd_id) - 1
+       idx = rcd_id - 1
        prv_msgrcd_tmp = postgres_select(str(idx))
        prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3]])
-       idx = int(rcd_id)
+       idx = rcd_id
        prv_msgrcd_tmp = postgres_select(str(idx))
        prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3]])
 
@@ -271,7 +271,7 @@ def postgres_insert_and_update(event, line_msg_intnt):
        #    cur.execute(qry_str)
        #except Exception:
        #    pass
-       qry_str = """CREATE TABLE """ + usr_id + """(rcd_id text, dttm text, msg text, intnt text);"""
+       qry_str = """CREATE TABLE """ + usr_id + """(rcd_id integer, dttm text, msg text, intnt text);"""
        cur.execute(qry_str)
 
     #データベースに登録・格納するLINEメッセージ(＝レコード)を構成する情報をまとめて用意する
@@ -282,22 +282,22 @@ def postgres_insert_and_update(event, line_msg_intnt):
     intnt     = line_msg_intnt
 
     #該当IDのメッセージ(＝レコード)がなかったら、データベースにインサート(＝新規に登録・格納)し、既にメッセージがあったらアップデート(＝上書き)する
-    if int(rcd_id) == -1:
-       #rcd_id = str(int(rcd_id) + 1)
-       rcd_id = str(0)
+    if rcd_id == -1:
+       #rcd_id = str(rcd_id + 1)
+       rcd_id = 0
     qry_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = %(rcd_id)s;"""
     cur.execute(qry_str, ([rcd_id]))
     rcd = cur.fetchone()
-    if (int(rcd_id) >= 0 and int(rcd_id) <= 99):
+    if (rcd_id >= 0 and rcd_id <= 99):
         if  rcd is None:
             qry_str = """INSERT INTO """ + usr_id + """ (rcd_id, dttm, msg, intnt) VALUES (%(rcd_id)s, %(dttm)s, %(msg)s, %(intnt)s);"""
             cur.execute(qry_str, ([rcd_id, dttm, msg, intnt]))
         if  rcd is not None:
             qry_str = """UPDATE """ + usr_id + """ SET (rcd_id, dttm, msg, intnt) VALUES (%(rcd_id)s, %(dttm)s, %(msg)s, %(intnt)s) WHERE = %(rcd_id)s;"""
             cur.execute(qry_str, ([rcd_id, dttm, msg, intnt, rcd_id]))
-        rcd_id = str(int(rcd_id) + 1)
-    if int(rcd_id) == 100:
-       rcd_id = str(-1)
+        rcd_id = str(rcd_id + 1)
+    if rcd_id == 100:
+       rcd_id = -1
 
     #データベースへコミットし、テーブル操作のためのカーソルを破棄して、データベースとの接続を解除する
     conn.commit()
@@ -313,16 +313,16 @@ def postgres_select(rcd_id):
     cur  = conn.cursor()
 
     #指定されたIDのメッセージ(＝レコード)をデータベースから個別にセレクトして取得する
-    if (int(rcd_id) <= -1 or int(rcd_id) == 0):
+    if (rcd_id <= -1 or rcd_id == 0):
         qry_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = %(rcd_id)s;"""
-        rcd_id_tmp = str(0)
+        rcd_id_tmp = 0
         cur.execute(qry_str, ([rcd_id_tmp]))
-    if (int(rcd_id) >= 1 and int(rcd_id) <= 99):
+    if (rcd_id >= 1 and rcd_id <= 99):
         qry_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = %(rcd_id)s;"""
         cur.execute(qry_str, ([rcd_id]))
-    if  int(rcd_id) >= 100:
+    if  rcd_id >= 100:
         qry_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = %(rcd_id)s;"""
-        rcd_id_tmp = str(99)
+        rcd_id_tmp = 99
         cur.execute(qry_str, ([rcd_id_tmp]))
     rcd = cur.fetchone()
 
