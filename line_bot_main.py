@@ -238,7 +238,7 @@ def line_msg_generate(line_usr_id, line_msg_txt, line_msg_intnt, prv_msgrcd_lst)
     jst              = datetime.timezone(datetime.timedelta(hours=+9), "JST")
     dttm_tmp         = datetime.datetime.now(jst)
     line_msg_dttm    = dttm_tmp.strftime("%Y/%m/%d %H:%M:%S")
-    crrnt_msgrcd_lst = {line_msg_dttm, line_msg_txt, line_msg_intnt}
+    crrnt_msgrcd_lst = [line_msg_dttm, line_msg_txt, line_msg_intnt]
     gnrtd_msg        = line_bot_text_generate.text_generate_from_analyze_result(line_usr_nm, crrnt_msgrcd_lst, prv_msgrcd_lst)
     return gnrtd_msg
 
