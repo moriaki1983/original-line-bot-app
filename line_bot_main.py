@@ -69,7 +69,7 @@ def show_db_record():
           return jsonify(rcd), 200
        if rcd_id >= 1:
           qry_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = %(rcd_id)s;"""
-          rcd_id_tmp = str(rcd_id - 1)
+          rcd_id_tmp = rcd_id - 1
           cur.execute(qry_str, ([rcd_id_tmp]))
           rcd = cur.fetchone()
           cur.close()
@@ -93,11 +93,8 @@ def db_table_drop():
     global has_db_table
     global usr_id
     global rcd_id
-    try:
-        qry_str = """DROP TABLE """ + usr_id + """;"""
-        cur.execute(qry_str)
-    except Exception:
-        pass
+    qry_str = """DROP TABLE """ + """U437a76c1393023b59a5bca38e390133b""" + """;"""
+    cur.execute(qry_str)
 
     #各種のプログラムの実行状態を示す変数を初期化する
     has_db_table = False
@@ -263,14 +260,8 @@ def postgres_insert_and_update(event, line_msg_intnt):
     global has_db_table
     global rcd_id
     global usr_id
-
     if has_db_table == False:
        has_db_table = True
-       #try:
-       #    qry_str = """CREATE TABLE """ + usr_id + """(rcd_id text, dttm text, msg text, intnt text);"""
-       #    cur.execute(qry_str)
-       #except Exception:
-       #    pass
        qry_str = """CREATE TABLE """ + usr_id + """(rcd_id integer, dttm text, msg text, intnt text);"""
        cur.execute(qry_str)
 
@@ -283,7 +274,6 @@ def postgres_insert_and_update(event, line_msg_intnt):
 
     #該当IDのメッセージ(＝レコード)がなかったら、データベースにインサート(＝新規に登録・格納)し、既にメッセージがあったらアップデート(＝上書き)する
     if rcd_id == -1:
-       #rcd_id = str(rcd_id + 1)
        rcd_id = 0
     qry_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = %(rcd_id)s;"""
     cur.execute(qry_str, ([rcd_id]))
@@ -295,7 +285,7 @@ def postgres_insert_and_update(event, line_msg_intnt):
         if  rcd is not None:
             qry_str = """UPDATE """ + usr_id + """ SET (rcd_id, dttm, msg, intnt) VALUES (%(rcd_id)s, %(dttm)s, %(msg)s, %(intnt)s) WHERE = %(rcd_id)s;"""
             cur.execute(qry_str, ([rcd_id, dttm, msg, intnt, rcd_id]))
-        rcd_id = str(rcd_id + 1)
+        rcd_id = rcd_id + 1
     if rcd_id == 100:
        rcd_id = -1
 
