@@ -266,7 +266,7 @@ def postgres_insert_and_update(event, line_msg_intnt):
            pass
 
     #データベースに登録・格納するLINEメッセージ(＝レコード)を構成する情報をまとめて用意する
-    #global rcd_id
+    global rcd_id
     jst       = datetime.timezone(datetime.timedelta(hours=+9), "JST")
     dttm_tmp  = datetime.datetime.now(jst)
     dttm      = dttm_tmp.strftime("%Y/%m/%d %H:%M:%S")
@@ -277,7 +277,6 @@ def postgres_insert_and_update(event, line_msg_intnt):
 
     #該当IDのメッセージ(＝レコード)がなかったら、データベースにインサート(＝新規に登録・格納)し、既にメッセージがあったらアップデート(＝上書き)する
     if int(rcd_id) == -1:
-       global rcd_id
        qry_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = '0';"""
        cur.execute(qry_str)
        rcd = cur.fetchone()
