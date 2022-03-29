@@ -5,7 +5,7 @@
 
 #各モジュールの読み込み
 import os
-import sys
+#import sys
 import datetime
 import psycopg2
 import line_bot_text_analyze
@@ -52,11 +52,11 @@ def show_db_record():
 
     # データベースから該当IDのメッセージ(＝レコード)を取得し、jsonifyで整形して呼出し元に引き渡しをする
     global has_db_table
-    global usr_id
     global rcd_id
+    global usr_id
     app.logger.info(has_db_table)
-    app.logger.info(usr_id)
     app.logger.info(rcd_id)
+    app.logger.info(usr_id)
     if has_db_table == True:
        if int(rcd_id) == -1:
           return "table-record not exist..."
@@ -231,7 +231,9 @@ def line_msg_analyze(line_msg_txt):
 def line_msg_generate(line_usr_id, line_msg_txt, line_msg_intnt, prv_msgrcd_lst):
     #ユーザーから送られるLINEメッセージの解析結果を基に、自然でかつ適切な返信メッセージを生成する
     global usr_id
-    usr_id = line_usr_id
+    if (has_db_table == True and usr_id != line_usr_id):
+        has_db_table = False
+    usr_id           = line_usr_id
     line_prfl        = line_bot_api.get_profile(line_usr_id)
     line_usr_nm      = line_prfl.display_name
     jst              = datetime.timezone(datetime.timedelta(hours=+9), "JST")
@@ -257,19 +259,20 @@ def postgres_insert_and_update(event, line_msg_intnt):
 
     #既にテーブルが用意・作成されていれば、それを破棄して新たにテーブルを用意・作成する
     global has_db_table
+    global rcd_id
     global usr_id
-    #global rcd_id
+
     if has_db_table == False:
        has_db_table = True
-       try:
-           qry_str = """CREATE TABLE """ + usr_id + """(rcd_id text, dttm text, msg text, intnt text);"""
-           cur.execute(qry_str)
-       except Exception:
-           #pass
-           sys.exc_clear()
+       #try:
+       #    qry_str = """CREATE TABLE """ + usr_id + """(rcd_id text, dttm text, msg text, intnt text);"""
+       #    cur.execute(qry_str)
+       #except Exception:
+       #    pass
+       qry_str = """CREATE TABLE """ + usr_id + """(rcd_id text, dttm text, msg text, intnt text);"""
+       cur.execute(qry_str)
 
     #データベースに登録・格納するLINEメッセージ(＝レコード)を構成する情報をまとめて用意する
-    global rcd_id
     jst       = datetime.timezone(datetime.timedelta(hours=+9), "JST")
     dttm_tmp  = datetime.datetime.now(jst)
     dttm      = dttm_tmp.strftime("%Y/%m/%d %H:%M:%S")
