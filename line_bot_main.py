@@ -53,8 +53,9 @@ def show_db_record():
     global has_db_table
     global usr_id
     global rcd_id
-    app.logger.info(rcd_id)
     app.logger.info(has_db_table)
+    app.logger.info(usr_id)
+    app.logger.info(rcd_id)
     if has_db_table == True:
        if int(rcd_id) == -1:
           return "table-record not exist..."
@@ -270,23 +271,20 @@ def postgres_insert_and_update(event, line_msg_intnt):
     jst       = datetime.timezone(datetime.timedelta(hours=+9), "JST")
     dttm_tmp  = datetime.datetime.now(jst)
     dttm      = dttm_tmp.strftime("%Y/%m/%d %H:%M:%S")
-    prfl      = line_bot_api.get_profile(event.source.user_id)
-    usr_nm    = prfl.display_name
     msg       = event.message.text
     intnt     = line_msg_intnt
 
     #該当IDのメッセージ(＝レコード)がなかったら、データベースにインサート(＝新規に登録・格納)し、既にメッセージがあったらアップデート(＝上書き)する
-    global rcd_id
     if int(rcd_id) == -1:
        #rcd_id = str(int(rcd_id) + 1)
        rcd_id = str(0)
     qry_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = %(rcd_id)s;"""
-    cur.execute(qry_str,{'rcd_id': rcd_id})
+    cur.execute(qry_str, {'rcd_id': rcd_id})
     rcd = cur.fetchone()
     if (int(rcd_id) >= 0 and int(rcd_id) <= 99):
         if  rcd is None:
             qry_str = """INSERT INTO """ + usr_id + """ (rcd_id, dttm, msg, intnt) VALUES (%(rcd_id)s, %(dttm)s, %(msg)s, %(intnt)s);"""
-            cur.execute(qry_str,{'rcd_id': rcd_id, 'dttm' : dttm, 'msg': msg, 'intnt': intnt})
+            cur.execute(qry_str, {'rcd_id': rcd_id, 'dttm' : dttm, 'msg': msg, 'intnt': intnt})
         if  rcd is not None:
             qry_str = """UPDATE """ + usr_id + """ SET (rcd_id, dttm, msg, intnt) VALUES (%(rcd_id)s, %(dttm)s, %(msg)s, %(intnt)s) WHERE = %(rcd_id)s;"""
             cur.execute(qry_str, {'rcd_id': rcd_id, 'dttm' : dttm, 'msg': msg, 'intnt': intnt, 'rcd_id': rcd_id})
