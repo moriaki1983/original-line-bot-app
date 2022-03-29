@@ -5,6 +5,7 @@
 
 #各モジュールの読み込み
 import os
+import sys
 import datetime
 import psycopg2
 import line_bot_text_analyze
@@ -290,8 +291,8 @@ def postgres_insert_and_update(event, line_msg_intnt):
             qry_str = """UPDATE """ + usr_id + """ SET (rcd_id, dttm, msg, intnt) VALUES (%(rcd_id)s, %(dttm)s, %(msg)s, %(intnt)s) WHERE = %(rcd_id)s;"""
             cur.execute(qry_str, {'rcd_id': rcd_id, 'dttm' : dttm, 'msg': msg, 'intnt': intnt, 'rcd_id': rcd_id})
         rcd_id = str(int(rcd_id) + 1)
-    if int(rcd_id) == -1:
-       pass
+    if int(rcd_id) == 100:
+       rcd_id = str(-1)
 
     #データベースへコミットし、テーブル操作のためのカーソルを破棄して、データベースとの接続を解除する
     conn.commit()
