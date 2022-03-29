@@ -22,13 +22,13 @@ from linebot.models import (MessageEvent, FollowEvent, TextMessage, TextSendMess
 app = Flask(__name__)
 
 #Herokuの環境変数に設定されている、LINE-Developersのアクセストークンとチャネルシークレットを取得する
-YOUR_CHANNEL_ACCESS_TOKEN = os.environ{"YOUR_CHANNEL_ACCESS_TOKEN"}
-YOUR_CHANNEL_SECRET       = os.environ{"YOUR_CHANNEL_SECRET"}
-line_bot_api = LineBotApi(YOUR_CHANNEL_ACCESS_TOKEN)
-handler      = WebhookHandler(YOUR_CHANNEL_SECRET)
+YOUR_CHANNEL_ACCESS_TOKEN = os.environ["YOUR_CHANNEL_ACCESS_TOKEN"]
+YOUR_CHANNEL_SECRET       = os.environ["YOUR_CHANNEL_SECRET"]
+line_bot_api              = LineBotApi(YOUR_CHANNEL_ACCESS_TOKEN)
+handler                   = WebhookHandler(YOUR_CHANNEL_SECRET)
 
 #Herokuの環境に設定されている、Postgresにアクセスするためのキーを取得する
-DATABASE_URL = os.environ{"DATABASE_URL"}
+DATABASE_URL = os.environ["DATABASE_URL"]
 
 #Postgresデータベース上の、ユーザーごとのテーブルの有無を示すフラグを宣言する
 has_db_table = False
