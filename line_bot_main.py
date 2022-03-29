@@ -285,6 +285,7 @@ def postgres_insert_and_update(event, line_msg_intnt):
        if rcd is not None:
           qry_str = """UPDATE """ + usr_id + """ SET (rcd_id, dttm, msg, intnt) VALUES (%(rcd_id)s, %(dttm)s, %(msg)s, %(intnt)s) WHERE = '0';"""
           cur.execute(qry_str, {'rcd_id': "0", 'dttm' : dttm, 'msg': msg, 'intnt': intnt})
+       global rcd_id
        rcd_id = str(int(rcd_id) + 1)
     elif  (int(rcd_id) >= 0 and int(rcd_id) <= 99):
           qry_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = %(rcd_id)s;"""
@@ -296,8 +297,10 @@ def postgres_insert_and_update(event, line_msg_intnt):
           if  rcd is not None:
               qry_str = """UPDATE """ + usr_id + """ SET (rcd_id, dttm, msg, intnt) VALUES (%(rcd_id)s, %(dttm)s, %(msg)s, %(intnt)s) WHERE = %(rcd_id)s;"""
               cur.execute(qry_str, {'rcd_id': rcd_id, 'dttm' : dttm, 'msg': msg, 'intnt': intnt, 'rcd_id': rcd_id})
+          global rcd_id
           rcd_id = str(int(rcd_id) + 1)
     else:
+       global rcd_id
        rcd_id = "-1"
 
     #データベースへコミットし、テーブル操作のためのカーソルを破棄して、データベースとの接続を解除する
