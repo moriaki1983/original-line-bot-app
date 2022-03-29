@@ -22,13 +22,13 @@ from linebot.models import (MessageEvent, FollowEvent, TextMessage, TextSendMess
 app = Flask(__name__)
 
 #Herokuの環境変数に設定されている、LINE-Developersのアクセストークンとチャネルシークレットを取得する
-YOUR_CHANNEL_ACCESS_TOKEN = os.environ["YOUR_CHANNEL_ACCESS_TOKEN"]
-YOUR_CHANNEL_SECRET       = os.environ["YOUR_CHANNEL_SECRET"]
+YOUR_CHANNEL_ACCESS_TOKEN = os.environ{"YOUR_CHANNEL_ACCESS_TOKEN"}
+YOUR_CHANNEL_SECRET       = os.environ{"YOUR_CHANNEL_SECRET"}
 line_bot_api = LineBotApi(YOUR_CHANNEL_ACCESS_TOKEN)
 handler      = WebhookHandler(YOUR_CHANNEL_SECRET)
 
 #Herokuの環境に設定されている、Postgresにアクセスするためのキーを取得する
-DATABASE_URL = os.environ["DATABASE_URL"]
+DATABASE_URL = os.environ{"DATABASE_URL"}
 
 #Postgresデータベース上の、ユーザーごとのテーブルの有無を示すフラグを宣言する
 has_db_table = False
@@ -70,7 +70,7 @@ def show_db_record():
        if rcd_id >= 1:
           qry_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = %(rcd_id)s;"""
           rcd_id_tmp = rcd_id - 1
-          cur.execute(qry_str, ([rcd_id_tmp]))
+          cur.execute(qry_str, ({rcd_id_tmp}))
           rcd = cur.fetchone()
           cur.close()
           conn.close()
@@ -107,10 +107,10 @@ def db_table_drop():
 
 
 #LINE-DevelopersのWebhookからURLにイベントが送出されるようにする(内部でイベントハンドラーを呼び出す)
-@app.route("/callback", methods=["POST"])
+@app.route("/callback", methods={"POST"})
 def callback():
     #HTTPリクエストヘッダーから署名検証のためのシグネチャーを取得する
-    signature = request.headers["X-Line-Signature"]
+    signature = request.headers{"X-Line-Signature"}
 
     #HTTPリクエストボディを取得して、ログに記録する
     body = request.get_data(as_text=True)
@@ -151,7 +151,7 @@ def handle_follow(event):
 def line_msg_analyze(line_msg_txt):
     #過去４件分のユーザーからのLINEメッセージ(＝レコード)をデータベースから取得する
     global rcd_id
-    prv_msgrcd_lst = []
+    prv_msgrcd_lst = {}
     if rcd_id == -1:
        prv_msgrcd_lst.append(["", "", ""])
        prv_msgrcd_lst.append(["", "", ""])
@@ -177,11 +177,11 @@ def line_msg_analyze(line_msg_txt):
        prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3]])
        prv_msgrcd_lst.append([prv_msgrcd_tmp2[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp2[3]])
        prv_msgrcd_lst.append([prv_msgrcd_tmp3[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp3[3]])
-       prv_msgrcd_lst.append(["", "", ""])
+       prv_msgrcd_lst.append(["", "", ""})
     if rcd_id >= 3:
        idx = rcd_id - 3
        prv_msgrcd_tmp = postgres_select(idx)
-       prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3]])
+       prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp{2], prv_msgrcd_tmp[3]])
        idx = rcd_id - 2
        prv_msgrcd_tmp = postgres_select(idx)
        prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3]])
@@ -238,7 +238,7 @@ def line_msg_generate(line_usr_id, line_msg_txt, line_msg_intnt, prv_msgrcd_lst)
     jst              = datetime.timezone(datetime.timedelta(hours=+9), "JST")
     dttm_tmp         = datetime.datetime.now(jst)
     line_msg_dttm    = dttm_tmp.strftime("%Y/%m/%d %H:%M:%S")
-    crrnt_msgrcd_lst = [line_msg_dttm, line_msg_txt, line_msg_intnt]
+    crrnt_msgrcd_lst = {line_msg_dttm, line_msg_txt, line_msg_intnt}
     gnrtd_msg        = line_bot_text_generate.text_generate_from_analyze_result(line_usr_nm, crrnt_msgrcd_lst, prv_msgrcd_lst)
     return gnrtd_msg
 
@@ -279,10 +279,10 @@ def postgres_insert_and_update(event, line_msg_intnt):
     if (rcd_id >= 0 and rcd_id <= 99):
         if  rcd is None:
             qry_str = """INSERT INTO """ + usr_id + """ (rcd_id, dttm, msg, intnt) VALUES (%(rcd_id)s, %(dttm)s, %(msg)s, %(intnt)s);"""
-            cur.execute(qry_str, ([rcd_id, dttm, msg, intnt]))
+            cur.execute(qry_str, ({rcd_id, dttm, msg, intnt}))
         if  rcd is not None:
             qry_str = """UPDATE """ + usr_id + """ SET (rcd_id, dttm, msg, intnt) VALUES (%(rcd_id)s, %(dttm)s, %(msg)s, %(intnt)s) WHERE = %(rcd_id)s;"""
-            cur.execute(qry_str, ([rcd_id, dttm, msg, intnt, rcd_id]))
+            cur.execute(qry_str, ({rcd_id, dttm, msg, intnt, rcd_id}))
         rcd_id = rcd_id + 1
     if rcd_id == 100:
        rcd_id = -1
@@ -305,14 +305,14 @@ def postgres_select(rcd_id):
     if (rcd_id <= -1 or rcd_id == 0):
         qry_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = %(rcd_id)s;"""
         rcd_id_tmp = 0
-        cur.execute(qry_str, ([rcd_id_tmp]))
+        cur.execute(qry_str, ({rcd_id_tmp}))
     if (rcd_id >= 1 and rcd_id <= 99):
         qry_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = %(rcd_id)s;"""
-        cur.execute(qry_str, ([rcd_id]))
+        cur.execute(qry_str, ({rcd_id}))
     if  rcd_id >= 100:
         qry_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = %(rcd_id)s;"""
         rcd_id_tmp = 99
-        cur.execute(qry_str, ([rcd_id_tmp]))
+        cur.execute(qry_str, ({rcd_id_tmp}))
     rcd = cur.fetchone()
 
     #テーブル操作のためのカーソルを破棄して、データベースとの接続を解除する
@@ -330,7 +330,7 @@ def postgres_select_all():
 
     #データベースに登録・格納されている全てのレコードをセレクトして取得する
     global usr_id
-    rcd_list = []
+    rcd_list = {}
     qry_str = """SELECT * FROM """ + usr_id + """;"""
     cur.execute(qry_str)
     rcd_list = cur.fetchall()
