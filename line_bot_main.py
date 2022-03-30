@@ -279,10 +279,10 @@ def postgres_insert_and_update(event, line_msg_intnt):
     if (rcd_id >= 0 and rcd_id <= 99):
         if  rcd is None:
             qry_str = """INSERT INTO """ + usr_id + """ (rcd_id, dttm, msg, intnt) VALUES (%s, %s, %s, %s);"""
-            cur.execute(qry_str, rcd_id, dttm, msg, intnt)
+            cur.execute(qry_str, (rcd_id, dttm, msg, intnt,))
         if  rcd is not None:
             qry_str = """UPDATE """ + usr_id + """ SET (rcd_id, dttm, msg, intnt) VALUES (%s, %s, %s, %s) WHERE = %s;"""
-            cur.execute(qry_str, rcd_id, dttm, msg, intnt, rcd_id)
+            cur.execute(qry_str, (rcd_id, dttm, msg, intnt, rcd_id,))
         rcd_id = rcd_id + 1
     if rcd_id == 100:
        rcd_id = -1
@@ -305,14 +305,14 @@ def postgres_select(rcd_id):
     if (rcd_id <= -1 or rcd_id == 0):
         qry_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = %s;"""
         rcd_id_tmp = 0
-        cur.execute(qry_str, rcd_id_tmp)
+        cur.execute(qry_str, (rcd_id_tmp,))
     if (rcd_id >= 1 and rcd_id <= 99):
         qry_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = %s;"""
-        cur.execute(qry_str, rcd_id)
+        cur.execute(qry_str, (rcd_id,))
     if  rcd_id >= 100:
         qry_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = %s;"""
         rcd_id_tmp = 99
-        cur.execute(qry_str, rcd_id_tmp)
+        cur.execute(qry_str, (rcd_id_tmp,))
     rcd = cur.fetchone()
 
     #テーブル操作のためのカーソルを破棄して、データベースとの接続を解除する
