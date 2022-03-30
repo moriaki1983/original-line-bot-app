@@ -34,7 +34,7 @@ DATABASE_URL = os.environ["DATABASE_URL"]
 has_db_table = False
 
 #Postgresデータベース上の、ユーザーごとのテーブルの名前として使用するLINEユーザーのIDを宣言する
-usr_id = ""
+usr_nm = ""
 
 #Postgresデータベースに登録・格納するLINEメッセージ(＝レコード)のID(＝レコードカウンター)を宣言する
 rcd_id = -1
@@ -52,23 +52,23 @@ def show_db_record():
 
     # データベースから該当IDのメッセージ(＝レコード)を取得し、jsonifyで整形して呼出し元に引き渡しをする
     global has_db_table
+    global usr_nm
     global rcd_id
-    global usr_id
     app.logger.info(has_db_table)
+    app.logger.info(usr_nm)
     app.logger.info(rcd_id)
-    app.logger.info(usr_id)
     if has_db_table == True:
        if rcd_id == -1:
           return "table-record not exist..."
        if rcd_id == 0:
-          qry_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = '0';"""
+          qry_str = """SELECT * FROM """ + usr_nm + """ WHERE rcd_id = '0';"""
           cur.execute(qry_str)
           rcd = cur.fetchone()
           cur.close()
           conn.close()
           return jsonify(rcd), 200
        if rcd_id >= 1:
-          qry_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = %(rcd_id)s;"""
+          qry_str = """SELECT * FROM """ + usr_nm + """ WHERE rcd_id = %(rcd_id)s;"""
           rcd_id_tmp = rcd_id - 1
           cur.execute(qry_str, (rcd_id_tmp,))
           rcd = cur.fetchone()
@@ -91,9 +91,9 @@ def db_table_drop():
 
     #既にテーブルが用意・作成されていれば、それを破棄する
     global has_db_table
-    global usr_id
+    global usr_nm
     global rcd_id
-    qry_str = """DROP TABLE """ + usr_id + """;"""
+    qry_str = """DROP TABLE """ + usr_nm + """;"""
     cur.execute(qry_str)
 
     #各種のプログラムの実行状態を示す変数を初期化する
@@ -150,9 +150,9 @@ def handle_follow(event):
 #ユーザーから送られるLINEメッセージを解析する
 def line_msg_analyze(line_msg_txt):
     #過去４件分のユーザーからのLINEメッセージ(＝レコード)をデータベースから取得する
+    global has_db_table
     global rcd_id
     prv_msgrcd_lst = []
-    global has_db_table
     if (has_db_table == True):
         if rcd_id == -1:
            prv_msgrcd_lst.append(["", "", ""])
@@ -236,10 +236,7 @@ def line_msg_analyze(line_msg_txt):
 def line_msg_generate(line_usr_id, line_msg_txt, line_msg_intnt, prv_msgrcd_lst):
     #ユーザーから送られるLINEメッセージの解析結果を基に、自然でかつ適切な返信メッセージを生成する
     global has_db_table
-    global usr_id
-    if (has_db_table == True and usr_id != line_usr_id):
-        has_db_table = False
-    usr_id           = line_usr_id
+    global usr_nm
     line_prfl        = line_bot_api.get_profile(line_usr_id)
     line_usr_nm      = line_prfl.display_name
     jst              = datetime.timezone(datetime.timedelta(hours=+9), "JST")
@@ -247,6 +244,9 @@ def line_msg_generate(line_usr_id, line_msg_txt, line_msg_intnt, prv_msgrcd_lst)
     line_msg_dttm    = dttm_tmp.strftime("%Y/%m/%d %H:%M:%S")
     crrnt_msgrcd_lst = [line_msg_dttm, line_msg_txt, line_msg_intnt]
     gnrtd_msg        = line_bot_text_generate.text_generate_from_analyze_result(line_usr_nm, crrnt_msgrcd_lst, prv_msgrcd_lst)
+    if (has_db_table == True and usr_nm != line_usr_nm):
+        has_db_table = False
+    usr_nm = line_usr_nm
     return gnrtd_msg
 
 
@@ -265,11 +265,11 @@ def postgres_insert_and_update(event, line_msg_intnt):
 
     #既にテーブルが用意・作成されていれば、それを破棄して新たにテーブルを用意・作成する
     global has_db_table
+    global usr_nm
     global rcd_id
-    global usr_id
     if has_db_table == False:
        has_db_table = True
-       qry_str = """CREATE TABLE """ + usr_id + """(rcd_id integer, dttm text, msg text, intnt text);"""
+       qry_str = """CREATE TABLE """ + usr_nm + """(rcd_id integer, dttm text, msg text, intnt text);"""
        cur.execute(qry_str)
 
     #データベースに登録・格納するLINEメッセージ(＝レコード)を構成する情報をまとめて用意する
@@ -285,10 +285,10 @@ def postgres_insert_and_update(event, line_msg_intnt):
     rcd = postgres_select(rcd_id)
     if (rcd_id >= 0 and rcd_id <= 99):
         if  rcd is None:
-            qry_str = """INSERT INTO """ + usr_id + """ (rcd_id, dttm, msg, intnt) VALUES (%s, %s, %s, %s);"""
+            qry_str = """INSERT INTO """ + usr_nm + """ (rcd_id, dttm, msg, intnt) VALUES (%s, %s, %s, %s);"""
             cur.execute(qry_str, (rcd_id, dttm, msg, intnt,))
         if  rcd is not None:
-            qry_str = """UPDATE """ + usr_id + """ SET (rcd_id, dttm, msg, intnt) VALUES (%s, %s, %s, %s) WHERE = %s;"""
+            qry_str = """UPDATE """ + usr_nm + """ SET (rcd_id, dttm, msg, intnt) VALUES (%s, %s, %s, %s) WHERE = %s;"""
             cur.execute(qry_str, (rcd_id, dttm, msg, intnt, rcd_id,))
         rcd_id = rcd_id + 1
     if rcd_id == 100:
@@ -308,16 +308,16 @@ def postgres_select(rcd_id):
     cur  = conn.cursor()
 
     #指定されたIDのメッセージ(＝レコード)をデータベースから個別にセレクトして取得する
-    global usr_id
+    global usr_nm
     if (rcd_id <= -1 or rcd_id == 0):
-        qry_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = %s;"""
+        qry_str = """SELECT * FROM """ + usr_nm + """ WHERE rcd_id = %s;"""
         rcd_id_tmp = 0
         cur.execute(qry_str, (rcd_id_tmp,))
     if (rcd_id >= 1 and rcd_id <= 99):
-        qry_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = %s;"""
+        qry_str = """SELECT * FROM """ + usr_nm + """ WHERE rcd_id = %s;"""
         cur.execute(qry_str, (rcd_id,))
     if  rcd_id >= 100:
-        qry_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = %s;"""
+        qry_str = """SELECT * FROM """ + usr_nm + """ WHERE rcd_id = %s;"""
         rcd_id_tmp = 99
         cur.execute(qry_str, (rcd_id_tmp,))
     rcd = cur.fetchone()
@@ -336,9 +336,9 @@ def postgres_select_all():
     cur  = conn.cursor()
 
     #データベースに登録・格納されている全てのレコードをセレクトして取得する
-    global usr_id
+    global usr_nm
     rcd_list = []
-    qry_str = """SELECT * FROM """ + usr_id + """;"""
+    qry_str = """SELECT * FROM """ + usr_nm + """;"""
     cur.execute(qry_str)
     rcd_list = cur.fetchall()
 
