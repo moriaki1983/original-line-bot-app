@@ -159,6 +159,11 @@ def handle_follow(event):
 
 #ユーザーから送られるLINEメッセージを解析する
 def line_msg_analyze(line_msg_txt):
+    #データベースに接続して、テーブル操作のためのカーソルを用意・作成する
+    conn = psycopg2.connect(DATABASE_URL)
+    conn.set_client_encoding("utf-8") 
+    cur  = conn.cursor()
+
     #過去４件分のユーザーからのLINEメッセージ(＝レコード)をデータベースから取得する
     global rcd_id
     prv_msgrcd_lst = []
@@ -168,39 +173,44 @@ def line_msg_analyze(line_msg_txt):
        prv_msgrcd_lst.append(["", "", ""])
        prv_msgrcd_lst.append(["", "", ""])
     if rcd_id == 0:
-       prv_msgrcd_tmp = postgres_select(0)
+       prv_msgrcd_tmp = cur.execute("""SELECT * FROM line_entries WHERE rcd_id = 0;""")
        prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3]])
        prv_msgrcd_lst.append(["", "", ""])
        prv_msgrcd_lst.append(["", "", ""])
        prv_msgrcd_lst.append(["", "", ""])
     if rcd_id == 1:
-       prv_msgrcd_tmp  = postgres_select(0)
-       prv_msgrcd_tmp2 = postgres_select(1)
+       prv_msgrcd_tmp  = cur.execute("""SELECT * FROM line_entries WHERE rcd_id = 0;""")
+       prv_msgrcd_tmp2 = cur.execute("""SELECT * FROM line_entries WHERE rcd_id = 1;""")
        prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3]])
        prv_msgrcd_lst.append([prv_msgrcd_tmp2[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp2[3]])
        prv_msgrcd_lst.append(["", "", ""])
        prv_msgrcd_lst.append(["", "", ""])
     if rcd_id == 2:
-       prv_msgrcd_tmp  = postgres_select(0)
-       prv_msgrcd_tmp2 = postgres_select(1)
-       prv_msgrcd_tmp3 = postgres_select(2)
+       prv_msgrcd_tmp  = cur.execute("""SELECT * FROM line_entries WHERE rcd_id = 0;""")
+       prv_msgrcd_tmp2 = cur.execute("""SELECT * FROM line_entries WHERE rcd_id = 1;""")
+       prv_msgrcd_tmp3 = cur.execute("""SELECT * FROM line_entries WHERE rcd_id = 2;""")
        prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3]])
        prv_msgrcd_lst.append([prv_msgrcd_tmp2[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp2[3]])
        prv_msgrcd_lst.append([prv_msgrcd_tmp3[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp3[3]])
        prv_msgrcd_lst.append(["", "", ""])
     if rcd_id >= 3:
        idx = rcd_id - 3
-       prv_msgrcd_tmp = postgres_select(idx)
+       prv_msgrcd_tmp = cur.execute("""SELECT * FROM line_entries WHERE rcd_id = %(idx)s;""", {'idx': idx})
        prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3]])
        idx = rcd_id - 2
-       prv_msgrcd_tmp = postgres_select(idx)
+       prv_msgrcd_tmp = cur.execute("""SELECT * FROM line_entries WHERE rcd_id = %(idx)s;""", {'idx': idx})
        prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3]])
        idx = rcd_id - 1
-       prv_msgrcd_tmp = postgres_select(idx)
+       prv_msgrcd_tmp = cur.execute("""SELECT * FROM line_entries WHERE rcd_id = %(idx)s;""", {'idx': idx})
        prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3]])
        idx = rcd_id
-       prv_msgrcd_tmp = postgres_select(idx)
+       prv_msgrcd_tmp = cur.execute("""SELECT * FROM line_entries WHERE rcd_id = %(idx)s;""", {'idx': idx})
        prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3]])
+
+    #データベースへコミットし、テーブル操作のためのカーソルを破棄して、データベースとの接続を解除する
+    conn.commit()
+    cur.close()
+    conn.close()
 
     #ユーザーから送られるLINEメッセージの中に含まれるインテントを抽出する
     rmv_etc      = line_bot_text_analyze.remove_etc(line_msg_txt)
