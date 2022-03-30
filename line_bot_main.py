@@ -80,7 +80,10 @@ def create_db_table():
     cur  = conn.cursor()
 
     #データベース上に新たにテーブルを用意・作成する
-    cur.execute("CREATE TABLE line_entries(rcd_id text, dttm text, usr_nm text, msg text)")
+    try:
+        cur.execute("CREATE TABLE line_entries(rcd_id text, dttm text, usr_nm text, msg text)")
+    except Exception:
+        pass
 
     #データベースへコミットし、テーブル操作のためのカーソルを破棄して、データベースとの接続を解除する
     cur.close()
