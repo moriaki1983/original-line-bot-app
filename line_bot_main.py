@@ -33,7 +33,7 @@ DATABASE_URL = os.environ["DATABASE_URL"]
 has_db_table = False
 
 #Postgresデータベースに登録・格納するLINEメッセージ(＝レコード)のID(＝レコードカウンター)を示す変数を宣言する
-rcd_id = "0"
+rcd_id = -1
 
 
 
