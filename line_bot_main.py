@@ -46,11 +46,13 @@ def show_db_record():
     conn.set_client_encoding("utf-8") 
     cur  = conn.cursor()
 
-    global has_db_table
+    #データベースからLINEメッセージ(＝レコード)を過去１件分取得してブラウザーに引渡しをする
     global rcd_id
     app.logger.info(rcd_id)
     if rcd_id == -1:
-       return "table-record not exist..."
+       cur.close()
+       conn.close()
+       return "table record not exist..."
     if rcd_id == 0:
        cur.execute("""SELECT * FROM line_entries WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id})
        rcd = cur.fetchone()
@@ -63,10 +65,10 @@ def show_db_record():
        cur.close()
        conn.close()
        return jsonify(rcd), 200
-    else:
+    if rcd_id == 100:
+       return "reached the end of the table..."
        cur.close()
        conn.close()
-       return "db-table not exist..."
 
 
 #Postgresデータベース上に新たにテーブルを用意・作成する
@@ -272,10 +274,8 @@ def postgres_insert_and_update(event, line_msg_intnt):
     if (rcd_id >= 0 and rcd_id <= 99):
         if  rcd is None:
             cur.execute("""INSERT INTO line_entries (rcd_id, dttm, usr_nm, msg) VALUES (%(rcd_id)s, %(dttm)s, %(usr_nm)s, %(msg)s);""", {'rcd_id': rcd_id, 'dttm' : dttm, 'usr_nm': usr_nm, 'msg': msg})
-            rcd_id = str(int(rcd_id) + 1)
         if  rcd is not None:
             cur.execute("""UPdttm line_entries SET (rcd_id, dttm, usr_nm, msg) VALUES (%(rcd_id)s, %(dttm)s, %(usr_nm)s, %(msg)s) WHERE = %(rcd_id)s;""", {'rcd_id': rcd_id, 'dttm' : dttm, 'usr_nm': usr_nm, 'msg': msg, 'rcd_id': rcd_id})
-            rcd_id = str(int(rcd_id) + 1)
         rcd_id = rcd_id + 1
     if rcd_id == 100:
        rcd_id = -1
