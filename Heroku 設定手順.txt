@@ -1,0 +1,8 @@
+●Heroku上で実行されるプロセスの同時実行数を設定する。
+  こうしておかないと、メモリー不足に陥ってしまうので(この項目については、ダッシュボード上で設定しても無視されてしまう)。
+heroku login
+heroku config:set WEB_CONCURRENCY=1 --app original-line-bot-app
+
+●LINE-Developerで取得した「YOUR_CHANNEL_SECRET」と「YOUR_CHANNEL_ACCESS_TOKEN」をダッシュボード上で設定する。
+
+●ダッシュボード上でインストールしたPostgresのアドオン用の項目「DATABASE_URL」を設定する。
