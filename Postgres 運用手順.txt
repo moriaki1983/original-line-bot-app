@@ -1,0 +1,4 @@
+●Postgresのテーブル一覧を出力する。
+heroku login
+heroku pg:psql --app original-line-bot-app
+\dt
