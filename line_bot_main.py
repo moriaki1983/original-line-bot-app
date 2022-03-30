@@ -5,7 +5,7 @@
 
 #各モジュールの読み込み
 import os
-import dttmtime
+import datetime
 import psycopg2
 import line_bot_text_analyze
 import line_bot_text_generate
