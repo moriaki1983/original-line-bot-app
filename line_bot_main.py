@@ -142,7 +142,7 @@ def handle_message(event):
     line_msg_send(event, gnrtd_msg)
 
     #ユーザーから送られるLINEメッセージをPostgresのデータベースに登録・格納する
-    postgres_insert_and_updttm(event, line_msg_intnt)
+    postgres_insert_and_update(event, line_msg_intnt)
 
 
 #LINE-DevelopersのWebhookを介して送られてくるイベントを処理する(＝フォローイベントを処理する)
@@ -250,7 +250,7 @@ def line_msg_send(event, line_gnrtd_msg):
 
 
 #ユーザーから送られるLINEメッセージをPostgresのデータベースに登録・格納する
-def postgres_insert_and_updttm(event):
+def postgres_insert_and_update(event, line_msg_intnt):
     #データベースに接続して、テーブル操作のためのカーソルを用意・作成する
     conn = psycopg2.connect(DATABASE_URL)
     conn.set_client_encoding("utf-8") 
