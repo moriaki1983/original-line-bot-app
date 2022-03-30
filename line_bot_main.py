@@ -34,7 +34,7 @@ DATABASE_URL = os.environ["DATABASE_URL"]
 has_db_table = False
 
 #Postgresデータベース上の、ユーザーごとのテーブルの名前として使用するLINEユーザーのIDを宣言する
-usr_nm = ""
+usr_nm = "アッキー"
 
 #Postgresデータベースに登録・格納するLINEメッセージ(＝レコード)のID(＝レコードカウンター)を宣言する
 rcd_id = -1
@@ -239,14 +239,12 @@ def line_msg_generate(line_usr_id, line_msg_txt, line_msg_intnt, prv_msgrcd_lst)
     global usr_nm
     line_prfl        = line_bot_api.get_profile(line_usr_id)
     line_usr_nm      = line_prfl.display_name
+    usr_nm           = line_usr_nm
     jst              = datetime.timezone(datetime.timedelta(hours=+9), "JST")
     dttm_tmp         = datetime.datetime.now(jst)
     line_msg_dttm    = dttm_tmp.strftime("%Y/%m/%d %H:%M:%S")
     crrnt_msgrcd_lst = [line_msg_dttm, line_msg_txt, line_msg_intnt]
     gnrtd_msg        = line_bot_text_generate.text_generate_from_analyze_result(line_usr_nm, crrnt_msgrcd_lst, prv_msgrcd_lst)
-    if (has_db_table == True and usr_nm != line_usr_nm):
-        has_db_table = False
-    usr_nm = line_usr_nm
     return gnrtd_msg
 
 
@@ -263,16 +261,10 @@ def postgres_insert_and_update(event, line_msg_intnt):
     conn.set_client_encoding("utf-8")
     cur  = conn.cursor()
 
-    #既にテーブルが用意・作成されていれば、それを破棄して新たにテーブルを用意・作成する
+    #データベースに登録・格納するLINEメッセージ(＝レコード)を構成する情報をまとめて用意する
     global has_db_table
     global usr_nm
     global rcd_id
-    if has_db_table == False:
-       has_db_table = True
-       qry_str = "CREATE TABLE " + usr_nm + "(rcd_id integer, dttm text, msg text, intnt text);"
-       cur.execute(qry_str)
-
-    #データベースに登録・格納するLINEメッセージ(＝レコード)を構成する情報をまとめて用意する
     jst       = datetime.timezone(datetime.timedelta(hours=+9), "JST")
     dttm_tmp  = datetime.datetime.now(jst)
     dttm      = dttm_tmp.strftime("%Y/%m/%d %H:%M:%S")
@@ -348,6 +340,20 @@ def postgres_select_all():
     return rcd_list
 
 
+
+
+#データベースに接続して、テーブル操作のためのカーソルを用意する
+conn = psycopg2.connect(DATABASE_URL)
+conn.set_client_encoding("utf-8")
+cur  = conn.cursor()
+
+qry_str = "CREATE TABLE " + usr_nm + "(rcd_id int, dttm text, msg text, intnt text);"
+cur.execute(qry_str)
+
+#テーブル操作のためのカーソルを破棄して、データベースとの接続を解除する
+cur.close()
+conn.close()
+return rcd_list
 
 
 #FlaskのアプリケーションモジュールをWebアプリケーションサーバー上で実行する
