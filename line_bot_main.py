@@ -81,7 +81,7 @@ def create_db_table():
 
     #データベース上に新たにテーブルを用意・作成する
     try:
-        cur.execute("CREATE TABLE line_entries(rcd_id text, dttm text, usr_nm text, msg text)")
+        cur.execute("""CREATE TABLE line_entries(rcd_id int, dttm text, usr_nm text, msg text);""")
     except Exception:
         pass
 
@@ -103,7 +103,7 @@ def drop_db_table():
     global has_db_table
     global rcd_id
     try:
-        cur.execute("DROP TABLE line_entries")
+        cur.execute("""DROP TABLE line_entries;""")
     except Exception:
         pass
 
