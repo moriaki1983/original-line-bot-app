@@ -1,4 +1,0 @@
-●postgresの文字エンコードを設定する。(こうしておかないと、テーブルにインサートできないので)
-heroku login
-heroku pg:psql --app original-line-bot-app database
-\encoding utf8
