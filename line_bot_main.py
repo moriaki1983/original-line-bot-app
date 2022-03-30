@@ -5,8 +5,7 @@
 
 #各モジュールの読み込み
 import os
-#import sys
-import datetime
+import dttmtime
 import psycopg2
 import line_bot_text_analyze
 import line_bot_text_generate
@@ -21,23 +20,20 @@ from linebot.models import (MessageEvent, FollowEvent, TextMessage, TextSendMess
 #Flaskのアプリケーションモジュールを作成する
 app = Flask(__name__)
 
-#Herokuの環境変数に設定されている、LINE-Developersのアクセストークンとチャネルシークレットを取得する
+#herokuの環境変数に設定されている、LINE-Developersのアクセストークンとチャンネルシークレットを取得する
 YOUR_CHANNEL_ACCESS_TOKEN = os.environ["YOUR_CHANNEL_ACCESS_TOKEN"]
 YOUR_CHANNEL_SECRET       = os.environ["YOUR_CHANNEL_SECRET"]
-line_bot_api              = LineBotApi(YOUR_CHANNEL_ACCESS_TOKEN)
-handler                   = WebhookHandler(YOUR_CHANNEL_SECRET)
+line_bot_api = LineBotApi(YOUR_CHANNEL_ACCESS_TOKEN)
+handler      = WebhookHandler(YOUR_CHANNEL_SECRET)
 
-#Herokuの環境に設定されている、Postgresにアクセスするためのキーを取得する
+#herokuの環境に設定されている、postgresにアクセスするためのキーを取得する
 DATABASE_URL = os.environ["DATABASE_URL"]
 
-#Postgresデータベース上の、ユーザーごとのテーブルの有無を示すフラグを宣言する
+#Postgresデータベース上のテーブル「line_entries」の有無を示す変数を宣言する
 has_db_table = False
 
-#Postgresデータベース上の、ユーザーごとのテーブルの名前として使用するLINEユーザーのIDを宣言する
-usr_nm = "アッキー"
-
-#Postgresデータベースに登録・格納するLINEメッセージ(＝レコード)のID(＝レコードカウンター)を宣言する
-rcd_id = -1
+#Postgresデータベースに登録・格納するLINEメッセージ(＝レコード)のID(＝レコードカウンター)を示す変数を宣言する
+rcd_id = "0"
 
 
 
@@ -50,54 +46,63 @@ def show_db_record():
     conn.set_client_encoding("utf-8") 
     cur  = conn.cursor()
 
-    # データベースから該当IDのメッセージ(＝レコード)を取得し、jsonifyで整形して呼出し元に引き渡しをする
     global has_db_table
-    global usr_nm
     global rcd_id
-    app.logger.info(has_db_table)
-    app.logger.info(usr_nm)
     app.logger.info(rcd_id)
-    if has_db_table == True:
-       if rcd_id == -1:
-          return "table-record not exist..."
-       if rcd_id == 0:
-          qry_str = "SELECT * FROM " + usr_nm + " WHERE rcd_id = '0';"
-          cur.execute(qry_str)
-          rcd = cur.fetchone()
-          cur.close()
-          conn.close()
-          return jsonify(rcd), 200
-       if rcd_id >= 1:
-          qry_str = "SELECT * FROM " + usr_nm + " WHERE rcd_id = %(rcd_id)s;"
-          rcd_id_tmp = rcd_id - 1
-          cur.execute(qry_str, (rcd_id_tmp,))
-          rcd = cur.fetchone()
-          cur.close()
-          conn.close()
-          return jsonify(rcd), 200
+    if rcd_id == -1:
+       return "table-record not exist..."
+    if rcd_id == 0:
+       cur.execute("""SELECT * FROM line_entries WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id})
+       rcd = cur.fetchone()
+       cur.close()
+       conn.close()
+       return jsonify(rcd), 200
+    if rcd_id >= 1:
+       cur.execute("""SELECT * FROM line_entries WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id - 1})
+       rcd = cur.fetchone()
+       cur.close()
+       conn.close()
+       return jsonify(rcd), 200
     else:
        cur.close()
        conn.close()
        return "db-table not exist..."
 
 
+#Postgresデータベース上に新たにテーブルを用意・作成する
+@app.route("/create_db_table")
+def create_db_table():
+    #データベースに接続して、テーブル操作のためのカーソルを用意・作成する
+    conn = psycopg2.connect(DATABASE_URL)
+    conn.set_client_encoding("utf-8") 
+    cur  = conn.cursor()
+
+    #データベース上に新たにテーブルを用意・作成する
+    cur.execute("CREATE TABLE line_entries(rcd_id text, dttm text, usr_nm text, msg text)")
+
+    #データベースへコミットし、テーブル操作のためのカーソルを破棄して、データベースとの接続を解除する
+    cur.close()
+    conn.close()
+    return "table created!"
+
+
 #Postgresデータベース上のテーブルを破棄する
-@app.route("/table_drop")
-def db_table_drop():
-    #データベースに接続して、テーブル操作のためのカーソルを用意する
+@app.route("/drop_db_table")
+def drop_db_table():
+    #データベースに接続して、テーブル操作のためのカーソルを用意・作成する
     conn = psycopg2.connect(DATABASE_URL)
     conn.set_client_encoding("utf-8") 
     cur  = conn.cursor()
 
     #既にテーブルが用意・作成されていれば、それを破棄する
     global has_db_table
-    global usr_nm
     global rcd_id
-    qry_str = "DROP TABLE " + usr_nm + ";"
-    cur.execute(qry_str)
+    try:
+        cur.execute("DROP TABLE line_entries")
+    except Exception:
+        pass
 
     #各種のプログラムの実行状態を示す変数を初期化する
-    has_db_table = False
     rcd_id       = -1
 
     #データベースへコミットし、テーブル操作のためのカーソルを破棄して、データベースとの接続を解除する
@@ -116,7 +121,7 @@ def callback():
     body = request.get_data(as_text=True)
     app.logger.info("Request body: " + body)
 
-    #署名を検証して問題がなければ、最終的に「handle_message(＝イベントハンドラー)」の呼出しをする
+    #署名を検証して問題がなければ、「handle_message(＝イベントハンドラー)」の呼出しをする
     try:
         handler.handle(body, signature)
     except InvalidSignatureError:
@@ -137,7 +142,7 @@ def handle_message(event):
     line_msg_send(event, gnrtd_msg)
 
     #ユーザーから送られるLINEメッセージをPostgresのデータベースに登録・格納する
-    postgres_insert_and_update(event, line_msg_intnt)
+    postgres_insert_and_updttm(event, line_msg_intnt)
 
 
 #LINE-DevelopersのWebhookを介して送られてくるイベントを処理する(＝フォローイベントを処理する)
@@ -150,54 +155,47 @@ def handle_follow(event):
 #ユーザーから送られるLINEメッセージを解析する
 def line_msg_analyze(line_msg_txt):
     #過去４件分のユーザーからのLINEメッセージ(＝レコード)をデータベースから取得する
-    global has_db_table
     global rcd_id
     prv_msgrcd_lst = []
-    if (has_db_table == True):
-        if rcd_id == -1:
-           prv_msgrcd_lst.append(["", "", ""])
-           prv_msgrcd_lst.append(["", "", ""])
-           prv_msgrcd_lst.append(["", "", ""])
-           prv_msgrcd_lst.append(["", "", ""])
-        if rcd_id == 0:
-           prv_msgrcd_tmp = postgres_select(0)
-           prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3]])
-           prv_msgrcd_lst.append(["", "", ""])
-           prv_msgrcd_lst.append(["", "", ""])
-           prv_msgrcd_lst.append(["", "", ""])
-        if rcd_id == 1:
-           prv_msgrcd_tmp  = postgres_select(0)
-           prv_msgrcd_tmp2 = postgres_select(1)
-           prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3]])
-           prv_msgrcd_lst.append([prv_msgrcd_tmp2[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp2[3]])
-           prv_msgrcd_lst.append(["", "", ""])
-           prv_msgrcd_lst.append(["", "", ""])
-        if rcd_id == 2:
-           prv_msgrcd_tmp  = postgres_select(0)
-           prv_msgrcd_tmp2 = postgres_select(1)
-           prv_msgrcd_tmp3 = postgres_select(2)
-           prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3]])
-           prv_msgrcd_lst.append([prv_msgrcd_tmp2[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp2[3]])
-           prv_msgrcd_lst.append([prv_msgrcd_tmp3[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp3[3]])
-           prv_msgrcd_lst.append(["", "", ""])
-        if rcd_id >= 3:
-           idx = rcd_id - 3
-           prv_msgrcd_tmp = postgres_select(idx)
-           prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3]])
-           idx = rcd_id - 2
-           prv_msgrcd_tmp = postgres_select(idx)
-           prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3]])
-           idx = rcd_id - 1
-           prv_msgrcd_tmp = postgres_select(idx)
-           prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3]])
-           idx = rcd_id
-           prv_msgrcd_tmp = postgres_select(idx)
-           prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3]])
-    else:
-           prv_msgrcd_lst.append(["", "", ""])
-           prv_msgrcd_lst.append(["", "", ""])
-           prv_msgrcd_lst.append(["", "", ""])
-           prv_msgrcd_lst.append(["", "", ""])
+    if rcd_id == -1:
+       prv_msgrcd_lst.append(["", "", ""])
+       prv_msgrcd_lst.append(["", "", ""])
+       prv_msgrcd_lst.append(["", "", ""])
+       prv_msgrcd_lst.append(["", "", ""])
+    if rcd_id == 0:
+       prv_msgrcd_tmp = postgres_select(0)
+       prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3]])
+       prv_msgrcd_lst.append(["", "", ""])
+       prv_msgrcd_lst.append(["", "", ""])
+       prv_msgrcd_lst.append(["", "", ""])
+    if rcd_id == 1:
+       prv_msgrcd_tmp  = postgres_select(0)
+       prv_msgrcd_tmp2 = postgres_select(1)
+       prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3]])
+       prv_msgrcd_lst.append([prv_msgrcd_tmp2[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp2[3]])
+       prv_msgrcd_lst.append(["", "", ""])
+       prv_msgrcd_lst.append(["", "", ""])
+    if rcd_id == 2:
+       prv_msgrcd_tmp  = postgres_select(0)
+       prv_msgrcd_tmp2 = postgres_select(1)
+       prv_msgrcd_tmp3 = postgres_select(2)
+       prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3]])
+       prv_msgrcd_lst.append([prv_msgrcd_tmp2[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp2[3]])
+       prv_msgrcd_lst.append([prv_msgrcd_tmp3[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp3[3]])
+       prv_msgrcd_lst.append(["", "", ""])
+    if rcd_id >= 3:
+       idx = rcd_id - 3
+       prv_msgrcd_tmp = postgres_select(idx)
+       prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3]])
+       idx = rcd_id - 2
+       prv_msgrcd_tmp = postgres_select(idx)
+       prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3]])
+       idx = rcd_id - 1
+       prv_msgrcd_tmp = postgres_select(idx)
+       prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3]])
+       idx = rcd_id
+       prv_msgrcd_tmp = postgres_select(idx)
+       prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3]])
 
     #ユーザーから送られるLINEメッセージの中に含まれるインテントを抽出する
     rmv_etc      = line_bot_text_analyze.remove_etc(line_msg_txt)
@@ -235,14 +233,11 @@ def line_msg_analyze(line_msg_txt):
 #ユーザーから送られるLINEメッセージの解析結果から返信メッセージを生成する
 def line_msg_generate(line_usr_id, line_msg_txt, line_msg_intnt, prv_msgrcd_lst):
     #ユーザーから送られるLINEメッセージの解析結果を基に、自然でかつ適切な返信メッセージを生成する
-    global has_db_table
-    global usr_nm
     line_prfl        = line_bot_api.get_profile(line_usr_id)
     line_usr_nm      = line_prfl.display_name
-    usr_nm           = line_usr_nm
     jst              = datetime.timezone(datetime.timedelta(hours=+9), "JST")
     dttm_tmp         = datetime.datetime.now(jst)
-    line_msg_dttm    = dttm_tmp.strftime("%Y/%m/%d %H:%M:%S")
+    dttm             = dttm_tmp.strftime("%Y/%m/%d %H:%M:%S")
     crrnt_msgrcd_lst = [line_msg_dttm, line_msg_txt, line_msg_intnt]
     gnrtd_msg        = line_bot_text_generate.text_generate_from_analyze_result(line_usr_nm, crrnt_msgrcd_lst, prv_msgrcd_lst)
     return gnrtd_msg
@@ -254,34 +249,33 @@ def line_msg_send(event, line_gnrtd_msg):
     line_bot_api.reply_message(event.reply_token, TextSendMessage(text=line_gnrtd_msg))
 
 
-#ユーザーから送られるLINEメッセージをpostgresのデータベースに登録・格納する
-def postgres_insert_and_update(event, line_msg_intnt):
-    #データベースに接続して、テーブル操作のためのカーソルを用意する
+#ユーザーから送られるLINEメッセージをPostgresのデータベースに登録・格納する
+def postgres_insert_and_updttm(event):
+    #データベースに接続して、テーブル操作のためのカーソルを用意・作成する
     conn = psycopg2.connect(DATABASE_URL)
-    conn.set_client_encoding("utf-8")
+    conn.set_client_encoding("utf-8") 
     cur  = conn.cursor()
 
-    #データベースに登録・格納するLINEメッセージ(＝レコード)を構成する情報をまとめて用意する
-    global has_db_table
-    global usr_nm
+    #データベースに登録・格納するLINEメッセージ(＝レコード)を構成する情報をまとめて用意・作成する
     global rcd_id
-    jst       = datetime.timezone(datetime.timedelta(hours=+9), "JST")
-    dttm_tmp  = datetime.datetime.now(jst)
-    dttm      = dttm_tmp.strftime("%Y/%m/%d %H:%M:%S")
-    msg       = event.message.text
-    intnt     = line_msg_intnt
+    jst      = datetime.timezone(datetime.timedelta(hours=+9), "JST")
+    dttm_tmp = datetime.datetime.now(jst)
+    dttm     = dttm_tmp.strftime("%Y/%m/%d %H:%M:%S")
+    prfl     = line_bot_api.get_profile(event.source.user_id)
+    usr_nm   = prfl.display_name
+    msg      = event.message.text
 
     #該当IDのメッセージ(＝レコード)がなかったら、データベースにインサート(＝新規に登録・格納)し、既にメッセージがあったらアップデート(＝上書き)する
     if rcd_id == -1:
        rcd_id = 0
-    rcd = postgres_select(rcd_id)
+    rcd = cur.execute("""SELECT * FROM line_entries WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id})
     if (rcd_id >= 0 and rcd_id <= 99):
         if  rcd is None:
-            qry_str = "INSERT INTO " + usr_nm + " (rcd_id, dttm, msg, intnt) VALUES (%s, %s, %s, %s);"
-            cur.execute(qry_str, (rcd_id, dttm, msg, intnt,))
+            cur.execute("""INSERT INTO line_entries (rcd_id, dttm, usr_nm, msg) VALUES (%(rcd_id)s, %(dttm)s, %(usr_nm)s, %(msg)s);""", {'rcd_id': rcd_id, 'dttm' : dttm, 'usr_nm': usr_nm, 'msg': msg})
+            rcd_id = str(int(rcd_id) + 1)
         if  rcd is not None:
-            qry_str = "UPDATE " + usr_nm + " SET (rcd_id, dttm, msg, intnt) VALUES (%s, %s, %s, %s) WHERE = %s;"
-            cur.execute(qry_str, (rcd_id, dttm, msg, intnt, rcd_id,))
+            cur.execute("""UPdttm line_entries SET (rcd_id, dttm, usr_nm, msg) VALUES (%(rcd_id)s, %(dttm)s, %(usr_nm)s, %(msg)s) WHERE = %(rcd_id)s;""", {'rcd_id': rcd_id, 'dttm' : dttm, 'usr_nm': usr_nm, 'msg': msg, 'rcd_id': rcd_id})
+            rcd_id = str(int(rcd_id) + 1)
         rcd_id = rcd_id + 1
     if rcd_id == 100:
        rcd_id = -1
@@ -292,46 +286,16 @@ def postgres_insert_and_update(event, line_msg_intnt):
     conn.close()
 
 
-#Postgresのデータベースからレコードを1件取得する
-def postgres_select(rcd_id):
-    #データベースに接続して、テーブル操作のためのカーソルを用意する
-    conn = psycopg2.connect(DATABASE_URL)
-    conn.set_client_encoding("utf-8")
-    cur  = conn.cursor()
-
-    #指定されたIDのメッセージ(＝レコード)をデータベースから個別にセレクトして取得する
-    global usr_nm
-    if (rcd_id <= -1 or rcd_id == 0):
-        qry_str = "SELECT * FROM " + usr_nm + " WHERE rcd_id = %s;"
-        rcd_id_tmp = 0
-        cur.execute(qry_str, (rcd_id_tmp,))
-    if (rcd_id >= 1 and rcd_id <= 99):
-        qry_str = "SELECT * FROM " + usr_nm + " WHERE rcd_id = %s;"
-        cur.execute(qry_str, (rcd_id,))
-    if  rcd_id >= 100:
-        qry_str = "SELECT * FROM " + usr_nm + " WHERE rcd_id = %s;"
-        rcd_id_tmp = 99
-        cur.execute(qry_str, (rcd_id_tmp,))
-    rcd = cur.fetchone()
-
-    #テーブル操作のためのカーソルを破棄して、データベースとの接続を解除する
-    cur.close()
-    conn.close()
-    return rcd
-
-
 #Postgresのデータベースからレコードを全件取得する
 def postgres_select_all():
-    #データベースに接続して、テーブル操作のためのカーソルを用意する
+    #データベースに接続して、テーブル操作のためのカーソルを用意・作成する
     conn = psycopg2.connect(DATABASE_URL)
     conn.set_client_encoding("utf-8")
     cur  = conn.cursor()
 
     #データベースに登録・格納されている全てのレコードをセレクトして取得する
-    global usr_nm
     rcd_list = []
-    qry_str = "SELECT * FROM " + usr_nm + ";"
-    cur.execute(qry_str)
+    cur.execute("SELECT * FROM line_entries")
     rcd_list = cur.fetchall()
 
     #テーブル操作のためのカーソルを破棄して、データベースとの接続を解除する
@@ -340,20 +304,6 @@ def postgres_select_all():
     return rcd_list
 
 
-
-
-#データベースに接続して、テーブル操作のためのカーソルを用意する
-conn = psycopg2.connect(DATABASE_URL)
-conn.set_client_encoding("utf-8")
-cur  = conn.cursor()
-
-qry_str = "CREATE TABLE " + usr_nm + "(rcd_id int, dttm text, msg text, intnt text);"
-cur.execute(qry_str)
-
-#テーブル操作のためのカーソルを破棄して、データベースとの接続を解除する
-cur.close()
-conn.close()
-return rcd_list
 
 
 #FlaskのアプリケーションモジュールをWebアプリケーションサーバー上で実行する
