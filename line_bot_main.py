@@ -52,14 +52,14 @@ def show_db_record():
        return "table record not exist..."
     if rcd_id == 0:
        rcd_id_tmp = 0
-       cur.execute("SELECT * FROM line_test_entry2 WHERE rcd_id = %s;", (rcd_id_tmp))
+       cur.execute("SELECT * FROM line_test_entry2 WHERE rcd_id %(rcd_id)s;", {'rcd_id': rcd_id})
        rcd = cur.fetchone()
        cur.close()
        conn.close()
        return jsonify(rcd), 200
     if rcd_id >= 1:
        rcd_id_tmp = rcd_id - 1
-       cur.execute("SELECT * FROM line_test_entry2 WHERE rcd_id = %s;", (rcd_id_tmp))
+       cur.execute("SELECT * FROM line_test_entry2 WHERE rcd_id = %(rcd_id)s;", {'rcd_id': rcd_id - 1})
        rcd = cur.fetchone()
        cur.close()
        conn.close()
@@ -297,13 +297,13 @@ def postgres_insert_and_update(event, line_msg_intnt):
     #該当IDのメッセージ(＝レコード)がなかったら、データベースにインサート(＝新規に登録・格納)し、既にメッセージがあったらアップデート(＝上書き)する
     if rcd_id == -1:
        rcd_id = 0
-    cur.execute("SELECT * FROM line_test_entry2 WHERE rcd_id = %s;", (rcd_id))
+    cur.execute("SELECT * FROM line_test_entry2 WHERE rcd_id = %(rcd_id)s;", {'rcd_id': rcd_id})
     line_rcd = cur.fetchone()
     if (rcd_id >= 0 and rcd_id <= 99):
         if line_rcd is None:
-           cur.execute("INSERT INTO line_test_entry2 (rcd_id, dttm, usr_nm, msg, intnt) VALUES (%s, %s, %s, %s, %s);", (rcd_id, dttm, usr_nm, msg, intnt))
+           cur.execute("INSERT INTO line_test_entry2 (rcd_id, dttm, usr_nm, msg, intnt) VALUES (%(rcd_id)s, %(dttm)s, %(usr_nm)s, %(msg)s), %(intnt)s;", {'rcd_id': rcd_id, 'dttm' : dttm, 'usr_nm': usr_nm, 'msg': msg, 'intnt':intnt})
         if line_rcd is not None:
-           cur.execute("UPDATE line_test_entry2 SET (rcd_id, dttm, usr_nm, msg, intnt) VALUES (%s, %s, %s, %s, %s) WHERE = %s;", (rcd_id, dttm, usr_nm, msg, intnt, rcd_id))
+           cur.execute("UPDATE line_test_entry2 SET (rcd_id, dttm, usr_nm, msg, intnt) VALUES (%(rcd_id)s, %(dttm)s, %(usr_nm)s, %(msg)s, %(intnt)s) WHERE = %(rcd_id)s;", {'rcd_id': rcd_id, 'dttm' : dttm, 'usr_nm': usr_nm, 'msg': msg, 'intnt':intnt', 'rcd_id': rcd_id})
         rcd_id = rcd_id + 1
     if rcd_id == 100:
        rcd_id = -1
