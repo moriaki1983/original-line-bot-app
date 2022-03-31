@@ -166,62 +166,59 @@ def line_msg_analyze(line_msg_txt):
     global rcd_id
     prv_line_rcd_lst = []
     if rcd_id == -1:
-       prv_line_rcd_lst.append(["<none>", "<none>", "<none>", "<none>"])
-       prv_line_rcd_lst.append(["<none>", "<none>", "<none>", "<none>"])
-       prv_line_rcd_lst.append(["<none>", "<none>", "<none>", "<none>"])
-       prv_line_rcd_lst.append(["<none>", "<none>", "<none>", "<none>"])
+       prv_line_rcd_lst.append(["", "", "", ""])
+       prv_line_rcd_lst.append(["", "", "", ""])
+       prv_line_rcd_lst.append(["", "", "", ""])
+       prv_line_rcd_lst.append(["", "", "", ""])
     if rcd_id == 0:
-       prv_line_rcd_lst.append(["<none>", "<none>", "<none>", "<none>"])
-       prv_line_rcd_lst.append(["<none>", "<none>", "<none>", "<none>"])
-       prv_line_rcd_lst.append(["<none>", "<none>", "<none>", "<none>"])
-       prv_line_rcd_lst.append(["<none>", "<none>", "<none>", "<none>"])
+       prv_line_rcd_lst.append(["", "", "", ""])
+       prv_line_rcd_lst.append(["", "", "", ""])
+       prv_line_rcd_lst.append(["", "", "", ""])
+       prv_line_rcd_lst.append(["", "", "", ""])
     if rcd_id == 1:
-       prv_line_rcd_tmp = []
-       idx = 0
-       prv_line_rcd_tmp = cur.execute("SELECT * FROM line_test_entry2 WHERE rcd_id = %s;", (idx,))
-       prv_line_rcd_lst.append([prv_line_rcd_tmp[1], prv_line_rcd_tmp[2], prv_line_rcd_tmp[3], prv_line_rcd_tmp[4]])
-       prv_line_rcd_lst.append(["<none>", "<none>", "<none>", "<none>"])
-       prv_line_rcd_lst.append(["<none>", "<none>", "<none>", "<none>"])
-       prv_line_rcd_lst.append(["<none>", "<none>", "<none>", "<none>"])
+       cur.execute("SELECT * FROM line_test_entry2 WHERE rcd_id = 0;")
+       prv_line_rcd = cur.fetchone()
+       prv_line_rcd_lst.append([prv_line_rcd[1], prv_line_rcd[2], prv_line_rcd[3], prv_line_rcd[4]])
+       prv_line_rcd_lst.append(["", "", "", ""])
+       prv_line_rcd_lst.append(["", "", "", ""])
+       prv_line_rcd_lst.append(["", "", "", ""])
     if rcd_id == 2:
-       prv_line_rcd_tmp  = []
-       prv_line_rcd_tmp2 = []
-       idx = 0
-       prv_line_rcd_tmp  = cur.execute("SELECT * FROM line_test_entry2 WHERE rcd_id = %s;", (idx,))
-       idx = 1
-       prv_line_rcd_tmp2 = cur.execute("SELECT * FROM line_test_entry2 WHERE rcd_id = %s;", (idx,))
-       prv_line_rcd_lst.append([prv_line_rcd_tmp[1], prv_line_rcd_tmp[2], prv_line_rcd_tmp[3], prv_line_rcd_tmp[4]])
-       prv_line_rcd_lst.append([prv_line_rcd_tmp2[1], prv_line_rcd_tmp[2], prv_line_rcd_tmp2[3], prv_line_rcd_tmp2[4]])
-       prv_line_rcd_lst.append(["<none>", "<none>", "<none>", "<none>"])
-       prv_line_rcd_lst.append(["<none>", "<none>", "<none>", "<none>"])
+       cur.execute("SELECT * FROM line_test_entry2 WHERE rcd_id = 0;")
+       prv_line_rcd = cur.fetchone()
+       cur.execute("SELECT * FROM line_test_entry2 WHERE rcd_id = 1;")
+       prv_line_rcd2 = cur.fetchone()
+       prv_line_rcd_lst.append([prv_line_rcd[1], prv_line_rcd[2], prv_line_rcd[3], prv_line_rcd[4]])
+       prv_line_rcd_lst.append([prv_line_rcd2[1], prv_line_rcd[2], prv_line_rcd2[3], prv_line_rcd2[4]])
+       prv_line_rcd_lst.append(["", "", "", ""])
+       prv_line_rcd_lst.append(["", "", "", ""])
     if rcd_id == 3:
-       prv_line_rcd_tmp  = []
-       prv_line_rcd_tmp2 = []
-       prv_line_rcd_tmp3 = []
-       idx = 0
-       prv_line_rcd_tmp  = cur.execute("SELECT * FROM line_test_entry2 WHERE rcd_id = %s;", (idx,))
-       idx = 1
-       prv_line_rcd_tmp2 = cur.execute("SELECT * FROM line_test_entry2 WHERE rcd_id = %s;", (idx,))
-       idx = 2
-       prv_line_rcd_tmp3 = cur.execute("SELECT * FROM line_test_entry2 WHERE rcd_id = %s;", (idx,))
-       prv_line_rcd_lst.append([prv_line_rcd_tmp[1], prv_line_rcd_tmp[2], prv_line_rcd_tmp[3], prv_line_rcd_tmp[4]])
-       prv_line_rcd_lst.append([prv_line_rcd_tmp2[1], prv_line_rcd_tmp[2], prv_line_rcd_tmp2[3], prv_line_rcd_tmp2[4]])
-       prv_line_rcd_lst.append([prv_line_rcd_tmp3[1], prv_line_rcd_tmp[2], prv_line_rcd_tmp3[3], prv_line_rcd_tmp3[4]])
-       prv_line_rcd_lst.append(["<none>", "<none>", "<none>", "<none>"])
+       cur.execute("SELECT * FROM line_test_entry2 WHERE rcd_id = 0;")
+       prv_line_rcd = cur.fetchone()
+       cur.execute("SELECT * FROM line_test_entry2 WHERE rcd_id = 1;")
+       prv_line_rcd2 = cur.fetchone()
+       cur.execute("SELECT * FROM line_test_entry2 WHERE rcd_id = 2;")
+       prv_line_rcd3 = cur.fetchone()
+       prv_line_rcd_lst.append([prv_line_rcd[1], prv_line_rcd[2], prv_line_rcd[3], prv_line_rcd[4]])
+       prv_line_rcd_lst.append([prv_line_rcd2[1], prv_line_rcd[2], prv_line_rcd2[3], prv_line_rcd2[4]])
+       prv_line_rcd_lst.append([prv_line_rcd3[1], prv_line_rcd[2], prv_line_rcd3[3], prv_line_rcd3[4]])
+       prv_line_rcd_lst.append(["", "", "", ""])
     if rcd_id >= 4:
-       prv_line_rcd_tmp = []
        idx = rcd_id - 4
-       prv_line_rcd_tmp = cur.execute("SELECT * FROM line_test_entry2 WHERE rcd_id = %s;", (idx,))
-       prv_line_rcd_lst.append([prv_line_rcd_tmp[1], prv_line_rcd_tmp[2], prv_line_rcd_tmp[3], prv_line_rcd_tmp[4]])
+       cur.execute("SELECT * FROM line_test_entry2 WHERE rcd_id = %s;", (idx,))
+       prv_line_rcd = cur.fetchone()
+       prv_line_rcd_lst.append([prv_line_rcd[1], prv_line_rcd[2], prv_line_rcd[3], prv_line_rcd[4]])
        idx = rcd_id - 3
-       prv_line_rcd_tmp = cur.execute("SELECT * FROM line_test_entry2 WHERE rcd_id = %s;", (idx,))
-       prv_line_rcd_lst.append([prv_line_rcd_tmp[1], prv_line_rcd_tmp[2], prv_line_rcd_tmp[3], prv_line_rcd_tmp[4]])
+       cur.execute("SELECT * FROM line_test_entry2 WHERE rcd_id = %s;", (idx,))
+       prv_line_rcd = cur.fetchone()
+       prv_line_rcd_lst.append([prv_line_rcd[1], prv_line_rcd[2], prv_line_rcd[3], prv_line_rcd[4]])
        idx = rcd_id - 2
-       prv_line_rcd_tmp = cur.execute("SELECT * FROM line_test_entry2 WHERE rcd_id = %s;", (idx,))
-       prv_line_rcd_lst.append([prv_line_rcd_tmp[1], prv_line_rcd_tmp[2], prv_line_rcd_tmp[3], prv_line_rcd_tmp[4]])
+       cur.execute("SELECT * FROM line_test_entry2 WHERE rcd_id = %s;", (idx,))
+       prv_line_rcd = cur.fetchone()
+       prv_line_rcd_lst.append([prv_line_rcd[1], prv_line_rcd[2], prv_line_rcd[3], prv_line_rcd[4]])
        idx = rcd_id - 1
-       prv_line_rcd_tmp = cur.execute("SELECT * FROM line_test_entry2 WHERE rcd_id = %s;", (idx,))
-       prv_line_rcd_lst.append([prv_line_rcd_tmp[1], prv_line_rcd_tmp[2], prv_line_rcd_tmp[3], prv_line_rcd_tmp[4]])
+       cur.execute("SELECT * FROM line_test_entry2 WHERE rcd_id = %s;", (idx,))
+       prv_line_rcd = cur.fetchone()
+       prv_line_rcd_lst.append([prv_line_rcd[1], prv_line_rcd[2], prv_line_rcd[3], prv_line_rcd[4]])
 
     #データベースへコミットし、テーブル操作のためのカーソルを破棄して、データベースとの接続を解除する
     conn.commit()
@@ -300,14 +297,14 @@ def postgres_insert_and_update(event, line_msg_intnt):
     #該当IDのメッセージ(＝レコード)がなかったら、データベースにインサート(＝新規に登録・格納)し、既にメッセージがあったらアップデート(＝上書き)する
     if rcd_id == -1:
        rcd_id = 0
-    rcd = cur.execute("SELECT * FROM line_test_entry2 WHERE rcd_id = %s;", (rcd_id,))
+    cur.execute("SELECT * FROM line_test_entry2 WHERE rcd_id = %s;", (rcd_id,))
+    line_rcd = cur.fetchone()
     if (rcd_id >= 0 and rcd_id <= 99):
-        if rcd is None:
+        if line_rcd is None:
            cur.execute("INSERT INTO line_test_entry2 (rcd_id, dttm, usr_nm, msg, intnt) VALUES (%s, %s, %s, %s, %s);", (rcd_id, dttm, usr_nm, msg, intnt,))
-           rcd_id = rcd_id + 1
-        if rcd is not None:
+        if line_rcd is not None:
            cur.execute("UPDATE line_test_entry2 SET (rcd_id, dttm, usr_nm, msg, intnt) VALUES (%s, %s, %s, %s, %s) WHERE = %s;", (rcd_id, dttm, usr_nm, msg, intnt, rcd_id,))
-           rcd_id = rcd_id + 1
+        rcd_id = rcd_id + 1
     if rcd_id == 100:
        rcd_id = -1
 
