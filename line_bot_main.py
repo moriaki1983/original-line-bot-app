@@ -9,6 +9,7 @@ import datetime
 import psycopg2
 import line_bot_text_analyze
 import line_bot_text_generate
+from psycopg2 import extras
 from flask import Flask, jsonify, request, abort
 from linebot import (LineBotApi, WebhookHandler)
 from linebot.exceptions import (InvalidSignatureError)
@@ -40,7 +41,7 @@ rcd_id = -1
 def show_db_record():
     #データベースに接続して、テーブル操作のためのカーソルを用意する
     conn = psycopg2.connect(DATABASE_URL)
-    conn.set_client_encoding("utf-8") 
+    #conn.set_client_encoding("utf-8") 
     cur  = conn.cursor()
 
     #データベースからLINEメッセージ(＝レコード)を過去１件分取得してブラウザーに引渡しをする
@@ -52,8 +53,8 @@ def show_db_record():
        return "table record not exist..."
     if rcd_id == 0:
        rcd_id_tmp = 0
-       cur.execute("""SELECT * FROM line_test_entry2 WHERE rcd_id = %s;""", (rcd_id))
-       rcd = cur.fetchone()
+       sql = """SELECT * FROM line_test_entry2 WHERE rcd_id = %s;"""
+       rcd = extras.execute_values(cur, sql, (rcd_id,))
        cur.close()
        conn.close()
        return jsonify(rcd), 200
