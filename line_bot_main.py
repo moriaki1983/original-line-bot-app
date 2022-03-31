@@ -303,7 +303,7 @@ def postgres_insert_and_update(event, line_msg_intnt):
         if line_rcd is None:
            cur.execute("""INSERT INTO line_test_entry2 (rcd_id, dttm, usr_nm, msg, intnt) VALUES (%(rcd_id)s, %(dttm)s, %(usr_nm)s, %(msg)s, %(intnt)s);""", {'rcd_id': rcd_id, 'dttm': dttm, 'usr_nm': usr_nm, 'msg': msg, 'intnt': intnt})
         if line_rcd is not None:
-           cur.execute("""UPDATE line_test_entry2 SET (rcd_id, dttm, usr_nm, msg, intnt) VALUES (%(rcd_id)s, %(dttm)s, %(usr_nm)s, %(msg)s, %(intnt)s) WHERE = %s;""", {'rcd_id': rcd_id, 'dttm': dttm, 'usr_nm': usr_nm, 'msg': msg, 'intnt': intnt, 'rcd_id': rcd_id})
+           cur.execute("""UPDATE line_test_entry2 SET (rcd_id, dttm, usr_nm, msg, intnt) VALUES (%(rcd_id)s, %(dttm)s, %(usr_nm)s, %(msg)s, %(intnt)s) WHERE = %(rcd_id)s;""", {'rcd_id': rcd_id, 'dttm': dttm, 'usr_nm': usr_nm, 'msg': msg, 'intnt': intnt, 'rcd_id': rcd_id})
         rcd_id = rcd_id + 1
     if rcd_id == 100:
        rcd_id = -1
