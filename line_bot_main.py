@@ -29,7 +29,7 @@ handler      = WebhookHandler(YOUR_CHANNEL_SECRET)
 #herokuの環境に設定されている、postgresにアクセスするためのキーを取得する
 DATABASE_URL = os.environ["DATABASE_URL"]
 
-#Postgresデータベース上のテーブル「line_entries」の有無を示す変数を宣言する
+#Postgresデータベース上のテーブル「line_entry」の有無を示す変数を宣言する
 has_db_table = False
 
 #Postgresデータベースに登録・格納するLINEメッセージ(＝レコード)のID(＝レコードカウンター)を示す変数を宣言する
@@ -54,13 +54,13 @@ def show_db_record():
        conn.close()
        return "table record not exist..."
     if rcd_id == 0:
-       cur.execute("""SELECT * FROM line_entries WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id})
+       cur.execute("""SELECT * FROM line_entry WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id})
        rcd = cur.fetchone()
        cur.close()
        conn.close()
        return jsonify(rcd), 200
     if rcd_id >= 1:
-       cur.execute("""SELECT * FROM line_entries WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id - 1})
+       cur.execute("""SELECT * FROM line_entry WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id - 1})
        rcd = cur.fetchone()
        cur.close()
        conn.close()
@@ -81,7 +81,7 @@ def create_db_table():
 
     #データベース上に新たにテーブルを用意・作成する
     try:
-        cur.execute("""CREATE TABLE line_entries(rcd_id int, dttm text, usr_nm text, msg text);""")
+        cur.execute("""CREATE TABLE line_entry(rcd_id int, dttm text, usr_nm text, msg text, intnt text);""")
     except Exception:
         pass
 
@@ -103,7 +103,7 @@ def drop_db_table():
     global has_db_table
     global rcd_id
     try:
-        cur.execute("""DROP TABLE line_entries;""")
+        cur.execute("""DROP TABLE line_entry;""")
     except Exception:
         pass
 
@@ -173,38 +173,38 @@ def line_msg_analyze(line_msg_txt):
        prv_msgrcd_lst.append(["", "", ""])
        prv_msgrcd_lst.append(["", "", ""])
     if rcd_id == 0:
-       prv_msgrcd_tmp = cur.execute("""SELECT * FROM line_entries WHERE rcd_id = 0;""")
+       prv_msgrcd_tmp = cur.execute("""SELECT * FROM line_entry WHERE rcd_id = 0;""")
        prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3]])
        prv_msgrcd_lst.append(["", "", ""])
        prv_msgrcd_lst.append(["", "", ""])
        prv_msgrcd_lst.append(["", "", ""])
     if rcd_id == 1:
-       prv_msgrcd_tmp  = cur.execute("""SELECT * FROM line_entries WHERE rcd_id = 0;""")
-       prv_msgrcd_tmp2 = cur.execute("""SELECT * FROM line_entries WHERE rcd_id = 1;""")
+       prv_msgrcd_tmp  = cur.execute("""SELECT * FROM line_entry WHERE rcd_id = 0;""")
+       prv_msgrcd_tmp2 = cur.execute("""SELECT * FROM line_entry WHERE rcd_id = 1;""")
        prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3]])
        prv_msgrcd_lst.append([prv_msgrcd_tmp2[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp2[3]])
        prv_msgrcd_lst.append(["", "", ""])
        prv_msgrcd_lst.append(["", "", ""])
     if rcd_id == 2:
-       prv_msgrcd_tmp  = cur.execute("""SELECT * FROM line_entries WHERE rcd_id = 0;""")
-       prv_msgrcd_tmp2 = cur.execute("""SELECT * FROM line_entries WHERE rcd_id = 1;""")
-       prv_msgrcd_tmp3 = cur.execute("""SELECT * FROM line_entries WHERE rcd_id = 2;""")
+       prv_msgrcd_tmp  = cur.execute("""SELECT * FROM line_entry WHERE rcd_id = 0;""")
+       prv_msgrcd_tmp2 = cur.execute("""SELECT * FROM line_entry WHERE rcd_id = 1;""")
+       prv_msgrcd_tmp3 = cur.execute("""SELECT * FROM line_entry WHERE rcd_id = 2;""")
        prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3]])
        prv_msgrcd_lst.append([prv_msgrcd_tmp2[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp2[3]])
        prv_msgrcd_lst.append([prv_msgrcd_tmp3[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp3[3]])
        prv_msgrcd_lst.append(["", "", ""])
     if rcd_id >= 3:
        idx = rcd_id - 3
-       prv_msgrcd_tmp = cur.execute("""SELECT * FROM line_entries WHERE rcd_id = %(idx)s;""", {'idx': idx})
+       prv_msgrcd_tmp = cur.execute("""SELECT * FROM line_entry WHERE rcd_id = %(idx)s;""", {'idx': idx})
        prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3]])
        idx = rcd_id - 2
-       prv_msgrcd_tmp = cur.execute("""SELECT * FROM line_entries WHERE rcd_id = %(idx)s;""", {'idx': idx})
+       prv_msgrcd_tmp = cur.execute("""SELECT * FROM line_entry WHERE rcd_id = %(idx)s;""", {'idx': idx})
        prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3]])
        idx = rcd_id - 1
-       prv_msgrcd_tmp = cur.execute("""SELECT * FROM line_entries WHERE rcd_id = %(idx)s;""", {'idx': idx})
+       prv_msgrcd_tmp = cur.execute("""SELECT * FROM line_entry WHERE rcd_id = %(idx)s;""", {'idx': idx})
        prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3]])
        idx = rcd_id
-       prv_msgrcd_tmp = cur.execute("""SELECT * FROM line_entries WHERE rcd_id = %(idx)s;""", {'idx': idx})
+       prv_msgrcd_tmp = cur.execute("""SELECT * FROM line_entry WHERE rcd_id = %(idx)s;""", {'idx': idx})
        prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3]])
 
     #データベースへコミットし、テーブル操作のためのカーソルを破棄して、データベースとの接続を解除する
@@ -283,12 +283,12 @@ def postgres_insert_and_update(event, line_msg_intnt):
     #該当IDのメッセージ(＝レコード)がなかったら、データベースにインサート(＝新規に登録・格納)し、既にメッセージがあったらアップデート(＝上書き)する
     if rcd_id == -1:
        rcd_id = 0
-    rcd = cur.execute("""SELECT * FROM line_entries WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id})
+    rcd = cur.execute("""SELECT * FROM line_entry WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id})
     if (rcd_id >= 0 and rcd_id <= 99):
         if  rcd is None:
-            cur.execute("""INSERT INTO line_entries (rcd_id, dttm, usr_nm, msg) VALUES (%(rcd_id)s, %(dttm)s, %(usr_nm)s, %(msg)s);""", {'rcd_id': rcd_id, 'dttm' : dttm, 'usr_nm': usr_nm, 'msg': msg})
+            cur.execute("""INSERT INTO line_entry (rcd_id, dttm, usr_nm, msg) VALUES (%(rcd_id)s, %(dttm)s, %(usr_nm)s, %(msg)s);""", {'rcd_id': rcd_id, 'dttm' : dttm, 'usr_nm': usr_nm, 'msg': msg})
         if  rcd is not None:
-            cur.execute("""UPdttm line_entries SET (rcd_id, dttm, usr_nm, msg) VALUES (%(rcd_id)s, %(dttm)s, %(usr_nm)s, %(msg)s) WHERE = %(rcd_id)s;""", {'rcd_id': rcd_id, 'dttm' : dttm, 'usr_nm': usr_nm, 'msg': msg, 'rcd_id': rcd_id})
+            cur.execute("""UPdttm line_entry SET (rcd_id, dttm, usr_nm, msg) VALUES (%(rcd_id)s, %(dttm)s, %(usr_nm)s, %(msg)s) WHERE = %(rcd_id)s;""", {'rcd_id': rcd_id, 'dttm' : dttm, 'usr_nm': usr_nm, 'msg': msg, 'rcd_id': rcd_id})
         rcd_id = rcd_id + 1
     if rcd_id == 100:
        rcd_id = -1
@@ -308,7 +308,7 @@ def postgres_select_all():
 
     #データベースに登録・格納されている全てのレコードをセレクトして取得する
     rcd_list = []
-    cur.execute("SELECT * FROM line_entries")
+    cur.execute("SELECT * FROM line_entry")
     rcd_list = cur.fetchall()
 
     #テーブル操作のためのカーソルを破棄して、データベースとの接続を解除する
