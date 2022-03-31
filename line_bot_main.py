@@ -303,7 +303,7 @@ def postgres_insert_and_update(event, line_msg_intnt):
         if line_rcd is None:
            cur.execute("INSERT INTO line_test_entry2 (rcd_id, dttm, usr_nm, msg, intnt) VALUES (%s, %s, %s, %s, %s);", [rcd_id, dttm, usr_nm, msg, intnt,])
         if line_rcd is not None:
-           cur.execute("UPDATE line_test_entry2 SET (rcd_id, dttm, usr_nm, msg, intnt) VALUES (%s, %s, %s, %s, %s) WHERE = %(rcd_id)s;", [rcd_id, dttm, usr_nm, msg, intnt, rcd_id,])
+           cur.execute("UPDATE line_test_entry2 SET (rcd_id, dttm, usr_nm, msg, intnt) VALUES (%s, %s, %s, %s, %s) WHERE = %s;", [rcd_id, dttm, usr_nm, msg, intnt, rcd_id,])
         rcd_id = rcd_id + 1
     if rcd_id == 100:
        rcd_id = -1
