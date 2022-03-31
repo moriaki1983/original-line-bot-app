@@ -177,7 +177,8 @@ def line_msg_analyze(line_msg_txt):
        prv_line_rcd_lst.append(["<none>", "<none>", "<none>", "<none>"])
     if rcd_id == 1:
        prv_line_rcd_tmp = []
-       prv_line_rcd_tmp = cur.execute("SELECT * FROM line_test_entry2 WHERE rcd_id = 0;")
+       idx = 0
+       prv_line_rcd_tmp = cur.execute("SELECT * FROM line_test_entry2 WHERE rcd_id = %s;", (idx,))
        prv_line_rcd_lst.append([prv_line_rcd_tmp[1], prv_line_rcd_tmp[2], prv_line_rcd_tmp[3], prv_line_rcd_tmp[4]])
        prv_line_rcd_lst.append(["<none>", "<none>", "<none>", "<none>"])
        prv_line_rcd_lst.append(["<none>", "<none>", "<none>", "<none>"])
@@ -185,8 +186,10 @@ def line_msg_analyze(line_msg_txt):
     if rcd_id == 2:
        prv_line_rcd_tmp  = []
        prv_line_rcd_tmp2 = []
-       prv_line_rcd_tmp  = cur.execute("SELECT * FROM line_test_entry2 WHERE rcd_id = 0;")
-       prv_line_rcd_tmp2 = cur.execute("SELECT * FROM line_test_entry2 WHERE rcd_id = 1;")
+       idx = 0
+       prv_line_rcd_tmp  = cur.execute("SELECT * FROM line_test_entry2 WHERE rcd_id = %s;", (idx,))
+       idx = 1
+       prv_line_rcd_tmp2 = cur.execute("SELECT * FROM line_test_entry2 WHERE rcd_id = %s;", (idx,))
        prv_line_rcd_lst.append([prv_line_rcd_tmp[1], prv_line_rcd_tmp[2], prv_line_rcd_tmp[3], prv_line_rcd_tmp[4]])
        prv_line_rcd_lst.append([prv_line_rcd_tmp2[1], prv_line_rcd_tmp[2], prv_line_rcd_tmp2[3], prv_line_rcd_tmp2[4]])
        prv_line_rcd_lst.append(["<none>", "<none>", "<none>", "<none>"])
@@ -195,9 +198,12 @@ def line_msg_analyze(line_msg_txt):
        prv_line_rcd_tmp  = []
        prv_line_rcd_tmp2 = []
        prv_line_rcd_tmp3 = []
-       prv_line_rcd_tmp  = cur.execute("SELECT * FROM line_test_entry2 WHERE rcd_id = 0;")
-       prv_line_rcd_tmp2 = cur.execute("SELECT * FROM line_test_entry2 WHERE rcd_id = 1;")
-       prv_line_rcd_tmp3 = cur.execute("SELECT * FROM line_test_entry2 WHERE rcd_id = 2;")
+       idx = 0
+       prv_line_rcd_tmp  = cur.execute("SELECT * FROM line_test_entry2 WHERE rcd_id = %s;", (idx,))
+       idx = 1
+       prv_line_rcd_tmp2 = cur.execute("SELECT * FROM line_test_entry2 WHERE rcd_id = %s;", (idx,))
+       idx = 2
+       prv_line_rcd_tmp3 = cur.execute("SELECT * FROM line_test_entry2 WHERE rcd_id = %s;", (idx,))
        prv_line_rcd_lst.append([prv_line_rcd_tmp[1], prv_line_rcd_tmp[2], prv_line_rcd_tmp[3], prv_line_rcd_tmp[4]])
        prv_line_rcd_lst.append([prv_line_rcd_tmp2[1], prv_line_rcd_tmp[2], prv_line_rcd_tmp2[3], prv_line_rcd_tmp2[4]])
        prv_line_rcd_lst.append([prv_line_rcd_tmp3[1], prv_line_rcd_tmp[2], prv_line_rcd_tmp3[3], prv_line_rcd_tmp3[4]])
