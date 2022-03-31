@@ -9,10 +9,10 @@ import random
 
 
 #ユーザーから送られるLINEメッセージの解析結果を基に、自然でかつ適切な返信メッセージを生成する
-def text_generate_from_analyze_result(crrnt_msgrcd_lst, prv_msgrcd_lst):
+def text_generate_from_analyze_result(crrnt_line_rcd_lst, prv_line_rcd_lst):
     #ユーザーの発話の流れを示す変数を宣言・定義する
-    flw_of_uttrnc = prv_msgrcd_lst[0][3] + prv_msgrcd_lst[1][3] + \
-                    prv_msgrcd_lst[2][3] + prv_msgrcd_lst[3][3] + crrnt_msgrcd_lst[2]
+    flw_of_uttrnc = prv_line_rcd_lst[0][3] + prv_line_rcd_lst[1][3] + \
+                    prv_line_rcd_lst[2][3] + prv_line_rcd_lst[3][3] + crrnt_line_rcd_lst[3]
 
     #ユーザーの発話の流れに沿った返信メッセージを生成する
     if flw_of_uttrnc == "<称賛＆礼賛>":

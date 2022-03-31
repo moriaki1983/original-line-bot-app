@@ -79,7 +79,7 @@ def create_db_table():
 
     #データベース上に新たにテーブルを用意・作成する
     try:
-        cur.execute("CREATE TABLE line_test_entry(rcd_id integer, dttm text, usr_nm text, msg text, intnt text);")
+        cur.execute("CREATE TABLE IF NOT EXISTS line_test_entry(rcd_id integer PRIMARY KEY, dttm text, usr_nm text, msg text, intnt text);")
     except Exception:
         pass
 
@@ -97,11 +97,10 @@ def drop_db_table():
     conn.set_client_encoding("utf-8") 
     cur  = conn.cursor()
 
-    #既にテーブルが用意・作成されていれば、それを破棄する
-    global has_db_table
+    #データベース上の既に用意・作成されているテーブルを破棄する
     global rcd_id
     try:
-        cur.execute("DROP TABLE line_test_entry;")
+        cur.execute("DROP TABLE IF EXISTS line_test_entry;")
     except Exception:
         pass
 
@@ -136,10 +135,10 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     #ユーザーから送られるLINEメッセージをJanomeで形態素解析する
-    line_msg_intnt, prv_msgrcd_lst = line_msg_analyze(event.message.text)
+    line_msg_intnt, prv_line_rcd_lst = line_msg_analyze(event.message.text)
 
     #ユーザーから送られるLINEメッセージの解析結果から返信メッセージを生成する
-    gnrtd_msg = line_msg_generate(event.source.user_id, event.message.text, line_msg_intnt, prv_msgrcd_lst)
+    gnrtd_msg = line_msg_generate(event.source.user_id, event.message.text, line_msg_intnt, prv_line_rcd_lst)
 
     #LINEBotAPIを使って生成されるLINEメッセージをユーザーに対して送信する
     line_msg_send(event, gnrtd_msg)
@@ -164,51 +163,58 @@ def line_msg_analyze(line_msg_txt):
 
     #過去４件分のユーザーからのLINEメッセージ(＝レコード)をデータベースから取得する
     global rcd_id
-    prv_msgrcd_lst = []
+    prv_line_rcd_lst = []
     if rcd_id == -1:
-       prv_msgrcd_lst.append(["", "", "", ""])
-       prv_msgrcd_lst.append(["", "", "", ""])
-       prv_msgrcd_lst.append(["", "", "", ""])
-       prv_msgrcd_lst.append(["", "", "", ""])
+       prv_line_rcd_lst.append(["", "", "", ""])
+       prv_line_rcd_lst.append(["", "", "", ""])
+       prv_line_rcd_lst.append(["", "", "", ""])
+       prv_line_rcd_lst.append(["", "", "", ""])
     if rcd_id == 0:
-       prv_msgrcd_lst.append(["", "", "", ""])
-       prv_msgrcd_lst.append(["", "", "", ""])
-       prv_msgrcd_lst.append(["", "", "", ""])
-       prv_msgrcd_lst.append(["", "", "", ""])
+       prv_line_rcd_lst.append(["", "", "", ""])
+       prv_line_rcd_lst.append(["", "", "", ""])
+       prv_line_rcd_lst.append(["", "", "", ""])
+       prv_line_rcd_lst.append(["", "", "", ""])
     if rcd_id == 1:
-       prv_msgrcd_tmp = cur.execute("SELECT * FROM line_test_entry WHERE rcd_id = 0;")
-       prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3], prv_msgrcd_tmp[4]])
-       prv_msgrcd_lst.append(["", "", "", ""])
-       prv_msgrcd_lst.append(["", "", "", ""])
-       prv_msgrcd_lst.append(["", "", "", ""])
+       prv_line_rcd_tmp = []
+       prv_line_rcd_tmp = cur.execute("SELECT * FROM line_test_entry WHERE rcd_id = 0;")
+       prv_line_rcd_lst.append([prv_line_rcd_tmp[1], prv_line_rcd_tmp[2], prv_line_rcd_tmp[3], prv_line_rcd_tmp[4]])
+       prv_line_rcd_lst.append(["", "", "", ""])
+       prv_line_rcd_lst.append(["", "", "", ""])
+       prv_line_rcd_lst.append(["", "", "", ""])
     if rcd_id == 2:
-       prv_msgrcd_tmp  = cur.execute("SELECT * FROM line_test_entry WHERE rcd_id = 0;")
-       prv_msgrcd_tmp2 = cur.execute("SELECT * FROM line_test_entry WHERE rcd_id = 1;")
-       prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3], prv_msgrcd_tmp[4]])
-       prv_msgrcd_lst.append([prv_msgrcd_tmp2[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp2[3], prv_msgrcd_tmp2[4]])
-       prv_msgrcd_lst.append(["", "", "", ""])
-       prv_msgrcd_lst.append(["", "", "", ""])
+       prv_line_rcd_tmp  = []
+       prv_line_rcd_tmp2 = []
+       prv_line_rcd_tmp  = cur.execute("SELECT * FROM line_test_entry WHERE rcd_id = 0;")
+       prv_line_rcd_tmp2 = cur.execute("SELECT * FROM line_test_entry WHERE rcd_id = 1;")
+       prv_line_rcd_lst.append(prv_line_rcd_tmp[1], prv_line_rcd_tmp[2], prv_line_rcd_tmp[3], prv_line_rcd_tmp[4]])
+       prv_line_rcd_lst.append(prv_line_rcd_tmp2[1], prv_line_rcd_tmp[2], prv_line_rcd_tmp2[3], prv_line_rcd_tmp2[4]])
+       prv_line_rcd_lst.append(["", "", "", ""])
+       prv_line_rcd_lst.append(["", "", "", ""])
     if rcd_id == 3:
-       prv_msgrcd_tmp  = cur.execute("SELECT * FROM line_test_entry WHERE rcd_id = 0;")
-       prv_msgrcd_tmp2 = cur.execute("SELECT * FROM line_test_entry WHERE rcd_id = 1;")
-       prv_msgrcd_tmp3 = cur.execute("SELECT * FROM line_test_entry WHERE rcd_id = 2;")
-       prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3], prv_msgrcd_tmp[4]])
-       prv_msgrcd_lst.append([prv_msgrcd_tmp2[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp2[3], prv_msgrcd_tmp2[4]])
-       prv_msgrcd_lst.append([prv_msgrcd_tmp3[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp3[3], prv_msgrcd_tmp3[4]])
-       prv_msgrcd_lst.append(["", "", "", ""])
+       prv_line_rcd_tmp  = []
+       prv_line_rcd_tmp2 = []
+       prv_line_rcd_tmp3 = []
+       prv_line_rcd_tmp  = cur.execute("SELECT * FROM line_test_entry WHERE rcd_id = 0;")
+       prv_line_rcd_tmp2 = cur.execute("SELECT * FROM line_test_entry WHERE rcd_id = 1;")
+       prv_line_rcd_tmp3 = cur.execute("SELECT * FROM line_test_entry WHERE rcd_id = 2;")
+       prv_line_rcd_lst.append([prv_line_rcd_tmp[1], prv_line_rcd_tmp[2], prv_line_rcd_tmp[3], prv_line_rcd_tmp[4]])
+       prv_line_rcd_lst.append([prv_line_rcd_tmp2[1], prv_line_rcd_tmp[2], prv_line_rcd_tmp2[3], prv_line_rcd_tmp2[4]])
+       prv_line_rcd_lst.append([prv_line_rcd_tmp3[1], prv_line_rcd_tmp[2], prv_line_rcd_tmp3[3], prv_line_rcd_tmp3[4]])
+       prv_line_rcd_lst.append(["", "", "", ""])
     if rcd_id >= 4:
+       prv_line_rcd_tmp = []
        idx = rcd_id - 4
-       prv_msgrcd_tmp = cur.execute("SELECT * FROM line_test_entry WHERE rcd_id = %(idx)s;", (idx,))
-       prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3], prv_msgrcd_tmp[4]])
+       prv_line_rcd_tmp = cur.execute("SELECT * FROM line_test_entry WHERE rcd_id = %(idx)s;", (idx,))
+       prv_line_rcd_lst.append([prv_line_rcd_tmp[1], prv_line_rcd_tmp[2], prv_line_rcd_tmp[3], prv_line_rcd_tmp[4]])
        idx = rcd_id - 3
-       prv_msgrcd_tmp = cur.execute("SELECT * FROM line_test_entry WHERE rcd_id = %(idx)s;", (idx,))
-       prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3], prv_msgrcd_tmp[4]])
+       prv_line_rcd_tmp = cur.execute("SELECT * FROM line_test_entry WHERE rcd_id = %(idx)s;", (idx,))
+       prv_line_rcd_lst.append([prv_line_rcd_tmp[1], prv_line_rcd_tmp[2], prv_line_rcd_tmp[3], prv_line_rcd_tmp[4]])
        idx = rcd_id - 2
-       prv_msgrcd_tmp = cur.execute("SELECT * FROM line_test_entry WHERE rcd_id = %(idx)s;", (idx,))
-       prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3], prv_msgrcd_tmp[4]])
+       prv_line_rcd_tmp = cur.execute("SELECT * FROM line_test_entry WHERE rcd_id = %(idx)s;", (idx,))
+       prv_line_rcd_lst.append([prv_line_rcd_tmp[1], prv_line_rcd_tmp[2], prv_line_rcd_tmp[3], prv_line_rcd_tmp[4]])
        idx = rcd_id - 1
-       prv_msgrcd_tmp = cur.execute("SELECT * FROM line_test_entry WHERE rcd_id = %(idx)s;", (idx,))
-       prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3], prv_msgrcd_tmp[4]])
+       prv_line_rcd_tmp = cur.execute("SELECT * FROM line_test_entry WHERE rcd_id = %(idx)s;", (idx,))
+       prv_line_rcd_lst.append([prv_line_rcd_tmp[1], prv_line_rcd_tmp[2], prv_line_rcd_tmp[3], prv_line_rcd_tmp[4]])
 
     #データベースへコミットし、テーブル操作のためのカーソルを破棄して、データベースとの接続を解除する
     conn.commit()
@@ -220,44 +226,44 @@ def line_msg_analyze(line_msg_txt):
     extrct_intnt = line_bot_text_analyze.extract_intent_from_gag_and_vocalcordcopy(rmv_etc)
     if extrct_intnt != "<その他・不明>":
        line_msg_intnt = extrct_intnt
-       return line_msg_intnt, prv_msgrcd_lst
+       return line_msg_intnt, prv_line_rcd_lst
     rmv_etc       = line_bot_text_analyze.remove_etc(line_msg_txt)
     rmv_symbl     = line_bot_text_analyze.remove_symbol(rmv_etc)
     extrct_intnt2 = line_bot_text_analyze.extract_intent_from_gag_and_vocalcordcopy(rmv_symbl)
     if extrct_intnt2 != "<その他・不明>":
        line_msg_intnt = extrct_intnt2
-       return line_msg_intnt, prv_msgrcd_lst
+       return line_msg_intnt, prv_line_rcd_lst
     rmv_etc       = line_bot_text_analyze.remove_etc(line_msg_txt)
     rmv_symbl     = line_bot_text_analyze.remove_symbol(rmv_etc)
     extrct_intnt3 = line_bot_text_analyze.extract_intent_from_short_and_boilerplate(rmv_symbl)
     if extrct_intnt3 != "<その他・不明>":
        line_msg_intnt = extrct_intnt3
-       return line_msg_intnt, prv_msgrcd_lst
+       return line_msg_intnt, prv_line_rcd_lst
     rmv_etc          = line_bot_text_analyze.remove_etc(line_msg_txt)
     rmv_symbl        = line_bot_text_analyze.remove_symbol(rmv_etc)
     rmv_edprtcl      = line_bot_text_analyze.remove_endparticle(rmv_symbl)
     extrct_intnt4 = line_bot_text_analyze.extract_intent_from_short_and_boilerplate(rmv_edprtcl)
     if extrct_intnt4 != "<その他・不明>":
        line_msg_intnt = extrct_intnt4
-       return line_msg_intnt, prv_msgrcd_lst
+       return line_msg_intnt, prv_line_rcd_lst
     rmv_etc          = line_bot_text_analyze.remove_etc(line_msg_txt)
     rmv_symbl        = line_bot_text_analyze.remove_symbol(rmv_etc)
     rmv_edprtcl      = line_bot_text_analyze.remove_endparticle(rmv_symbl)
     extrct_intnt_end = line_bot_text_analyze.extract_intent(rmv_edprtcl)
     line_msg_intnt = extrct_intnt_end
-    return line_msg_intnt, prv_msgrcd_lst
+    return line_msg_intnt, prv_line_rcd_lst
 
 
 #ユーザーから送られるLINEメッセージの解析結果から返信メッセージを生成する
-def line_msg_generate(line_usr_id, line_msg_txt, line_msg_intnt, prv_msgrcd_lst):
+def line_msg_generate(line_usr_id, line_msg_txt, line_msg_intnt, prv_line_rcd_lst):
     #ユーザーから送られるLINEメッセージの解析結果を基に、自然でかつ適切な返信メッセージを生成する
-    line_prfl        = line_bot_api.get_profile(line_usr_id)
-    line_usr_nm      = line_prfl.display_name
-    jst              = datetime.timezone(datetime.timedelta(hours=+9), "JST")
-    dttm_tmp         = datetime.datetime.now(jst)
-    line_msg_dttm    = dttm_tmp.strftime("%Y/%m/%d %H:%M:%S")
-    crrnt_msgrcd_lst = [line_msg_dttm, line_usr_nm, line_msg_txt, line_msg_intnt]
-    gnrtd_msg        = line_bot_text_generate.text_generate_from_analyze_result(crrnt_msgrcd_lst, prv_msgrcd_lst)
+    line_prfl          = line_bot_api.get_profile(line_usr_id)
+    line_usr_nm        = line_prfl.display_name
+    jst                = datetime.timezone(datetime.timedelta(hours=+9), "JST")
+    dttm_tmp           = datetime.datetime.now(jst)
+    line_msg_dttm      = dttm_tmp.strftime("%Y/%m/%d %H:%M:%S")
+    crrnt_line_rcd_lst = [line_msg_dttm, line_usr_nm, line_msg_txt, line_msg_intnt]
+    gnrtd_msg          = line_bot_text_generate.text_generate_from_analyze_result(crrnt_line_rcd_lst, prv_line_rcd_lst)
     return gnrtd_msg
 
 
