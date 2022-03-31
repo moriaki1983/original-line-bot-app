@@ -54,7 +54,7 @@ def show_db_record():
     if rcd_id == 0:
        rcd_id_tmp = 0
        sql = """SELECT * FROM line_test_entry2 WHERE rcd_id = %s;"""
-       rcd = extras.execute_values(cur, sql, (rcd_id,))
+       rcd = extras.execute_values(cur, sql, [rcd_id,])
        cur.close()
        conn.close()
        return jsonify(rcd), 200
