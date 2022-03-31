@@ -205,7 +205,7 @@ def line_msg_analyze(line_msg_txt):
        prv_line_rcd_lst.append(["", "", "", ""])
     if rcd_id >= 4:
        idx = rcd_id - 4
-       cur.execute("""SELECT * FROM line_test_entry2 WHERE rcd_id = %(rcd_id)s;""", {'rcd_id' : idx}))
+       cur.execute("""SELECT * FROM line_test_entry2 WHERE rcd_id = %(rcd_id)s;""", {'rcd_id' : idx})
        prv_line_rcd = cur.fetchone()
        prv_line_rcd_lst.append([prv_line_rcd[1], prv_line_rcd[2], prv_line_rcd[3], prv_line_rcd[4]])
        idx = rcd_id - 3
