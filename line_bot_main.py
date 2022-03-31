@@ -41,7 +41,7 @@ rcd_id = -1
 def show_db_record():
     #データベースに接続して、テーブル操作のためのカーソルを用意する
     conn = psycopg2.connect(DATABASE_URL)
-    #conn.set_client_encoding("utf-8") 
+    conn.set_client_encoding("utf-8") 
     cur  = conn.cursor()
 
     #データベースからLINEメッセージ(＝レコード)を過去１件分取得してブラウザーに引渡しをする
@@ -53,14 +53,14 @@ def show_db_record():
        return "table record not exist..."
     if rcd_id == 0:
        rcd_id_tmp = 0
-       sql = """SELECT * FROM line_test_entry2 WHERE rcd_id = %s;"""
-       rcd = extras.execute_values(cur, sql, [rcd_id,])
+       cur.execute("""SELECT * FROM line_test_entry2 WHERE rcd_id = %(rcd_id)s;""", {'rcd_id' : rcd_id_tmp})
+       rcd = cur.fetchone()
        cur.close()
        conn.close()
        return jsonify(rcd), 200
     if rcd_id >= 1:
        rcd_id_tmp = rcd_id - 1
-       cur.execute("""SELECT * FROM line_test_entry2 WHERE rcd_id = %s;""", (rcd_id_tmp))
+       cur.execute("""SELECT * FROM line_test_entry2 WHERE rcd_id = %(rcd_id)s;""", {'rcd_id' : rcd_id_tmp})
        rcd = cur.fetchone()
        cur.close()
        conn.close()
@@ -205,19 +205,19 @@ def line_msg_analyze(line_msg_txt):
        prv_line_rcd_lst.append(["", "", "", ""])
     if rcd_id >= 4:
        idx = rcd_id - 4
-       cur.execute("""SELECT * FROM line_test_entry2 WHERE rcd_id = %s;""", (idx))
+       cur.execute("""SELECT * FROM line_test_entry2 WHERE rcd_id = %(rcd_id)s;""", {'rcd_id' : idx}))
        prv_line_rcd = cur.fetchone()
        prv_line_rcd_lst.append([prv_line_rcd[1], prv_line_rcd[2], prv_line_rcd[3], prv_line_rcd[4]])
        idx = rcd_id - 3
-       cur.execute("""SELECT * FROM line_test_entry2 WHERE rcd_id = %s;""", (idx))
+       cur.execute("""SELECT * FROM line_test_entry2 WHERE rcd_id = %(rcd_id)s;""", {'rcd_id' : idx})
        prv_line_rcd = cur.fetchone()
        prv_line_rcd_lst.append([prv_line_rcd[1], prv_line_rcd[2], prv_line_rcd[3], prv_line_rcd[4]])
        idx = rcd_id - 2
-       cur.execute("""SELECT * FROM line_test_entry2 WHERE rcd_id = %s;""", (idx))
+       cur.execute("""SELECT * FROM line_test_entry2 WHERE rcd_id = %(rcd_id)s;""", {'rcd_id' : idx})
        prv_line_rcd = cur.fetchone()
        prv_line_rcd_lst.append([prv_line_rcd[1], prv_line_rcd[2], prv_line_rcd[3], prv_line_rcd[4]])
        idx = rcd_id - 1
-       cur.execute("""SELECT * FROM line_test_entry2 WHERE rcd_id = %s;""", (idx))
+       cur.execute("""SELECT * FROM line_test_entry2 WHERE rcd_id = %(rcd_id)s;""", {'rcd_id' : idx})
        prv_line_rcd = cur.fetchone()
        prv_line_rcd_lst.append([prv_line_rcd[1], prv_line_rcd[2], prv_line_rcd[3], prv_line_rcd[4]])
 
@@ -298,13 +298,13 @@ def postgres_insert_and_update(event, line_msg_intnt):
     #該当IDのメッセージ(＝レコード)がなかったら、データベースにインサート(＝新規に登録・格納)し、既にメッセージがあったらアップデート(＝上書き)する
     if rcd_id == -1:
        rcd_id = 0
-    cur.execute("""SELECT * FROM line_test_entry2 WHERE rcd_id = %s;""", (rcd_id))
+    cur.execute("""SELECT * FROM line_test_entry2 WHERE rcd_id = %(rcd_id)s;""", {'rcd_id' : rcd_id})
     line_rcd = cur.fetchone()
     if (rcd_id >= 0 and rcd_id <= 99):
         if line_rcd is None:
-           cur.execute("""INSERT INTO line_test_entry2 (rcd_id, dttm, usr_nm, msg, intnt) VALUES (%s, %s, %s, %s, %s);""", (rcd_id, dttm, usr_nm, msg, intnt))
+           cur.execute("""INSERT INTO line_test_entry2 (rcd_id, dttm, usr_nm, msg, intnt) VALUES (%(rcd_id)s, %(dttm)s, %(usr_nm)s, %(msg)s, %(intnt)s);""", ('rcd_id' : rcd_id, 'dttm' : dttm, 'usr_nm' : usr_nm, 'msg' : msg, 'intnt' : intnt))
         if line_rcd is not None:
-           cur.execute("""UPDATE line_test_entry2 SET (rcd_id, dttm, usr_nm, msg, intnt) VALUES (%s, %s, %s, %s, %s) WHERE = %s;""", (rcd_id, dttm, usr_nm, msg, intnt, rcd_id))
+           cur.execute("""UPDATE line_test_entry2 SET (rcd_id, dttm, usr_nm, msg, intnt) VALUES (%(rcd_id)s, %(dttm)s, %(usr_nm)s, %(msg)s, %(intnt)s) WHERE = %s;""", ('rcd_id' : rcd_id, 'dttm' : dttm, 'usr_nm' : usr_nm, 'msg' : msg, 'intnt' : intnt, 'rcd_id' : rcd_id))
         rcd_id = rcd_id + 1
     if rcd_id == 100:
        rcd_id = -1
