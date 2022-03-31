@@ -52,7 +52,7 @@ def show_db_record():
        return "table record not exist..."
     if rcd_id == 0:
        rcd_id_tmp = 0
-       cur.execute("SELECT * FROM line_test_entry2 WHERE rcd_id = %s;", (%rcd_id))
+       cur.execute("SELECT * FROM line_test_entry2 WHERE rcd_id = %s;", %rcd_id)
        rcd = cur.fetchone()
        cur.close()
        conn.close()
