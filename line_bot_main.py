@@ -9,7 +9,6 @@ import datetime
 import psycopg2
 import line_bot_text_analyze
 import line_bot_text_generate
-from psycopg2 import extras
 from flask import Flask, jsonify, request, abort
 from linebot import (LineBotApi, WebhookHandler)
 from linebot.exceptions import (InvalidSignatureError)
@@ -81,7 +80,7 @@ def create_db_table():
 
     #データベース上に新たにテーブルを用意・作成する
     try:
-        cur.execute("CREATE TABLE IF NOT EXISTS line_test_entry2(rcd_id integer PRIMARY KEY, dttm text, usr_nm text, msg text, intnt text);")
+        cur.execute("""CREATE TABLE IF NOT EXISTS line_test_entry2(rcd_id integer PRIMARY KEY, dttm text, usr_nm text, msg text, intnt text);""")
     except Exception:
         pass
 
@@ -177,27 +176,27 @@ def line_msg_analyze(line_msg_txt):
        prv_line_rcd_lst.append(["", "", "", ""])
        prv_line_rcd_lst.append(["", "", "", ""])
     if rcd_id == 1:
-       cur.execute("SELECT * FROM line_test_entry2 WHERE rcd_id = 0;")
+       cur.execute("""SELECT * FROM line_test_entry2 WHERE rcd_id = 0;""")
        prv_line_rcd = cur.fetchone()
        prv_line_rcd_lst.append([prv_line_rcd[1], prv_line_rcd[2], prv_line_rcd[3], prv_line_rcd[4]])
        prv_line_rcd_lst.append(["", "", "", ""])
        prv_line_rcd_lst.append(["", "", "", ""])
        prv_line_rcd_lst.append(["", "", "", ""])
     if rcd_id == 2:
-       cur.execute("SELECT * FROM line_test_entry2 WHERE rcd_id = 0;")
+       cur.execute("""SELECT * FROM line_test_entry2 WHERE rcd_id = 0;""")
        prv_line_rcd = cur.fetchone()
-       cur.execute("SELECT * FROM line_test_entry2 WHERE rcd_id = 1;")
+       cur.execute("""SELECT * FROM line_test_entry2 WHERE rcd_id = 1;""")
        prv_line_rcd2 = cur.fetchone()
        prv_line_rcd_lst.append([prv_line_rcd[1], prv_line_rcd[2], prv_line_rcd[3], prv_line_rcd[4]])
        prv_line_rcd_lst.append([prv_line_rcd2[1], prv_line_rcd[2], prv_line_rcd2[3], prv_line_rcd2[4]])
        prv_line_rcd_lst.append(["", "", "", ""])
        prv_line_rcd_lst.append(["", "", "", ""])
     if rcd_id == 3:
-       cur.execute("SELECT * FROM line_test_entry2 WHERE rcd_id = 0;")
+       cur.execute("SELECT * FROM line_test_entry2 WHERE rcd_id = 0;""")
        prv_line_rcd = cur.fetchone()
-       cur.execute("SELECT * FROM line_test_entry2 WHERE rcd_id = 1;")
+       cur.execute("SELECT * FROM line_test_entry2 WHERE rcd_id = 1;""")
        prv_line_rcd2 = cur.fetchone()
-       cur.execute("SELECT * FROM line_test_entry2 WHERE rcd_id = 2;")
+       cur.execute("SELECT * FROM line_test_entry2 WHERE rcd_id = 2;""")
        prv_line_rcd3 = cur.fetchone()
        prv_line_rcd_lst.append([prv_line_rcd[1], prv_line_rcd[2], prv_line_rcd[3], prv_line_rcd[4]])
        prv_line_rcd_lst.append([prv_line_rcd2[1], prv_line_rcd[2], prv_line_rcd2[3], prv_line_rcd2[4]])
@@ -302,9 +301,9 @@ def postgres_insert_and_update(event, line_msg_intnt):
     line_rcd = cur.fetchone()
     if (rcd_id >= 0 and rcd_id <= 99):
         if line_rcd is None:
-           cur.execute("""INSERT INTO line_test_entry2 (rcd_id, dttm, usr_nm, msg, intnt) VALUES (%(rcd_id)s, %(dttm)s, %(usr_nm)s, %(msg)s, %(intnt)s);""", ('rcd_id': rcd_id, 'dttm': dttm, 'usr_nm': usr_nm, 'msg': msg, 'intnt': intnt))
+           cur.execute("""INSERT INTO line_test_entry2 (rcd_id, dttm, usr_nm, msg, intnt) VALUES (%(rcd_id)s, %(dttm)s, %(usr_nm)s, %(msg)s, %(intnt)s);""", {'rcd_id': rcd_id, 'dttm': dttm, 'usr_nm': usr_nm, 'msg': msg, 'intnt': intnt})
         if line_rcd is not None:
-           cur.execute("""UPDATE line_test_entry2 SET (rcd_id, dttm, usr_nm, msg, intnt) VALUES (%(rcd_id)s, %(dttm)s, %(usr_nm)s, %(msg)s, %(intnt)s) WHERE = %s;""", ('rcd_id': rcd_id, 'dttm': dttm, 'usr_nm': usr_nm, 'msg': msg, 'intnt': intnt, 'rcd_id': rcd_id))
+           cur.execute("""UPDATE line_test_entry2 SET (rcd_id, dttm, usr_nm, msg, intnt) VALUES (%(rcd_id)s, %(dttm)s, %(usr_nm)s, %(msg)s, %(intnt)s) WHERE = %s;""", {'rcd_id': rcd_id, 'dttm': dttm, 'usr_nm': usr_nm, 'msg': msg, 'intnt': intnt, 'rcd_id': rcd_id})
         rcd_id = rcd_id + 1
     if rcd_id == 100:
        rcd_id = -1
@@ -324,7 +323,7 @@ def postgres_select_all():
 
     #データベースに登録・格納されている全てのレコードをセレクトして取得する
     rcd_list = []
-    cur.execute("SELECT * FROM line_test_entry2;")
+    cur.execute("""SELECT * FROM line_test_entry2;""")
     rcd_list = cur.fetchall()
 
     #テーブル操作のためのカーソルを破棄して、データベースとの接続を解除する
