@@ -168,44 +168,49 @@ def line_msg_analyze(line_msg_txt):
     global rcd_id
     prv_msgrcd_lst = []
     if rcd_id == -1:
-       prv_msgrcd_lst.append(["", "", ""])
-       prv_msgrcd_lst.append(["", "", ""])
-       prv_msgrcd_lst.append(["", "", ""])
-       prv_msgrcd_lst.append(["", "", ""])
+       prv_msgrcd_lst.append(["", "", "", ""])
+       prv_msgrcd_lst.append(["", "", "", ""])
+       prv_msgrcd_lst.append(["", "", "", ""])
+       prv_msgrcd_lst.append(["", "", "", ""])
     if rcd_id == 0:
-       prv_msgrcd_tmp = cur.execute("""SELECT * FROM line_entry WHERE rcd_id = 0;""")
-       prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3]])
-       prv_msgrcd_lst.append(["", "", ""])
-       prv_msgrcd_lst.append(["", "", ""])
-       prv_msgrcd_lst.append(["", "", ""])
+       prv_msgrcd_lst.append(["", "", "", ""])
+       prv_msgrcd_lst.append(["", "", "", ""])
+       prv_msgrcd_lst.append(["", "", "", ""])
+       prv_msgrcd_lst.append(["", "", "", ""])
     if rcd_id == 1:
-       prv_msgrcd_tmp  = cur.execute("""SELECT * FROM line_entry WHERE rcd_id = 0;""")
-       prv_msgrcd_tmp2 = cur.execute("""SELECT * FROM line_entry WHERE rcd_id = 1;""")
-       prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3]])
-       prv_msgrcd_lst.append([prv_msgrcd_tmp2[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp2[3]])
-       prv_msgrcd_lst.append(["", "", ""])
-       prv_msgrcd_lst.append(["", "", ""])
+       prv_msgrcd_tmp = cur.execute("""SELECT * FROM line_entry WHERE rcd_id = 0;""")
+       prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3], prv_msgrcd_tmp[4]])
+       prv_msgrcd_lst.append(["", "", "", ""])
+       prv_msgrcd_lst.append(["", "", "", ""])
+       prv_msgrcd_lst.append(["", "", "", ""])
     if rcd_id == 2:
        prv_msgrcd_tmp  = cur.execute("""SELECT * FROM line_entry WHERE rcd_id = 0;""")
        prv_msgrcd_tmp2 = cur.execute("""SELECT * FROM line_entry WHERE rcd_id = 1;""")
+       prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3], prv_msgrcd_tmp[4]])
+       prv_msgrcd_lst.append([prv_msgrcd_tmp2[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp2[3], prv_msgrcd_tmp2[4]])
+       prv_msgrcd_lst.append(["", "", "", ""])
+       prv_msgrcd_lst.append(["", "", "", ""])
+    if rcd_id == 3:
+       prv_msgrcd_tmp  = cur.execute("""SELECT * FROM line_entry WHERE rcd_id = 0;""")
+       prv_msgrcd_tmp2 = cur.execute("""SELECT * FROM line_entry WHERE rcd_id = 1;""")
        prv_msgrcd_tmp3 = cur.execute("""SELECT * FROM line_entry WHERE rcd_id = 2;""")
-       prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3]])
-       prv_msgrcd_lst.append([prv_msgrcd_tmp2[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp2[3]])
-       prv_msgrcd_lst.append([prv_msgrcd_tmp3[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp3[3]])
-       prv_msgrcd_lst.append(["", "", ""])
-    if rcd_id >= 3:
+       prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3], prv_msgrcd_tmp[4]])
+       prv_msgrcd_lst.append([prv_msgrcd_tmp2[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp2[3], prv_msgrcd_tmp2[4]])
+       prv_msgrcd_lst.append([prv_msgrcd_tmp3[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp3[3], prv_msgrcd_tmp3[4]])
+       prv_msgrcd_lst.append(["", "", "", ""])
+    if rcd_id >= 4:
+       idx = rcd_id - 4
+       prv_msgrcd_tmp = cur.execute("""SELECT * FROM line_entry WHERE rcd_id = %(idx)s;""", {'idx': idx})
+       prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3], prv_msgrcd_tmp[4]])
        idx = rcd_id - 3
        prv_msgrcd_tmp = cur.execute("""SELECT * FROM line_entry WHERE rcd_id = %(idx)s;""", {'idx': idx})
-       prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3]])
+       prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3], prv_msgrcd_tmp[4]])
        idx = rcd_id - 2
        prv_msgrcd_tmp = cur.execute("""SELECT * FROM line_entry WHERE rcd_id = %(idx)s;""", {'idx': idx})
-       prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3]])
+       prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3], prv_msgrcd_tmp[4]])
        idx = rcd_id - 1
        prv_msgrcd_tmp = cur.execute("""SELECT * FROM line_entry WHERE rcd_id = %(idx)s;""", {'idx': idx})
-       prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3]])
-       idx = rcd_id
-       prv_msgrcd_tmp = cur.execute("""SELECT * FROM line_entry WHERE rcd_id = %(idx)s;""", {'idx': idx})
-       prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3]])
+       prv_msgrcd_lst.append([prv_msgrcd_tmp[1], prv_msgrcd_tmp[2], prv_msgrcd_tmp[3], prv_msgrcd_tmp[4]])
 
     #データベースへコミットし、テーブル操作のためのカーソルを破棄して、データベースとの接続を解除する
     conn.commit()
@@ -253,8 +258,8 @@ def line_msg_generate(line_usr_id, line_msg_txt, line_msg_intnt, prv_msgrcd_lst)
     jst              = datetime.timezone(datetime.timedelta(hours=+9), "JST")
     dttm_tmp         = datetime.datetime.now(jst)
     line_msg_dttm    = dttm_tmp.strftime("%Y/%m/%d %H:%M:%S")
-    crrnt_msgrcd_lst = [line_msg_dttm, line_msg_txt, line_msg_intnt]
-    gnrtd_msg        = line_bot_text_generate.text_generate_from_analyze_result(line_usr_nm, crrnt_msgrcd_lst, prv_msgrcd_lst)
+    crrnt_msgrcd_lst = [line_msg_dttm, line_usr_nm, line_msg_txt, line_msg_intnt]
+    gnrtd_msg        = line_bot_text_generate.text_generate_from_analyze_result(crrnt_msgrcd_lst, prv_msgrcd_lst)
     return gnrtd_msg
 
 
