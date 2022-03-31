@@ -284,6 +284,7 @@ def postgres_insert_and_update(event, line_msg_intnt):
     prfl     = line_bot_api.get_profile(event.source.user_id)
     usr_nm   = prfl.display_name
     msg      = event.message.text
+    intnt    = line_msg_intnt
 
     #該当IDのメッセージ(＝レコード)がなかったら、データベースにインサート(＝新規に登録・格納)し、既にメッセージがあったらアップデート(＝上書き)する
     if rcd_id == -1:
@@ -291,7 +292,7 @@ def postgres_insert_and_update(event, line_msg_intnt):
     rcd = cur.execute("""SELECT * FROM line_test_entry WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id})
     if (rcd_id >= 0 and rcd_id <= 99):
         if  rcd is None:
-            cur.execute("""INSERT INTO line_test_entry (rcd_id, dttm, usr_nm, msg) VALUES (%(rcd_id)s, %(dttm)s, %(usr_nm)s, %(msg)s), %(intnt)s;""", {'rcd_id': rcd_id, 'dttm' : dttm, 'usr_nm': usr_nm, 'msg': msg, 'intnt':intnt})
+            cur.execute("""INSERT INTO line_test_entry (rcd_id, dttm, usr_nm, msg, intnt) VALUES (%(rcd_id)s, %(dttm)s, %(usr_nm)s, %(msg)s), %(intnt)s;""", {'rcd_id': rcd_id, 'dttm' : dttm, 'usr_nm': usr_nm, 'msg': msg, 'intnt':intnt})
         if  rcd is not None:
             cur.execute("""UPDATE line_test_entry SET (rcd_id, dttm, usr_nm, msg, intnt) VALUES (%(rcd_id)s, %(dttm)s, %(usr_nm)s, %(msg)s, %(intnt)s) WHERE = %(rcd_id)s;""", {'rcd_id': rcd_id, 'dttm': dttm, 'usr_nm': usr_nm, 'msg': msg, 'intnt': intnt', 'rcd_id': rcd_id})
         rcd_id = rcd_id + 1
