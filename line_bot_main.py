@@ -205,16 +205,16 @@ def line_msg_analyze(line_msg_txt):
     if rcd_id >= 4:
        prv_line_rcd_tmp = []
        idx = rcd_id - 4
-       prv_line_rcd_tmp = cur.execute("SELECT * FROM line_test_entry2 WHERE rcd_id = %(idx)s;", (idx,))
+       prv_line_rcd_tmp = cur.execute("SELECT * FROM line_test_entry2 WHERE rcd_id = %s;", (idx,))
        prv_line_rcd_lst.append([prv_line_rcd_tmp[1], prv_line_rcd_tmp[2], prv_line_rcd_tmp[3], prv_line_rcd_tmp[4]])
        idx = rcd_id - 3
-       prv_line_rcd_tmp = cur.execute("SELECT * FROM line_test_entry2 WHERE rcd_id = %(idx)s;", (idx,))
+       prv_line_rcd_tmp = cur.execute("SELECT * FROM line_test_entry2 WHERE rcd_id = %s;", (idx,))
        prv_line_rcd_lst.append([prv_line_rcd_tmp[1], prv_line_rcd_tmp[2], prv_line_rcd_tmp[3], prv_line_rcd_tmp[4]])
        idx = rcd_id - 2
-       prv_line_rcd_tmp = cur.execute("SELECT * FROM line_test_entry2 WHERE rcd_id = %(idx)s;", (idx,))
+       prv_line_rcd_tmp = cur.execute("SELECT * FROM line_test_entry2 WHERE rcd_id = %s;", (idx,))
        prv_line_rcd_lst.append([prv_line_rcd_tmp[1], prv_line_rcd_tmp[2], prv_line_rcd_tmp[3], prv_line_rcd_tmp[4]])
        idx = rcd_id - 1
-       prv_line_rcd_tmp = cur.execute("SELECT * FROM line_test_entry2 WHERE rcd_id = %(idx)s;", (idx,))
+       prv_line_rcd_tmp = cur.execute("SELECT * FROM line_test_entry2 WHERE rcd_id = %s;", (idx,))
        prv_line_rcd_lst.append([prv_line_rcd_tmp[1], prv_line_rcd_tmp[2], prv_line_rcd_tmp[3], prv_line_rcd_tmp[4]])
 
     #データベースへコミットし、テーブル操作のためのカーソルを破棄して、データベースとの接続を解除する
