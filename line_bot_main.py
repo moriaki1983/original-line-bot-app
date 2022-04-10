@@ -359,13 +359,13 @@ def postgres_insert_and_update(event, line_intnt, line_sbcntnt, line_mncntnt, li
     #該当IDのメッセージ(＝レコード)がなかったら、データベースにインサート(＝新規に登録・格納)し、既にメッセージがあったらアップデート(＝上書き)する
     if rcd_id == -1:
        rcd_id = 0
-    cur.execute("""SELECT * FROM %(usr_id)s WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id})
+    cur.execute("""SELECT * FROM %(usr_id)s WHERE rcd_id = %(rcd_id)s;""", {'usr_id': usr_id, 'rcd_id': rcd_id})
     line_rcd = cur.fetchone()
     if (rcd_id >= 0 and rcd_id <= 99):
         if line_rcd is None:
            cur.execute("""INSERT INTO %(usr_id)s (rcd_id, dttm, usr_nm, msg, intnt, sbcntnt, mncntnt, ontrgy) VALUES (%(rcd_id)s, %(dttm)s, %(msg)s, %(intnt)s, %(sbcntnt)s, %(mncntnt)s, %(ontrgy)s);""", {'usr_id': usr_id, 'rcd_id': rcd_id, 'dttm': dttm, 'usr_nm': usr_nm, 'msg': msg, 'intnt': intnt, 'sbcntnt': sbcntnt, 'mncntnt': mncntnt, 'ontrgy': ontrgy})
         if line_rcd is not None:
-           cur.execute("""UPDATE %(usr_id)s SET rcd_id=%(rcd_id)s, dttm=%(dttm)s, msg=%(msg)s, intnt=%(intnt)s  sbcntnt=%(sbcntnt)s, mncntnt=%(mncntnt)s, ontrgy=%(ontrgy)s WHERE rcd_id = %(rcd_id)s;""", {'usr_id': usr_id, 'rcd_id': rcd_id, 'dttm': dttm, 'msg': msg, 'intnt': intnt, 'sbcntnt': sbcntnt, 'mncntnt': mncntnt, 'ontrgy': ontrgy', rcd_id': rcd_id})
+           cur.execute("""UPDATE %(usr_id)s SET rcd_id=%(rcd_id)s, dttm=%(dttm)s, msg=%(msg)s, intnt=%(intnt)s  sbcntnt=%(sbcntnt)s, mncntnt=%(mncntnt)s, ontrgy=%(ontrgy)s WHERE rcd_id = %(rcd_id)s;""", {'usr_id': usr_id, 'rcd_id': rcd_id, 'dttm': dttm, 'msg': msg, 'intnt': intnt, 'sbcntnt': sbcntnt, 'mncntnt': mncntnt, 'ontrgy': ontrgy', 'rcd_id': rcd_id})
         rcd_id = rcd_id + 1
     if rcd_id == 100:
        rcd_id = -1
