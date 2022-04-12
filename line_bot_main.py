@@ -154,7 +154,7 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     #ユーザーから送られるLINEメッセージをJanomeで形態素解析する
-    line_intnt, line_intnt, line_cntnt, line_ontrgy = line_msg_analyze(event.message.text)
+    line_intnt, line_cntnt, line_ontrgy = line_msg_analyze(event.message.text)
 
     #ユーザーから送られるLINEメッセージをPostgresのデータベースに登録・格納する
     postgres_insert_and_update(event, line_intnt, line_cntnt, line_ontrgy)
