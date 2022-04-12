@@ -176,8 +176,8 @@ def handle_follow(event):
 #ユーザーから送られるLINEメッセージを解析する
 def line_msg_analyze(line_msg):
     #ユーザーから送られるメッセージの中に含まれるコンテント・オントロジーを抽出する
-    line_cntnt  = extract_content(line_msg)
-    line_ontrgy = extract_ontrgy(line_msg)
+    line_cntnt  = line_bot_text_analyze.extract_content(line_msg)
+    line_ontrgy = line_bot_text_analyze.extract_ontrgy(line_msg)
 
     #ユーザーから送られるメッセージの中に含まれるインテントを抽出する
     rmvd_etc_msg = line_bot_text_analyze.remove_etc(line_msg)
