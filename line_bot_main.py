@@ -63,14 +63,16 @@ def show_db_record():
           return "table record not exist..."
        if rcd_id == 0:
           rcd_id_tmp = 0
-          cur.execute("""SELECT * FROM """ + usr_id + """ WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id_tmp})
+          sql_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = %(rcd_id)s;"""
+          cur.execute(sql_str, {'rcd_id': rcd_id_tmp})
           rcd = cur.fetchone()
           cur.close()
           conn.close()
           return jsonify(rcd), 200
        if rcd_id >= 1:
           rcd_id_tmp = rcd_id - 1
-          cur.execute("""SELECT * FROM """ + usr_id + """ WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id_tmp})
+          sql_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = %(rcd_id)s;"""
+          cur.execute(sql_str, {'rcd_id': rcd_id_tmp})
           rcd = cur.fetchone()
           cur.close()
           conn.close()
@@ -95,7 +97,8 @@ def create_db_table():
 
     #データベース上に新たにテーブルを用意・作成する
     try:
-        cur.execute("""CREATE TABLE IF NOT EXISTS """ + usr_id + """(rcd_id integer PRIMARY KEY, dttm text, text, msg text, intnt text, cntnt text, ontrgy text);""")
+        sql_str = """CREATE TABLE IF NOT EXISTS """ + usr_id + """(rcd_id integer PRIMARY KEY, dttm text, text, msg text, intnt text, cntnt text, ontrgy text);"""
+        cur.execute(sql_str)
     except Exception:
         pass
 
@@ -118,7 +121,8 @@ def drop_db_table():
     global usr_id
     global rcd_id
     try:
-        cur.execute("""DROP TABLE IF EXISTS """ + usr_id + """;""")
+        sql_str = """DROP TABLE IF EXISTS """ + usr_id + """;"""
+        cur.execute(sql_str)
     except Exception:
         pass
 
@@ -235,7 +239,8 @@ def line_msg_generate():
        line_rcds.append(["", "", "", "", "", "", ""])
        line_rcds.append(["", "", "", "", "", "", ""])
     if rcd_id == 1:
-       cur.execute("""SELECT * FROM """ + usr_id + """ WHERE rcd_id = 0;""")
+       sql_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = 0;"""
+       cur.execute(sql_str)
        line_rcd = cur.fetchone()
        line_rcds.append([line_rcd[1], line_rcd[2], line_rcd[3], line_rcd[4], line_rcd[5], line_rcd[6], line_rcd[7]])
        line_rcds.append(["", "", "", "", "", "", ""])
@@ -243,9 +248,11 @@ def line_msg_generate():
        line_rcds.append(["", "", "", "", "", "", ""])
        line_rcds.append(["", "", "", "", "", "", ""])
     if rcd_id == 2:
-       cur.execute("""SELECT * FROM """ + usr_id + """ WHERE rcd_id = 0;""")
+       sql_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = 0;"""
+       cur.execute(sql_str)
        line_rcd = cur.fetchone()
-       cur.execute("""SELECT * FROM """ + usr_id + """ WHERE rcd_id = 1;""")
+       sql_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = 1;"""
+       cur.execute(sql_str)
        line_rcd2 = cur.fetchone()
        line_rcds.append([line_rcd[1], line_rcd[2], line_rcd[3], line_rcd[4], line_rcd[5], line_rcd[6], line_rcd[7]])
        line_rcds.append([line_rcd2[1], line_rcd2[2], line_rcd2[3], line_rcd2[4], line_rcd2[5], line_rcd2[6], line_rcd2[7]])
@@ -253,11 +260,14 @@ def line_msg_generate():
        line_rcds.append(["", "", "", "", "", "", ""])
        line_rcds.append(["", "", "", "", "", "", ""])
     if rcd_id == 3:
-       cur.execute("SELECT * FROM """ + usr_id + """ WHERE rcd_id = 0;""")
+       sql_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = 0;"""
+       cur.execute(sql_str)
        line_rcd = cur.fetchone()
-       cur.execute("SELECT * FROM """ + usr_id + """ WHERE rcd_id = 1;""")
+       sql_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = 1;"""
+       cur.execute(sql_str)
        line_rcd2 = cur.fetchone()
-       cur.execute("SELECT * FROM """ + usr_id + """ WHERE rcd_id = 2;""")
+       sql_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = 2;"""
+       cur.execute(sql_str)
        line_rcd3 = cur.fetchone()
        line_rcds.append([line_rcd[1], line_rcd[2], line_rcd[3], line_rcd[4], line_rcd[5], line_rcd[6], line_rcd[7]])
        line_rcds.append([line_rcd2[1], line_rcd2[2], line_rcd2[3], line_rcd2[4], line_rcd2[5], line_rcd2[6], line_rcd2[7]])
@@ -265,13 +275,17 @@ def line_msg_generate():
        line_rcds.append(["", "", "", "", "", "", ""])
        line_rcds.append(["", "", "", "", "", "", ""])
     if rcd_id == 4:
-       cur.execute("SELECT * FROM """ + usr_id + """ WHERE rcd_id = 0;""")
+       sql_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = 0;"""
+       cur.execute(sql_str)
        line_rcd = cur.fetchone()
-       cur.execute("SELECT * FROM """ + usr_id + """ WHERE rcd_id = 1;""")
+       sql_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = 1;"""
+       cur.execute(sql_str)
        line_rcd2 = cur.fetchone()
-       cur.execute("SELECT * FROM """ + usr_id + """ WHERE rcd_id = 2;""")
+       sql_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = 2;"""
+       cur.execute(sql_str)
        line_rcd3 = cur.fetchone()
-       cur.execute("SELECT * FROM """ + usr_id + """ WHERE rcd_id = 3;""")
+       sql_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = 3;"""
+       cur.execute(sql_str)
        line_rcd4 = cur.fetchone()
        line_rcds.append([line_rcd[1], line_rcd[2], line_rcd[3], line_rcd[4], line_rcd[5], line_rcd[6], line_rcd[7]])
        line_rcds.append([line_rcd2[1], line_rcd2[2], line_rcd2[3], line_rcd2[4], line_rcd2[5], line_rcd2[6], line_rcd2[7]])
@@ -280,23 +294,28 @@ def line_msg_generate():
        line_rcds.append(["", "", "", "", "", "", ""])
     if rcd_id >= 5:
        idx = rcd_id - 5
-       cur.execute("""SELECT * FROM """ + usr_id + """ WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': idx})
+       sql_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = %(rcd_id)s;"""
+       cur.execute(sql_str, {'rcd_id': idx})
        line_rcd = cur.fetchone()
        line_rcds.append([line_rcd[1], line_rcd[2], line_rcd[3], line_rcd[4], line_rcd[5], line_rcd[6], line_rcd[7]])
        idx = rcd_id - 4
-       cur.execute("""SELECT * FROM """ + usr_id + """ WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': idx})
+       sql_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = %(rcd_id)s;"""
+       cur.execute(sql_str, {'rcd_id': idx})
        line_rcd = cur.fetchone()
        line_rcds.append([line_rcd[1], line_rcd[2], line_rcd[3], line_rcd[4], line_rcd[5], line_rcd[6], line_rcd[7]])
        idx = rcd_id - 3
-       cur.execute("""SELECT * FROM """ + usr_id + """ WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': idx})
+       sql_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = %(rcd_id)s;"""
+       cur.execute(sql_str, {'rcd_id': idx})
        line_rcd = cur.fetchone()
        line_rcds.append([line_rcd[1], line_rcd[2], line_rcd[3], line_rcd[4], line_rcd[5], line_rcd[6], line_rcd[7]])
        idx = rcd_id - 2
-       cur.execute("""SELECT * FROM """ + usr_id + """ WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': idx})
+       sql_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = %(rcd_id)s;"""
+       cur.execute(sql_str, {'rcd_id': idx})
        line_rcd = cur.fetchone()
        line_rcds.append([line_rcd[1], line_rcd[2], line_rcd[3], line_rcd[4], line_rcd[5], line_rcd[6], line_rcd[7]])
        idx = rcd_id - 1
-       cur.execute("""SELECT * FROM """ + usr_id + """ WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': idx})
+       sql_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = %(rcd_id)s;"""
+       cur.execute(sql_str, {'rcd_id': idx})
        line_rcd = cur.fetchone()
        line_rcds.append([line_rcd[1], line_rcd[2], line_rcd[3], line_rcd[4], line_rcd[5], line_rcd[6], line_rcd[7]])
 
@@ -349,20 +368,24 @@ def postgres_insert_and_update(event, line_intnt, line_cntnt, line_ontrgy):
        usr_id = event.source.user_id
        usr_nm = usr_nm_tmp
        try:
-        cur.execute("""CREATE TABLE IF NOT EXISTS """ + usr_id + """(rcd_id integer PRIMARY KEY, dttm text, text, msg text, intnt text, cntnt text, ontrgy text);""")
+           sql_str = """CREATE TABLE IF NOT EXISTS """ + usr_id + """(rcd_id integer PRIMARY KEY, dttm text, text, msg text, intnt text, cntnt text, ontrgy text);"""
+           cur.execute(sql_str)
        except Exception:
            pass
 
     #該当IDのメッセージ(＝レコード)がなかったら、データベースにインサート(＝新規に登録・格納)し、既にメッセージがあったらアップデート(＝上書き)する
     if rcd_id == -1:
        rcd_id = 0
-    cur.execute("""SELECT * FROM """ + usr_id + """ WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id})
+    sql_str = """SELECT * FROM """ + usr_id + """ WHERE rcd_id = %(rcd_id)s;"""
+    cur.execute(sql_str, {'rcd_id': rcd_id})
     line_rcd = cur.fetchone()
     if (rcd_id >= 0 and rcd_id <= 99):
         if line_rcd is None:
-           cur.execute("""INSERT INTO """ + usr_id + """ (rcd_id, dttm, usr_nm, msg, intnt, cntnt, ontrgy) VALUES (%(rcd_id)s, %(dttm)s, %(msg)s, %(intnt)s, %(cntnt)s, %(ontrgy)s);""", {'rcd_id': rcd_id, 'dttm': dttm, 'usr_nm': usr_nm, 'msg': msg, 'intnt': intnt, 'cntnt': cntnt, 'ontrgy': ontrgy})
+           sql_str = """INSERT INTO """ + usr_id + """ (rcd_id, dttm, usr_nm, msg, intnt, cntnt, ontrgy) VALUES (%(rcd_id)s, %(dttm)s, %(msg)s, %(intnt)s, %(cntnt)s, %(ontrgy)s);"""
+           cur.execute(sql_str, {'rcd_id': rcd_id, 'dttm': dttm, 'usr_nm': usr_nm, 'msg': msg, 'intnt': intnt, 'cntnt': cntnt, 'ontrgy': ontrgy})
         if line_rcd is not None:
-           cur.execute("""UPDATE """ + usr_id + """ SET rcd_id=%(rcd_id)s, dttm=%(dttm)s, msg=%(msg)s, intnt=%(intnt)s, cntnt=%(mncntnt)s, ontrgy=%(ontrgy)s WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id, 'dttm': dttm, 'msg': msg, 'intnt': intnt, 'cntnt': cntnt, 'ontrgy': ontrgy, 'rcd_id': rcd_id})
+           sql_str = """UPDATE """ + usr_id + """ SET rcd_id=%(rcd_id)s, dttm=%(dttm)s, msg=%(msg)s, intnt=%(intnt)s, cntnt=%(mncntnt)s, ontrgy=%(ontrgy)s WHERE rcd_id = %(rcd_id)s;"""
+           cur.execute(sql_str, {'rcd_id': rcd_id, 'dttm': dttm, 'msg': msg, 'intnt': intnt, 'cntnt': cntnt, 'ontrgy': ontrgy, 'rcd_id': rcd_id})
         rcd_id +=  1
     if rcd_id == 100:
        rcd_id = -1
@@ -382,7 +405,8 @@ def postgres_select_all():
 
     #データベースに登録・格納されている全てのレコードをセレクトして取得する
     rcds = []
-    cur.execute("""SELECT * FROM %(usr_id)s;""", {'usr_id': usr_id})
+    sql_str = """SELECT * FROM + """ + usr_id + """;"""
+    cur.execute(sql_str)
     rcds = cur.fetchall()
 
     #テーブル操作のためのカーソルを破棄して、データベースとの接続を解除する
