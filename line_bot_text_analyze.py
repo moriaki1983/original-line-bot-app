@@ -484,7 +484,7 @@ def remove_intent(line_msg):
     elif check_text_terminate_string(line_msg, "はできたか"):
          intnt_rmv_cnddts.append("はできたか")
     elif check_text_terminate_string(line_msg, "できましたか"):
-         intnt_rmv_cnddts.append("できましたか"
+         intnt_rmv_cnddts.append("できましたか")
     elif check_text_terminate_string(line_msg, "できたか"):
          intnt_rmv_cnddts.append("できたか")
     elif check_text_terminate_string(line_msg, "はできていませんか"):
