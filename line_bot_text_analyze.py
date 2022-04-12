@@ -4553,7 +4553,7 @@ def extract_content(line_msg):
     rmvd_symbl_msg   = remove_symbol(rmvd_etc_msg)
     rmvd_edprtcl_msg = remove_endparticle(rmvd_symbl_msg)
     extrctd_cntnt    = remove_intent(rmvd_edprtcl_msg)
-return extrctd_cntnt
+    return extrctd_cntnt
 
 
 #ユーザーから送られるLINEメッセージの中から文型(＝文全体を構成する品詞の連なり)を抽出する
