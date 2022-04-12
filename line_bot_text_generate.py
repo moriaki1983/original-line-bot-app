@@ -24,7 +24,7 @@ def text_generate_from_analyze_result(line_rcds):
            gnrtd_msg_cnddt = ["大好きです", "スキ"]
            gnrtd_msg = random.choice(gnrtd_msg_cnddt)
            BotCharacter.set_mind(0)
-        return gnrtd_msg
+       return gnrtd_msg
     if flw_of_uttrnc == "<卑猥な言動 辱め>":
        if BotCharacter.get_mind() < 0:
           gnrtd_msg_cnddt = ["やめてください", "/ω＼)ｲﾔﾝ", "いやらしいですよね"]
@@ -34,7 +34,7 @@ def text_generate_from_analyze_result(line_rcds):
           gnrtd_msg_cnddt = ["もうエエわ", "そんなこと言ってると 女性に嫌われますよ"]
           gnrtd_msg = random.choice(gnrtd_msg_cnddt)
           BotCharacter.set_mind(0)
-        return gnrtd_msg
+       return gnrtd_msg
     if flw_of_uttrnc == "<称賛＆礼賛><称賛＆礼賛>":
        gnrtd_msg_cnddt = ["またまた～ お上手ですね", "褒められるとテレます 照"]
        gnrtd_msg = random.choice(gnrtd_msg_cnddt)
