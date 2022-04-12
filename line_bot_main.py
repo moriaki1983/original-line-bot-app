@@ -154,10 +154,10 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     #ユーザーから送られるLINEメッセージをJanomeで形態素解析する
-    line_intnt, line_intnt, line_sbcntnt, line_mncntnt, line_ontrgy = line_msg_analyze(event.message.text)
+    line_intnt, line_intnt, line_cntnt, line_ontrgy = line_msg_analyze(event.message.text)
 
     #ユーザーから送られるLINEメッセージをPostgresのデータベースに登録・格納する
-    postgres_insert_and_update(event, line_intnt, line_sbcntnt, line_mncntnt, line_ontrgy)
+    postgres_insert_and_update(event, line_intnt, line_cntnt, line_ontrgy)
 
     #ユーザーから送られるLINEメッセージの解析結果から返信メッセージを生成する
     gnrtd_msg = line_msg_generate()
@@ -175,42 +175,40 @@ def handle_follow(event):
 
 #ユーザーから送られるLINEメッセージを解析する
 def line_msg_analyze(line_msg):
+    #ユーザーから送られるメッセージの中に含まれるコンテント・オントロジーを抽出する
+    line_cntnt  = extract_content(line_msg)
+    line_ontrgy = extract_ontrgy(line_msg)
+
     #ユーザーから送られるメッセージの中に含まれるインテントを抽出する
     rmvd_etc_msg = line_bot_text_analyze.remove_etc(line_msg)
-    extrctd_intnt = line_bot_text_analyze.extract_intent_from_gag_and_vocalcordcopy(rmvd_etc_msg_msg)
+    extrctd_intnt = line_bot_text_analyze.extract_intent_from_gag_and_vocalcordcopy(rmvd_etc_msg)
     if extrctd_intnt != "<その他・不明>":
        line_intnt = extrctd_intnt
-       return line_intnt
+       return line_intnt, line_cntnt, line_ontrgy
     rmvd_etc_msg   = line_bot_text_analyze.remove_etc(line_msg)
     rmvd_symbl_msg = line_bot_text_analyze.remove_symbol(rmvd_etc_msg)
     extrctd_intnt2 = line_bot_text_analyze.extract_intent_from_gag_and_vocalcordcopy(rmvd_symbl_msg)
     if extrctd_intnt2 != "<その他・不明>":
        line_intnt = extrctd_intnt2
-       return line_intnt
+       return line_intnt, line_cntnt, line_ontrgy
     rmvd_etc_msg   = line_bot_text_analyze.remove_etc(line_msg)
     rmvd_symbl_msg = line_bot_text_analyze.remove_symbol(rmvd_etc_msg)
     extrctd_intnt3 = line_bot_text_analyze.extract_intent_from_short_and_boilerplate(rmvd_symbl_msg)
     if extrctd_intnt3 != "<その他・不明>":
        line_intnt = extrctd_intnt3
-       return line_intnt
-    rmvd_etc_msg   = line_bot_text_analyze.remove_etc(line_msg)
-    rmvd_symbl_msg = line_bot_text_analyze.remove_symbol(rmvd_etc_msg)
-    rmvd_edprtcl_msg      = line_bot_text_analyze.remove_endparticle(rmvd_symbl_msg)
+       return line_intnt, line_cntnt, line_ontrgy
+    rmvd_etc_msg     = line_bot_text_analyze.remove_etc(line_msg)
+    rmvd_symbl_msg   = line_bot_text_analyze.remove_symbol(rmvd_etc_msg)
+    rmvd_edprtcl_msg = line_bot_text_analyze.remove_endparticle(rmvd_symbl_msg)
     extrctd_intnt4 = line_bot_text_analyze.extract_intent_from_short_and_boilerplate(rmvd_edprtcl_msg)
     if extrctd_intnt4 != "<その他・不明>":
        line_intnt = extrctd_intnt4
-       return line_intnt
-    rmvd_etc_msg   = line_bot_text_analyze.remove_etc(line_msg)
-    rmvd_symbl_msg = line_bot_text_analyze.remove_symbol(rmvd_etc_msg)
-    rmvd_edprtcl_msg      = line_bot_text_analyze.remove_endparticle(rmvd_symbl_msg)
-    extrctd_intnt_end = line_bot_text_analyze.extract_intent(rmvd_edprtcl_msg)
-    line_intnt = extrctd_intnt_end
-
-    #ユーザーから送られるメッセージの中に含まれるサブコンテント・メインコンテント・オントロジーを抽出する
-    line_sbcntnt = extract_subcontent(line_msg)
-    line_mncntnt = extract_maincontent(line_msg)
-    line_ontrgy  = extract_ontrgy(line_msg)
-    return line_intnt, line_sbcntnt, line_mncntnt, line_ontrgy
+       return line_intnt, line_cntnt, line_ontrgy
+    rmvd_etc_msg     = line_bot_text_analyze.remove_etc(line_msg)
+    rmvd_symbl_msg   = line_bot_text_analyze.remove_symbol(rmvd_etc_msg)
+    rmvd_edprtcl_msg = line_bot_text_analyze.remove_endparticle(rmvd_symbl_msg)
+    line_intnt       = line_bot_text_analyze.extract_intent(rmvd_edprtcl_msg)
+    return line_intnt, line_cntnt, line_ontrgy
 
 
 #ユーザーから送られるLINEメッセージの解析結果から返信メッセージを生成する
@@ -319,7 +317,7 @@ def line_msg_send(event, line_gnrtd_msg):
 
 
 #ユーザーから送られるLINEメッセージをPostgresのデータベースに登録・格納する
-def postgres_insert_and_update(event, line_intnt, line_sbcntnt, line_mncntnt, line_ontrgy):
+def postgres_insert_and_update(event, line_intnt, line_cntnt, line_ontrgy):
     #データベースに接続して、テーブル操作のためのカーソルを用意・作成する
     conn = psycopg2.connect(DATABASE_URL)
     conn.set_client_encoding("utf-8") 
@@ -337,8 +335,7 @@ def postgres_insert_and_update(event, line_intnt, line_sbcntnt, line_mncntnt, li
     usr_nm_tmp = prfl.display_name
     msg        = event.message.text
     intnt      = line_intnt
-    sbcntnt    = line_sbcntnt
-    mncntnt    = line_mncntnt
+    cntnt      = line_cntnt
     ontrgy     = line_ontrgy
 
     #プログラム実行中にLINEユーザーが入れ変わったら、ユーザーIDとユーザー名を変更する(テーブルフラグを倒しておく)
