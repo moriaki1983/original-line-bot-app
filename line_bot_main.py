@@ -95,7 +95,7 @@ def create_db_table():
 
     #データベース上に新たにテーブルを用意・作成する
     try:
-        cur.execute("""CREATE TABLE IF NOT EXISTS %(usr_id)s(rcd_id integer PRIMARY KEY, dttm text, text, msg text, intnt text, sbcntnt text, mncntnt text, ontrgy text);""")
+        cur.execute("""CREATE TABLE IF NOT EXISTS %(usr_id)s(rcd_id integer PRIMARY KEY, dttm text, text, msg text, intnt text, cntnt text, ontrgy text);""")
     except Exception:
         pass
 
@@ -352,7 +352,7 @@ def postgres_insert_and_update(event, line_intnt, line_sbcntnt, line_mncntnt, li
        usr_id = event.source.user_id
        usr_nm = usr_nm_tmp
        try:
-        cur.execute("""CREATE TABLE IF NOT EXISTS %(usr_id)s(rcd_id integer PRIMARY KEY, dttm text, text, msg text, intnt text, sbcntnt text, mncntnt text, ontrgy text);""")
+        cur.execute("""CREATE TABLE IF NOT EXISTS %(usr_id)s(rcd_id integer PRIMARY KEY, dttm text, text, msg text, intnt text, cntnt text, ontrgy text);""")
        except Exception:
            pass
 
@@ -363,9 +363,9 @@ def postgres_insert_and_update(event, line_intnt, line_sbcntnt, line_mncntnt, li
     line_rcd = cur.fetchone()
     if (rcd_id >= 0 and rcd_id <= 99):
         if line_rcd is None:
-           cur.execute("""INSERT INTO %(usr_id)s (rcd_id, dttm, usr_nm, msg, intnt, sbcntnt, mncntnt, ontrgy) VALUES (%(rcd_id)s, %(dttm)s, %(msg)s, %(intnt)s, %(sbcntnt)s, %(mncntnt)s, %(ontrgy)s);""", {'usr_id': usr_id, 'rcd_id': rcd_id, 'dttm': dttm, 'usr_nm': usr_nm, 'msg': msg, 'intnt': intnt, 'sbcntnt': sbcntnt, 'mncntnt': mncntnt, 'ontrgy': ontrgy})
+           cur.execute("""INSERT INTO %(usr_id)s (rcd_id, dttm, usr_nm, msg, intnt, cntnt, ontrgy) VALUES (%(rcd_id)s, %(dttm)s, %(msg)s, %(intnt)s, %(cntnt)s, %(ontrgy)s);""", {'usr_id': usr_id, 'rcd_id': rcd_id, 'dttm': dttm, 'usr_nm': usr_nm, 'msg': msg, 'intnt': intnt, 'cntnt': cntnt, 'ontrgy': ontrgy})
         if line_rcd is not None:
-           cur.execute("""UPDATE %(usr_id)s SET rcd_id=%(rcd_id)s, dttm=%(dttm)s, msg=%(msg)s, intnt=%(intnt)s, sbcntnt=%(sbcntnt)s, mncntnt=%(mncntnt)s, ontrgy=%(ontrgy)s WHERE rcd_id = %(rcd_id)s;""", {'usr_id': usr_id, 'rcd_id': rcd_id, 'dttm': dttm, 'msg': msg, 'intnt': intnt, 'sbcntnt': sbcntnt, 'mncntnt': mncntnt, 'ontrgy': ontrgy, 'rcd_id': rcd_id})
+           cur.execute("""UPDATE %(usr_id)s SET rcd_id=%(rcd_id)s, dttm=%(dttm)s, msg=%(msg)s, intnt=%(intnt)s, cntnt=%(mncntnt)s, ontrgy=%(ontrgy)s WHERE rcd_id = %(rcd_id)s;""", {'usr_id': usr_id, 'rcd_id': rcd_id, 'dttm': dttm, 'msg': msg, 'intnt': intnt, 'cntnt': cntnt, 'ontrgy': ontrgy, 'rcd_id': rcd_id})
         rcd_id +=  1
     if rcd_id == 100:
        rcd_id = -1

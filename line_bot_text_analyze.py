@@ -181,459 +181,6 @@ def remove_endparticle(line_msg):
     return rmvd_edprtcl_msg
 
 
-#ユーザーから送られるLINEメッセージの中に含まれるサブコンテント(＝発話の意図される内容)(＝副詞＆前置詞＆接続詞)を除去する
-def remove_subcontent(line_msg):
-    #メッセージの中に含まれる日本語固有のサブコンテントの削除候補をリストアップする
-    sbcntnt_rmv_cnddts = []
-    if   check_text_start_string(line_msg, "さて"):
-         sbcntnt_rmv_cnddts.append("さて")
-    elif check_text_start_string(line_msg, "ところで"):
-         sbcntnt_rmv_cnddts.append("ところで")
-    elif check_text_start_string(line_msg, "そして"):
-         sbcntnt_rmv_cnddts.append("そして")
-    elif check_text_start_string(line_msg, "それで"):
-         sbcntnt_rmv_cnddts.append("それで")
-    elif check_text_start_string(line_msg, "そんで"):
-         sbcntnt_rmv_cnddts.append("そんで")
-    elif check_text_start_string(line_msg, "加えて"):
-         sbcntnt_rmv_cnddts.append("加えて")
-    elif check_text_start_string(line_msg, "更に"):
-         sbcntnt_rmv_cnddts.append("更に")
-    elif check_text_start_string(line_msg, "さらに"):
-         sbcntnt_rmv_cnddts.append("さらに")
-    elif check_text_start_string(line_msg, "又"):
-         sbcntnt_rmv_cnddts.append("又")
-    elif check_text_start_string(line_msg, "また"):
-         sbcntnt_rmv_cnddts.append("また")
-    elif check_text_start_string(line_msg, "多分"):
-         sbcntnt_rmv_cnddts.append("多分")
-    elif check_text_start_string(line_msg, "たぶん"):
-         sbcntnt_rmv_cnddts.append("たぶん")
-    elif check_text_start_string(line_msg, "恐らくは"):
-         sbcntnt_rmv_cnddts.append("恐らくは")
-    elif check_text_start_string(line_msg, "おそらくは"):
-         sbcntnt_rmv_cnddts.append("おそらくは")
-    elif check_text_start_string(line_msg, "恐らく"):
-         sbcntnt_rmv_cnddts.append("恐らく")
-    elif check_text_start_string(line_msg, "おそらく"):
-         sbcntnt_rmv_cnddts.append("おそらく")
-    elif check_text_start_string(line_msg, "又は"):
-         sbcntnt_rmv_cnddts.append("又は")
-    elif check_text_start_string(line_msg, "または"):
-         sbcntnt_rmv_cnddts.append("または")
-    elif check_text_start_string(line_msg, "且つ"):
-         sbcntnt_rmv_cnddts.append("且つ")
-    elif check_text_start_string(line_msg, "かつ"):
-         sbcntnt_rmv_cnddts.append("かつ")
-    elif check_text_start_string(line_msg, "得てして"):
-         sbcntnt_rmv_cnddts.append("得てして")
-    elif check_text_start_string(line_msg, "えてして"):
-         sbcntnt_rmv_cnddts.append("えてして")
-    elif check_text_start_string(line_msg, "概して"):
-         sbcntnt_rmv_cnddts.append("概して")
-    elif check_text_start_string(line_msg, "大抵は"):
-         sbcntnt_rmv_cnddts.append("大抵は")
-    elif check_text_start_string(line_msg, "大抵"):
-         sbcntnt_rmv_cnddts.append("大抵")
-    elif check_text_start_string(line_msg, "大概は"):
-         sbcntnt_rmv_cnddts.append("大概は")
-    elif check_text_start_string(line_msg, "大概"):
-         sbcntnt_rmv_cnddts.append("大概")
-    elif check_text_start_string(line_msg, "確実に"):
-         sbcntnt_rmv_cnddts.append("確実に")
-    elif check_text_start_string(line_msg, "明らかに"):
-         sbcntnt_rmv_cnddts.append("明らかに")
-    elif check_text_start_string(line_msg, "多くの場合には"):
-         sbcntnt_rmv_cnddts.append("多くの場合には")
-    elif check_text_start_string(line_msg, "多くの場合は"):
-         sbcntnt_rmv_cnddts.append("多くの場合は")
-    elif check_text_start_string(line_msg, "多くの場合"):
-         sbcntnt_rmv_cnddts.append("多くの場合")
-    elif check_text_start_string(line_msg, "多くは"):
-         sbcntnt_rmv_cnddts.append("多くは")
-    elif check_text_start_string(line_msg, "多く"):
-         sbcntnt_rmv_cnddts.append("多く")
-    elif check_text_start_string(line_msg, "少なくとも"):
-         sbcntnt_rmv_cnddts.append("少なくとも")
-    elif check_text_start_string(line_msg, "少なくても"):
-         sbcntnt_rmv_cnddts.append("少なくても")
-    elif check_text_start_string(line_msg, "大層"):
-         sbcntnt_rmv_cnddts.append("大層")
-    elif check_text_start_string(line_msg, "なので"):
-         sbcntnt_rmv_cnddts.append("なので")
-    elif check_text_start_string(line_msg, "ですから"):
-         sbcntnt_rmv_cnddts.append("ですから")
-    elif check_text_start_string(line_msg, "さては"):
-         sbcntnt_rmv_cnddts.append("さては")
-    elif check_text_start_string(line_msg, "もしや"):
-         sbcntnt_rmv_cnddts.append("もしや")
-    elif check_text_start_string(line_msg, "もしも"):
-         sbcntnt_rmv_cnddts.append("もしも")
-    elif check_text_start_string(line_msg, "もし"):
-         sbcntnt_rmv_cnddts.append("もし")
-    elif check_text_start_string(line_msg, "例えば"):
-         sbcntnt_rmv_cnddts.append("例えば")
-    elif check_text_start_string(line_msg, "たとえば"):
-         sbcntnt_rmv_cnddts.append("たとえば")
-    elif check_text_start_string(line_msg, "例すれば"):
-         sbcntnt_rmv_cnddts.append("例すれば")
-    elif check_text_start_string(line_msg, "例せば"):
-         sbcntnt_rmv_cnddts.append("例せば")
-    elif check_text_start_string(line_msg, "類すれば"):
-         sbcntnt_rmv_cnddts.append("類すれば")
-    elif check_text_start_string(line_msg, "類せば"):
-         sbcntnt_rmv_cnddts.append("類せば")
-    elif check_text_start_string(line_msg, "譬え"):
-         sbcntnt_rmv_cnddts.append("譬え")
-    elif check_text_start_string(line_msg, "たとえ"):
-         sbcntnt_rmv_cnddts.append("たとえ")
-    elif check_text_start_string(line_msg, "仮にも"):
-         sbcntnt_rmv_cnddts.append("仮にも")
-    elif check_text_start_string(line_msg, "仮に"):
-         sbcntnt_rmv_cnddts.append("仮に")
-    elif check_text_start_string(line_msg, "或いは"):
-         sbcntnt_rmv_cnddts.append("或いは")
-    elif check_text_start_string(line_msg, "よしんば"):
-         sbcntnt_rmv_cnddts.append("よしんば")
-    elif check_text_start_string(line_msg, "あるいは"):
-         sbcntnt_rmv_cnddts.append("あるいは")
-    elif check_text_start_string(line_msg, "若しくは"):
-         sbcntnt_rmv_cnddts.append("若しくは")
-    elif check_text_start_string(line_msg, "もしくは"):
-         sbcntnt_rmv_cnddts.append("もしくは")
-    elif check_text_start_string(line_msg, "もしか"):
-         sbcntnt_rmv_cnddts.append("もしか")
-    elif check_text_start_string(line_msg, "乃至は"):
-         sbcntnt_rmv_cnddts.append("乃至は")
-    elif check_text_start_string(line_msg, "ないしは"):
-         sbcntnt_rmv_cnddts.append("ないしは")
-    elif check_text_start_string(line_msg, "乃至"):
-         sbcntnt_rmv_cnddts.append("乃至")
-    elif check_text_start_string(line_msg, "ないし"):
-         sbcntnt_rmv_cnddts.append("ないし")
-    elif check_text_start_string(line_msg, "さぞかし"):
-         sbcntnt_rmv_cnddts.append("さぞかし")
-    elif check_text_start_string(line_msg, "さぞ"):
-         sbcntnt_rmv_cnddts.append("さぞ")
-    elif check_text_start_string(line_msg, "決して"):
-         sbcntnt_rmv_cnddts.append("決して")
-    elif check_text_start_string(line_msg, "決まって"):
-         sbcntnt_rmv_cnddts.append("決まって")
-    elif check_text_start_string(line_msg, "ひょっとして"):
-         sbcntnt_rmv_cnddts.append("ひょっとして")
-    elif check_text_start_string(line_msg, "もしかして"):
-         sbcntnt_rmv_cnddts.append("もしかして")
-    elif check_text_start_string(line_msg, "もしかしたら"):
-         sbcntnt_rmv_cnddts.append("もしかしたら")
-    elif check_text_start_string(line_msg, "必ずしも"):
-         sbcntnt_rmv_cnddts.append("必ずしも")
-    elif check_text_start_string(line_msg, "必ずや"):
-         sbcntnt_rmv_cnddts.append("必ずや")
-    elif check_text_start_string(line_msg, "必ず"):
-         sbcntnt_rmv_cnddts.append("必ず")
-    elif check_text_start_string(line_msg, "もっと言えば"):
-         sbcntnt_rmv_cnddts.append("もっと言えば")
-    elif check_text_start_string(line_msg, "もっといえば"):
-         sbcntnt_rmv_cnddts.append("もっといえば")
-    elif check_text_start_string(line_msg, "更に言えば"):
-         sbcntnt_rmv_cnddts.append("更に言えば")
-    elif check_text_start_string(line_msg, "さらに言えば"):
-         sbcntnt_rmv_cnddts.append("さらに言えば")
-    elif check_text_start_string(line_msg, "欲を言えば"):
-         sbcntnt_rmv_cnddts.append("欲を言えば")
-    elif check_text_start_string(line_msg, "欲をいえば"):
-         sbcntnt_rmv_cnddts.append("欲をいえば")
-    elif check_text_start_string(line_msg, "強ち"):
-         sbcntnt_rmv_cnddts.append("強ち")
-    elif check_text_start_string(line_msg, "あながち"):
-         sbcntnt_rmv_cnddts.append("あながち")
-    elif check_text_start_string(line_msg, "最も"):
-         sbcntnt_rmv_cnddts.append("最も")
-    elif check_text_start_string(line_msg, "もっとも"):
-         sbcntnt_rmv_cnddts.append("もっとも")
-    elif check_text_start_string(line_msg, "実に"):
-         sbcntnt_rmv_cnddts.append("実に")
-    elif check_text_start_string(line_msg, "畢竟"):
-         sbcntnt_rmv_cnddts.append("畢竟")
-    elif check_text_start_string(line_msg, "詮ずる所"):
-         sbcntnt_rmv_cnddts.append("詮ずる所")
-    elif check_text_start_string(line_msg, "詮ずるところ"):
-         sbcntnt_rmv_cnddts.append("詮ずるところ")
-    elif check_text_start_string(line_msg, "詮ずると"):
-         sbcntnt_rmv_cnddts.append("詮ずると")
-    elif check_text_start_string(line_msg, "詰まる所"):
-         sbcntnt_rmv_cnddts.append("詰まる所")
-    elif check_text_start_string(line_msg, "詰まるところ"):
-         sbcntnt_rmv_cnddts.append("詰まるところ")
-    elif check_text_start_string(line_msg, "詰まりは"):
-         sbcntnt_rmv_cnddts.append("つまりは")
-    elif check_text_start_string(line_msg, "つまりは"):
-         sbcntnt_rmv_cnddts.append("つまりは")
-    elif check_text_start_string(line_msg, "詰まり"):
-         sbcntnt_rmv_cnddts.append("詰まり")
-    elif check_text_start_string(line_msg, "つまり"):
-         sbcntnt_rmv_cnddts.append("つまり")
-    elif check_text_start_string(line_msg, "まさか"):
-         sbcntnt_rmv_cnddts.append("まさか")
-    elif check_text_start_string(line_msg, "よもや"):
-         sbcntnt_rmv_cnddts.append("よもや")
-    elif check_text_start_string(line_msg, "当然にして"):
-         sbcntnt_rmv_cnddts.append("当然にして")
-    elif check_text_start_string(line_msg, "当然"):
-         sbcntnt_rmv_cnddts.append("当然")
-    elif check_text_start_string(line_msg, "非常に"):
-         sbcntnt_rmv_cnddts.append("非常に")
-    elif check_text_start_string(line_msg, "とても"):
-         sbcntnt_rmv_cnddts.append("とても")
-    elif check_text_start_string(line_msg, "極めて"):
-         sbcntnt_rmv_cnddts.append("極めて")
-    elif check_text_start_string(line_msg, "かなり"):
-         sbcntnt_rmv_cnddts.append("かなり")
-    elif check_text_start_string(line_msg, "纏めると"):
-         sbcntnt_rmv_cnddts.append("纏めると")
-    elif check_text_start_string(line_msg, "まとめると"):
-         sbcntnt_rmv_cnddts.append("まとめると")
-    elif check_text_start_string(line_msg, "初めに"):
-         sbcntnt_rmv_cnddts.append("初めに")
-    elif check_text_start_string(line_msg, "はじめに"):
-         sbcntnt_rmv_cnddts.append("はじめに")
-    elif check_text_start_string(line_msg, "終わりに"):
-         sbcntnt_rmv_cnddts.append("終わりに")
-    elif check_text_start_string(line_msg, "おわりに"):
-         sbcntnt_rmv_cnddts.append("おわりに")
-    elif check_text_start_string(line_msg, "だけども"):
-         sbcntnt_rmv_cnddts.append("だけども")
-    elif check_text_start_string(line_msg, "だけど"):
-         sbcntnt_rmv_cnddts.append("だけど")
-    elif check_text_start_string(line_msg, "それでも"):
-         sbcntnt_rmv_cnddts.append("それでも")
-    elif check_text_start_string(line_msg, "でも"):
-         sbcntnt_rmv_cnddts.append("でも")
-    elif check_text_start_string(line_msg, "如何せん"):
-         sbcntnt_rmv_cnddts.append("如何せん")
-    elif check_text_start_string(line_msg, "いかんせん"):
-         sbcntnt_rmv_cnddts.append("いかんせん")
-    elif check_text_start_string(line_msg, "残念ながら"):
-         sbcntnt_rmv_cnddts.append("残念ながら")
-    elif check_text_start_string(line_msg, "言い換えれば"):
-         sbcntnt_rmv_cnddts.append("言い換えれば")
-    elif check_text_start_string(line_msg, "言い換えると"):
-         sbcntnt_rmv_cnddts.append("言い換えると")
-    elif check_text_start_string(line_msg, "初めに言っておくと"):
-         sbcntnt_rmv_cnddts.append("初めに言っておくと")
-    elif check_text_start_string(line_msg, "はじめに言っておくと"):
-         sbcntnt_rmv_cnddts.append("はじめに言っておくと")
-    elif check_text_start_string(line_msg, "先に言っておくと"):
-         sbcntnt_rmv_cnddts.append("先に言っておくと")
-    elif check_text_start_string(line_msg, "先に言っておくけど"):
-         sbcntnt_rmv_cnddts.append("先に言っておくけど")
-    elif check_text_start_string(line_msg, "初めに断っておくと"):
-         sbcntnt_rmv_cnddts.append("初めに断っておくと")
-    elif check_text_start_string(line_msg, "はじめに断っておくと"):
-         sbcntnt_rmv_cnddts.append("はじめに断っておくと")
-    elif check_text_start_string(line_msg, "初めに断っておくけど"):
-         sbcntnt_rmv_cnddts.append("初めに断っておくけど")
-    elif check_text_start_string(line_msg, "はじめに断っておくけど"):
-         sbcntnt_rmv_cnddts.append("はじめに断っておくけど")
-    elif check_text_start_string(line_msg, "然らば"):
-         sbcntnt_rmv_cnddts.append("然らば")
-    elif check_text_start_string(line_msg, "しからば"):
-         sbcntnt_rmv_cnddts.append("しからば")
-    elif check_text_start_string(line_msg, "であるのならば"):
-         sbcntnt_rmv_cnddts.append("であるのならば")
-    elif check_text_start_string(line_msg, "であるならば"):
-         sbcntnt_rmv_cnddts.append("であるならば")
-    elif check_text_start_string(line_msg, "であれば"):
-         sbcntnt_rmv_cnddts.append("であれば")
-    elif check_text_start_string(line_msg, "故に"):
-         sbcntnt_rmv_cnddts.append("故に")
-    elif check_text_start_string(line_msg, "ゆえに"):
-         sbcntnt_rmv_cnddts.append("ゆえに")
-    elif check_text_start_string(line_msg, "従って"):
-         sbcntnt_rmv_cnddts.append("従って")
-    elif check_text_start_string(line_msg, "したがって"):
-         sbcntnt_rmv_cnddts.append("したがって")
-    elif check_text_start_string(line_msg, "ですので"):
-         sbcntnt_rmv_cnddts.append("ですので")
-    elif check_text_start_string(line_msg, "なので"):
-         sbcntnt_rmv_cnddts.append("なので")
-    elif check_text_start_string(line_msg, "即ち"):
-         sbcntnt_rmv_cnddts.append("即ち")
-    elif check_text_start_string(line_msg, "すなわち"):
-         sbcntnt_rmv_cnddts.append("すなわち")
-    elif check_text_start_string(line_msg, "しばしば"):
-         sbcntnt_rmv_cnddts.append("しばしば")
-    elif check_text_start_string(line_msg, "稀に"):
-         sbcntnt_rmv_cnddts.append("稀に")
-    elif check_text_start_string(line_msg, "まれに"):
-         sbcntnt_rmv_cnddts.append("まれに")
-    elif check_text_start_string(line_msg, "益々"):
-         sbcntnt_rmv_cnddts.append("益々")
-    elif check_text_start_string(line_msg, "ますます"):
-         sbcntnt_rmv_cnddts.append("ますます")
-    elif check_text_start_string(line_msg, "いよいよ"):
-         sbcntnt_rmv_cnddts.append("いよいよ")
-    elif check_text_start_string(line_msg, "しかしながら"):
-         sbcntnt_rmv_cnddts.append("しかしながら")
-    elif check_text_start_string(line_msg, "しかし"):
-         sbcntnt_rmv_cnddts.append("しかし")
-    elif check_text_start_string(line_msg, "ですが"):
-         sbcntnt_rmv_cnddts.append("ですが")
-    elif check_text_start_string(line_msg, "だが")
-         sbcntnt_rmv_cnddts.append("だが")
-
-    elif check_text_start_string(line_msg, "一応は")
-         sbcntnt_rmv_cnddts.append("一応は")
-    elif check_text_start_string(line_msg, "一応")
-         sbcntnt_rmv_cnddts.append("一応")
-    elif check_text_start_string(line_msg, "いつかは")
-         sbcntnt_rmv_cnddts.append("いつかは")
-    elif check_text_start_string(line_msg, "いつか")
-         sbcntnt_rmv_cnddts.append("いつか")
-    elif check_text_start_string(line_msg, "一旦は")
-         sbcntnt_rmv_cnddts.append("一旦は")
-    elif check_text_start_string(line_msg, "一旦")
-         sbcntnt_rmv_cnddts.append("一旦")
-    elif check_text_start_string(line_msg, "今更")
-         sbcntnt_rmv_cnddts.append("今更")
-    elif check_text_start_string(line_msg, "今さら")
-         sbcntnt_rmv_cnddts.append("今さら")
-    elif check_text_start_string(line_msg, "きっと")
-         sbcntnt_rmv_cnddts.append("きっと")
-    elif check_text_start_string(line_msg, "一層")
-         sbcntnt_rmv_cnddts.append("一層")
-    elif check_text_start_string(line_msg, "やっぱり")
-         sbcntnt_rmv_cnddts.append("やっぱり")
-    elif check_text_start_string(line_msg, "やはり")
-         sbcntnt_rmv_cnddts.append("やはり")
-    elif check_text_start_string(line_msg, "わざと")
-         sbcntnt_rmv_cnddts.append("わざと")
-    elif check_text_start_string(line_msg, "わざわざ")
-         sbcntnt_rmv_cnddts.append("わざわざ")
-    elif check_text_start_string(line_msg, "ようやく")
-         sbcntnt_rmv_cnddts.append("ようやく")
-    elif check_text_start_string(line_msg, "まるで")
-         sbcntnt_rmv_cnddts.append("まるで")
-    elif check_text_start_string(line_msg, "もともと")
-         sbcntnt_rmv_cnddts.append("もともと")
-    elif check_text_start_string(line_msg, "むしろ")
-         sbcntnt_rmv_cnddts.append("むしろ")
-    elif check_text_start_string(line_msg, "なかなか")
-         sbcntnt_rmv_cnddts.append("なかなか")
-    elif check_text_start_string(line_msg, "とりあえず")
-         sbcntnt_rmv_cnddts.append("とりあえず")
-    elif check_text_start_string(line_msg, "ちゃんと")
-         sbcntnt_rmv_cnddts.append("ちゃんと")
-    elif check_text_start_string(line_msg, "しっかりと")
-         sbcntnt_rmv_cnddts.append("しっかりと")
-    elif check_text_start_string(line_msg, "確りと")
-         sbcntnt_rmv_cnddts.append("確りと")
-    elif check_text_start_string(line_msg, "しっかりと")
-         sbcntnt_rmv_cnddts.append("しっかりと")
-    elif check_text_start_string(line_msg, "しっかり")
-         sbcntnt_rmv_cnddts.append("しっかり")
-    elif check_text_start_string(line_msg, "大分")
-         sbcntnt_rmv_cnddts.append("大分")
-    elif check_text_start_string(line_msg, "だいぶ")
-         sbcntnt_rmv_cnddts.append("だいぶ")
-    elif check_text_start_string(line_msg, "確かに")
-         sbcntnt_rmv_cnddts.append("確かに")
-    elif check_text_start_string(line_msg, "但し")
-         sbcntnt_rmv_cnddts.append("但し")
-    elif check_text_start_string(line_msg, "ただし")
-         sbcntnt_rmv_cnddts.append("ただし")
-    elif check_text_start_string(line_msg, "たまたま")
-         sbcntnt_rmv_cnddts.append("たまたま")
-    elif check_text_start_string(line_msg, "たまに")
-         sbcntnt_rmv_cnddts.append("たまに")
-    elif check_text_start_string(line_msg, "十分に")
-         sbcntnt_rmv_cnddts.append("十分に")
-    elif check_text_start_string(line_msg, "十分")
-         sbcntnt_rmv_cnddts.append("十分")
-    elif check_text_start_string(line_msg, "折角")
-         sbcntnt_rmv_cnddts.append("折角")
-    elif check_text_start_string(line_msg, "せっかく")
-         sbcntnt_rmv_cnddts.append("せっかく")
-    elif check_text_start_string(line_msg, "流石")
-         sbcntnt_rmv_cnddts.append("流石")
-    elif check_text_start_string(line_msg, "流石に")
-         sbcntnt_rmv_cnddts.append("流石に")
-    elif check_text_start_string(line_msg, "きちんと")
-         sbcntnt_rmv_cnddts.append("きちんと")
-    elif check_text_start_string(line_msg, "代わりに")
-         sbcntnt_rmv_cnddts.append("代わりに")
-    elif check_text_start_string(line_msg, "代りに")
-         sbcntnt_rmv_cnddts.append("代りに")
-    elif check_text_start_string(line_msg, "かわりに")
-         sbcntnt_rmv_cnddts.append("かわりに")
-    elif check_text_start_string(line_msg, "お陰で")
-         sbcntnt_rmv_cnddts.append("お陰で")
-    elif check_text_start_string(line_msg, "おかげで")
-         sbcntnt_rmv_cnddts.append("おかげで")
-    elif check_text_start_string(line_msg, "今でも")
-         sbcntnt_rmv_cnddts.append("今でも")
-    elif check_text_start_string(line_msg, "今では")
-         sbcntnt_rmv_cnddts.append("今では")
-    elif check_text_start_string(line_msg, "今は")
-         sbcntnt_rmv_cnddts.append("今は")
-    elif check_text_start_string(line_msg, "今")
-         sbcntnt_rmv_cnddts.append("今")
-    elif check_text_start_string(line_msg, "相も変わらず")
-         sbcntnt_rmv_cnddts.append("相も変わらず")
-    elif check_text_start_string(line_msg, "あいもかわらず")
-         sbcntnt_rmv_cnddts.append("あいもかわらず")
-    elif check_text_start_string(line_msg, "相変わらず")
-         sbcntnt_rmv_cnddts.append("相変わらず")
-    elif check_text_start_string(line_msg, "あいかわらず")
-         sbcntnt_rmv_cnddts.append("あいかわらず")
-    elif check_text_start_string(line_msg, "敢えて")
-         sbcntnt_rmv_cnddts.append("敢えて")
-    elif check_text_start_string(line_msg, "あえて")
-         sbcntnt_rmv_cnddts.append("あえて")
-    elif check_text_start_string(line_msg, "挙句の果てに")
-         sbcntnt_rmv_cnddts.append("挙句の果てに")
-    elif check_text_start_string(line_msg, "挙句の果て")
-         sbcntnt_rmv_cnddts.append("挙句の果て")
-    elif check_text_start_string(line_msg, "挙句")
-         sbcntnt_rmv_cnddts.append("挙句")
-    elif check_text_start_string(line_msg, "危うく")
-         sbcntnt_rmv_cnddts.append("危うく")
-    elif check_text_start_string(line_msg, "あやうく")
-         sbcntnt_rmv_cnddts.append("あやうく")
-    elif check_text_start_string(line_msg, "案外")
-         sbcntnt_rmv_cnddts.append("案外")
-    elif check_text_start_string(line_msg, "あんがい")
-         sbcntnt_rmv_cnddts.append("あんがい")
-    elif check_text_start_string(line_msg, "如何にも")
-         sbcntnt_rmv_cnddts.append("如何にも")
-    elif check_text_start_string(line_msg, "いかにも")
-         sbcntnt_rmv_cnddts.append("いかにも")
-
-
-
-    #取得した削除候補の中から実際に削除するサブコンテントを決定して、これを呼出し元に引渡しをする
-    sbcntnt_rmv_cnddts_tmp = []
-    for sbcntnt in sbcntnt_rmv_cnddts:
-        sbcntnt_rmv_cnddts_tmp.append([len(sbcntnt), sbcntnt])
-    if  len(sbcntnt_rmv_cnddts_tmp) == 0:
-        rmvd_sbcntnt_msg = line_msg
-        return rmvd_sbcntnt_msg
-    if  len(sbcntnt_rmv_cnddts_tmp) == 1:
-        sbcntnt_tmp      = sbcntnt_rmv_cnddts_tmp[0][1]
-        rmvd_sbcntnt_msg = re.sub(sbcntnt_tmp, "", line_msg)
-        return rmvd_sbcntnt_msg
-    idx         = 0
-    sbcntnt_tmp = ""
-    while len(sbcntnt_rmv_cnddts_tmp) > (idx+1):
-           if sbcntnt_rmv_cnddts_tmp[idx+1][0] > sbcntnt_rmv_cnddts_tmp[idx][0]:
-              sbcntnt_tmp = sbcntnt_rmv_cnddts_tmp[idx+1][1]
-              idx = idx + 1
-           else:
-              continue
-    rmvd_sbcntnt_msg = re.sub(sbcntnt_tmp, "", line_msg)
-    return rmvd_sbcntnt_msg
-
-
 #ユーザーから送られるLINEメッセージの中に含まれるインテント(＝意図するもの)を除去する
 def remove_intent(line_msg):
     #メッセージの中に含まれる日本語固有のインテントの削除候補をリストアップする
@@ -3924,7 +3471,7 @@ def extract_intent_from_short_and_boilerplate(line_msg):
     return extrctd_intnt
 
 
-#ユーザーから送られるLINEメッセージの中からインテント(＝発話の意図するもの ＝助詞・助動詞)を抽出する
+#ユーザーから送られるLINEメッセージの中からインテント(＝発話の意図するもの)を抽出する
 def extract_intent_from_general(line_msg):
     #メッセージの末尾部分からインテントを抽出して、これを呼出し元に引渡しをする
     if   (check_text_terminate_string(line_msg, "を行います") or
@@ -5000,293 +4547,85 @@ def extract_intent_from_general(line_msg):
     return extrctd_intnt
 
 
-#ユーザーから送られるLINEメッセージの中からサブコンテント(＝発話の意図される内容 ＝副詞＆前置詞＆接続詞)を抽出する
-def extract_subcontent(line_msg):
-    #メッセージの先頭部分からサブコンテントを抽出して、これを呼出し元に引渡しをする
-    if   (check_text_start_string(line_msg, "さて") or
-          check_text_start_string(line_msg, "ところで")):
-            extrctd_sbcntnt = "<転換＆切替>"
-    elif (check_text_start_string(line_msg, "そして") or
-          check_text_start_string(line_msg, "それで") or
-          check_text_start_string(line_msg, "そんで")):
-            extrctd_sbcntnt = "<結末＆結論>"
-    elif (check_text_start_string(line_msg, "畢竟") or
-          check_text_start_string(line_msg, "詮ずる所") or
-          check_text_start_string(line_msg, "詮ずるところ") or
-          check_text_start_string(line_msg, "詮ずると") or
-          check_text_start_string(line_msg, "詰まる所") or
-          check_text_start_string(line_msg, "詰まるところ") or
-          check_text_start_string(line_msg, "詰まりは") or
-          check_text_start_string(line_msg, "つまりは") or
-          check_text_start_string(line_msg, "詰まり") or
-          check_text_start_string(line_msg, "つまり")):
-            extrctd_sbcntnt = "<結果＆結論>"
-    elif (check_text_start_string(line_msg, "加えて") or
-          check_text_start_string(line_msg, "更に") or
-          check_text_start_string(line_msg, "さらに") or
-          check_text_start_string(line_msg, "又") or
-          check_text_start_string(line_msg, "また")):
-            extrctd_sbcntnt = "<添加＆追加>"
-    elif (check_text_start_string(line_msg, "もっと言えば") or
-          check_text_start_string(line_msg, "もっといえば") or
-          check_text_start_string(line_msg, "更に言えば") or
-          check_text_start_string(line_msg, "さらに言えば")):
-            extrctd_sbcntnt = "<添加＆追加 補足・条件付け>"
-    elif (check_text_start_string(line_msg, "欲を言えば") or
-          check_text_start_string(line_msg, "欲をいえば")):
-            extrctd_sbcntnt = "<添加＆追加 補足・条件付け 願望・欲求について>"
-    elif (check_text_start_string(line_msg, "纏めると") or
-          check_text_start_string(line_msg, "まとめると")):
-            extrctd_sbcntnt = "<総括＆概括>"
-    elif (check_text_start_string(line_msg, "得てして") or
-          check_text_start_string(line_msg, "えてして") or
-          check_text_start_string(line_msg, "概して") or
-          check_text_start_string(line_msg, "大抵は") or
-          check_text_start_string(line_msg, "大抵") or
-          check_text_start_string(line_msg, "大概は") or
-          check_text_start_string(line_msg, "大概")): 
-            extrctd_sbcntnt = "<概要＆概略>"
-    elif (check_text_start_string(line_msg, "決まって") or
-          check_text_start_string(line_msg, "決して") or
-          check_text_start_string(line_msg, "確実に") or
-          check_text_start_string(line_msg, "明らかに") or
-          check_text_start_string(line_msg, "多くの場合には") or
-          check_text_start_string(line_msg, "多くの場合は") or
-          check_text_start_string(line_msg, "多くの場合") or
-          check_text_start_string(line_msg, "多くは") or
-          check_text_start_string(line_msg, "多く") or
-          check_text_start_string(line_msg, "少なくとも") or
-          check_text_start_string(line_msg, "少なくても")):
-            extrctd_sbcntnt = "<断定＆確定>"
-    elif (check_text_start_string(line_msg, "さては") or
-          check_text_start_string(line_msg, "もしや")):
-            extrctd_sbcntnt = "<推定＆推測＆推量 確定・断定に近い>"
-    elif (check_text_start_string(line_msg, "多分") or
-          check_text_start_string(line_msg, "たぶん") or
-          check_text_start_string(line_msg, "恐らくは") or
-          check_text_start_string(line_msg, "おそらくは") or
-          check_text_start_string(line_msg, "恐らく") or
-          check_text_start_string(line_msg, "おそらく")):
-            extrctd_sbcntnt = "<推定＆推測＆推量 揣摩・憶測に近い>"
-    elif (check_text_start_string(line_msg, "例えば") or
-          check_text_start_string(line_msg, "たとえば") or
-          check_text_start_string(line_msg, "例すれば") or
-          check_text_start_string(line_msg, "例せば")):
-            extrctd_sbcntnt = "<比喩＆隠喩>"
-    elif (check_text_start_string(line_msg, "類すれば") or
-          check_text_start_string(line_msg, "類せば")):
-            extrctd_sbcntnt = "<近似＆類似>"
-    elif (check_text_start_string(line_msg, "なので") or
-          check_text_start_string(line_msg, "ですから")):
-            extrctd_sbcntnt = "<説得＆説明>"
-    elif (check_text_start_string(line_msg, "よしんば") or
-          check_text_start_string(line_msg, "もしも") or
-          check_text_start_string(line_msg, "もし")):
-            extrctd_sbcntnt = "<仮定＆仮説>"
-    elif (check_text_start_string(line_msg, "譬え") or
-          check_text_start_string(line_msg, "たとえ") or
-          check_text_start_string(line_msg, "仮にも") or
-          check_text_start_string(line_msg, "仮に")):
-            extrctd_sbcntnt = "<仮定＆仮説 特別・特例言及>"
-    elif (check_text_start_string(line_msg, "或いは") or
-          check_text_start_string(line_msg, "あるいは")):
-            extrctd_sbcntnt = "<並置＆列挙>"
-    elif (check_text_start_string(line_msg, "若しくは") or
-          check_text_start_string(line_msg, "もしくは") or
-          check_text_start_string(line_msg, "もしか")):
-            extrctd_sbcntnt = "<並置＆列挙 代理・代替性について 対名詞・存在>"
-    elif (check_text_start_string(line_msg, "乃至は") or
-          check_text_start_string(line_msg, "ないしは") or
-          check_text_start_string(line_msg, "乃至") or
-          check_text_start_string(line_msg, "ないし")):
-            extrctd_sbcntnt = "<並置＆列挙 代理・代替性について 対動詞・行為>"
-    elif (check_text_start_string(line_msg, "ひょっとして") or
-          check_text_start_string(line_msg, "もしかしたら") or
-          check_text_start_string(line_msg, "もしかして")):
-            extrctd_sbcntnt = "<推定＆推測＆推量 揣摩・憶測に近い>"
-    elif (check_text_start_string(line_msg, "さぞかし") or
-          check_text_start_string(line_msg, "さぞ")):
-            extrctd_sbcntnt = "<推定＆推測＆推量 断定・確定に近い>"
-    elif (check_text_start_string(line_msg, "強ち") or
-          check_text_start_string(line_msg, "あながち")):
-            extrctd_sbcntnt = "<推定＆推測＆推量 揣摩・憶測に近い 意外な事柄について>"
-    elif (check_text_start_string(line_msg,"まさか") or
-          check_text_start_string(line_msg,"よもや")):
-            extrctd_sbcntnt = "<臆見＆憶測>"
-    elif (check_text_start_string(line_msg, "必ずしも") or
-          check_text_start_string(line_msg, "必ずしも")):
-            extrctd_sbcntnt = "<宣言＆表明 確信に至らない>"
-    elif (check_text_start_string(line_msg, "必ずや") or
-          check_text_start_string(line_msg, "必ず")):
-            extrctd_sbcntnt = "<宣言＆表明 確信に至る>"
-    elif (check_text_start_string(line_msg, "実に")):
-            extrctd_sbcntnt = "<認知＆認識>"
-    elif (check_text_start_string(line_msg,"当然にして") or
-          check_text_start_string(line_msg, "当然")):
-            extrctd_sbcntnt = "<推理＆推論>"
-    elif (check_text_start_string(line_msg, "然らば") or
-          check_text_start_string(line_msg, "しからば") or
-          check_text_start_string(line_msg, "であるのならば") or
-          check_text_start_string(line_msg, "であるならば") or
-          check_text_start_string(line_msg, "であれば")):
-            extrctd_sbcntnt = "<帰結＆帰着>"
-    elif (check_text_start_string(line_msg, "最も") or
-          check_text_start_string(line_msg, "もっとも")):
-            extrctd_sbcntnt = "<皮相＆皮肉>"
-    elif (check_text_start_string(line_msg, "しかしながら") or
-          check_text_start_string(line_msg, "しかし") or
-          check_text_start_string(line_msg, "ですが") or
-          check_text_start_string(line_msg, "だが") or
-          check_text_start_string(line_msg, "だけども") or
-          check_text_start_string(line_msg, "だけど") or
-          check_text_start_string(line_msg, "それでも") or
-          check_text_start_string(line_msg, "でも")):
-            extrctd_sbcntnt = "<反駁＆反論>"
-    elif (check_text_start_string(line_msg, "如何せん") or
-          check_text_start_string(line_msg, "いかんせん") or
-          check_text_start_string(line_msg, "残念ながら")):
-            extrctd_sbcntnt = "<言い訳>"
-    elif (check_text_start_string(line_msg, "翻って") or
-          check_text_start_string(line_msg, "ひるがえって")):
-            extrctd_sbcntnt = "<翻意>"
-    elif (check_text_start_string(line_msg, "言い換えれば") or
-          check_text_start_string(line_msg, "言い換えると")):
-            extrctd_sbcntnt = "<換言＆言換え>"
-    elif (check_text_start_string(line_msg, "初めに") or
-          check_text_start_string(line_msg, "はじめに")):
-            extrctd_sbcntnt = "<前置き 初めの部分>"
-    elif (check_text_start_string(line_msg, "終わりに") or
-          check_text_start_string(line_msg, "おわりに")):
-            extrctd_sbcntnt = "<前置き 終わりの部分>"
-    elif (check_text_start_string(line_msg, "初めに言っておくと") or
-          check_text_start_string(line_msg, "はじめに言っておくと") or
-          check_text_start_string(line_msg, "先に言っておくと") or
-          check_text_start_string(line_msg, "先に言っておくけど")):
-            extrctd_sbcntnt = "<前置き＆先述>"
-    elif (check_text_start_string(line_msg, "初めに断っておくと") or
-          check_text_start_string(line_msg, "はじめに断っておくと") or
-          check_text_start_string(line_msg, "初めに断っておくけど") or
-          check_text_start_string(line_msg, "はじめに断っておくけど")):
-            extrctd_sbcntnt = "<断り＆先述>"
-    elif (check_text_start_string(line_msg, "従って") or
-          check_text_start_string(line_msg, "したがって") or
-          check_text_start_string(line_msg, "ですので") or
-          check_text_start_string(line_msg, "なので")):
-            extrctd_sbcntnt = "<理由の申し立て 段階的に>"
-    elif (check_text_start_string(line_msg, "故に") or
-          check_text_start_string(line_msg, "ゆえに")):
-            extrctd_sbcntnt = "<理由の申し立て 結論的に>"
-    elif (check_text_start_string(line_msg, "又は") or
-          check_text_start_string(line_msg, "または")):
-            extrctd_sbcntnt = "<論理和>"
-    elif (check_text_start_string(line_msg, "且つ") or
-          check_text_start_string(line_msg, "かつ")):
-            extrctd_sbcntnt = "<論理積>"
-    elif (check_text_start_string(line_msg, "即ち") or
-          check_text_start_string(line_msg, "すなわち")):
-            extrctd_sbcntnt = "<等値＆等価>"
-    elif (check_text_start_string(line_msg, "しばしば") or
-          check_text_start_string(line_msg, "稀に") or
-          check_text_start_string(line_msg, "まれに")):
-            extrctd_sbcntnt = "<頻度>"
-    elif (check_text_start_string(line_msg, "大層") or
-          check_text_start_string(line_msg, "非常に") or
-          check_text_start_string(line_msg,"とても") or
-          check_text_start_string(line_msg,"極めて") or
-          check_text_start_string(line_msg,"かなり")):
-            extrctd_sbcntnt = "<程度>"
-    elif (check_text_start_string(line_msg, "益々") or
-          check_text_start_string(line_msg, "ますます")):
-            extrctd_sbcntnt = "<程度 物事の勢いについて>"
-    elif (check_text_start_string(line_msg, "いよいよ")):
-            extrctd_sbcntnt = "<程度 物事の時期について>"
-    elif (check_text_start_string(line_msg, "よくよく")):
-            extrctd_sbcntnt = "<程度 物事を見極める・見定める際に>"
-    else:
-            extrctd_sbcntnt = "<その他・不明>"
-    return extrctd_sbcntnt
-
-
-#ユーザーから送られるLINEメッセージの中からメインコンテント(＝意図されるものの内で主だったもの)(＝名詞＆代名詞＆動詞＆助詞＆助動詞等)を抽出する
-def extract_maincontent(line_msg):
+#ユーザーから送られるLINEメッセージの中からコンテント(＝発話の意図されるもの)を抽出する
+def extract_content(line_msg):
     rmvd_etc_msg     = remove_etc(line_msg)
     rmvd_symbl_msg   = remove_symbol(rmvd_etc_msg)
     rmvd_edprtcl_msg = remove_endparticle(rmvd_symbl_msg)
-    rmvd_intnt_msg   = remove_intent(rmvd_edprtcl_msg)
-    extrctd_mncntnt  = remove_subcontent(rmvd_intnt_msg)
-return extrctd_mncntnt
+    extrctd_cntnt    = remove_intent(rmvd_edprtcl_msg)
+return extrctd_cntnt
 
 
 #ユーザーから送られるLINEメッセージの中から文型(＝文全体を構成する品詞の連なり)を抽出する
-def conversion_maincontent_to_sentencepattern(line_msg):
-    mncntnt            = extract_maincontent(line_msg)
-    anlyzd_mncntnt     = line_msg_morpho_analyze2(mncntnt)
+def conversion_content_to_sentencepattern(line_msg):
+    cntnt            = extract_content(line_msg)
+    anlyzd_cntnt     = line_msg_morpho_analyze2(cntnt)
     extrctd_sntncpttrn = []
     idx                = 0
-    while len(anlyzd_mncntnt) > idx:
-          extrctd_sntncpttrn.append("[" + anlyzd_mncntnt[idx][1] + " " + anlyzd_mncntnt[idx][0] + "]")
+    while len(anlyzd_cntnt) > idx:
+          extrctd_sntncpttrn.append("[" + anlyzd_cntnt[idx][1] + " " + anlyzd_cntnt[idx][0] + "]")
           idx += 1
     return extrctd_sntncpttrn
 
 
 #ユーザーから送られるLINEメッセージの中からオントロジー(＝象意)(＝メッセージ全体の意味)を抽出する
 def extract_ontrgy(line_msg):
-    mncntnt        = extract_maincontent(line_msg)
-    anlyzd_mncntnt = line_msg_morpho_analyze2(mncntnt)
+    cntnt        = extract_content(line_msg)
+    anlyzd_cntnt = line_msg_morpho_analyze2(cntnt)
     extrctd_ontrgy = []
     idx            = 0
-    while len(anlyzd_mncntnt) > idx:
-          if   (anlyzd_mncntnt[idx][1] == "代名詞" and anlyzd_mncntnt[idx][0] == "私"):
+    while len(anlyzd_cntnt) > idx:
+          if   (anlyzd_cntnt[idx][1] == "代名詞" and anlyzd_cntnt[idx][0] == "私"):
                 extrctd_ontrgy.append("LINE-Client")
-          elif (anlyzd_mncntnt[idx][1] == "代名詞" and anlyzd_mncntnt[idx][0] == "わたくし"):
+          elif (anlyzd_cntnt[idx][1] == "代名詞" and anlyzd_cntnt[idx][0] == "わたくし"):
                 extrctd_ontrgy.append("LINE-Client")
-          elif (anlyzd_mncntnt[idx][1] == "代名詞" and anlyzd_mncntnt[idx][0] == "わたし"):
+          elif (anlyzd_cntnt[idx][1] == "代名詞" and anlyzd_cntnt[idx][0] == "わたし"):
                 extrctd_ontrgy.append("LINE-Client")
-          elif (anlyzd_mncntnt[idx][1] == "代名詞" and anlyzd_mncntnt[idx][0] == "ワタシ"):
+          elif (anlyzd_cntnt[idx][1] == "代名詞" and anlyzd_cntnt[idx][0] == "ワタシ"):
                 extrctd_ontrgy.append("LINE-Client")
-          elif (anlyzd_mncntnt[idx][1] == "代名詞" and anlyzd_mncntnt[idx][0] == "あたし"):
+          elif (anlyzd_cntnt[idx][1] == "代名詞" and anlyzd_cntnt[idx][0] == "あたし"):
                 extrctd_ontrgy.append("LINE-Client")
-          elif (anlyzd_mncntnt[idx][1] == "代名詞" and anlyzd_mncntnt[idx][0] == "アタシ"):
+          elif (anlyzd_cntnt[idx][1] == "代名詞" and anlyzd_cntnt[idx][0] == "アタシ"):
                 extrctd_ontrgy.append("LINE-Client")
-          elif (anlyzd_mncntnt[idx][1] == "代名詞" and anlyzd_mncntnt[idx][0] == "僕"):
+          elif (anlyzd_cntnt[idx][1] == "代名詞" and anlyzd_cntnt[idx][0] == "僕"):
                 extrctd_ontrgy.append("LINE-Client")
-          elif (anlyzd_mncntnt[idx][1] == "代名詞" and anlyzd_mncntnt[idx][0] == "ぼく"):
+          elif (anlyzd_cntnt[idx][1] == "代名詞" and anlyzd_cntnt[idx][0] == "ぼく"):
                 extrctd_ontrgy.append("LINE-Client")
-          elif (anlyzd_mncntnt[idx][1] == "代名詞" and anlyzd_mncntnt[idx][0] == "ボク"):
+          elif (anlyzd_cntnt[idx][1] == "代名詞" and anlyzd_cntnt[idx][0] == "ボク"):
                 extrctd_ontrgy.append("LINE-Client")
-          elif (anlyzd_mncntnt[idx][1] == "代名詞" and anlyzd_mncntnt[idx][0] == "自分"):
+          elif (anlyzd_cntnt[idx][1] == "代名詞" and anlyzd_cntnt[idx][0] == "自分"):
                 extrctd_ontrgy.append("LINE-Client")
-          elif (anlyzd_mncntnt[idx][1] == "代名詞" and anlyzd_mncntnt[idx][0] == "貴方"):
+          elif (anlyzd_cntnt[idx][1] == "代名詞" and anlyzd_cntnt[idx][0] == "貴方"):
                 extrctd_ontrgy.append("LINE-Bot")
-          elif (anlyzd_mncntnt[idx][1] == "代名詞" and anlyzd_mncntnt[idx][0] == "貴女"):
+          elif (anlyzd_cntnt[idx][1] == "代名詞" and anlyzd_cntnt[idx][0] == "貴女"):
                 extrctd_ontrgy.append("LINE-Bot")
-          elif (anlyzd_mncntnt[idx][1] == "代名詞" and anlyzd_mncntnt[idx][0] == "あなた"):
+          elif (anlyzd_cntnt[idx][1] == "代名詞" and anlyzd_cntnt[idx][0] == "あなた"):
                 extrctd_ontrgy.append("LINE-Bot")
-          elif (anlyzd_mncntnt[idx][1] == "代名詞" and anlyzd_mncntnt[idx][0] == "アンタ"):
+          elif (anlyzd_cntnt[idx][1] == "代名詞" and anlyzd_cntnt[idx][0] == "アンタ"):
                 extrctd_ontrgy.append("LINE-Bot")
-          elif (anlyzd_mncntnt[idx][1] == "代名詞" and anlyzd_mncntnt[idx][0] == "君"):
+          elif (anlyzd_cntnt[idx][1] == "代名詞" and anlyzd_cntnt[idx][0] == "君"):
                 extrctd_ontrgy.append("LINE-Bot")
-          elif (anlyzd_mncntnt[idx][1] == "代名詞" and anlyzd_mncntnt[idx][0] == "キミ"):
+          elif (anlyzd_cntnt[idx][1] == "代名詞" and anlyzd_cntnt[idx][0] == "キミ"):
                 extrctd_ontrgy.append("LINE-Bot")
-          elif (anlyzd_mncntnt[idx][1] == "代名詞" and anlyzd_mncntnt[idx][0] == "彼"):
+          elif (anlyzd_cntnt[idx][1] == "代名詞" and anlyzd_cntnt[idx][0] == "彼"):
                 extrctd_ontrgy.append("第三者 男性")
-          elif (anlyzd_mncntnt[idx][1] == "代名詞" and anlyzd_mncntnt[idx][0] == "カレ"):
+          elif (anlyzd_cntnt[idx][1] == "代名詞" and anlyzd_cntnt[idx][0] == "カレ"):
                 extrctd_ontrgy.append("第三者 男性")
-          elif (anlyzd_mncntnt[idx][1] == "代名詞" and anlyzd_mncntnt[idx][0] == "彼女"):
+          elif (anlyzd_cntnt[idx][1] == "代名詞" and anlyzd_cntnt[idx][0] == "彼女"):
                 extrctd_ontrgy.append("第三者 女性")
-          elif (anlyzd_mncntnt[idx][1] == "代名詞" and anlyzd_mncntnt[idx][0] == "カノジョ"):
+          elif (anlyzd_cntnt[idx][1] == "代名詞" and anlyzd_cntnt[idx][0] == "カノジョ"):
                 extrctd_ontrgy.append("第三者 女性")
-          elif (anlyzd_mncntnt[idx][1] == "代名詞" and anlyzd_mncntnt[idx][0] == "誰か"):
+          elif (anlyzd_cntnt[idx][1] == "代名詞" and anlyzd_cntnt[idx][0] == "誰か"):
                 extrctd_ontrgy.append("第三者")
-          elif (anlyzd_mncntnt[idx][1] == "代名詞" and anlyzd_mncntnt[idx][0] == "彼ら"):
+          elif (anlyzd_cntnt[idx][1] == "代名詞" and anlyzd_cntnt[idx][0] == "彼ら"):
                 extrctd_ontrgy.append("第三者 複数")
-          elif (anlyzd_mncntnt[idx][1] == "名詞"):
-                extrctd_ontrgy.append(anlyzd_mncntnt[idx][0])
-          elif (anlyzd_mncntnt[idx][1] == "動詞"):
-                extrctd_ontrgy.append(anlyzd_mncntnt[idx][0])
-          elif (anlyzd_mncntnt[idx][1] == "助詞"):
-                extrctd_ontrgy.append(anlyzd_mncntnt[idx][0])
-          elif (anlyzd_mncntnt[idx][1] == "助動詞"):
-                extrctd_ontrgy.append(anlyzd_mncntnt[idx][0])
+          elif (anlyzd_cntnt[idx][1] == "名詞"):
+                extrctd_ontrgy.append(anlyzd_cntnt[idx][0])
+          elif (anlyzd_cntnt[idx][1] == "動詞"):
+                extrctd_ontrgy.append(anlyzd_cntnt[idx][0])
+          elif (anlyzd_cntnt[idx][1] == "助詞"):
+                extrctd_ontrgy.append(anlyzd_cntnt[idx][0])
+          elif (anlyzd_cntnt[idx][1] == "助動詞"):
+                extrctd_ontrgy.append(anlyzd_cntnt[idx][0])
           idx += 1
     return extrctd_ontrgy
