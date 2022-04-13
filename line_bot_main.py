@@ -148,6 +148,13 @@ def callback():
     return 'OK'
 
 
+#LINE-DevelopersのWebhookを介して送られてくるイベントを処理する(＝フォローイベントを処理する)
+@handler.add(FollowEvent)
+def handle_follow(event):
+    fllw_msg = "友達追加 ありがとう！"
+    line_bot_api.reply_message(event.reply_token, TextSendMessage(text=fllw_msg))
+
+
 #LINE-DevelopersのWebhookを介して送られてくるイベントを処理する(＝メッセージイベントを処理する)
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
@@ -162,13 +169,6 @@ def handle_message(event):
 
     #プログラムが生成するLINEメッセージをLINEBotAPIを使ってユーザーに対して送信する
     line_msg_send(event, gnrtd_msg)
-
-
-#LINE-DevelopersのWebhookを介して送られてくるイベントを処理する(＝フォローイベントを処理する)
-@handler.add(FollowEvent)
-def handle_follow(event):
-    fllw_msg = "友達追加 ありがとう！"
-    line_bot_api.reply_message(event.reply_token, TextSendMessage(text=fllw_msg))
 
 
 #ユーザーから送られるLINEメッセージを解析する
@@ -209,6 +209,45 @@ def line_msg_analyze(line_msg):
     return line_intnt, line_cntnt, line_ontrgy
 
 
+#ユーザーから送られるLINEメッセージをPostgresのデータベースに登録・格納する
+def postgres_insert_and_update(event, line_intnt, line_cntnt, line_ontrgy):
+    #データベースに接続して、テーブル操作のためのカーソルを用意・作成する
+    conn = psycopg2.connect(DATABASE_URL)
+    conn.set_client_encoding("utf-8") 
+    cur  = conn.cursor()
+
+    #データベースに登録・格納するLINEレコードを構成する情報をまとめて用意・作成する
+    global rcd_id
+    jst      = datetime.timezone(datetime.timedelta(hours=+9), "JST")
+    dttm_tmp = datetime.datetime.now(jst)
+    dttm     = dttm_tmp.strftime("%Y/%m/%d %H:%M:%S")
+    prfl     = line_bot_api.get_profile(event.source.user_id)
+    usr_nm   = prfl.display_name
+    msg      = event.message.text
+    intnt    = line_intnt
+    cntnt    = line_cntnt
+    ontrgy   = line_ontrgy
+
+    #該当IDのメッセージ(＝レコード)がなかったら、データベースにインサート(＝新規に登録・格納)し、既にメッセージがあったらアップデート(＝上書き)する
+    if rcd_id == -1:
+       rcd_id = 0
+    cur.execute("""SELECT * FROM line_table WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id})
+    line_rcd = cur.fetchone()
+    if (rcd_id >= 0 and rcd_id <= 99):
+        if line_rcd is None:
+           cur.execute("""INSERT INTO line_table (rcd_id, dttm, usr_nm, msg, intnt, cntnt, ontrgy) VALUES (%(rcd_id)s, %(dttm)s, %(usr_nm)s, %(msg)s, %(intnt)s, %(cntnt)s, %(ontrgy)s);""", {'rcd_id': rcd_id, 'dttm': dttm, 'usr_nm': usr_nm, 'msg': msg, 'intnt': intnt, 'cntnt': cntnt, 'ontrgy': ontrgy})
+        if line_rcd is not None:
+           cur.execute("""UPDATE line_table SET rcd_id=%(rcd_id)s, dttm=%(dttm)s, usr_nm=%(usr_nm)s, msg=%(msg)s, intnt=%(intnt)s, cntnt=%(cntnt)s, ontrgy=%(ontrgy)s WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id, 'dttm': dttm, 'usr_nm': usr_nm, 'msg': msg, 'intnt': intnt, 'cntnt': cntnt, 'ontrgy': ontrgy, 'rcd_id': rcd_id})
+        rcd_id +=  1
+    if rcd_id == 100:
+       rcd_id = -1
+
+    #データベースへコミットし、テーブル操作のためのカーソルを破棄して、データベースとの接続を解除する
+    conn.commit()
+    cur.close()
+    conn.close()
+
+
 #ユーザーから送られるLINEメッセージの解析結果から返信メッセージを生成する
 def line_msg_generate():
     #データベースに接続して、テーブル操作のためのカーソルを用意・作成する
@@ -219,7 +258,8 @@ def line_msg_generate():
     #最新のLINEレコードをデータベースから取得する
     global rcd_id
     line_nwrcd = []
-    cur.execute("""SELECT * FROM line_table WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id})
+    rcd_id_tmp = rcd_id - 1
+    cur.execute("""SELECT * FROM line_table WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id_tmp})
     line_rcd = cur.fetchone()
     line_nwrcd.append([line_rcd[1], line_rcd[2], line_rcd[3], line_rcd[4], line_rcd[5], line_rcd[6]])
 
@@ -317,63 +357,6 @@ def line_msg_generate():
 def line_msg_send(event, line_gnrtd_msg):
     #LINEの返信用トークンと生成されたメッセージをセットにしてLINEBotAPIの呼出しをする
     line_bot_api.reply_message(event.reply_token, TextSendMessage(text=line_gnrtd_msg))
-
-
-#ユーザーから送られるLINEメッセージをPostgresのデータベースに登録・格納する
-def postgres_insert_and_update(event, line_intnt, line_cntnt, line_ontrgy):
-    #データベースに接続して、テーブル操作のためのカーソルを用意・作成する
-    conn = psycopg2.connect(DATABASE_URL)
-    conn.set_client_encoding("utf-8") 
-    cur  = conn.cursor()
-
-    #データベースに登録・格納するLINEレコードを構成する情報をまとめて用意・作成する
-    global rcd_id
-    jst      = datetime.timezone(datetime.timedelta(hours=+9), "JST")
-    dttm_tmp = datetime.datetime.now(jst)
-    dttm     = dttm_tmp.strftime("%Y/%m/%d %H:%M:%S")
-    prfl     = line_bot_api.get_profile(event.source.user_id)
-    usr_nm   = prfl.display_name
-    msg      = event.message.text
-    intnt    = line_intnt
-    cntnt    = line_cntnt
-    ontrgy   = line_ontrgy
-
-    #該当IDのメッセージ(＝レコード)がなかったら、データベースにインサート(＝新規に登録・格納)し、既にメッセージがあったらアップデート(＝上書き)する
-    if rcd_id == -1:
-       rcd_id = 0
-    cur.execute("""SELECT * FROM line_table WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id})
-    line_rcd = cur.fetchone()
-    if (rcd_id >= 0 and rcd_id <= 99):
-        if line_rcd is None:
-           cur.execute("""INSERT INTO line_table (rcd_id, dttm, usr_nm, msg, intnt, cntnt, ontrgy) VALUES (%(rcd_id)s, %(dttm)s, %(usr_nm)s, %(msg)s, %(intnt)s, %(cntnt)s, %(ontrgy)s);""", {'rcd_id': rcd_id, 'dttm': dttm, 'usr_nm': usr_nm, 'msg': msg, 'intnt': intnt, 'cntnt': cntnt, 'ontrgy': ontrgy})
-        if line_rcd is not None:
-           cur.execute("""UPDATE line_table SET rcd_id=%(rcd_id)s, dttm=%(dttm)s, usr_nm=%(usr_nm)s, msg=%(msg)s, intnt=%(intnt)s, cntnt=%(cntnt)s, ontrgy=%(ontrgy)s WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id, 'dttm': dttm, 'usr_nm': usr_nm, 'msg': msg, 'intnt': intnt, 'cntnt': cntnt, 'ontrgy': ontrgy, 'rcd_id': rcd_id})
-        rcd_id +=  1
-    if rcd_id == 100:
-       rcd_id = -1
-
-    #データベースへコミットし、テーブル操作のためのカーソルを破棄して、データベースとの接続を解除する
-    conn.commit()
-    cur.close()
-    conn.close()
-
-
-#Postgresのデータベースからレコードを全件取得する
-def postgres_select_all():
-    #データベースに接続して、テーブル操作のためのカーソルを用意・作成する
-    conn = psycopg2.connect(DATABASE_URL)
-    conn.set_client_encoding("utf-8")
-    cur  = conn.cursor()
-
-    #データベースに登録・格納されている全てのレコードをセレクトして取得する
-    rcds = []
-    cur.execute("""SELECT * FROM line_table;""")
-    rcds = cur.fetchall()
-
-    #テーブル操作のためのカーソルを破棄して、データベースとの接続を解除する
-    cur.close()
-    conn.close()
-    return rcds
 
 
 
