@@ -19,7 +19,7 @@ class BotCharacter:
 
       #ボットのマインドのゲッター
       @classmethod
-      def get_mind(self, mind_state):
+      def get_mind(self):
           return self.mind_state
 
       #ボットのマインドを指定された分だけ上昇させるメソッド
