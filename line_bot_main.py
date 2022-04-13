@@ -64,7 +64,7 @@ def show_db_record():
           conn.close()
           return jsonify(rcd), 200
        if rcd_id >= 1:
-          rcd_id_tmp = rcd_id - 1
+          rcd_id_tmp -= 1
           cur.execute("""SELECT * FROM line_table WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id_tmp})
           rcd = cur.fetchone()
           cur.close()
@@ -89,10 +89,14 @@ def create_db_table():
     cur  = conn.cursor()
 
     #データベース上に新たにテーブルを用意・作成する
+    global has_db_tbl
     try:
         cur.execute("""CREATE TABLE IF NOT EXISTS line_table(rcd_id integer PRIMARY KEY, dttm text, usr_nm text, text, msg text, intnt text, cntnt text, ontrgy text);""")
     except Exception:
         pass
+
+    #プログラムの実行状態を示す変数を変更する
+    has_db_tbl = True
 
     #データベースへコミットし、テーブル操作のためのカーソルを破棄して、データベースとの接続を解除する
     cur.close()
@@ -116,7 +120,7 @@ def drop_db_table():
     except Exception:
         pass
 
-    #各種のプログラムの実行状態を示す変数を初期化する
+    #プログラムの実行状態を示す変数を初期化する
     has_db_tbl = False
     rcd_id     = -1
 
@@ -317,7 +321,6 @@ def postgres_insert_and_update(event, line_intnt, line_cntnt, line_ontrgy):
     cur  = conn.cursor()
 
     #データベースに登録・格納するLINEレコードを構成する情報をまとめて用意・作成する
-    global has_db_tbl
     global rcd_id
     jst      = datetime.timezone(datetime.timedelta(hours=+9), "JST")
     dttm_tmp = datetime.datetime.now(jst)
@@ -329,14 +332,6 @@ def postgres_insert_and_update(event, line_intnt, line_cntnt, line_ontrgy):
     cntnt    = line_cntnt
     ontrgy   = line_ontrgy
 
-    #テーブルフラグが倒れていたら、データベース上に新たにテーブルを用意・作成する(ユーザーIDとユーザー名の設定もしておく)
-    if has_db_tbl == False:
-       has_db_tbl = True
-       try:
-           cur.execute("""CREATE TABLE IF NOT EXISTS line_table(rcd_id integer PRIMARY KEY, dttm text, usr_nm text, text, msg text, intnt text, cntnt text, ontrgy text);""")
-       except Exception:
-           pass
-
     #該当IDのメッセージ(＝レコード)がなかったら、データベースにインサート(＝新規に登録・格納)し、既にメッセージがあったらアップデート(＝上書き)する
     if rcd_id == -1:
        rcd_id = 0
@@ -346,7 +341,7 @@ def postgres_insert_and_update(event, line_intnt, line_cntnt, line_ontrgy):
         if line_rcd is None:
            cur.execute("""INSERT INTO line_table (rcd_id, dttm, usr_nm, msg, intnt, cntnt, ontrgy) VALUES (%(rcd_id)s, %(dttm)s, %(usr_nm)s, %(msg)s, %(intnt)s, %(cntnt)s, %(ontrgy)s);""", {'rcd_id': rcd_id, 'dttm': dttm, 'usr_nm': usr_nm, 'msg': msg, 'intnt': intnt, 'cntnt': cntnt, 'ontrgy': ontrgy})
         if line_rcd is not None:
-           cur.execute("""UPDATE line_table SET rcd_id=%(rcd_id)s, dttm=%(dttm)s, usr_nm=%(usr_nm)s, msg=%(msg)s, intnt=%(intnt)s, cntnt=%(mncntnt)s, ontrgy=%(ontrgy)s WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id, 'dttm': dttm, 'usr_nm': usr_nm, 'msg': msg, 'intnt': intnt, 'cntnt': cntnt, 'ontrgy': ontrgy, 'rcd_id': rcd_id})
+           cur.execute("""UPDATE line_table SET rcd_id=%(rcd_id)s, dttm=%(dttm)s, usr_nm=%(usr_nm)s, msg=%(msg)s, intnt=%(intnt)s, cntnt=%(cntnt)s, ontrgy=%(ontrgy)s WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id, 'dttm': dttm, 'usr_nm': usr_nm, 'msg': msg, 'intnt': intnt, 'cntnt': cntnt, 'ontrgy': ontrgy, 'rcd_id': rcd_id})
         rcd_id +=  1
     if rcd_id == 100:
        rcd_id = -1
