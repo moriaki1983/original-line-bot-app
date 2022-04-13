@@ -220,8 +220,8 @@ def line_msg_generate():
     global rcd_id
     line_nwrcd = []
     cur.execute("""SELECT * FROM line_table WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id})
-    line_nwrcd = cur.fetchone()
-    line_nwrcd.append([line_nwrcd[1], line_nwrcd[2], line_nwrcd[3], line_nwrcd[4], line_nwrcd[5], line_nwrcd[6]])
+    line_rcd = cur.fetchone()
+    line_nwrcd.append([line_rcd[1], line_rcd[2], line_rcd[3], line_rcd[4], line_rcd[5], line_rcd[6]])
 
     #過去５件分のLINEレコードをデータベースから取得する
     line_oldrcds = []
