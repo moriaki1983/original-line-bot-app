@@ -332,7 +332,7 @@ def postgres_insert_and_update(event, line_intnt, line_cntnt, line_ontrgy):
     #テーブルフラグが倒れていたら、データベース上に新たにテーブルを用意・作成する(ユーザーIDとユーザー名の設定もしておく)
     if has_db_tbl == False:
        try:
-        cur.execute("""CREATE TABLE IF NOT EXISTS line_table(rcd_id integer PRIMARY KEY, dttm text, usr_nm text, text, msg text, intnt text, cntnt text, ontrgy text);""")
+           cur.execute("""CREATE TABLE IF NOT EXISTS line_table(rcd_id integer PRIMARY KEY, dttm text, usr_nm text, text, msg text, intnt text, cntnt text, ontrgy text);""")
        except Exception:
            pass
 
