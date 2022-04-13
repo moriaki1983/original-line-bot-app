@@ -64,7 +64,7 @@ def show_db_record():
           conn.close()
           return jsonify(rcd), 200
        if rcd_id >= 1:
-          rcd_id_tmp -= 1
+          rcd_id_tmp = rcd_id - 1
           cur.execute("""SELECT * FROM line_table WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id_tmp})
           rcd = cur.fetchone()
           cur.close()
