@@ -205,7 +205,7 @@ def line_msg_analyze(line_msg):
     rmvd_etc_msg     = line_bot_text_analyze.remove_etc(line_msg)
     rmvd_symbl_msg   = line_bot_text_analyze.remove_symbol(rmvd_etc_msg)
     rmvd_edprtcl_msg = line_bot_text_analyze.remove_endparticle(rmvd_symbl_msg)
-    line_intnt       = line_bot_text_analyze.extract_intent(rmvd_edprtcl_msg)
+    line_intnt       = line_bot_text_analyze.extract_intent_from_general(rmvd_edprtcl_msg)
     return line_intnt, line_cntnt, line_ontrgy
 
 
