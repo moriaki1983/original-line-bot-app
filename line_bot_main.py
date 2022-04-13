@@ -91,7 +91,7 @@ def create_db_table():
     #データベース上に新たにテーブルを用意・作成する
     global has_db_tbl
     try:
-        cur.execute("""CREATE TABLE IF NOT EXISTS line_table(rcd_id integer PRIMARY KEY, dttm text, usr_nm text, text, msg text, intnt text, cntnt text, ontrgy text);""")
+        cur.execute("""CREATE TABLE IF NOT EXISTS line_table(rcd_id integer PRIMARY KEY, dttm text, usr_nm text, msg text, intnt text, cntnt text, ontrgy text);""")
     except Exception:
         pass
 
