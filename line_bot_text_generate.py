@@ -40,4 +40,5 @@ def text_generate_from_analyze_result(line_rcds):
        return gnrtd_msg
 
     gnrtd_msg = "また おしゃべりしましょう♪"
+    gnrtd_msg += cntnt_of_uttrnc
     return gnrtd_msg
