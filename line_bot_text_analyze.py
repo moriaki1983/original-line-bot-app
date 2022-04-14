@@ -96,15 +96,27 @@ def remove_symbol(line_msg):
     rmvd_symbl_msg6  = re.sub("(。)", "", rmvd_symbl_msg5)
     rmvd_symbl_msg7  = re.sub("(！)", "", rmvd_symbl_msg6)
     rmvd_symbl_msg8  = re.sub("(？)", "", rmvd_symbl_msg7)
-    rmvd_symbl_msg9  = re.sub("(ー)", "", rmvd_symbl_msg8)
-    rmvd_symbl_msg10 = re.sub("(～)", "", rmvd_symbl_msg9)
-    rmvd_symbl_msg11 = re.sub("(・)", "", rmvd_symbl_msg10)
-    rmvd_symbl_msg12 = re.sub("(＝)", "", rmvd_symbl_msg11)
-    rmvd_symbl_msg13 = re.sub("(＆)", "", rmvd_symbl_msg12)
-    rmvd_symbl_msg14 = re.sub("(＋)", "", rmvd_symbl_msg13)
-    rmvd_symbl_msg15 = re.sub("( )",  "", rmvd_symbl_msg14)
+    rmvd_symbl_msg9  = re.sub("(♪)", "", rmvd_symbl_msg8)
+    rmvd_symbl_msg10 = re.sub("(ー)", "", rmvd_symbl_msg9)
+    rmvd_symbl_msg11 = re.sub("(～)", "", rmvd_symbl_msg10)
+    rmvd_symbl_msg12 = re.sub("(・)", "", rmvd_symbl_msg11)
+    rmvd_symbl_msg13 = re.sub("(＝)", "", rmvd_symbl_msg12)
+    rmvd_symbl_msg14 = re.sub("(＆)", "", rmvd_symbl_msg13)
+    rmvd_symbl_msg15 = re.sub("(＋)", "", rmvd_symbl_msg14)
     rmvd_symbl_msg16 = re.sub("(　)", "", rmvd_symbl_msg15)
-    return rmvd_symbl_msg16
+    rmvd_symbl_msg17 = re.sub("(\')", "", rmvd_symbl_msg16)
+    rmvd_symbl_msg18 = re.sub("(\")", "", rmvd_symbl_msg17)
+    rmvd_symbl_msg19 = re.sub("(\[)", "", rmvd_symbl_msg18)
+    rmvd_symbl_msg20 = re.sub("(\])", "", rmvd_symbl_msg19)
+    rmvd_symbl_msg21 = re.sub("(\,)", "", rmvd_symbl_msg20)
+    rmvd_symbl_msg22 = re.sub("(\.)", "", rmvd_symbl_msg21)
+    rmvd_symbl_msg23 = re.sub("(\!)", "", rmvd_symbl_msg22)
+    rmvd_symbl_msg24 = re.sub("(\?)", "", rmvd_symbl_msg23)
+    rmvd_symbl_msg25 = re.sub("(\=)", "", rmvd_symbl_msg24)
+    rmvd_symbl_msg26 = re.sub("(\&)", "", rmvd_symbl_msg25)
+    rmvd_symbl_msg27 = re.sub("(\+)", "", rmvd_symbl_msg26)
+    rmvd_symbl_msg28 = re.sub("( )",  "", rmvd_symbl_msg27)
+    return rmvd_symbl_msg28
 
 
 #ユーザーから送られるLINEメッセージの中に含まれる終助詞を除去する
@@ -1973,6 +1985,8 @@ def remove_intent(line_msg):
          intnt_rmv_cnddts.append("とは思う")
     elif check_text_terminate_string(line_msg, "と思っています"):
          intnt_rmv_cnddts.append("と思っています")
+    elif check_text_terminate_string(line_msg, "と思ってます"):
+         intnt_rmv_cnddts.append("と思ってます")
     elif check_text_terminate_string(line_msg, "と思っている"):
          intnt_rmv_cnddts.append("と思っている")
     elif check_text_terminate_string(line_msg, "と思ってる"):
@@ -2001,12 +2015,16 @@ def remove_intent(line_msg):
          intnt_rmv_cnddts.append("と思わない")
     elif check_text_terminate_string(line_msg, "とは思っていました"):
          intnt_rmv_cnddts.append("とは思っていました")
+    elif check_text_terminate_string(line_msg, "とは思ってました"):
+         intnt_rmv_cnddts.append("とは思ってました")
     elif check_text_terminate_string(line_msg, "とは思っていた"):
          intnt_rmv_cnddts.append("とは思っていた")
     elif check_text_terminate_string(line_msg, "とは思ってた"):
          intnt_rmv_cnddts.append("とは思ってた")
     elif check_text_terminate_string(line_msg, "と思っていました"):
          intnt_rmv_cnddts.append("と思っていました")
+    elif check_text_terminate_string(line_msg, "と思ってました"):
+         intnt_rmv_cnddts.append("と思ってました")
     elif check_text_terminate_string(line_msg, "と思っていた"):
          intnt_rmv_cnddts.append("と思っていた")
     elif check_text_terminate_string(line_msg, "と思ってた"):
@@ -2053,6 +2071,22 @@ def remove_intent(line_msg):
          intnt_rmv_cnddts.append("とはなに")
     elif check_text_terminate_string(line_msg, "とは"):
          intnt_rmv_cnddts.append("とは")
+    elif check_text_terminate_string(line_msg, "して頂き有り難う御座います"):
+         intnt_rmv_cnddts.append("して頂き有り難う御座います")
+    elif check_text_terminate_string(line_msg, "して頂きありがとうございます"):
+         intnt_rmv_cnddts.append("して頂きありがとうございます")
+    elif check_text_terminate_string(line_msg, "していただきありがとうございます"):
+         intnt_rmv_cnddts.append("していただきありがとうございます")
+    elif check_text_terminate_string(line_msg, "してくれて有り難う"):
+         intnt_rmv_cnddts.append("してくれて有り難う")
+    elif check_text_terminate_string(line_msg, "してくれてありがとう"):
+         intnt_rmv_cnddts.append("してくれてありがとう")
+    elif check_text_terminate_string(line_msg, "して頂き感謝致します"):
+         intnt_rmv_cnddts.append("して頂き感謝致します")
+    elif check_text_terminate_string(line_msg, "して頂き感謝いたします"):
+         intnt_rmv_cnddts.append("して頂き感謝いたします")
+    elif check_text_terminate_string(line_msg, "していただき感謝いたします"):
+         intnt_rmv_cnddts.append("していただき感謝いたします")
 
     #取得した削除候補の中から実際に削除するメインコンテントを決定して、これを呼出し元に引渡しをする
     intnt_rmv_cnddts_tmp = []
@@ -4495,6 +4529,7 @@ def extract_intent_from_general(line_msg):
           check_text_terminate_string(line_msg, "とは思ってる") or
           check_text_terminate_string(line_msg, "とは思う") or
           check_text_terminate_string(line_msg, "と思っています") or
+          check_text_terminate_string(line_msg, "と思ってます") or
           check_text_terminate_string(line_msg, "と思っている") or
           check_text_terminate_string(line_msg, "と思ってる") or
           check_text_terminate_string(line_msg, "と思う")):
@@ -4511,9 +4546,11 @@ def extract_intent_from_general(line_msg):
           check_text_terminate_string(line_msg, "と思わない")):
             extrctd_intnt = "<思慮＆考慮 現在 否定形>"
     elif (check_text_terminate_string(line_msg, "とは思っていました") or
+          check_text_terminate_string(line_msg, "とは思ってました") or
           check_text_terminate_string(line_msg, "とは思っていた") or
           check_text_terminate_string(line_msg, "とは思ってた") or
           check_text_terminate_string(line_msg, "と思っていました") or
+          check_text_terminate_string(line_msg, "と思ってました") or
           check_text_terminate_string(line_msg, "と思っていた") or
           check_text_terminate_string(line_msg, "と思ってた")):
             extrctd_intnt = "<思慮＆考慮 過去 肯定形>"
@@ -4530,6 +4567,15 @@ def extract_intent_from_general(line_msg):
     elif (check_text_terminate_string(line_msg, "らしくないです") or
           check_text_terminate_string(line_msg, "らしくない")):
             extrctd_intnt = "<感想＆感慨 否定形 形容的な表現>"
+    elif (check_text_terminate_string(line_msg, "して頂き有り難う御座います") or
+          check_text_terminate_string(line_msg, "して頂きありがとうございます") or
+          check_text_terminate_string(line_msg, "していただきありがとうございます") or
+          check_text_terminate_string(line_msg, "してくれて有り難う") or
+          check_text_terminate_string(line_msg, "してくれてありがとう") or
+          check_text_terminate_string(line_msg, "して頂き感謝致します") or
+          check_text_terminate_string(line_msg, "して頂き感謝いたします") or
+          check_text_terminate_string(line_msg, "していただき感謝いたします")):
+            extrctd_intnt = "<謝意・感謝>"
     elif (check_text_terminate_string(line_msg, "とは何でしょうか") or
           check_text_terminate_string(line_msg, "とはなんでしょうか") or
           check_text_terminate_string(line_msg, "とは何ですか") or
@@ -4540,7 +4586,10 @@ def extract_intent_from_general(line_msg):
           check_text_terminate_string(line_msg, "とはなにか") or
           check_text_terminate_string(line_msg, "とは何") or
           check_text_terminate_string(line_msg, "とはなに") or
-          check_text_terminate_string(line_msg, "とは")):
+          check_text_terminate_string(line_msg, "とは") or
+          check_text_terminate_string(line_msg, "って何") or
+          check_text_terminate_string(line_msg, "ってなに") or
+          check_text_terminate_string(line_msg, "って")):
             extrctd_intnt = "<単純質問>"
     else:
             extrctd_intnt = "<その他・不明>"
