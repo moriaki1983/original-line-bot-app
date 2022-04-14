@@ -6,13 +6,13 @@
 #LINEボットの性格や振舞いを決定づけるためのクラスを宣言・定義する
 class BotCharacter:
       #ボットのマインド(＝心の状態)を表す変数
-      __mindstt = 0
+      mindstt = 0
 
       #ボットのミッション(＝使命の達成状態)を表す変数
-      __missnstt = 0
+      missnstt = 0
 
       #ボットのミッション実行への到達度を表す変数
-      __dgr_of_missnexctn = 0
+      dgr_of_missnexctn = 0
 
       #コンストラクター
       def __init__(self):
