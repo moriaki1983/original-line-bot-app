@@ -5,8 +5,14 @@
 
 #LINEボットの性格や振舞いを決定づけるためのクラスを宣言・定義する
 class BotCharacter:
-      #ボットのマインド(＝心の状態)を表す変数を宣言する
-      __mind_state = 0
+      #ボットのマインド(＝心の状態)を表す変数
+      __mindstt = 0
+
+      #ボットのミッション(＝使命の達成状態)を表す変数
+      __missnstt = 0
+
+      #ボットのミッション実行への到達度を表す変数
+      __dgr_of_missnexctn = 0
 
       #コンストラクター
       def __init__(self):
@@ -14,26 +20,36 @@ class BotCharacter:
 
       #ボットのマインドのセッター
       @classmethod
-      def __set_mind(self, mind_state):
-          self.mind_state = mind_state
+      def __set_mind(self, mindstt):
+          self.__mindstt = mindstt
 
       #ボットのマインドのゲッター
       @classmethod
       def __get_mind(self):
-          return self.mind_state
+          return self.__mindstt
 
       #ボットのマインドを指定された分だけ上昇させるメソッド
       @classmethod
       def __add_mind(self, amnt):
-          self.mind_state += amnt
+          self.__mindstt += amnt
 
       #ボットのマインドを指定された分だけ下降させるメソッド
       @classmethod
       def __sub_mind(self, amnt):
-          self.mind_state -= amnt
+          self.__mindstt -= amnt
 
       #ボットのマインドを計算するメソッド
       @classmethod
       def calc_mind(self, flw_of_uttrnc):
-          if flw_of_uttrnc == "<称賛＆礼賛>":
-             return "<謝意＆感謝>"
+          if flw_of_uttrnc == "<挨拶>":
+             if (__missnstt == 0 and __dgr_of_missnexctn < 100):
+                __dgr_of_missnexctn += 50
+                return "<挨拶>"
+             if (__missnstt < 100 and __dgr_of_missnexctn >= 100):
+                __dgr_of_missnexctn = 0
+                __missnstt = 100
+                return "<聞出し>"
+             if __missnstt >= 100:
+                __dgr_of_missnexctn = 0
+                __missnstt = 0
+                return "<助言>"
