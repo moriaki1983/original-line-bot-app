@@ -21,35 +21,35 @@ class BotCharacter:
       #ボットのマインドのセッター
       @classmethod
       def __set_mind(self, mindstt):
-          self.__mindstt = mindstt
+          self.mindstt = mindstt
 
       #ボットのマインドのゲッター
       @classmethod
       def __get_mind(self):
-          return self.__mindstt
+          return self.mindstt
 
       #ボットのマインドを指定された分だけ上昇させるメソッド
       @classmethod
       def __add_mind(self, amnt):
-          self.__mindstt += amnt
+          self.mindstt += amnt
 
       #ボットのマインドを指定された分だけ下降させるメソッド
       @classmethod
       def __sub_mind(self, amnt):
-          self.__mindstt -= amnt
+          self.mindstt -= amnt
 
       #ボットのマインドを計算するメソッド
       @classmethod
       def calc_mind(self, flw_of_uttrnc):
           if flw_of_uttrnc == "<挨拶>":
-             if (__missnstt == 0 and __dgr_of_missnexctn < 100):
-                __dgr_of_missnexctn += 50
+             if (missnstt == 0 and dgr_of_missnexctn < 100):
+                dgr_of_missnexctn += 50
                 return "<挨拶>"
-             if (__missnstt < 100 and __dgr_of_missnexctn >= 100):
-                __dgr_of_missnexctn = 0
-                __missnstt = 100
+             if (missnstt < 100 and dgr_of_missnexctn >= 100):
+                dgr_of_missnexctn = 0
+                missnstt = 100
                 return "<聞出し>"
-             if __missnstt >= 100:
-                __dgr_of_missnexctn = 0
-                __missnstt = 0
+             if missnstt >= 100:
+                dgr_of_missnexctn = 0
+                missnstt = 0
                 return "<助言>"
