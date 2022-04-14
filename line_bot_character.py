@@ -31,3 +31,9 @@ class BotCharacter:
       @classmethod
       def sub_mind(self, amnt):
           self.mind_state -= amnt
+
+      #ボットのマインドを計算するメソッド
+      @classmethod
+      def calc_mind(self, flw_of_uttrnc):
+          if flw_of_uttrnc == "<称賛＆礼賛>":
+             return "<謝意＆感謝>"

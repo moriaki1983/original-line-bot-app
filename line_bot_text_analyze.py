@@ -4570,54 +4570,62 @@ def conversion_content_to_sentencepattern(line_msg):
 
 #ユーザーから送られるLINEメッセージの中からオントロジー(＝象意)(＝メッセージ全体の意味)を抽出する
 def extract_ontrgy(line_msg):
-    cntnt        = extract_content(line_msg)
-    anlyzd_cntnt = line_msg_morpho_analyze2(cntnt)
+    cntnt          = extract_content(line_msg)
+    anlyzd_cntnt   = line_msg_morpho_analyze2(cntnt)
     extrctd_ontrgy = []
     idx            = 0
     while len(anlyzd_cntnt) > idx:
-          if   (anlyzd_cntnt[idx][1] == "代名詞" and anlyzd_cntnt[idx][0] == "私"):
+          if   (anlyzd_cntnt[idx][1] == "名詞" and anlyzd_cntnt[idx][0] == "私"):
                 extrctd_ontrgy.append("LINE-Client")
-          elif (anlyzd_cntnt[idx][1] == "代名詞" and anlyzd_cntnt[idx][0] == "わたくし"):
+          elif (anlyzd_cntnt[idx][1] == "名詞" and anlyzd_cntnt[idx][0] == "わたくし"):
                 extrctd_ontrgy.append("LINE-Client")
-          elif (anlyzd_cntnt[idx][1] == "代名詞" and anlyzd_cntnt[idx][0] == "わたし"):
+          elif (anlyzd_cntnt[idx][1] == "名詞" and anlyzd_cntnt[idx][0] == "わたし"):
                 extrctd_ontrgy.append("LINE-Client")
-          elif (anlyzd_cntnt[idx][1] == "代名詞" and anlyzd_cntnt[idx][0] == "ワタシ"):
+          elif (anlyzd_cntnt[idx][1] == "名詞" and anlyzd_cntnt[idx][0] == "ワタシ"):
                 extrctd_ontrgy.append("LINE-Client")
-          elif (anlyzd_cntnt[idx][1] == "代名詞" and anlyzd_cntnt[idx][0] == "あたし"):
+          elif (anlyzd_cntnt[idx][1] == "名詞" and anlyzd_cntnt[idx][0] == "あたし"):
                 extrctd_ontrgy.append("LINE-Client")
-          elif (anlyzd_cntnt[idx][1] == "代名詞" and anlyzd_cntnt[idx][0] == "アタシ"):
+          elif (anlyzd_cntnt[idx][1] == "名詞" and anlyzd_cntnt[idx][0] == "アタシ"):
                 extrctd_ontrgy.append("LINE-Client")
-          elif (anlyzd_cntnt[idx][1] == "代名詞" and anlyzd_cntnt[idx][0] == "僕"):
+          elif (anlyzd_cntnt[idx][1] == "名詞" and anlyzd_cntnt[idx][0] == "僕"):
                 extrctd_ontrgy.append("LINE-Client")
-          elif (anlyzd_cntnt[idx][1] == "代名詞" and anlyzd_cntnt[idx][0] == "ぼく"):
+          elif (anlyzd_cntnt[idx][1] == "名詞" and anlyzd_cntnt[idx][0] == "ぼく"):
                 extrctd_ontrgy.append("LINE-Client")
-          elif (anlyzd_cntnt[idx][1] == "代名詞" and anlyzd_cntnt[idx][0] == "ボク"):
+          elif (anlyzd_cntnt[idx][1] == "名詞" and anlyzd_cntnt[idx][0] == "ボク"):
                 extrctd_ontrgy.append("LINE-Client")
-          elif (anlyzd_cntnt[idx][1] == "代名詞" and anlyzd_cntnt[idx][0] == "自分"):
+          elif (anlyzd_cntnt[idx][1] == "名詞" and anlyzd_cntnt[idx][0] == "自分"):
                 extrctd_ontrgy.append("LINE-Client")
-          elif (anlyzd_cntnt[idx][1] == "代名詞" and anlyzd_cntnt[idx][0] == "貴方"):
+          elif (anlyzd_cntnt[idx][1] == "名詞" and anlyzd_cntnt[idx][0] == "貴方"):
                 extrctd_ontrgy.append("LINE-Bot")
-          elif (anlyzd_cntnt[idx][1] == "代名詞" and anlyzd_cntnt[idx][0] == "貴女"):
+          elif (anlyzd_cntnt[idx][1] == "名詞" and anlyzd_cntnt[idx][0] == "貴女"):
                 extrctd_ontrgy.append("LINE-Bot")
-          elif (anlyzd_cntnt[idx][1] == "代名詞" and anlyzd_cntnt[idx][0] == "あなた"):
+          elif (anlyzd_cntnt[idx][1] == "名詞" and anlyzd_cntnt[idx][0] == "あなた"):
                 extrctd_ontrgy.append("LINE-Bot")
-          elif (anlyzd_cntnt[idx][1] == "代名詞" and anlyzd_cntnt[idx][0] == "アンタ"):
+          elif (anlyzd_cntnt[idx][1] == "名詞" and anlyzd_cntnt[idx][0] == "アンタ"):
                 extrctd_ontrgy.append("LINE-Bot")
-          elif (anlyzd_cntnt[idx][1] == "代名詞" and anlyzd_cntnt[idx][0] == "君"):
+          elif (anlyzd_cntnt[idx][1] == "名詞" and anlyzd_cntnt[idx][0] == "お前"):
                 extrctd_ontrgy.append("LINE-Bot")
-          elif (anlyzd_cntnt[idx][1] == "代名詞" and anlyzd_cntnt[idx][0] == "キミ"):
+          elif (anlyzd_cntnt[idx][1] == "名詞" and anlyzd_cntnt[idx][0] == "手前"):
                 extrctd_ontrgy.append("LINE-Bot")
-          elif (anlyzd_cntnt[idx][1] == "代名詞" and anlyzd_cntnt[idx][0] == "彼"):
+          elif (anlyzd_cntnt[idx][1] == "名詞" and anlyzd_cntnt[idx][0] == "てめえ"):
+                extrctd_ontrgy.append("LINE-Bot")
+          elif (anlyzd_cntnt[idx][1] == "名詞" and anlyzd_cntnt[idx][0] == "てめぇ"):
+                extrctd_ontrgy.append("LINE-Bot")
+          elif (anlyzd_cntnt[idx][1] == "名詞" and anlyzd_cntnt[idx][0] == "君"):
+                extrctd_ontrgy.append("LINE-Bot")
+          elif (anlyzd_cntnt[idx][1] == "名詞" and anlyzd_cntnt[idx][0] == "キミ"):
+                extrctd_ontrgy.append("LINE-Bot")
+          elif (anlyzd_cntnt[idx][1] == "名詞" and anlyzd_cntnt[idx][0] == "彼"):
                 extrctd_ontrgy.append("第三者 男性")
-          elif (anlyzd_cntnt[idx][1] == "代名詞" and anlyzd_cntnt[idx][0] == "カレ"):
+          elif (anlyzd_cntnt[idx][1] == "名詞" and anlyzd_cntnt[idx][0] == "カレ"):
                 extrctd_ontrgy.append("第三者 男性")
-          elif (anlyzd_cntnt[idx][1] == "代名詞" and anlyzd_cntnt[idx][0] == "彼女"):
+          elif (anlyzd_cntnt[idx][1] == "名詞" and anlyzd_cntnt[idx][0] == "彼女"):
                 extrctd_ontrgy.append("第三者 女性")
-          elif (anlyzd_cntnt[idx][1] == "代名詞" and anlyzd_cntnt[idx][0] == "カノジョ"):
+          elif (anlyzd_cntnt[idx][1] == "名詞" and anlyzd_cntnt[idx][0] == "カノジョ"):
                 extrctd_ontrgy.append("第三者 女性")
-          elif (anlyzd_cntnt[idx][1] == "代名詞" and anlyzd_cntnt[idx][0] == "誰か"):
+          elif (anlyzd_cntnt[idx][1] == "名詞" and anlyzd_cntnt[idx][0] == "誰か"):
                 extrctd_ontrgy.append("第三者")
-          elif (anlyzd_cntnt[idx][1] == "代名詞" and anlyzd_cntnt[idx][0] == "彼ら"):
+          elif (anlyzd_cntnt[idx][1] == "名詞" and anlyzd_cntnt[idx][0] == "彼ら"):
                 extrctd_ontrgy.append("第三者 複数")
           elif (anlyzd_cntnt[idx][1] == "名詞"):
                 extrctd_ontrgy.append(anlyzd_cntnt[idx][0])
@@ -4626,6 +4634,16 @@ def extract_ontrgy(line_msg):
           elif (anlyzd_cntnt[idx][1] == "助詞"):
                 extrctd_ontrgy.append(anlyzd_cntnt[idx][0])
           elif (anlyzd_cntnt[idx][1] == "助動詞"):
+                extrctd_ontrgy.append(anlyzd_cntnt[idx][0])
+          elif (anlyzd_cntnt[idx][1] == "副詞"):
+                extrctd_ontrgy.append(anlyzd_cntnt[idx][0])
+          elif (anlyzd_cntnt[idx][1] == "接続詞"):
+                extrctd_ontrgy.append(anlyzd_cntnt[idx][0])
+          elif (anlyzd_cntnt[idx][1] == "形容詞"):
+                extrctd_ontrgy.append(anlyzd_cntnt[idx][0])
+          elif (anlyzd_cntnt[idx][1] == "連体詞"):
+                extrctd_ontrgy.append(anlyzd_cntnt[idx][0])
+          elif (anlyzd_cntnt[idx][1] == "感動詞"):
                 extrctd_ontrgy.append(anlyzd_cntnt[idx][0])
           idx += 1
     return extrctd_ontrgy
