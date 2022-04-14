@@ -42,14 +42,9 @@ class BotCharacter:
       @classmethod
       def calc_mind(self, flw_of_uttrnc):
           if flw_of_uttrnc == "<挨拶>":
-             if (self.missnstt == 0 and self.dgr_of_missnexctn < 100):
+             if (self.dgr_of_missnexctn < 100):
                  self.dgr_of_missnexctn += 50
                  return "<挨拶>"
-             if (self.missnstt < 100 and self.dgr_of_missnexctn >= 100):
+             if (self.dgr_of_missnexctn >= 100):
                  self.dgr_of_missnexctn = 0
-                 self.missnstt = 100
                  return "<聞出し>"
-             if  self.missnstt >= 100:
-                 self.dgr_of_missnexctn = 0
-                 self.missnstt = 0
-                 return "<助言>"
