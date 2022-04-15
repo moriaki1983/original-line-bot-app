@@ -25,7 +25,7 @@ def text_generate_from_analyze_result(line_nwrcd, line_oldrcds):
        gnrtd_msg_cnddt = ["どうされましたか？", "伺います"]
        gnrtd_msg = random.choice(gnrtd_msg_cnddt)
        return gnrtd_msg
-    if mind == "<助言>":
+    if mind == "<依頼＆要求への返答>":
        gnrtd_msg_cnddt = ["どうぞお話しください", "いいですよ"]
        gnrtd_msg = random.choice(gnrtd_msg_cnddt)
        return gnrtd_msg
