@@ -20,7 +20,6 @@ def text_generate_from_analyze_result(line_nwrcd, line_oldrcds):
     if mind == "<挨拶>":
        gnrtd_msg_cnddt = ["こんにちは", "どうも"]
        gnrtd_msg = random.choice(gnrtd_msg_cnddt)
-       gnrtd_msg = gnrtd_msg + " cntnt:" + cntnt
        return gnrtd_msg
     if mind == "<聞出し>":
        gnrtd_msg_cnddt = ["どうされましたか？", "伺います"]
@@ -28,12 +27,10 @@ def text_generate_from_analyze_result(line_nwrcd, line_oldrcds):
        gnrtd_msg = gnrtd_msg + " cntnt:" + cntnt
        return gnrtd_msg
     if mind == "<助言>":
-       gnrtd_msg_cnddt = ["仕事もほどほどに", "ご自愛ください"]
+       gnrtd_msg_cnddt = ["どうぞお話しください", "いいですよ"]
        gnrtd_msg = random.choice(gnrtd_msg_cnddt)
-       gnrtd_msg = gnrtd_msg + " cntnt:" + cntnt
        return gnrtd_msg
 
     #ユーザーの発話の流れがどのパターンにも該当しない場合の処理をする
     gnrtd_msg = "また おしゃべりしましょう♪"
-    gnrtd_msg = gnrtd_msg + " cntnt:" + cntnt
     return gnrtd_msg

@@ -38,6 +38,7 @@ class BotCharacter:
       def sub_mind(cls, amnt):
           cls.mindstt -= amnt
 
+
       @classmethod
       def set_misson_state(cls, missnstt):
           cls.missnstt = missnstt
@@ -46,9 +47,11 @@ class BotCharacter:
       def get_misson_state(cls):
           return cls.missnstt
 
+
       @classmethod
       def add_misson_state(cls, amnt):
           cls.missnstt += amnt
+
 
       @classmethod
       def sub_misson_state(cls, amnt):
@@ -58,6 +61,7 @@ class BotCharacter:
       def set_degree_of_mission_execution(cls, dgr_of_missnexctn):
           cls.dgr_of_missnexctn = dgr_of_missnexctn
 
+
       @classmethod
       def get_degree_of_mission_execution(cls):
           return cls.dgr_of_missnexctn
@@ -65,6 +69,7 @@ class BotCharacter:
       @classmethod
       def add_degree_of_mission_execution(cls, amnt):
           cls.dgr_of_missnexctn += amnt
+
 
       @classmethod
       def sub_degree_of_mission_execution(cls, amnt):
@@ -79,7 +84,7 @@ class BotCharacter:
                 return "<挨拶>"
              if cls.get_degree_of_mission_execution() >= 100:
                 cls.set_degree_of_mission_execution(0)
-                cls.add_misson_state(50)
+                cls.add_misson_state(100)
                 return "<聞出し>"
           if (flw_of_uttrnc == "<依頼＆要求>" and "相談" in cntnt):
               cls.set_degree_of_mission_execution(0)
