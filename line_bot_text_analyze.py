@@ -1499,6 +1499,8 @@ def remove_intent(line_msg):
          intnt_rmv_cnddts.append("はして")
     elif check_text_terminate_string(line_msg, "してくれ"):
          intnt_rmv_cnddts.append("してくれ")
+    elif check_text_terminate_string(line_msg, "くれ"):
+         intnt_rmv_cnddts.append("くれ")
     elif check_text_terminate_string(line_msg, "がして下さい"):
          intnt_rmv_cnddts.append("がして下さい")
     elif check_text_terminate_string(line_msg, "がしてください"):
@@ -1523,6 +1525,8 @@ def remove_intent(line_msg):
          intnt_rmv_cnddts.append("はしてくれますか")
     elif check_text_terminate_string(line_msg, "してくれるか"):
          intnt_rmv_cnddts.append("してくれるか")
+    elif check_text_terminate_string(line_msg, "くれるか"):
+         intnt_rmv_cnddts.append("くれるか")
     elif check_text_terminate_string(line_msg, "をやって下さいますか"):
          intnt_rmv_cnddts.append("をやって下さいますか")
     elif check_text_terminate_string(line_msg, "をやってくださいますか"):
@@ -4227,7 +4231,8 @@ def extract_intent_from_general(line_msg):
           check_text_terminate_string(line_msg, "してください") or
           check_text_terminate_string(line_msg, "はしてくれ") or
           check_text_terminate_string(line_msg, "はして") or 
-          check_text_terminate_string(line_msg, "してくれ")):
+          check_text_terminate_string(line_msg, "してくれ") or
+          check_text_terminate_string(line_msg, "くれ")):
             extrctd_intnt = "<依頼＆要求>"
     elif (check_text_terminate_string(line_msg, "がして下さい") or
           check_text_terminate_string(line_msg, "がしてください") or
@@ -4259,6 +4264,7 @@ def extract_intent_from_general(line_msg):
           check_text_terminate_string(line_msg, "をしてくれますか") or
           check_text_terminate_string(line_msg, "はしてくれますか") or
           check_text_terminate_string(line_msg, "してくれるか") or
+          check_text_terminate_string(line_msg, "くれるか") or
           check_text_terminate_string(line_msg, "をやって下さいますか") or
           check_text_terminate_string(line_msg, "をやってくださいますか") or
           check_text_terminate_string(line_msg, "をやってくれますか") or

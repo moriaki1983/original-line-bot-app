@@ -14,7 +14,7 @@ def text_generate_from_analyze_result(line_nwrcd, line_oldrcds):
     #を示す変数を宣言・定義する
     flw_of_uttrnc = line_nwrcd[0][3]
     cntnt         = line_nwrcd[0][4]
-    mind          = BotCharacter.calc_mind(flw_of_uttrnc)
+    mind          = BotCharacter.calc_mind(flw_of_uttrnc, cntnt)
 
     #ユーザーの発話の流れに沿った返信メッセージを生成する
     if mind == "<挨拶>":
@@ -24,6 +24,11 @@ def text_generate_from_analyze_result(line_nwrcd, line_oldrcds):
        return gnrtd_msg
     if mind == "<聞出し>":
        gnrtd_msg_cnddt = ["どうされましたか？", "伺います"]
+       gnrtd_msg = random.choice(gnrtd_msg_cnddt)
+       gnrtd_msg = gnrtd_msg + " cntnt:" + cntnt
+       return gnrtd_msg
+    if mind == "<助言>":
+       gnrtd_msg_cnddt = ["仕事もほどほどに", "ご自愛ください"]
        gnrtd_msg = random.choice(gnrtd_msg_cnddt)
        gnrtd_msg = gnrtd_msg + " cntnt:" + cntnt
        return gnrtd_msg
