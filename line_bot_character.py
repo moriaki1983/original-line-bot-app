@@ -82,7 +82,6 @@ class BotCharacter:
                 cls.add_misson_state(50)
                 return "<聞出し>"
           if (flw_of_uttrnc == "<依頼＆要求>" and "相談" in cntnt):
-             if cls.get_misson_state() >= 100:
-                cls.set_degree_of_mission_execution(0)
-                cls.set_misson_state(0)
-                return "<助言>"
+              cls.set_degree_of_mission_execution(0)
+              cls.set_misson_state(0)
+              return "<助言>"
