@@ -1493,6 +1493,10 @@ def remove_intent(line_msg):
          intnt_rmv_cnddts.append("して下さい")
     elif check_text_terminate_string(line_msg, "してください"):
          intnt_rmv_cnddts.append("してください")
+    elif check_text_terminate_string(line_msg, "下さい"):
+         intnt_rmv_cnddts.append("下さい")
+    elif check_text_terminate_string(line_msg, "ください"):
+         intnt_rmv_cnddts.append("ください")
     elif check_text_terminate_string(line_msg, "はしてくれ"):
          intnt_rmv_cnddts.append("はしてくれ")
     elif check_text_terminate_string(line_msg, "はして"):
@@ -1517,12 +1521,18 @@ def remove_intent(line_msg):
          intnt_rmv_cnddts.append("して下さいますか")
     elif check_text_terminate_string(line_msg, "してくださいますか"):
          intnt_rmv_cnddts.append("してくださいますか")
+    elif check_text_terminate_string(line_msg, "下さいますか"):
+         intnt_rmv_cnddts.append("下さいますか")
+    elif check_text_terminate_string(line_msg, "くださいますか"):
+         intnt_rmv_cnddts.append("くださいますか")
     elif check_text_terminate_string(line_msg, "をしてくれますか"):
          intnt_rmv_cnddts.append("をしてくれますか")
     elif check_text_terminate_string(line_msg, "をしてくれますか"):
          intnt_rmv_cnddts.append("をしてくれますか")
     elif check_text_terminate_string(line_msg, "はしてくれますか"):
          intnt_rmv_cnddts.append("はしてくれますか")
+    elif check_text_terminate_string(line_msg, "くれますか"):
+         intnt_rmv_cnddts.append("くれますか")
     elif check_text_terminate_string(line_msg, "してくれるか"):
          intnt_rmv_cnddts.append("してくれるか")
     elif check_text_terminate_string(line_msg, "くれるか"):
@@ -4229,6 +4239,8 @@ def extract_intent_from_general(line_msg):
           check_text_terminate_string(line_msg, "はしてください") or
           check_text_terminate_string(line_msg, "して下さい") or
           check_text_terminate_string(line_msg, "してください") or
+          check_text_terminate_string(line_msg, "下さい") or
+          check_text_terminate_string(line_msg, "ください") or
           check_text_terminate_string(line_msg, "はしてくれ") or
           check_text_terminate_string(line_msg, "はして") or 
           check_text_terminate_string(line_msg, "してくれ") or
@@ -4243,26 +4255,12 @@ def extract_intent_from_general(line_msg):
           check_text_terminate_string(line_msg, "をしてくださいますか") or
           check_text_terminate_string(line_msg, "して下さいますか") or
           check_text_terminate_string(line_msg, "してくださいますか") or
+          check_text_terminate_string(line_msg, "下さいますか") or
+          check_text_terminate_string(line_msg, "くださいますか") or
           check_text_terminate_string(line_msg, "をしてくれますか") or
           check_text_terminate_string(line_msg, "をしてくれますか") or
           check_text_terminate_string(line_msg, "はしてくれますか") or
-          check_text_terminate_string(line_msg, "してくれるか") or
-          check_text_terminate_string(line_msg, "をやって下さいますか") or
-          check_text_terminate_string(line_msg, "をやってくださいますか") or
-          check_text_terminate_string(line_msg, "をやってくれますか") or
-          check_text_terminate_string(line_msg, "をやってくれるか") or
-          check_text_terminate_string(line_msg, "はやって下さいますか") or
-          check_text_terminate_string(line_msg, "はやってくださいますか") or
-          check_text_terminate_string(line_msg, "はやってくれますか") or
-          check_text_terminate_string(line_msg, "はやってくれるか")):
-            extrctd_intnt = "<疑義＆質問＆確認 依頼・要求について>"
-    elif (check_text_terminate_string(line_msg, "をして下さいますか") or
-          check_text_terminate_string(line_msg, "をしてくださいますか") or
-          check_text_terminate_string(line_msg, "して下さいますか") or
-          check_text_terminate_string(line_msg, "してくださいますか") or
-          check_text_terminate_string(line_msg, "をしてくれますか") or
-          check_text_terminate_string(line_msg, "をしてくれますか") or
-          check_text_terminate_string(line_msg, "はしてくれますか") or
+          check_text_terminate_string(line_msg, "くれますか") or
           check_text_terminate_string(line_msg, "してくれるか") or
           check_text_terminate_string(line_msg, "くれるか") or
           check_text_terminate_string(line_msg, "をやって下さいますか") or

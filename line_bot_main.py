@@ -182,18 +182,21 @@ def line_msg_analyze(line_msg):
     extrctd_intnt = line_bot_text_analyze.extract_intent_from_gag_and_vocalcordcopy(rmvd_etc_msg)
     if extrctd_intnt != "<その他・不明>":
        line_intnt = extrctd_intnt
+       line_cntnt = ""
        return line_intnt, line_cntnt, line_ontrgy
     rmvd_etc_msg   = line_bot_text_analyze.remove_etc(line_msg)
     rmvd_symbl_msg = line_bot_text_analyze.remove_symbol(rmvd_etc_msg)
     extrctd_intnt2 = line_bot_text_analyze.extract_intent_from_gag_and_vocalcordcopy(rmvd_symbl_msg)
     if extrctd_intnt2 != "<その他・不明>":
        line_intnt = extrctd_intnt2
+       line_cntnt = ""
        return line_intnt, line_cntnt, line_ontrgy
     rmvd_etc_msg   = line_bot_text_analyze.remove_etc(line_msg)
     rmvd_symbl_msg = line_bot_text_analyze.remove_symbol(rmvd_etc_msg)
     extrctd_intnt3 = line_bot_text_analyze.extract_intent_from_short_and_boilerplate(rmvd_symbl_msg)
     if extrctd_intnt3 != "<その他・不明>":
        line_intnt = extrctd_intnt3
+       line_cntnt = ""
        return line_intnt, line_cntnt, line_ontrgy
     rmvd_etc_msg     = line_bot_text_analyze.remove_etc(line_msg)
     rmvd_symbl_msg   = line_bot_text_analyze.remove_symbol(rmvd_etc_msg)
@@ -201,6 +204,7 @@ def line_msg_analyze(line_msg):
     extrctd_intnt4 = line_bot_text_analyze.extract_intent_from_short_and_boilerplate(rmvd_edprtcl_msg)
     if extrctd_intnt4 != "<その他・不明>":
        line_intnt = extrctd_intnt4
+       line_cntnt = ""
        return line_intnt, line_cntnt, line_ontrgy
     rmvd_etc_msg     = line_bot_text_analyze.remove_etc(line_msg)
     rmvd_symbl_msg   = line_bot_text_analyze.remove_symbol(rmvd_etc_msg)

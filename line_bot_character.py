@@ -43,7 +43,7 @@ class BotCharacter:
           cls.missnstt = missnstt
 
       @classmethod
-      def get_misson_state(cls, missnstt):
+      def get_misson_state(cls):
           return cls.missnstt
 
       @classmethod
