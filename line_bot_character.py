@@ -40,7 +40,7 @@ class BotCharacter:
 
       @classmethod
       def __set_degree_of_mission_execution(self, dgr_of_missnexctn):
-          self.__dgr_of_missnexctn = dgr_of_missnexctn
+          self.dgr_of_missnexctn = dgr_of_missnexctn
 
       @classmethod
       def __get_degree_of_mission_execution(self):
@@ -58,9 +58,9 @@ class BotCharacter:
       @classmethod
       def calc_mind(self, flw_of_uttrnc):
           if flw_of_uttrnc == "<挨拶>":
-             if get_degree_of_mission_execution() < 100:
-                add_degree_of_mission_execution(self, 50)
+             if __get_degree_of_mission_execution() < 100:
+                __add_degree_of_mission_execution(self, 50)
                 return "<挨拶>"
-             if get_degree_of_mission_execution() >= 100:
-                set_degree_of_mission_execution(0)
+             if __get_degree_of_mission_execution() >= 100:
+                __set_degree_of_mission_execution(0)
                 return "<聞出し>"
