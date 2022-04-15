@@ -11,23 +11,19 @@ from line_bot_character import BotCharacter
 
 #ユーザーから送られるLINEメッセージの解析結果を基に、自然でかつ適切な返信メッセージを生成する
 def text_generate_from_analyze_result(line_nwrcd, line_oldrcds):
-    #ユーザーの発話の流れを示す変数を宣言・定義する
+    #を示す変数を宣言・定義する
     flw_of_uttrnc = line_nwrcd[0][3]
     cntnt         = line_nwrcd[0][4]
+    mind          = BotCharacter.calc_mind(flw_of_uttrnc)
 
     #ユーザーの発話の流れに沿った返信メッセージを生成する
-    if BotCharacter.calc_mind(flw_of_uttrnc) == "<挨拶>":
+    if mind == "<挨拶>":
        gnrtd_msg_cnddt = ["こんにちは", "どうも"]
        gnrtd_msg = random.choice(gnrtd_msg_cnddt)
        gnrtd_msg = gnrtd_msg + " cntnt:" + cntnt
        return gnrtd_msg
-    if BotCharacter.calc_mind(flw_of_uttrnc) == "<聞出し>":
+    if mind == "<聞出し>":
        gnrtd_msg_cnddt = ["どうされましたか？", "伺います"]
-       gnrtd_msg = random.choice(gnrtd_msg_cnddt)
-       gnrtd_msg = gnrtd_msg + " cntnt:" + cntnt
-       return gnrtd_msg
-    if BotCharacter.calc_mind(flw_of_uttrnc) == "<助言>":
-       gnrtd_msg_cnddt = ["仕事はほどほどに", "体に気を付けて"]
        gnrtd_msg = random.choice(gnrtd_msg_cnddt)
        gnrtd_msg = gnrtd_msg + " cntnt:" + cntnt
        return gnrtd_msg
