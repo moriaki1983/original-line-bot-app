@@ -82,7 +82,7 @@ class BotCharacter:
              if cls.get_degree_of_mission_execution() < 100:
                 cls.add_degree_of_mission_execution(50)
                 return "<挨拶>"
-             if cls.get_degree_of_mission_execution() >= 100:
+             if cls.get_degree_of_mission_execution() > 99:
                 cls.set_degree_of_mission_execution(0)
                 cls.add_misson_state(100)
                 return "<聞出し>"
