@@ -56,11 +56,11 @@ class BotCharacter:
 
       #ボットのマインドを計算するメソッド
       @classmethod
-      def calc_mind(self, flw_of_uttrnc):
+      def calc_mind(cls, flw_of_uttrnc):
           if flw_of_uttrnc == "<挨拶>":
-             if get_degree_of_mission_execution() < 100:
-                add_degree_of_mission_execution(50)
+             if cls.get_degree_of_mission_execution() < 100:
+                cls.add_degree_of_mission_execution(50)
                 return "<挨拶>"
-             if get_degree_of_mission_execution() >= 100:
-                set_degree_of_mission_execution(0)
+             if cls.get_degree_of_mission_execution() >= 100:
+                cls.set_degree_of_mission_execution(0)
                 return "<聞出し>"
