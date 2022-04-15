@@ -6,13 +6,13 @@
 #LINEボットの性格や振舞いを決定づけるためのクラスを宣言・定義する
 class BotCharacter:
       #ボットのマインド(＝心の状態)を表す変数
-      mindstt = 0
+      __mindstt = 0
 
       #ボットのミッション(＝使命の達成状態)を表す変数
-      missnstt = 0
+      __missnstt = 0
 
       #ボットのミッション実行への到達度を表す変数
-      dgr_of_missnexctn = 0
+      __dgr_of_missnexctn = 0
 
       #コンストラクター
       def __init__(self):
@@ -38,13 +38,29 @@ class BotCharacter:
       def __sub_mind(self, amnt):
           self.mindstt -= amnt
 
+      @classmethod
+      def __set_degree_of_mission_execution(self, dgr_of_missnexctn):
+          self.__dgr_of_missnexctn = dgr_of_missnexctn
+
+      @classmethod
+      def __get_degree_of_mission_execution(self):
+          return self.dgr_of_missnexctn
+
+      @classmethod
+      def __add_degree_of_mission_execution(self, amnt):
+          self.dgr_of_missnexctn += amnt
+
+      @classmethod
+      def __sub_degree_of_mission_execution(self, amnt):
+          self.dgr_of_missnexctn -= amnt
+
       #ボットのマインドを計算するメソッド
       @classmethod
       def calc_mind(self, flw_of_uttrnc):
           if flw_of_uttrnc == "<挨拶>":
-             if (self.dgr_of_missnexctn < 100):
-                 self.dgr_of_missnexctn += 50
-                 return "<挨拶>"
-             if (self.dgr_of_missnexctn >= 100):
-                 self.dgr_of_missnexctn = 0
-                 return "<聞出し>"
+             if get_degree_of_mission_execution() < 100:
+                add_degree_of_mission_execution(self, 50)
+                return "<挨拶>"
+             if get_degree_of_mission_execution() >= 100:
+                set_degree_of_mission_execution(0)
+                return "<聞出し>"
