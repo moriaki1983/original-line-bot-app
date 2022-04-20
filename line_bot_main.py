@@ -58,14 +58,14 @@ def show_db_record():
           return "table record not exist..."
        if rcd_id == 0:
           rcd_id_tmp = 0
-          cur.execute("""SELECT * FROM line_table WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id_tmp})
+          cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id_tmp})
           rcd = cur.fetchone()
           cur.close()
           conn.close()
           return jsonify(rcd), 200
        if rcd_id >= 1:
           rcd_id_tmp = rcd_id - 1
-          cur.execute("""SELECT * FROM line_table WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id_tmp})
+          cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id_tmp})
           rcd = cur.fetchone()
           cur.close()
           conn.close()
@@ -91,7 +91,7 @@ def create_db_table():
     #データベース上に新たにテーブルを用意・作成する
     global has_db_tbl
     try:
-        cur.execute("""CREATE TABLE IF NOT EXISTS line_table(rcd_id integer PRIMARY KEY, dttm text, usr_nm text, msg text, intnt text, cntnt text, ontrgy text);""")
+        cur.execute("""CREATE TABLE IF NOT EXISTS line_tbl(rcd_id integer PRIMARY KEY, dttm text, usr_nm text, msg text, intnt text, cntnt text);""")
     except Exception:
         pass
 
@@ -116,7 +116,7 @@ def drop_db_table():
     global has_db_tbl
     global rcd_id
     try:
-        cur.execute("""DROP TABLE IF EXISTS line_table;""")
+        cur.execute("""DROP TABLE IF EXISTS line_tbl;""")
     except Exception:
         pass
 
@@ -159,23 +159,22 @@ def handle_follow(event):
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     #ユーザーから送られるLINEメッセージをJanomeで形態素解析する
-    line_intnt, line_cntnt, line_ontrgy = line_msg_analyze(event.message.text)
+    line_intnt, line_cntnt = analyze_line_message(event.message.text)
 
     #ユーザーから送られるLINEメッセージをPostgresのデータベースに登録・格納する
-    postgres_insert_and_update(event, line_intnt, line_cntnt, line_ontrgy)
+    postgres_insert_and_update(event, line_intnt, line_cntnt)
 
     #ユーザーから送られるLINEメッセージの解析結果から返信メッセージを生成する
-    gnrtd_msg = line_msg_generate()
+    gnrtd_msg = generate_line_message()
 
     #プログラムが生成するLINEメッセージをLINEBotAPIを使ってユーザーに対して送信する
-    line_msg_send(event, gnrtd_msg)
+    send_line_message(event, gnrtd_msg)
 
 
 #ユーザーから送られるLINEメッセージを解析する
-def line_msg_analyze(line_msg):
-    #ユーザーから送られるメッセージの中に含まれるコンテント・オントロジーを抽出する
-    line_cntnt  = line_bot_text_analyze.extract_content(line_msg)
-    line_ontrgy = line_bot_text_analyze.extract_ontrgy(line_msg)
+def analyze_line_message(line_msg):
+    #ユーザーから送られるメッセージの中に含まれるコンテントを抽出する
+    line_cntnt = line_bot_text_analyze.extract_content(line_msg)
 
     #ユーザーから送られるメッセージの中に含まれるインテントを抽出する
     rmvd_etc_msg = line_bot_text_analyze.remove_etc(line_msg)
@@ -183,21 +182,21 @@ def line_msg_analyze(line_msg):
     if extrctd_intnt != "<その他・不明>":
        line_intnt = extrctd_intnt
        line_cntnt = ""
-       return line_intnt, line_cntnt, line_ontrgy
+       return line_intnt, line_cntnt
     rmvd_etc_msg   = line_bot_text_analyze.remove_etc(line_msg)
     rmvd_symbl_msg = line_bot_text_analyze.remove_symbol(rmvd_etc_msg)
     extrctd_intnt2 = line_bot_text_analyze.extract_intent_from_gag_and_vocalcordcopy(rmvd_symbl_msg)
     if extrctd_intnt2 != "<その他・不明>":
        line_intnt = extrctd_intnt2
        line_cntnt = ""
-       return line_intnt, line_cntnt, line_ontrgy
+       return line_intnt, line_cntnt
     rmvd_etc_msg   = line_bot_text_analyze.remove_etc(line_msg)
     rmvd_symbl_msg = line_bot_text_analyze.remove_symbol(rmvd_etc_msg)
     extrctd_intnt3 = line_bot_text_analyze.extract_intent_from_short_and_boilerplate(rmvd_symbl_msg)
     if extrctd_intnt3 != "<その他・不明>":
        line_intnt = extrctd_intnt3
        line_cntnt = ""
-       return line_intnt, line_cntnt, line_ontrgy
+       return line_intnt, line_cntnt
     rmvd_etc_msg     = line_bot_text_analyze.remove_etc(line_msg)
     rmvd_symbl_msg   = line_bot_text_analyze.remove_symbol(rmvd_etc_msg)
     rmvd_edprtcl_msg = line_bot_text_analyze.remove_endparticle(rmvd_symbl_msg)
@@ -205,16 +204,16 @@ def line_msg_analyze(line_msg):
     if extrctd_intnt4 != "<その他・不明>":
        line_intnt = extrctd_intnt4
        line_cntnt = ""
-       return line_intnt, line_cntnt, line_ontrgy
+       return line_intnt, line_cntnt
     rmvd_etc_msg     = line_bot_text_analyze.remove_etc(line_msg)
     rmvd_symbl_msg   = line_bot_text_analyze.remove_symbol(rmvd_etc_msg)
     rmvd_edprtcl_msg = line_bot_text_analyze.remove_endparticle(rmvd_symbl_msg)
     line_intnt       = line_bot_text_analyze.extract_intent_from_general(rmvd_edprtcl_msg)
-    return line_intnt, line_cntnt, line_ontrgy
+    return line_intnt, line_cntnt
 
 
 #ユーザーから送られるLINEメッセージをPostgresのデータベースに登録・格納する
-def postgres_insert_and_update(event, line_intnt, line_cntnt, line_ontrgy):
+def postgres_insert_and_update(event, line_intnt, line_cntnt):
     #データベースに接続して、テーブル操作のためのカーソルを用意・作成する
     conn = psycopg2.connect(DATABASE_URL)
     conn.set_client_encoding("utf-8") 
@@ -235,13 +234,13 @@ def postgres_insert_and_update(event, line_intnt, line_cntnt, line_ontrgy):
     #該当IDのメッセージ(＝レコード)がなかったら、データベースにインサート(＝新規に登録・格納)し、既にメッセージがあったらアップデート(＝上書き)する
     if rcd_id == -1:
        rcd_id = 0
-    cur.execute("""SELECT * FROM line_table WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id})
+    cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id})
     line_rcd = cur.fetchone()
     if (rcd_id >= 0 and rcd_id <= 99):
         if line_rcd is None:
-           cur.execute("""INSERT INTO line_table (rcd_id, dttm, usr_nm, msg, intnt, cntnt, ontrgy) VALUES (%(rcd_id)s, %(dttm)s, %(usr_nm)s, %(msg)s, %(intnt)s, %(cntnt)s, %(ontrgy)s);""", {'rcd_id': rcd_id, 'dttm': dttm, 'usr_nm': usr_nm, 'msg': msg, 'intnt': intnt, 'cntnt': cntnt, 'ontrgy': ontrgy})
+           cur.execute("""INSERT INTO line_tbl (rcd_id, dttm, usr_nm, msg, intnt, cntnt) VALUES (%(rcd_id)s, %(dttm)s, %(usr_nm)s, %(msg)s, %(intnt)s, %(cntnt)s);""", {'rcd_id': rcd_id, 'dttm': dttm, 'usr_nm': usr_nm, 'msg': msg, 'intnt': intnt, 'cntnt': cntnt})
         if line_rcd is not None:
-           cur.execute("""UPDATE line_table SET rcd_id=%(rcd_id)s, dttm=%(dttm)s, usr_nm=%(usr_nm)s, msg=%(msg)s, intnt=%(intnt)s, cntnt=%(cntnt)s, ontrgy=%(ontrgy)s WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id, 'dttm': dttm, 'usr_nm': usr_nm, 'msg': msg, 'intnt': intnt, 'cntnt': cntnt, 'ontrgy': ontrgy, 'rcd_id': rcd_id})
+           cur.execute("""UPDATE line_tbl SET rcd_id=%(rcd_id)s, dttm=%(dttm)s, usr_nm=%(usr_nm)s, msg=%(msg)s, intnt=%(intnt)s, cntnt=%(cntnt)s WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id, 'dttm': dttm, 'usr_nm': usr_nm, 'msg': msg, 'intnt': intnt, 'cntnt': cntnt, 'rcd_id': rcd_id})
         rcd_id +=  1
     if rcd_id == 100:
        rcd_id = -1
@@ -253,21 +252,21 @@ def postgres_insert_and_update(event, line_intnt, line_cntnt, line_ontrgy):
 
 
 #ユーザーから送られるLINEメッセージの解析結果から返信メッセージを生成する
-def line_msg_generate():
+def generate_line_message():
     #データベースに接続して、テーブル操作のためのカーソルを用意・作成する
     conn = psycopg2.connect(DATABASE_URL)
     conn.set_client_encoding("utf-8")
     cur  = conn.cursor()
 
-    #最新のLINEレコードをデータベースから取得する
+    #最新のレコードをデータベースから取得する
     global rcd_id
     line_nwrcd = []
     rcd_id_tmp = rcd_id - 1
-    cur.execute("""SELECT * FROM line_table WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id_tmp})
+    cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id_tmp})
     line_rcd = cur.fetchone()
-    line_nwrcd.append([line_rcd[1], line_rcd[2], line_rcd[3], line_rcd[4], line_rcd[5], line_rcd[6]])
+    line_nwrcd.append([line_rcd[1], line_rcd[2], line_rcd[3], line_rcd[4], line_rcd[5]])
 
-    #過去５件分のLINEレコードをデータベースから取得する
+    #過去５件分のレコードをデータベースから取得する
     line_oldrcds = []
     if rcd_id == -1:
        line_oldrcds.append(["", "", "", "", "", ""])
@@ -282,83 +281,110 @@ def line_msg_generate():
        line_oldrcds.append(["", "", "", "", "", ""])
        line_oldrcds.append(["", "", "", "", "", ""])
     if rcd_id == 1:
-       cur.execute("""SELECT * FROM line_table WHERE rcd_id = 0;""")
+       cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = 0;""")
        line_rcd = cur.fetchone()
-       line_oldrcds.append([line_rcd[1], line_rcd[2], line_rcd[3], line_rcd[4], line_rcd[5], line_rcd[6]])
+       line_oldrcds.append([line_rcd[1], line_rcd[2], line_rcd[3], line_rcd[4], line_rcd[5]])
        line_oldrcds.append(["", "", "", "", "", ""])
        line_oldrcds.append(["", "", "", "", "", ""])
        line_oldrcds.append(["", "", "", "", "", ""])
        line_oldrcds.append(["", "", "", "", "", ""])
     if rcd_id == 2:
-       cur.execute("""SELECT * FROM line_table WHERE rcd_id = 0;""")
+       cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = 0;""")
        line_rcd = cur.fetchone()
-       cur.execute("""SELECT * FROM line_table WHERE rcd_id = 1;""")
+       cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = 1;""")
        line_rcd2 = cur.fetchone()
-       line_oldrcds.append([line_rcd[1], line_rcd[2], line_rcd[3], line_rcd[4], line_rcd[5], line_rcd[6]])
-       line_oldrcds.append([line_rcd2[1], line_rcd2[2], line_rcd2[3], line_rcd2[4], line_rcd2[5], line_rcd2[6]])
+       line_oldrcds.append([line_rcd[1], line_rcd[2], line_rcd[3], line_rcd[4], line_rcd[5]])
+       line_oldrcds.append([line_rcd2[1], line_rcd2[2], line_rcd2[3], line_rcd2[4], line_rcd2[5]])
        line_oldrcds.append(["", "", "", "", "", ""])
        line_oldrcds.append(["", "", "", "", "", ""])
        line_oldrcds.append(["", "", "", "", "", ""])
     if rcd_id == 3:
-       cur.execute("""SELECT * FROM line_table WHERE rcd_id = 0;""")
+       cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = 0;""")
        line_rcd = cur.fetchone()
-       cur.execute("""SELECT * FROM line_table WHERE rcd_id = 1;""")
+       cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = 1;""")
        line_rcd2 = cur.fetchone()
-       cur.execute("""SELECT * FROM line_table WHERE rcd_id = 2;""")
+       cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = 2;""")
        line_rcd3 = cur.fetchone()
-       line_oldrcds.append([line_rcd[1], line_rcd[2], line_rcd[3], line_rcd[4], line_rcd[5], line_rcd[6]])
-       line_oldrcds.append([line_rcd2[1], line_rcd2[2], line_rcd2[3], line_rcd2[4], line_rcd2[5], line_rcd2[6]])
-       line_oldrcds.append([line_rcd3[1], line_rcd3[2], line_rcd3[3], line_rcd3[4], line_rcd3[5], line_rcd3[6]])
+       line_oldrcds.append([line_rcd[1], line_rcd[2], line_rcd[3], line_rcd[4], line_rcd[5]])
+       line_oldrcds.append([line_rcd2[1], line_rcd2[2], line_rcd2[3], line_rcd2[4], line_rcd2[5]])
+       line_oldrcds.append([line_rcd3[1], line_rcd3[2], line_rcd3[3], line_rcd3[4], line_rcd3[5]])
        line_oldrcds.append(["", "", "", "", "", ""])
        line_oldrcds.append(["", "", "", "", "", ""])
     if rcd_id == 4:
-       cur.execute("""SELECT * FROM line_table WHERE rcd_id = 0;""")
+       cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = 0;""")
        line_rcd = cur.fetchone()
-       cur.execute("""SELECT * FROM line_table WHERE rcd_id = 1;""")
+       cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = 1;""")
        line_rcd2 = cur.fetchone()
-       cur.execute("""SELECT * FROM line_table WHERE rcd_id = 2;""")
+       cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = 2;""")
        line_rcd3 = cur.fetchone()
-       cur.execute("""SELECT * FROM line_table WHERE rcd_id = 3;""")
+       cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = 3;""")
        line_rcd4 = cur.fetchone()
-       line_oldrcds.append([line_rcd[1], line_rcd[2], line_rcd[3], line_rcd[4], line_rcd[5], line_rcd[6]])
-       line_oldrcds.append([line_rcd2[1], line_rcd2[2], line_rcd2[3], line_rcd2[4], line_rcd2[5], line_rcd2[6]])
-       line_oldrcds.append([line_rcd3[1], line_rcd3[2], line_rcd3[3], line_rcd3[4], line_rcd3[5], line_rcd3[6]])
-       line_oldrcds.append([line_rcd4[1], line_rcd4[2], line_rcd4[3], line_rcd4[4], line_rcd4[5], line_rcd4[6]])
+       line_oldrcds.append([line_rcd[1], line_rcd[2], line_rcd[3], line_rcd[4], line_rcd[5]])
+       line_oldrcds.append([line_rcd2[1], line_rcd2[2], line_rcd2[3], line_rcd2[4], line_rcd2[5]])
+       line_oldrcds.append([line_rcd3[1], line_rcd3[2], line_rcd3[3], line_rcd3[4], line_rcd3[5]])
+       line_oldrcds.append([line_rcd4[1], line_rcd4[2], line_rcd4[3], line_rcd4[4], line_rcd4[5]])
        line_oldrcds.append(["", "", "", "", "", ""])
     if rcd_id >= 5:
        idx = rcd_id - 5
-       cur.execute("""SELECT * FROM line_table WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': idx})
+       cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': idx})
        line_rcd = cur.fetchone()
-       line_oldrcds.append([line_rcd[1], line_rcd[2], line_rcd[3], line_rcd[4], line_rcd[5], line_rcd[6]])
+       line_oldrcds.append([line_rcd[1], line_rcd[2], line_rcd[3], line_rcd[4], line_rcd[5]])
        idx = rcd_id - 4
-       cur.execute("""SELECT * FROM line_table WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': idx})
+       cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': idx})
        line_rcd = cur.fetchone()
-       line_oldrcds.append([line_rcd[1], line_rcd[2], line_rcd[3], line_rcd[4], line_rcd[5], line_rcd[6]])
+       line_oldrcds.append([line_rcd[1], line_rcd[2], line_rcd[3], line_rcd[4], line_rcd[5]])
        idx = rcd_id - 3
-       cur.execute("""SELECT * FROM line_table WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': idx})
+       cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': idx})
        line_rcd = cur.fetchone()
-       line_oldrcds.append([line_rcd[1], line_rcd[2], line_rcd[3], line_rcd[4], line_rcd[5], line_rcd[6]])
+       line_oldrcds.append([line_rcd[1], line_rcd[2], line_rcd[3], line_rcd[4], line_rcd[5]])
        idx = rcd_id - 2
-       cur.execute("""SELECT * FROM line_table WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': idx})
+       cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': idx})
        line_rcd = cur.fetchone()
-       line_oldrcds.append([line_rcd[1], line_rcd[2], line_rcd[3], line_rcd[4], line_rcd[5], line_rcd[6]])
+       line_oldrcds.append([line_rcd[1], line_rcd[2], line_rcd[3], line_rcd[4], line_rcd[5]])
        idx = rcd_id - 1
-       cur.execute("""SELECT * FROM line_table WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': idx})
+       cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': idx})
        line_rcd = cur.fetchone()
-       line_oldrcds.append([line_rcd[1], line_rcd[2], line_rcd[3], line_rcd[4], line_rcd[5], line_rcd[6]])
+       line_oldrcds.append([line_rcd[1], line_rcd[2], line_rcd[3], line_rcd[4], line_rcd[5]])
+
+    #新旧６件分のメッセージの中からトピックを抽出する
+    idx = rcd_id - 5
+    cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': idx})
+    line_rcd = cur.fetchone()
+    msg = line_rcd[3]
+    idx = rcd_id - 4
+    cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': idx})
+    line_rcd = cur.fetchone()
+    msg2 = line_rcd[3]
+    idx = rcd_id - 3
+    cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': idx})
+    line_rcd = cur.fetchone()
+    msg3 = line_rcd[3]
+    idx = rcd_id - 2
+    cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': idx})
+    line_rcd = cur.fetchone()
+    msg4 = line_rcd[3]
+    idx = rcd_id - 1
+    cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': idx})
+    line_rcd = cur.fetchone()
+    msg5 = line_rcd[3]
+    idx = rcd_id
+    cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': idx})
+    line_rcd = cur.fetchone()
+    msg6 = line_rcd[3]
+    line_tpc = line_bot_text_analyze.extract_topic(msg, msg2, msg3, msg4, msg5, msg6)
 
     #データベースへコミットし、テーブル操作のためのカーソルを破棄して、データベースとの接続を解除する
     conn.commit()
     cur.close()
     conn.close()
 
-    #LINEレコードリストを基にユーザーに返信するLINEメッセージを生成する
-    gnrtd_msg = line_bot_text_generate.text_generate_from_analyze_result(line_nwrcd, line_oldrcds)
+    #新旧のレコードリストとトピックを基にユーザーに返信するLINEメッセージを生成する
+    gnrtd_msg = line_bot_text_generate.text_generate_from_analyze_result(line_nwrcd, line_oldrcds, line_tpc)
     return gnrtd_msg
 
 
 #LINEBotAPIを使って生成されるLINEメッセージをユーザーに対して送信する
-def line_msg_send(event, line_gnrtd_msg):
+def send_line_message(event, line_gnrtd_msg):
     #LINEの返信用トークンと生成されたメッセージをセットにしてLINEBotAPIの呼出しをする
     line_bot_api.reply_message(event.reply_token, TextSendMessage(text=line_gnrtd_msg))
 

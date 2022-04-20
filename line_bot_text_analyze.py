@@ -1987,6 +1987,18 @@ def remove_intent(line_msg):
          intnt_rmv_cnddts.append("ではないかも知れない")
     elif check_text_terminate_string(line_msg, "ではないかもしれない"):
          intnt_rmv_cnddts.append("ではないかもしれない")
+    elif check_text_terminate_string(line_msg, "かと存じ上げます"):
+         intnt_rmv_cnddts.append("かと存じ上げます")
+    elif check_text_terminate_string(line_msg, "と存じます"):
+         intnt_rmv_cnddts.append("と存じます")
+    elif check_text_terminate_string(line_msg, "かと思います"):
+         intnt_rmv_cnddts.append("かと思います")
+    elif check_text_terminate_string(line_msg, "と思います"):
+         intnt_rmv_cnddts.append("と思います")
+    elif check_text_terminate_string(line_msg, "と申します"):
+         intnt_rmv_cnddts.append("と申します")
+    elif check_text_terminate_string(line_msg, "と言います"):
+         intnt_rmv_cnddts.append("と言います")
     elif check_text_terminate_string(line_msg, "とは思っています"):
          intnt_rmv_cnddts.append("とは思っています")
     elif check_text_terminate_string(line_msg, "とは思ってます"):
@@ -2085,24 +2097,36 @@ def remove_intent(line_msg):
          intnt_rmv_cnddts.append("とはなに")
     elif check_text_terminate_string(line_msg, "とは"):
          intnt_rmv_cnddts.append("とは")
-    elif check_text_terminate_string(line_msg, "して頂き有り難う御座います"):
-         intnt_rmv_cnddts.append("して頂き有り難う御座います")
-    elif check_text_terminate_string(line_msg, "して頂きありがとうございます"):
-         intnt_rmv_cnddts.append("して頂きありがとうございます")
-    elif check_text_terminate_string(line_msg, "していただきありがとうございます"):
-         intnt_rmv_cnddts.append("していただきありがとうございます")
-    elif check_text_terminate_string(line_msg, "してくれて有り難う"):
-         intnt_rmv_cnddts.append("してくれて有り難う")
-    elif check_text_terminate_string(line_msg, "してくれてありがとう"):
-         intnt_rmv_cnddts.append("してくれてありがとう")
-    elif check_text_terminate_string(line_msg, "して頂き感謝致します"):
-         intnt_rmv_cnddts.append("して頂き感謝致します")
-    elif check_text_terminate_string(line_msg, "して頂き感謝いたします"):
-         intnt_rmv_cnddts.append("して頂き感謝いたします")
-    elif check_text_terminate_string(line_msg, "していただき感謝いたします"):
-         intnt_rmv_cnddts.append("していただき感謝いたします")
+    elif check_text_terminate_string(line_msg, "でございます"):
+         intnt_rmv_cnddts.append("でございます")
+    elif check_text_terminate_string(line_msg, "にございます"):
+         intnt_rmv_cnddts.append("にございます")
+    elif check_text_terminate_string(line_msg, "となります"):
+         intnt_rmv_cnddts.append("となります")
+    elif check_text_terminate_string(line_msg, "になります"):
+         intnt_rmv_cnddts.append("になります")
+    elif check_text_terminate_string(line_msg, "にありまして"):
+         intnt_rmv_cnddts.append("にありまして")
+    elif check_text_terminate_string(line_msg, "におりまして"):
+         intnt_rmv_cnddts.append("におりまして")
+    elif check_text_terminate_string(line_msg, "がありまして"):
+         intnt_rmv_cnddts.append("がありまして")
+    elif check_text_terminate_string(line_msg, "がおりまして"):
+         intnt_rmv_cnddts.append("がおりまして")
+    elif check_text_terminate_string(line_msg, "ですので"):
+         intnt_rmv_cnddts.append("ですので")
+    elif check_text_terminate_string(line_msg, "なので"):
+         intnt_rmv_cnddts.append("なので")
+    elif check_text_terminate_string(line_msg, "ので"):
+         intnt_rmv_cnddts.append("ので")
+    elif check_text_terminate_string(line_msg, "なものでして"):
+         intnt_rmv_cnddts.append("なものでして")
+    elif check_text_terminate_string(line_msg, "なもので"):
+         intnt_rmv_cnddts.append("なもので")
+    elif check_text_terminate_string(line_msg, "でして"):
+         intnt_rmv_cnddts.append("でして")
 
-    #取得した削除候補の中から実際に削除するメインコンテントを決定して、これを呼出し元に引渡しをする
+    #取得した削除候補の中から実際に削除するコンテントを決定して、これを呼出し元に引渡しをする
     intnt_rmv_cnddts_tmp = []
     for intnt in intnt_rmv_cnddts:
         intnt_rmv_cnddts_tmp.append([len(intnt), intnt])
@@ -2218,7 +2242,9 @@ def extract_intent_from_gag_and_vocalcordcopy(line_msg):
           line_msg == "空 前 絶 後" or
           line_msg == "空！ 前！ 絶！ 後！" or
           line_msg == "空！前！絶！後！" or
-          line_msg == "空前絶後！"):
+          line_msg == "空前絶後！" or
+          line_msg == "失礼 ぶっこきました" or
+          line_msg == "失礼ぶっこきました"):
             extrctd_intnt = "<モノマネ＆ギャグ＆一発芸 人物・キャラクターに基づいて>"
     elif (line_msg == "にゃー にゃー" or
           line_msg == "にゃーにゃー" or
@@ -2290,7 +2316,7 @@ def extract_intent_from_gag_and_vocalcordcopy(line_msg):
           line_msg == "がったんごっとん" or
           line_msg == "ガッタン ゴットン" or
           line_msg == "ガッタンゴットン"):
-            extrctd_intnt = "<モノマネ＆声帯模写 モノ・動物に基づいて>"
+            extrctd_intnt = "<モノマネ＆声帯模写 擬音・擬態>"
     elif (line_msg == "ぷー" or
           line_msg == "プー" or
           line_msg == "ぷ～" or
@@ -2315,16 +2341,12 @@ def extract_intent_from_gag_and_vocalcordcopy(line_msg):
           line_msg == "ヘブシッ" or
           line_msg == "はっくしょん" or
           line_msg == "ハックション"):
-            extrctd_intnt = "<生理現象に伴う音>"
-    elif (line_msg == "おい" or
-          line_msg == "ねぇ" or
-          line_msg == "なあ" or
-          line_msg == "なぁ" or
-          line_msg == "なあ？" or
-          line_msg == "なぁ？" or
-          line_msg == "なあ！" or
-          line_msg == "なぁ！"):
-            extrctd_intnt = "<呼掛け＆問掛け>"      
+            extrctd_intnt = "<生理現象 擬音・擬態>"
+      elif (line_msg == "ブー ブー" or
+            line_msg == "ブーブー" or
+            line_msg == "ブー！ ブー！" or
+            line_msg == "ブー！ブー！"):
+            extrctd_intnt = "<ブーイング>"
     elif (line_msg == "あのー" or
           line_msg == "あの～" or
           line_msg == "あー" or
@@ -2338,20 +2360,15 @@ def extract_intent_from_gag_and_vocalcordcopy(line_msg):
           line_msg == "うー" or
           line_msg == "う～"):
             extrctd_intnt = "<フィラー 間の引き延ばし>"
-    elif (line_msg == "ブー ブー" or
-          line_msg == "ブーブー" or
-          line_msg == "ブー！ ブー！" or
-          line_msg == "ブー！ブー！"):
-            extrctd_intnt = "<ブーイング>"
     elif (line_msg == "海" or
-          line_msg == "うみ" or
           line_msg == "海！" or
+          line_msg == "うみ" or
           line_msg == "うみ！" or
           line_msg == "セイ イェーイ" or
-          line_msg == "セイイェーイ" or
           line_msg == "セイ イェーイ！" or
+          line_msg == "セイイェーイ" or 
           line_msg == "セイイェーイ！"):
-            extrctd_intnt = "<掛合い＆コールアンドレスポンス>"
+            extrctd_intnt = "<掛合い＝コールアンドレスポンス>"
     else:
             extrctd_intnt = "<その他・不明>"
     return extrctd_intnt
@@ -2360,7 +2377,17 @@ def extract_intent_from_gag_and_vocalcordcopy(line_msg):
 #LINEメッセージが短文＆定型文だったとして、これからインテント(＝発話の意図するもの)を抽出する
 def extract_intent_from_short_and_boilerplate(line_msg):
     #短文＆定型文となっているメッセージからインテントを抽出して、これを呼出し元に引渡しをする
-    if   (line_msg == "おはよう御座います" or
+    if   (line_msg == "お初にお目にかかります" or
+          line_msg == "初めまして" or
+          line_msg == "はじめまして"):
+            extrctd_intnt = "<挨拶 初対面>"
+    elif (line_msg == "やあ" or
+          line_msg == "どうも" or
+          line_msg == "御免遊ばせ" or
+          line_msg == "御免あそばせ" or
+          line_msg == "ごめん遊ばせ" or
+          line_msg == "ごめんあそばせ" or
+          line_msg == "おはよう御座います" or
           line_msg == "おはようございます" or
           line_msg == "おはよう" or
           line_msg == "おはっす" or
@@ -2374,14 +2401,72 @@ def extract_intent_from_short_and_boilerplate(line_msg):
           line_msg == "ばんわ" or
           line_msg == "ばんは" or
           line_msg == "ばんっす" or
-          line_msg == "ばん" or
-          line_msg == "やあ" or
-          line_msg == "どうも" or
-          line_msg == "御免遊ばせ" or
-          line_msg == "御免あそばせ" or
-          line_msg == "ごめん遊ばせ" or
-          line_msg == "ごめんあそばせ"):
-            extrctd_intnt = "<挨拶>"
+          line_msg == "ばん"):
+            extrctd_intnt = "<挨拶 時間帯によるもの>"
+    elif (line_msg == "お先に失礼します" or
+          line_msg == "それでは失礼します" or
+          line_msg == "失礼します" or
+          line_msg == "さようなら" or
+          line_msg == "サヨウナラ" or
+          line_msg == "サヨナラ" or
+          line_msg == "また明日"):
+            extrctd_intnt = "<挨拶 会社・学校などで>"
+    elif (line_msg == "行って参ります" or
+          line_msg == "行ってまいります" or
+          line_msg == "行ってきます" or
+          line_msg == "行きます" or
+          line_msg == "行く"):
+            extrctd_intnt = "<自宅・会社から出る時の決まり文句>"
+    elif (line_msg == "只今戻りました" or
+          line_msg == "ただいま戻りました" or
+          line_msg == "只今" or
+          line_msg == "ただいま" or
+          line_msg == "お帰りなさいませ" or
+          line_msg == "おかえりなさいませ" or
+          line_msg == "お帰りなさい" or
+          line_msg == "おかえりなさい"):
+            extrctd_intnt = "<自宅・会社に戻る時の決まり文句>"
+    elif (line_msg == "少々 お待ち下さい" or
+          line_msg == "少々 お待ちください" or
+          line_msg == "少々お待ち下さい" or
+          line_msg == "少々お待ちください" or
+          line_msg == "少し 待って下さい" or
+          line_msg == "少し 待ってください" or
+          line_msg == "少し待って下さい" or
+          line_msg == "少し待ってください" or
+          line_msg == "ちょっと待って" or
+          line_msg == "チョット待って"):
+            extrctd_intnt = "<相手を待たせる時の決まり文句>"
+    elif (line_msg == "待っていました" or
+          line_msg == "待ってました" or
+          line_msg == "待ってた"):
+            extrctd_intnt = "<相手に待たされた時の決まり文句>"
+    elif (line_msg == "以後気を付けて下さい" or
+          line_msg == "以後気を付けてください" or
+          line_msg == "気を付けて下さい" or
+          line_msg == "気を付けてください" or
+          line_msg == "気をつけろ" or
+          line_msg == "しっかりしろ" or
+          line_msg == "しっかりやれ" or
+          line_msg == "こら" or
+          line_msg == "コラ"):
+            extrctd_intnt = "<注意・叱責する時の決まり文句>"
+    elif (line_msg == "以後気を付けます" or
+          line_msg == "気を付けます" or
+          line_msg == "気をつけます" or
+          line_msg == "しっかりします" or
+          line_msg == "しっかりやります"):
+            extrctd_intnt = "<注意・叱責された時の決まり文句>"
+    elif (line_msg == "失礼ですが" or
+          line_msg == "失礼" or
+          line_msg == "すみません" or
+          line_msg == "すいません" or
+          line_msg == "おい" or
+          line_msg == "ねえ" or
+          line_msg == "ねぇ" or
+          line_msg == "なあ" or
+          line_msg == "なぁ"):
+            extrctd_intnt = "<呼掛け>"
     elif (line_msg == "流石ですね" or
           line_msg == "流石です" or
           line_msg == "流石ね" or
@@ -2532,7 +2617,7 @@ def extract_intent_from_short_and_boilerplate(line_msg):
           line_msg == "素敵" or
           line_msg == "すてき" or
           line_msg == "ステキ"):
-            extrctd_intnt = "<称賛＆礼賛>"
+            extrctd_intnt = "<称賛＆礼賛 お世辞に近い>"
     elif (line_msg == "この変態め" or
           line_msg == "このへんたいめ" or
           line_msg == "このヘンタイめ" or
@@ -2860,7 +2945,14 @@ def extract_intent_from_short_and_boilerplate(line_msg):
           line_msg == "げす" or
           line_msg == "ゲス"):
             extrctd_intnt = "<罵倒＆貶め>"
-    elif (line_msg == "消えてください" or
+    elif (line_msg == "邪魔" or
+          line_msg == "じゃま" or
+          line_msg == "ジャマ" or
+          line_msg == "目障り" or
+          line_msg == "うざったい" or
+          line_msg == "ウザったい" or
+          line_msg == "ウザい" or
+          line_msg == "消えてください" or
           line_msg == "消えて" or
           line_msg == "消えな" or
           line_msg == "消え失せろ" or
@@ -2884,7 +2976,7 @@ def extract_intent_from_short_and_boilerplate(line_msg):
           line_msg == "死んでろ" or
           line_msg == "氏んでろ" or
           line_msg == "しんでろ"):
-            extrctd_intnt = "<人格・存在の否定>"
+            extrctd_intnt = "<人格・存在否定 罵声に近い>"
     elif (line_msg == "大天才ですか" or
           line_msg == "天才ですか" or
           line_msg == "大秀才ですか" or
@@ -3083,7 +3175,18 @@ def extract_intent_from_short_and_boilerplate(line_msg):
           line_msg == "だねえ" or
           line_msg == "だねぇ" or
           line_msg == "だね"):
-            extrctd_intnt = "<賛意＆賛同>" 
+            extrctd_intnt = "<賛意＆賛同>"
+    elif (line_msg == "許可を頂きたいです" or
+          line_msg == "許可をいただきたいです" or
+          line_msg == "許可を頂きたい" or
+          line_msg == "許可をいただきたい" or
+          line_msg == "許可を下さい" or
+          line_msg == "許可をください" or
+          line_msg == "許可して下さい" or
+          line_msg == "許可してください" or
+          line_msg == "許可してくれ" or
+          line_msg == "許可して"):
+            extrctd_intnt = "<依頼＆要求 許可を求めている>"
     elif (line_msg == "歌ってよ" or
           line_msg == "うたってよ" or
           line_msg == "歌って" or
@@ -3096,7 +3199,7 @@ def extract_intent_from_short_and_boilerplate(line_msg):
           line_msg == "あそんでよ" or
           line_msg == "遊んで" or
           line_msg == "あそんで"):
-            extrctd_intnt = "<依頼＆要求>"
+            extrctd_intnt = "<依頼＆要求 遊び心を求めている>"
     elif (line_msg == "行きます" or
           line_msg == "いきます" or
           line_msg == "遣ります" or
@@ -3119,7 +3222,7 @@ def extract_intent_from_short_and_boilerplate(line_msg):
           line_msg == "悲しい" or
           line_msg == "かなしい" or
           line_msg == "哀しい"):
-            extrctd_intnt = "<訴求＆表出 心理・感情について>"
+            extrctd_intnt = "<心理・感情>"
     elif (line_msg == "楽" or
           line_msg == "らく" or
           line_msg == "ラク" or
@@ -3133,7 +3236,7 @@ def extract_intent_from_short_and_boilerplate(line_msg):
           line_msg == "タイヘン" or
           line_msg == "疲れた" or
           line_msg == "つかれた"):
-            extrctd_intnt = "<訴求＆表出 精神・肉体について>"
+            extrctd_intnt = "<精神・肉体>"
     elif (line_msg == "最初は グー" or
           line_msg == "最初はグー" or
           line_msg == "じゃんけんぽん" or
@@ -3147,7 +3250,9 @@ def extract_intent_from_short_and_boilerplate(line_msg):
           line_msg == "お願いです" or
           line_msg == "お願い"):
             extrctd_intnt = "<依頼＆依願>"
-    elif (line_msg == "御免なさい" or
+    elif (line_msg == "申し訳ございません" or
+          line_msg == "申し訳ありません" or
+          line_msg == "御免なさい" or
           line_msg == "ごめんなさい" or
           line_msg == "ゴメンなさい" or
           line_msg == "御免" or
@@ -3155,7 +3260,25 @@ def extract_intent_from_short_and_boilerplate(line_msg):
           line_msg == "ゴメン" or
           line_msg == "メンゴ メンゴ" or
           line_msg == "メンゴメンゴ" or
-          line_msg == "メンゴ"):
+          line_msg == "メンゴ" or
+          line_msg == "すみません" or
+          line_msg == "すいません" or
+          line_msg == "すまん"):
+            extrctd_intnt = "<感謝＆お礼>"
+    elif (line_msg == "申し訳ございません" or
+          line_msg == "申し訳ありません" or
+          line_msg == "御免なさい" or
+          line_msg == "ごめんなさい" or
+          line_msg == "ゴメンなさい" or
+          line_msg == "御免" or
+          line_msg == "ごめん" or
+          line_msg == "ゴメン" or
+          line_msg == "メンゴ メンゴ" or
+          line_msg == "メンゴメンゴ" or
+          line_msg == "メンゴ" or
+          line_msg == "すみません" or
+          line_msg == "すいません" or
+          line_msg == "すまん"):
             extrctd_intnt = "<陳謝＆謝罪>"
     elif (line_msg == "承知致しました" or
           line_msg == "承知いたしました" or
@@ -3192,14 +3315,14 @@ def extract_intent_from_short_and_boilerplate(line_msg):
           line_msg == "好き" or
           line_msg == "すき" or
           line_msg == "スキ"):
-            extrctd_intnt = "<訴求＆表出 求愛している>"
+            extrctd_intnt = "<求愛>"
     elif (line_msg == "Hなことしたい" or
           line_msg == "Hなことしよう" or
           line_msg == "Hしたい" or
           line_msg == "Hしよう" or
           line_msg == "セックスしたい" or
           line_msg == "セックスしよう"):
-            extrctd_intnt = "<訴求＆表出 発情している>"
+            extrctd_intnt = "<発情>"
     elif (line_msg == "セックスは好きですか" or
           line_msg == "セックスは好き" or
           line_msg == "どこを責められたい" or
@@ -3217,7 +3340,7 @@ def extract_intent_from_short_and_boilerplate(line_msg):
           line_msg == "なぜそうなるのです" or
           line_msg == "何故そうなるんです" or
           line_msg == "なぜそうなるんです"):
-            extrctd_intnt = "<疑義＆確認＆質問 理由・事情について>"
+            extrctd_intnt = "<疑義＆確認＆質問 目上に対して 理由・事情について>"
     elif (line_msg == "なんでそうなるのかなあ" or
           line_msg == "なんでそうなるのかなぁ" or
           line_msg == "なんでそうなるのかな" or
@@ -3231,25 +3354,33 @@ def extract_intent_from_short_and_boilerplate(line_msg):
           line_msg == "なぜそうなるの" or
           line_msg == "何故そうなる" or
           line_msg == "なぜそうなる"):
-            extrctd_intnt = "<疑義＆確認＆質問 やや反発している、やや反感を抱いている>"
+            extrctd_intnt = "<疑義＆確認＆質問 やや反発している やや反感を抱いている 目下に対して 理由・事情について>"
     elif (line_msg == "大丈夫でしょうか" or
           line_msg == "大丈夫ですか" or
           line_msg == "大丈夫"):
             extrctd_intnt = "<疑義＆質問＆確認 安否・健康状態について>"
-    elif (line_msg == "お疲れ様でした" or
-          line_msg == "お疲れ様です" or
-          line_msg == "お疲れ様" or
-          line_msg == "お疲れ" or
-          line_msg == "ご苦労様でした" or
+    elif (line_msg == "ご苦労様でした" or
           line_msg == "ご苦労様です" or
           line_msg == "ご苦労様" or
           line_msg == "ご苦労" or
+          line_msg == "お疲れ様でした" or
+          line_msg == "お疲れ様です" or
+          line_msg == "お疲れ様" or
+          line_msg == "お疲れ" or
           line_msg == "大儀であった" or
           line_msg == "大儀だった"):        
             extrctd_intnt = "<慰労＆労い>"
     elif (line_msg == "分かった" or
           line_msg == "わかった"):
             extrctd_intnt = "<理解＆認識>"
+    elif (line_msg == "恐悦至極にございます" or
+          line_msg == "恐悦至極でございます" or
+          line_msg == "恐悦至極です" or
+          line_msg == "恐れ入ります" or
+          line_msg == "恐れ多いです" or
+          line_msg == "とんでもございません" or
+          line_msg == "とんでもない"):
+            extrctd_intnt = "<訴求＆表現 褒められて 感謝されて 恐縮している>"
     elif (line_msg == "きざったらしい" or
           line_msg == "キザったらしい" or
           line_msg == "きざっぽい" or
@@ -3258,7 +3389,7 @@ def extract_intent_from_short_and_boilerplate(line_msg):
           line_msg == "イヤミったらしい" or
           line_msg == "嫌味っぽい" or
           line_msg == "イヤミっぽい"):
-            extrctd_intnt = "<訴求＆表現 反発している、反感を抱いている 強い嫌悪>"
+            extrctd_intnt = "<訴求＆表現 反発している 反感を抱いている 強い嫌悪>"
     elif (line_msg == "しても良いですか" or
           line_msg == "してもよいですか" or
           line_msg == "良いですか" or
@@ -3405,21 +3536,48 @@ def extract_intent_from_short_and_boilerplate(line_msg):
           line_msg == "ではないんですね" or
           line_msg == "じゃないんですね"):
             extrctd_intnt = "<理解＆納得 否定形>"
+    elif (line_msg == "お分かりいただけましたか" or
+          line_msg == "分かっていただけましたか" or
+          line_msg == "分かりましたか" or
+          line_msg == "分かっていますか" or
+          line_msg == "分かってますか"):
+            extrctd_intnt = "<疑義＆質問＆確認 理解力を試すことに近い>"
+    elif (line_msg == "いかがなさいますか" or
+          line_msg == "いかがいたしましょうか" or
+          line_msg == "どういたしますか" or
+          line_msg == "どうしますか" or
+          line_msg == "どうするのですか" or
+          line_msg == "どうするんですか" or
+          line_msg == "どうするの" or
+          line_msg == "どうするん" or
+          line_msg == "どうする"):
+            extrctd_intnt = "<疑義＆質問＆確認 丁寧に敬って 今後の動きや活動について>"
     elif (line_msg == "ではどうするのですか" or
           line_msg == "ではどうするんですか" or
           line_msg == "ではどうするのか" or
           line_msg == "ではどうするの" or
           line_msg == "ではどうする" or
-          line_msg == "どうするのですか" or
-          line_msg == "どうするんですか" or
           line_msg == "じゃあどうするのか" or
           line_msg == "じゃあどうするの" or
-          line_msg == "じゃあどうする" or
-          line_msg == "どうするの" or
-          line_msg == "どうするん" or
-          line_msg == "どうする"):
-            extrctd_intnt = "<疑義＆質問＆確認 追求 今後の動きや活動について>"
-    elif (line_msg == "どうぞ ごゆっくりなさって下さい" or
+          line_msg == "じゃあどうする"):
+            extrctd_intnt = "<疑義＆質問＆確認 追求に近い 今後の動きや活動について>"
+    elif (line_msg == "いらっしゃいませ" or
+          line_msg == "いらっしゃい" or
+          line_msg == "どうぞ ごゆっくりなさって下さい" or
+          line_msg == "どうぞ ごゆっくりなさってください" or
+          line_msg == "どうぞごゆっくりなさってください" or
+          line_msg == "どうぞ ごゆっくりなさって" or
+          line_msg == "どうぞごゆっくりなさって" or
+          line_msg == "ごゆっくりなさって下さい" or
+          line_msg == "ごゆっくりなさってください" or
+          line_msg == "ごゆっくりなさって" or
+          line_msg == "ごゆっくり どうぞ" or
+          line_msg == "ごゆっくりどうぞ" or
+          line_msg == "ごゆっくり"):
+            extrctd_intnt = "<歓迎＆歓待 くつろいで欲しいという気持ち>"
+    elif (line_msg == "いらっしゃいませ" or
+          line_msg == "いらっしゃい" or
+          line_msg == "どうぞ ごゆっくりなさって下さい" or
           line_msg == "どうぞ ごゆっくりなさってください" or
           line_msg == "どうぞごゆっくりなさってください" or
           line_msg == "どうぞ ごゆっくりなさって" or
@@ -3511,9 +3669,12 @@ def extract_intent_from_short_and_boilerplate(line_msg):
     elif (line_msg == "その通りです" or
           line_msg == "その通り"):
             extrctd_intnt = "<相槌＆合いの手 正鵠を得た相手に対して>"
+    elif (line_msg == "賛成" or
+          line_msg == "反対"):
+            extrctd_intnt = "<単純な返答 投票 二者択一式>"
     elif (line_msg == "はい" or
           line_msg == "いいえ"):
-            extrctd_intnt = "<単純な返答 二者択一式>"
+            extrctd_intnt = "<単純な返答 一般 二者択一式>"
     else:
             extrctd_intnt = "<その他・不明>"
     return extrctd_intnt
@@ -4527,16 +4688,26 @@ def extract_intent_from_general(line_msg):
           check_text_terminate_string(line_msg, "ではないかも知れない") or
           check_text_terminate_string(line_msg, "ではないかもしれない")):
             extrctd_intnt = "<推定＆推測＆推量 否定形>"
-    elif (check_text_terminate_string(line_msg, "とは思っています") or
-          check_text_terminate_string(line_msg, "とは思ってます") or
-          check_text_terminate_string(line_msg, "とは思っている") or
-          check_text_terminate_string(line_msg, "とは思ってる") or
-          check_text_terminate_string(line_msg, "とは思う") or
-          check_text_terminate_string(line_msg, "と思っています") or
-          check_text_terminate_string(line_msg, "と思ってます") or
-          check_text_terminate_string(line_msg, "と思っている") or
-          check_text_terminate_string(line_msg, "と思ってる") or
-          check_text_terminate_string(line_msg, "と思う")):
+    elif (check_text_terminate_string(line_msg, "かと存じ上げます" or
+          check_text_terminate_string(line_msg, "と存じます" or
+          check_text_terminate_string(line_msg, "かと思います" or
+          check_text_terminate_string(line_msg, "と思います"):
+            extrctd_intnt = "<既知＆認知 肯定形>"
+    elif (check_text_terminate_string(line_msg, "とは存じ上げませんでした" or
+          check_text_terminate_string(line_msg, "と存じまませんでした" or
+          check_text_terminate_string(line_msg, "とは思いません" or
+          check_text_terminate_string(line_msg, "と思いません"):
+            extrctd_intnt = "<既知＆認知 否定形>"
+    elif (check_text_terminate_string(line_msg, "とは思っています" or
+          check_text_terminate_string(line_msg, "とは思ってます" or
+          check_text_terminate_string(line_msg, "とは思っている" or
+          check_text_terminate_string(line_msg, "とは思ってる" or
+          check_text_terminate_string(line_msg, "とは思う" or
+          check_text_terminate_string(line_msg, "と思っています" or
+          check_text_terminate_string(line_msg, "と思ってます" or
+          check_text_terminate_string(line_msg, "と思っている" or
+          check_text_terminate_string(line_msg, "と思ってる" or
+          check_text_terminate_string(line_msg, "と思う"):
             extrctd_intnt = "<思慮＆考慮 現在 肯定形>"
     elif (check_text_terminate_string(line_msg, "とは思っていません") or
           check_text_terminate_string(line_msg, "とは思ってません") or
@@ -4562,24 +4733,27 @@ def extract_intent_from_general(line_msg):
           check_text_terminate_string(line_msg, "とは思っていなかった") or
           check_text_terminate_string(line_msg, "とは思ってなかった") or
           check_text_terminate_string(line_msg, "と思っていませんでした") or
-          check_text_terminate_string(line_msg, "と思っていなかった") or                           
+          check_text_terminate_string(line_msg, "と思っていなかった") or
           check_text_terminate_string(line_msg, "と思ってなかった")):
             extrctd_intnt = "<思慮＆考慮 過去 否定形>"
+    elif (check_text_terminate_string(line_msg, "について考えて参ります" or
+          check_text_terminate_string(line_msg, "について考えてまいります" or
+          check_text_terminate_string(line_msg, "について考えて行きます" or
+          check_text_terminate_string(line_msg, "について考えていきます" or
+          check_text_terminate_string(line_msg, "について考えます" or
+          check_text_terminate_string(line_msg, "を考えます" or
+          check_text_terminate_string(line_msg, "が考えます" or
+          check_text_terminate_string(line_msg, "は考えます")):
+            extrctd_intnt = "<感想＆感慨 否定形 形容的な表現>"
+    elif (check_text_terminate_string(line_msg, "と申します") or
+          check_text_terminate_string(line_msg, "と言います")):
+            extrctd_intnt = "<感想＆感慨 否定形 形容的な表現>"
     elif (check_text_terminate_string(line_msg, "らしいです") or
           check_text_terminate_string(line_msg, "らしい")):
             extrctd_intnt = "<感想＆感慨 肯定形 形容的な表現>"
     elif (check_text_terminate_string(line_msg, "らしくないです") or
           check_text_terminate_string(line_msg, "らしくない")):
             extrctd_intnt = "<感想＆感慨 否定形 形容的な表現>"
-    elif (check_text_terminate_string(line_msg, "して頂き有り難う御座います") or
-          check_text_terminate_string(line_msg, "して頂きありがとうございます") or
-          check_text_terminate_string(line_msg, "していただきありがとうございます") or
-          check_text_terminate_string(line_msg, "してくれて有り難う") or
-          check_text_terminate_string(line_msg, "してくれてありがとう") or
-          check_text_terminate_string(line_msg, "して頂き感謝致します") or
-          check_text_terminate_string(line_msg, "して頂き感謝いたします") or
-          check_text_terminate_string(line_msg, "していただき感謝いたします")):
-            extrctd_intnt = "<謝意・感謝>"
     elif (check_text_terminate_string(line_msg, "とは何でしょうか") or
           check_text_terminate_string(line_msg, "とはなんでしょうか") or
           check_text_terminate_string(line_msg, "とは何ですか") or
@@ -4595,6 +4769,24 @@ def extract_intent_from_general(line_msg):
           check_text_terminate_string(line_msg, "ってなに") or
           check_text_terminate_string(line_msg, "って")):
             extrctd_intnt = "<単純質問>"
+    elif (check_text_terminate_string(line_msg, "でございます") or
+          check_text_terminate_string(line_msg, "にございます") or
+          check_text_terminate_string(line_msg, "となります") or
+          check_text_terminate_string(line_msg, "になります")):
+            extrctd_intnt = "<紹介＆提示＆説明 単純>"
+    elif (check_text_terminate_string(line_msg, "にありまして") or
+          check_text_terminate_string(line_msg, "におりまして") or
+          check_text_terminate_string(line_msg, "がありまして") or
+          check_text_terminate_string(line_msg, "がおりまして")):
+            extrctd_intnt = "<申立て>"
+    elif (check_text_terminate_string(line_msg, "ですので") or
+          check_text_terminate_string(line_msg, "なので") or
+          check_text_terminate_string(line_msg, "ので")):
+            extrctd_intnt = "<説得＆説明>"
+    elif (check_text_terminate_string(line_msg, "なものでして") or
+          check_text_terminate_string(line_msg, "なもので") or
+          check_text_terminate_string(line_msg, "でして")):
+            extrctd_intnt = "<説得＆説明 言い訳に近い>"
     else:
             extrctd_intnt = "<その他・不明>"
     return extrctd_intnt
@@ -4609,94 +4801,34 @@ def extract_content(line_msg):
     return extrctd_cntnt
 
 
+#ユーザーから送られるLINEメッセージの中からトピック(＝新旧６件分のメッセージに共通して出現する名詞)を抽出する
+def extract_topic(line_msg, line_msg2, line_msg3, line_msg4, line_msg5, line_msg6):
+    #メッセージの内容を品詞や単語を単位として分解する(＝文節に分ける)
+    tknzr = Tokenizer()
+    tkns  = tknzr.tokenize(line_msg + line_msg2 + line_msg3 + line_msg4 + line_msg5 + line_msg6)
+
+    #分解後のメッセージをリストに格納して、これを呼出し元に引渡しをする
+    anlyzd_msg = []
+    for tkn in tkns:
+        anlyzd_msg.append([tkn.surface, tkn.part_of_speech])
+
+    #新旧６件分のメッセージの中から共通して出現する名詞を抜き出して、これを呼出し元に引渡しをする
+    wrddc = {}
+    idx   = 0
+    while len(anlyzd_msg) > idx:
+          if anlyzd_msg[idx][1] == "名詞":
+          wrddc[anlyzd_msg[idx][0]] += 1
+          idx += 1
+    tpc = max(wrddc, key=wrddc.get)
+    return tpc
+
+
 #ユーザーから送られるLINEメッセージの中から文型(＝文全体を構成する品詞の連なり)を抽出する
-def conversion_content_to_sentencepattern(line_msg):
-    cntnt            = extract_content(line_msg)
-    anlyzd_cntnt     = line_msg_morpho_analyze2(cntnt)
+def conversion_message_to_sentencepattern(line_msg):
+    anlyzd_msg         = line_msg_morpho_analyze2(line_msg)
     extrctd_sntncpttrn = []
     idx                = 0
-    while len(anlyzd_cntnt) > idx:
-          extrctd_sntncpttrn.append("[" + anlyzd_cntnt[idx][1] + " " + anlyzd_cntnt[idx][0] + "]")
+    while len(anlyzd_msg) > idx:
+          extrctd_sntncpttrn.append("[" + anlyzd_msg[idx][1] + " " + anlyzd_msg[idx][0] + "]")
           idx += 1
     return extrctd_sntncpttrn
-
-
-#ユーザーから送られるLINEメッセージの中からオントロジー(＝象意)(＝メッセージ全体の意味)を抽出する
-def extract_ontrgy(line_msg):
-    cntnt          = extract_content(line_msg)
-    anlyzd_cntnt   = line_msg_morpho_analyze2(cntnt)
-    extrctd_ontrgy = []
-    idx            = 0
-    while len(anlyzd_cntnt) > idx:
-          if   (anlyzd_cntnt[idx][1] == "名詞" and anlyzd_cntnt[idx][0] == "私"):
-                extrctd_ontrgy.append("LINE-Client")
-          elif (anlyzd_cntnt[idx][1] == "名詞" and anlyzd_cntnt[idx][0] == "わたくし"):
-                extrctd_ontrgy.append("LINE-Client")
-          elif (anlyzd_cntnt[idx][1] == "名詞" and anlyzd_cntnt[idx][0] == "わたし"):
-                extrctd_ontrgy.append("LINE-Client")
-          elif (anlyzd_cntnt[idx][1] == "名詞" and anlyzd_cntnt[idx][0] == "ワタシ"):
-                extrctd_ontrgy.append("LINE-Client")
-          elif (anlyzd_cntnt[idx][1] == "名詞" and anlyzd_cntnt[idx][0] == "あたし"):
-                extrctd_ontrgy.append("LINE-Client")
-          elif (anlyzd_cntnt[idx][1] == "名詞" and anlyzd_cntnt[idx][0] == "アタシ"):
-                extrctd_ontrgy.append("LINE-Client")
-          elif (anlyzd_cntnt[idx][1] == "名詞" and anlyzd_cntnt[idx][0] == "僕"):
-                extrctd_ontrgy.append("LINE-Client")
-          elif (anlyzd_cntnt[idx][1] == "名詞" and anlyzd_cntnt[idx][0] == "ぼく"):
-                extrctd_ontrgy.append("LINE-Client")
-          elif (anlyzd_cntnt[idx][1] == "名詞" and anlyzd_cntnt[idx][0] == "ボク"):
-                extrctd_ontrgy.append("LINE-Client")
-          elif (anlyzd_cntnt[idx][1] == "名詞" and anlyzd_cntnt[idx][0] == "自分"):
-                extrctd_ontrgy.append("LINE-Client")
-          elif (anlyzd_cntnt[idx][1] == "名詞" and anlyzd_cntnt[idx][0] == "貴方"):
-                extrctd_ontrgy.append("LINE-Bot")
-          elif (anlyzd_cntnt[idx][1] == "名詞" and anlyzd_cntnt[idx][0] == "貴女"):
-                extrctd_ontrgy.append("LINE-Bot")
-          elif (anlyzd_cntnt[idx][1] == "名詞" and anlyzd_cntnt[idx][0] == "あなた"):
-                extrctd_ontrgy.append("LINE-Bot")
-          elif (anlyzd_cntnt[idx][1] == "名詞" and anlyzd_cntnt[idx][0] == "アンタ"):
-                extrctd_ontrgy.append("LINE-Bot")
-          elif (anlyzd_cntnt[idx][1] == "名詞" and anlyzd_cntnt[idx][0] == "お前"):
-                extrctd_ontrgy.append("LINE-Bot")
-          elif (anlyzd_cntnt[idx][1] == "名詞" and anlyzd_cntnt[idx][0] == "手前"):
-                extrctd_ontrgy.append("LINE-Bot")
-          elif (anlyzd_cntnt[idx][1] == "名詞" and anlyzd_cntnt[idx][0] == "てめえ"):
-                extrctd_ontrgy.append("LINE-Bot")
-          elif (anlyzd_cntnt[idx][1] == "名詞" and anlyzd_cntnt[idx][0] == "てめぇ"):
-                extrctd_ontrgy.append("LINE-Bot")
-          elif (anlyzd_cntnt[idx][1] == "名詞" and anlyzd_cntnt[idx][0] == "君"):
-                extrctd_ontrgy.append("LINE-Bot")
-          elif (anlyzd_cntnt[idx][1] == "名詞" and anlyzd_cntnt[idx][0] == "キミ"):
-                extrctd_ontrgy.append("LINE-Bot")
-          elif (anlyzd_cntnt[idx][1] == "名詞" and anlyzd_cntnt[idx][0] == "彼"):
-                extrctd_ontrgy.append("第三者 男性")
-          elif (anlyzd_cntnt[idx][1] == "名詞" and anlyzd_cntnt[idx][0] == "カレ"):
-                extrctd_ontrgy.append("第三者 男性")
-          elif (anlyzd_cntnt[idx][1] == "名詞" and anlyzd_cntnt[idx][0] == "彼女"):
-                extrctd_ontrgy.append("第三者 女性")
-          elif (anlyzd_cntnt[idx][1] == "名詞" and anlyzd_cntnt[idx][0] == "カノジョ"):
-                extrctd_ontrgy.append("第三者 女性")
-          elif (anlyzd_cntnt[idx][1] == "名詞" and anlyzd_cntnt[idx][0] == "誰か"):
-                extrctd_ontrgy.append("第三者")
-          elif (anlyzd_cntnt[idx][1] == "名詞" and anlyzd_cntnt[idx][0] == "彼ら"):
-                extrctd_ontrgy.append("第三者 複数")
-          elif (anlyzd_cntnt[idx][1] == "名詞"):
-                extrctd_ontrgy.append(anlyzd_cntnt[idx][0])
-          elif (anlyzd_cntnt[idx][1] == "動詞"):
-                extrctd_ontrgy.append(anlyzd_cntnt[idx][0])
-          elif (anlyzd_cntnt[idx][1] == "助詞"):
-                extrctd_ontrgy.append(anlyzd_cntnt[idx][0])
-          elif (anlyzd_cntnt[idx][1] == "助動詞"):
-                extrctd_ontrgy.append(anlyzd_cntnt[idx][0])
-          elif (anlyzd_cntnt[idx][1] == "副詞"):
-                extrctd_ontrgy.append(anlyzd_cntnt[idx][0])
-          elif (anlyzd_cntnt[idx][1] == "接続詞"):
-                extrctd_ontrgy.append(anlyzd_cntnt[idx][0])
-          elif (anlyzd_cntnt[idx][1] == "形容詞"):
-                extrctd_ontrgy.append(anlyzd_cntnt[idx][0])
-          elif (anlyzd_cntnt[idx][1] == "連体詞"):
-                extrctd_ontrgy.append(anlyzd_cntnt[idx][0])
-          elif (anlyzd_cntnt[idx][1] == "感動詞"):
-                extrctd_ontrgy.append(anlyzd_cntnt[idx][0])
-          idx += 1
-    return extrctd_ontrgy
