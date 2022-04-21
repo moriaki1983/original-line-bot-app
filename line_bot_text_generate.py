@@ -3,6 +3,7 @@
 
 
 
+#各モジュールの読み込み
 import random
 from line_bot_character import BotCharacter
 

@@ -3,6 +3,7 @@
 
 
 
+#各モジュールの読み込み
 from enum import Enum
 
 
@@ -29,7 +30,7 @@ class BotCharacter:
 
       #ボットの性格・人格等を決定づける属性を表す変数
       __chrctr_attrbts = ["女性", "優秀", "アドバイザー", "子供好き", "子供が好き", "下ネタ好き", "下ネタが好き", \
-                          "22才", "年齢は22才", "22"歳", "年齢は22歳", "開発者はmoriaki", "生みの親はmoriaki", "LINE-Bot","名前はLINE-Bot"]
+                          "22才", "年齢は22才", "22歳", "年齢は22歳", "開発者はmoriaki", "生みの親はmoriaki", "LINE-Bot", "名前はLINE-Bot"]
 
       #コンストラクター
       def __init__(self):
