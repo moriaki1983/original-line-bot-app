@@ -324,7 +324,11 @@ def generate_line_message():
        line_oldrcds.append([line_rcd3[1], line_rcd3[2], line_rcd3[3], line_rcd3[4], line_rcd3[5]])
        line_oldrcds.append([line_rcd4[1], line_rcd4[2], line_rcd4[3], line_rcd4[4], line_rcd4[5]])
        line_oldrcds.append(["", "", "", "", "", ""])
-    if rcd_id >= 5:
+    if rcd_id >= 6:
+       idx = rcd_id - 6
+       cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': idx})
+       line_rcd = cur.fetchone()
+       line_oldrcds.append([line_rcd[1], line_rcd[2], line_rcd[3], line_rcd[4], line_rcd[5]])
        idx = rcd_id - 5
        cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': idx})
        line_rcd = cur.fetchone()
@@ -341,42 +345,40 @@ def generate_line_message():
        cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': idx})
        line_rcd = cur.fetchone()
        line_oldrcds.append([line_rcd[1], line_rcd[2], line_rcd[3], line_rcd[4], line_rcd[5]])
-       idx = rcd_id - 1
-       cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': idx})
-       line_rcd = cur.fetchone()
-       line_oldrcds.append([line_rcd[1], line_rcd[2], line_rcd[3], line_rcd[4], line_rcd[5]])
 
-    #新旧６件分のメッセージの中からトピックを抽出する
-    idx = rcd_id - 5
+    #メッセージの中からトピックを抽出するために新旧６件分のレコードを取得する
+    idx = rcd_id - 6
     cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': idx})
     line_rcd = cur.fetchone()
-    msg = line_rcd[3]
-    idx = rcd_id - 4
+    line_oldmsg5 = line_rcd[3]
+    idx          = rcd_id - 5
     cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': idx})
     line_rcd = cur.fetchone()
-    msg2 = line_rcd[3]
-    idx = rcd_id - 3
+    line_oldmsg4 = line_rcd[3]
+    idx          = rcd_id - 4
     cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': idx})
     line_rcd = cur.fetchone()
-    msg3 = line_rcd[3]
-    idx = rcd_id - 2
+    line_oldmsg3 = line_rcd[3]
+    idx          = rcd_id - 3
     cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': idx})
     line_rcd = cur.fetchone()
-    msg4 = line_rcd[3]
-    idx = rcd_id - 1
+    line_oldmsg2 = line_rcd[3]
+    idx          = rcd_id - 2
     cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': idx})
     line_rcd = cur.fetchone()
-    msg5 = line_rcd[3]
-    idx = rcd_id
+    line_oldmsg = line_rcd[3]
+    idx         = rcd_id - 1
     cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': idx})
-    line_rcd = cur.fetchone()
-    msg6 = line_rcd[3]
-    line_tpc = line_bot_text_analyze.extract_topic(msg, msg2, msg3, msg4, msg5, msg6)
+    line_rcd   = cur.fetchone()
+    line_nwmsg = line_rcd[3]
 
     #データベースへコミットし、テーブル操作のためのカーソルを破棄して、データベースとの接続を解除する
     conn.commit()
     cur.close()
     conn.close()
+
+    #新旧６件分のメッセージの中からトピックを抽出する
+    line_tpc = extract_topic(line_nwmsg, line_oldmsg, line_oldmsg2, line_oldmsg3, line_oldmsg4, line_oldmsg5)
 
     #新旧のレコードリストとトピックを基にユーザーに返信するLINEメッセージを生成する
     gnrtd_msg = line_bot_text_generate.text_generate_from_analyze_result(line_nwrcd, line_oldrcds, line_tpc)

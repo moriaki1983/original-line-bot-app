@@ -4802,7 +4802,7 @@ def extract_content(line_msg):
 
 
 #ユーザーから送られるLINEメッセージの中からトピック(＝新旧６件分のメッセージに共通して出現する名詞)を抽出する
-def extract_topic(line_msg, line_msg2, line_msg3, line_msg4, line_msg5, line_msg6):
+def extract_topic(line_nwmsg, line_oldmsg, line_oldmsg2, line_oldmsg3, line_oldmsg4, line_oldmsg5):
     #メッセージの内容を品詞や単語を単位として分解する(＝文節に分ける)
     tknzr = Tokenizer()
     tkns  = tknzr.tokenize(line_msg + line_msg2 + line_msg3 + line_msg4 + line_msg5 + line_msg6)
@@ -4829,6 +4829,6 @@ def conversion_message_to_sentencepattern(line_msg):
     extrctd_sntncpttrn = []
     idx                = 0
     while len(anlyzd_msg) > idx:
-          extrctd_sntncpttrn.append("[" + anlyzd_msg[idx][1] + " " + anlyzd_msg[idx][0] + "]")
+          extrctd_sntncpttrn.append("<" + anlyzd_msg[idx][1] + " " + anlyzd_msg[idx][0] + ">")
           idx += 1
     return extrctd_sntncpttrn
