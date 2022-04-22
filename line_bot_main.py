@@ -52,17 +52,10 @@ def show_db_record():
     app.logger.info(has_db_tbl)
     app.logger.info(rcd_id)
     if has_db_tbl == True:
-       if rcd_id == -1:
-          cur.close()
-          conn.close()
-          return "table record not exist..."
        if rcd_id == 0:
-          rcd_id_tmp = 0
-          cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id_tmp})
-          rcd = cur.fetchone()
           cur.close()
           conn.close()
-          return jsonify(rcd), 200
+          return "record not exist..."
        if rcd_id >= 1:
           rcd_id_tmp = rcd_id - 1
           cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id_tmp})
@@ -122,7 +115,7 @@ def drop_db_table():
 
     #プログラムの実行状態を示す変数を初期化する
     has_db_tbl = False
-    rcd_id     = -1
+    rcd_id     = 0
 
     #データベースへコミットし、テーブル操作のためのカーソルを破棄して、データベースとの接続を解除する
     cur.close()
@@ -232,8 +225,6 @@ def postgres_insert_and_update(event, line_intnt, line_cntnt):
     ontrgy   = line_ontrgy
 
     #該当IDのメッセージ(＝レコード)がなかったら、データベースにインサート(＝新規に登録・格納)し、既にメッセージがあったらアップデート(＝上書き)する
-    if rcd_id == -1:
-       rcd_id = 0
     cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id})
     line_rcd = cur.fetchone()
     if (rcd_id >= 0 and rcd_id <= 99):
@@ -243,7 +234,7 @@ def postgres_insert_and_update(event, line_intnt, line_cntnt):
            cur.execute("""UPDATE line_tbl SET rcd_id=%(rcd_id)s, dttm=%(dttm)s, usr_nm=%(usr_nm)s, msg=%(msg)s, intnt=%(intnt)s, cntnt=%(cntnt)s WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id, 'dttm': dttm, 'usr_nm': usr_nm, 'msg': msg, 'intnt': intnt, 'cntnt': cntnt, 'rcd_id': rcd_id})
         rcd_id +=  1
     if rcd_id == 100:
-       rcd_id = -1
+       rcd_id = 0
 
     #データベースへコミットし、テーブル操作のためのカーソルを破棄して、データベースとの接続を解除する
     conn.commit()
@@ -258,119 +249,97 @@ def generate_line_message():
     conn.set_client_encoding("utf-8")
     cur  = conn.cursor()
 
-    #最新のレコードをデータベースから取得する
+    #メッセージの中からトピックを抽出するために新旧６件分のレコードを取得する
     global rcd_id
-    line_nwrcd = []
-    rcd_id_tmp = rcd_id - 1
-    cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': rcd_id_tmp})
-    line_rcd = cur.fetchone()
-    line_nwrcd.append([line_rcd[1], line_rcd[2], line_rcd[3], line_rcd[4], line_rcd[5]])
-
-    #過去５件分のレコードをデータベースから取得する
-    line_oldrcds = []
-    if rcd_id == -1:
-       line_oldrcds.append(["", "", "", "", "", ""])
-       line_oldrcds.append(["", "", "", "", "", ""])
-       line_oldrcds.append(["", "", "", "", "", ""])
-       line_oldrcds.append(["", "", "", "", "", ""])
-       line_oldrcds.append(["", "", "", "", "", ""])
-    if rcd_id == 0:
-       line_oldrcds.append(["", "", "", "", "", ""])
-       line_oldrcds.append(["", "", "", "", "", ""])
-       line_oldrcds.append(["", "", "", "", "", ""])
-       line_oldrcds.append(["", "", "", "", "", ""])
-       line_oldrcds.append(["", "", "", "", "", ""])
     if rcd_id == 1:
        cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = 0;""")
-       line_rcd = cur.fetchone()
-       line_oldrcds.append([line_rcd[1], line_rcd[2], line_rcd[3], line_rcd[4], line_rcd[5]])
-       line_oldrcds.append(["", "", "", "", "", ""])
-       line_oldrcds.append(["", "", "", "", "", ""])
-       line_oldrcds.append(["", "", "", "", "", ""])
-       line_oldrcds.append(["", "", "", "", "", ""])
+       line_rcd     = cur.fetchone()
+       line_nwmsg   = line_rcd[3]
+       line_oldmsg  = ""
+       line_oldmsg2 = ""
+       line_oldmsg3 = ""
+       line_oldmsg4 = ""
+       line_oldmsg5 = ""
     if rcd_id == 2:
        cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = 0;""")
-       line_rcd = cur.fetchone()
+       line_rcd     = cur.fetchone()
+       line_nwmsg   = line_rcd[3]
        cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = 1;""")
-       line_rcd2 = cur.fetchone()
-       line_oldrcds.append([line_rcd[1], line_rcd[2], line_rcd[3], line_rcd[4], line_rcd[5]])
-       line_oldrcds.append([line_rcd2[1], line_rcd2[2], line_rcd2[3], line_rcd2[4], line_rcd2[5]])
-       line_oldrcds.append(["", "", "", "", "", ""])
-       line_oldrcds.append(["", "", "", "", "", ""])
-       line_oldrcds.append(["", "", "", "", "", ""])
+       line_rcd     = cur.fetchone()
+       line_oldmsg2  = line_rcd[3]
+       line_oldmsg3 = ""
+       line_oldmsg4 = ""
+       line_oldmsg5 = ""
     if rcd_id == 3:
        cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = 0;""")
-       line_rcd = cur.fetchone()
+       line_rcd     = cur.fetchone()
+       line_nwmsg   = line_rcd[3]
        cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = 1;""")
-       line_rcd2 = cur.fetchone()
+       line_rcd     = cur.fetchone()
+       line_oldmsg  = line_rcd[3]
        cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = 2;""")
-       line_rcd3 = cur.fetchone()
-       line_oldrcds.append([line_rcd[1], line_rcd[2], line_rcd[3], line_rcd[4], line_rcd[5]])
-       line_oldrcds.append([line_rcd2[1], line_rcd2[2], line_rcd2[3], line_rcd2[4], line_rcd2[5]])
-       line_oldrcds.append([line_rcd3[1], line_rcd3[2], line_rcd3[3], line_rcd3[4], line_rcd3[5]])
-       line_oldrcds.append(["", "", "", "", "", ""])
-       line_oldrcds.append(["", "", "", "", "", ""])
+       line_rcd     = cur.fetchone()
+       line_oldmsg2  = line_rcd[3]
+       line_oldmsg3 = ""
+       line_oldmsg4 = ""
+       line_oldmsg5 = ""
     if rcd_id == 4:
        cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = 0;""")
-       line_rcd = cur.fetchone()
+       line_rcd     = cur.fetchone()
+       line_nwmsg   = line_rcd[3]
        cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = 1;""")
-       line_rcd2 = cur.fetchone()
+       line_rcd     = cur.fetchone()
+       line_oldmsg  = line_rcd[3]
        cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = 2;""")
-       line_rcd3 = cur.fetchone()
+       line_rcd     = cur.fetchone()
+       line_oldmsg2  = line_rcd[3]
        cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = 3;""")
-       line_rcd4 = cur.fetchone()
-       line_oldrcds.append([line_rcd[1], line_rcd[2], line_rcd[3], line_rcd[4], line_rcd[5]])
-       line_oldrcds.append([line_rcd2[1], line_rcd2[2], line_rcd2[3], line_rcd2[4], line_rcd2[5]])
-       line_oldrcds.append([line_rcd3[1], line_rcd3[2], line_rcd3[3], line_rcd3[4], line_rcd3[5]])
-       line_oldrcds.append([line_rcd4[1], line_rcd4[2], line_rcd4[3], line_rcd4[4], line_rcd4[5]])
-       line_oldrcds.append(["", "", "", "", "", ""])
+       line_rcd     = cur.fetchone()
+       line_oldmsg3  = line_rcd[3]
+       line_oldmsg4 = ""
+       line_oldmsg5 = ""
+    if rcd_id == 5:
+       cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = 0;""")
+       line_rcd     = cur.fetchone()
+       line_nwmsg   = line_rcd[3]
+       cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = 1;""")
+       line_rcd     = cur.fetchone()
+       line_oldmsg  = line_rcd[3]
+       cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = 2;""")
+       line_rcd     = cur.fetchone()
+       line_oldmsg2  = line_rcd[3]
+       cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = 3;""")
+       line_rcd     = cur.fetchone()
+       line_oldmsg3  = line_rcd[3]
+       cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = 4;""")
+       line_rcd     = cur.fetchone()
+       line_oldmsg4  = line_rcd[3]
+       line_oldmsg5 = ""
     if rcd_id >= 6:
-       idx = rcd_id - 6
+       idx = rcd_id - 1
        cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': idx})
-       line_rcd = cur.fetchone()
-       line_oldrcds.append([line_rcd[1], line_rcd[2], line_rcd[3], line_rcd[4], line_rcd[5]])
-       idx = rcd_id - 5
-       cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': idx})
-       line_rcd = cur.fetchone()
-       line_oldrcds.append([line_rcd[1], line_rcd[2], line_rcd[3], line_rcd[4], line_rcd[5]])
-       idx = rcd_id - 4
-       cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': idx})
-       line_rcd = cur.fetchone()
-       line_oldrcds.append([line_rcd[1], line_rcd[2], line_rcd[3], line_rcd[4], line_rcd[5]])
-       idx = rcd_id - 3
-       cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': idx})
-       line_rcd = cur.fetchone()
-       line_oldrcds.append([line_rcd[1], line_rcd[2], line_rcd[3], line_rcd[4], line_rcd[5]])
+       line_rcd     = cur.fetchone()
+       line_nwmsg   = line_rcd[3]
        idx = rcd_id - 2
        cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': idx})
-       line_rcd = cur.fetchone()
-       line_oldrcds.append([line_rcd[1], line_rcd[2], line_rcd[3], line_rcd[4], line_rcd[5]])
-
-    #メッセージの中からトピックを抽出するために新旧６件分のレコードを取得する
-    idx = rcd_id - 6
-    cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': idx})
-    line_rcd = cur.fetchone()
-    line_oldmsg5 = line_rcd[3]
-    idx          = rcd_id - 5
-    cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': idx})
-    line_rcd = cur.fetchone()
-    line_oldmsg4 = line_rcd[3]
-    idx          = rcd_id - 4
-    cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': idx})
-    line_rcd = cur.fetchone()
-    line_oldmsg3 = line_rcd[3]
-    idx          = rcd_id - 3
-    cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': idx})
-    line_rcd = cur.fetchone()
-    line_oldmsg2 = line_rcd[3]
-    idx          = rcd_id - 2
-    cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': idx})
-    line_rcd = cur.fetchone()
-    line_oldmsg = line_rcd[3]
-    idx         = rcd_id - 1
-    cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': idx})
-    line_rcd   = cur.fetchone()
-    line_nwmsg = line_rcd[3]
+       line_rcd     = cur.fetchone()
+       line_oldmsg  = line_rcd[3]
+       idx = rcd_id - 3
+       cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': idx})
+       line_rcd     = cur.fetchone()
+       line_oldmsg2 = line_rcd[3]
+       idx = rcd_id - 4
+       cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': idx})
+       line_rcd     = cur.fetchone()
+       line_oldmsg3 = line_rcd[3]
+       idx = rcd_id - 5
+       cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': idx})
+       line_rcd     = cur.fetchone()
+       line_oldmsg4 = line_rcd[3]
+       idx = rcd_id - 6
+       cur.execute("""SELECT * FROM line_tbl WHERE rcd_id = %(rcd_id)s;""", {'rcd_id': idx})
+       line_rcd     = cur.fetchone()
+       line_oldmsg5 = line_rcd[3]
 
     #データベースへコミットし、テーブル操作のためのカーソルを破棄して、データベースとの接続を解除する
     conn.commit()
@@ -381,7 +350,7 @@ def generate_line_message():
     line_tpc = extract_topic(line_nwmsg, line_oldmsg, line_oldmsg2, line_oldmsg3, line_oldmsg4, line_oldmsg5)
 
     #新旧のレコードリストとトピックを基にユーザーに返信するLINEメッセージを生成する
-    gnrtd_msg = line_bot_text_generate.text_generate_from_analyze_result(line_nwrcd, line_oldrcds, line_tpc)
+    gnrtd_msg = line_bot_text_generate.text_generate_from_analyze_result(line_rcd, line_tpc)
     return gnrtd_msg
 
 

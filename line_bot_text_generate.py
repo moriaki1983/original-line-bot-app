@@ -11,15 +11,15 @@ from line_bot_character import BotCharacter
 
 
 #ユーザーから送られるLINEメッセージの解析結果を基に、自然でかつ適切な返信メッセージを生成する
-def text_generate_from_analyze_result(line_nwrcd, line_oldrcds, line_tpc):
+def text_generate_from_analyze_result(line_rcd, line_tpc):
     #会話の流れ等を示す変数を宣言・定義する
-    flw_of_cnvrstn = line_nwrcd[0][4]
-    msg            = line_nwrcd[0][3]
-    cntnt          = line_nwrcd[0][5]
-    tpc            = line_tpc
+    msg   = line_rcd[0][3]
+    intnt = line_rcd[0][4]
+    cntnt = line_rcd[0][5]
+    tpc   = line_tpc
 
     #会話の流れ等からボットのマインドを計算する
-    mind = BotCharacter.calc_mind(flw_of_cnvrstn, msg, cntnt, tpc)
+    mind = BotCharacter.calc_mind(msg, intnt, cntnt, tpc)
 
     #ボットのマインドに沿った返信メッセージを生成する
     if mind == "<挨拶 朝>":

@@ -4,18 +4,19 @@
 
 
 #各モジュールの読み込み
-from enum import Enum
+from enum import IntEnum
 
 
 
 
 #ボットの感情・心理状態を表すデータ型
-class Emotions(Enum):
+class Emotions(IntEnum):
       JOY     = 1
       ANGER   = 2
       PITY    = 3
       COMFORT = 4
-      NEUTRAL = 5
+      MIXED   = 5
+      NEUTRAL = 6
 
 
 
@@ -77,8 +78,8 @@ class BotCharacter:
 
       #ボットのマインドを計算するメソッド
       @classmethod
-      def calc_mind(cls, flw_of_cnvrstn, msg, cntnt, tpc):
-          if flw_of_cnvrstn == "<挨拶>":
+      def calc_mind(cls, msg, intnt, cntnt, tpc):
+          if intnt == "<挨拶>":
              if   msg == "おはよう":
                   return "<挨拶 朝>"
              elif msg == "こんにちは":
