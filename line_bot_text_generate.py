@@ -5,9 +5,29 @@
 
 #各モジュールの読み込み
 import random
+import wikipedia
 from line_bot_character import BotCharacter
 
 
+
+
+#Wikipediaサイト内のページを検索する
+def wikipedia_search(srch_txt):
+    wikipedia.set_lang("ja")
+    rsps_str  = ""
+    srch_rsps = wikipedia.search(srch_txt)
+    if not srch_rsps:
+       rsps_str = "その単語は 登録されていません"
+       return rsps_str
+    try:
+        wk_pg = wikipedia.page(srch_rsps[0])
+    except Exception:
+        rsps_str = "エラーが発生しました"
+        return rsps_str
+    wk_cntnt = wk_pg.content
+    rsps_str = wk_cntnt[0:wk_cntnt.find("。")] + "。\n"
+    rsps_str += "リンクはこちら：" + wk_pg.url
+    return rsps_str
 
 
 #ユーザーから送られるLINEメッセージの解析結果を基に、自然でかつ適切な返信メッセージを生成する

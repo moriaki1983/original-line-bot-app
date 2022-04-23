@@ -4,6 +4,7 @@
 
 
 #各モジュールの読み込み
+import random
 from enum import IntEnum
 
 
@@ -27,10 +28,10 @@ class BotCharacter:
       __emtn = Emotions.NEUTRAL
 
       #ボットのユーザーに対する好感度・信頼度を表す変数
-      __lkablty_and_rlblty = 0
+      __lkblty_and_rlblty = 0
 
       #ボットの性格・人格等を決定づける属性を表す変数
-      __chrctr_attrbts = ["女性", "優秀", "アドバイザー", "子供好き", "子供が好き", "下ネタ好き", "下ネタが好き", \
+      __chrctr_attrbts = ["女性", "性別は女性", "優秀", "アドバイザー", "子供好き", "子供が好き", "下ネタ好き", "下ネタが好き", \
                           "22才", "年齢は22才", "22歳", "年齢は22歳", "開発者はmoriaki", "生みの親はmoriaki", "LINE-Bot", "名前はLINE-Bot"]
 
       #コンストラクター
@@ -47,26 +48,30 @@ class BotCharacter:
       def get_emotion(cls):
           return cls.emotion
 
+      #ボットの感情・心理状態を変更するメソッド
+      @classmethod
+      def change_emotion_with_rhinos(cls):
+      cls.emtn = random.randint(1,6)
 
       #ボットのユーザーに対する好感度・信頼度のセッター
       @classmethod
-      def set_likeability_and_reliability(cls, lkablty_and_rlblty):
-          cls.lkablty_and_rlblty = lkablty_and_rlblty
+      def set_likeability_and_reliability(cls, lkblty_and_rlblty):
+          cls.lkblty_and_rlblty = lkblty_and_rlblty
 
       #ボットのユーザーに対する好感度・信頼度のゲッター
       @classmethod
       def get_likeability_and_reliability(cls):
-          return cls.lkablty_and_rlblty
+          return cls.lkblty_and_rlblty
 
       #ボットのユーザーに対する好感度・信頼度を指定された分だけ増加・上昇させるメソッド
       @classmethod
       def add_likeability_and_reliability(cls, amnt):
-          cls.lkablty_and_rlblty += amnt
+          cls.lkblty_and_rlblty += amnt
 
       #ボットのユーザーに対する好感度・信頼度を指定された分だけ減少・下降させるメソッド
       @classmethod
       def sub_likeability_and_reliability(cls, amnt):
-          cls.lkablty_and_rlblty -= amnt
+          cls.lkblty_and_rlblty -= amnt
 
       #指定された属性がボットの属性に該当するかを調べるメソッド
       @classmethod

@@ -4801,8 +4801,8 @@ def extract_content(line_msg):
     return extrctd_cntnt
 
 
-#ユーザーから送られるLINEメッセージの中からトピック(＝新旧６件分のメッセージに共通して出現する名詞)を抽出する
-def extract_topic(line_nwmsg, line_oldmsg, line_oldmsg2, line_oldmsg3, line_oldmsg4, line_oldmsg5):
+#ユーザーから送られるLINEメッセージの中からトピック(＝新旧５件分のメッセージに共通して出現する名詞)を抽出する
+def extract_topic(line_nwmsg, line_oldmsg, line_oldmsg2, line_oldmsg3, line_oldmsg4):
     #メッセージの内容を品詞や単語を単位として分解する(＝文節に分ける)
     tknzr = Tokenizer()
     tkns  = tknzr.tokenize(line_msg + line_msg2 + line_msg3 + line_msg4 + line_msg5 + line_msg6)
