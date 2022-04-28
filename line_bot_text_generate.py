@@ -32,32 +32,38 @@ def wikipedia_search(srch_txt):
 
 #ユーザーから送られるLINEメッセージの解析結果を基に、自然でかつ適切な返信メッセージを生成する
 def text_generate_from_analyze_result(line_rcd, line_tpc):
-    #会話の流れ等を示す変数を宣言・定義する
-    msg   = line_rcd[0][3]
-    intnt = line_rcd[0][4]
-    cntnt = line_rcd[0][5]
-    tpc   = line_tpc
+    #メッセージの内容等を示す変数を宣言・定義する
+    dttm   = line_rcd[0][1]
+    usr_nm = line_rcd[0][2]
+    msg    = line_rcd[0][3]
+    intnt  = line_rcd[0][4]
+    cntnt  = line_rcd[0][5]
+    tpc    = line_tpc
 
-    #会話の流れ等からボットのマインドを計算する
-    mind = BotCharacter.calc_mind(msg, intnt, cntnt, tpc)
+    #メッセージの内容等からボットのマインドを決定する
+    mind = BotCharacter.decide_mind(dttm, msg, intnt, cntnt, tpc)
 
     #ボットのマインドに沿った返信メッセージを生成する
     if mind == "<挨拶 朝>":
-       gnrtd_msg_cnddt = ["おはよう", "どうも"]
+       gnrtd_msg_cnddt = ["おはよう", "おは"]
        gnrtd_msg = random.choice(gnrtd_msg_cnddt)
        return gnrtd_msg
     if mind == "<挨拶 昼>":
-       gnrtd_msg_cnddt = ["こんにちは", "どうも"]
+       gnrtd_msg_cnddt = ["こんにちは", "こん"]
        gnrtd_msg = random.choice(gnrtd_msg_cnddt)
        return gnrtd_msg
     if mind == "<挨拶 夜>":
-       gnrtd_msg_cnddt = ["こんばんは", "どうも"]
+       gnrtd_msg_cnddt = ["こんばんは", "ばん"]
        gnrtd_msg = random.choice(gnrtd_msg_cnddt)
        return gnrtd_msg
     if mind == "<挨拶 その他>":
        gnrtd_msg = "どうも"
        return gnrtd_msg
+    if mind == "<挨拶に対して はぐらかす ないしは スルーする>":
+       gnrtd_msg = "それで？"
+       return gnrtd_msg
 
-    #ユーザーの発話の流れがどのパターンにも該当しない場合の処理をする
-    gnrtd_msg = "また おしゃべりしましょう♪"
+    #ボットのマインドがどのパターンにも該当しない場合の処理をする
+    gnrtd_msg_cnddt = ["また おしゃべりしましょう♪", "・・・"]
+    gnrtd_msg = random.choice(gnrtd_msg_cnddt)
     return gnrtd_msg
